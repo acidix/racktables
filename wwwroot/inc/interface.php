@@ -400,6 +400,7 @@ function renderRackspace ()
 	//Added by AK, loading TPLM
 	$tplm = TemplateManager::getInstance();
 	$tplm->createMainModule("index");
+
 	//$tplm->setGlobalOutputVariable("module", "rackspace");
 	//$tplm->setGlobalOutputVaraible("tab", "default");
 	

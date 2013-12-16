@@ -1,6 +1,6 @@
 <?php
 //Use this to test wether a template was called within the main module or without it.
-
+define("TPL_DEBUG",true);
 define("RS_TPL",true);
 /**
  * Class used by the other TemplateClass to throw exceptions.
@@ -127,12 +127,14 @@ class TemplateManager
 		}
 		return "";
 	}
+	
 	/**
 	 * Set the main template
 	 * @param string $name
 	 */
 	public function setTemplate($name)
 	{
+		self::log("Setting template: " . $name);
 		$this->tpl = $name;
 	}
 	
@@ -150,6 +152,7 @@ class TemplateManager
 	 * @param array $out
 	 */
 	public function setGlobalOutput($out) {
+		self::log("Setting template: " . $name);
 		$this->gout = $out;
 	}
 	
@@ -159,6 +162,7 @@ class TemplateManager
 	 * @param string $value
 	 */
 	public function setGlobalOutputVariable($name,$value) {
+		self::log("Setting global out: " . $name . "=>", $value);
 		$this->gout[$name] = $value;
 	}
 	
@@ -212,6 +216,7 @@ class TemplateManager
 		}
 		$this->mainmod->mergeOutputArray($this->gout,true);
 		$this->mainmod->setTemplate($this->tpl);
+		self::log("Running with template: " . $this->tpl . " Mainmod: " , $this->mainmod);
 		$cont = $this->mainmod->run();
 		if ($echo)
 		{
@@ -235,6 +240,7 @@ class TemplateManager
 	 */
 	public function generateSubmodule($placeholder,$name,TemplateModule $parent=null,$inmemory=false,$output=array())
 	{
+		self::log("Generating submodule: " . $name . " (Placeholder: " . $placeholder . " InMemory: " . $inmemory . "Parent and Output: " , array($parent,$output));
 		if (!$inmemory)
 		{
 			$module = new TemplateModule($this->tpl, $name, $output);
@@ -271,6 +277,7 @@ class TemplateManager
 	 */
 	public function generateModule($name,$inmemory=false,$output=array())
 	{
+		self::log("Generating module: ".$name . " (InMemory: " . $inmemory . " Output: " , $output);
 		if (!$inmemory)
 		{
 			$module = new TemplateModule($this->tpl, $name, $output);
@@ -295,6 +302,7 @@ class TemplateManager
 	 */
 	public function addRequirement($placeholder,$name,$namespace="",$inmemory=false,$cont=array())
 	{
+		self::log("Adding requirement: ".$placeholder . " on " . $name . " (Namespace: " . $namespace . " InMemory: " . $inmemory . " Cont: ", $cont);
 		$mod = $this->generateSubmodule($placeholder, $name, null, $inmemory, $cont);
 		$mod->setNamespace($namespace);
 		return $mod;
@@ -311,6 +319,7 @@ class TemplateManager
 	 */
 	public function addHelper($helper,TemplateHelper $object = null)
 	{
+		self::log("Adding helper: ".$helper , $object);
 		$classname = "TemplateHelper" . $helper;
 		if ($object != null)
 		{
@@ -336,6 +345,7 @@ class TemplateManager
 	
 	public function getHelper($helper)
 	{
+		self::log("Loading helper:" . $helper);
 		if(!array_key_exists($helper, $this->helpers))
 		{
 			if (!$this->addHelper($helper))
@@ -344,6 +354,23 @@ class TemplateManager
 			}	
 		}
 		return $this->helpers[$helper];
+	}
+	
+	public static function log($text,$var=null)
+	{
+		if (defined('TPL_DEBUG'))
+		{
+			if ($var != null)
+			{
+				ob_start();
+				var_dump($var);
+				$text .= ob_get_clean();
+			}
+			$text .= "\r\n";
+			$handle = fopen('./tpl.log','a');
+			fwrite($handle,$text);
+			fclose($handle);
+		}
 	}
 }
 
