@@ -5068,20 +5068,53 @@ function buildTagCheckboxRows ($inputname, $preselect, $neg_preselect, $taginfo,
 }
 
 # generate HTML from the data produced by the above function
-function printTagCheckboxTable ($input_name, $preselect, $neg_preselect, $taglist, $realm = '')
+function printTagCheckboxTable ($input_name, $preselect, $neg_preselect, $taglist, $realm = '', TemplateModule $addto = null)
 {
+	$tplm = TemplateManager::getInstance();
 	foreach ($taglist as $taginfo)
 		foreach (buildTagCheckboxRows ($input_name, $preselect, $neg_preselect, $taginfo, $realm) as $row)
 		{
-			$tag_class = isset ($taginfo['id']) && isset ($taginfo['refcnt']) ? getTagClassName ($row['input_value']) : '';
-			echo "<tr class='${row['tr_class']}'><td class='${row['td_class']}' style='padding-left: " . ($row['level'] * 16) . "px;'>";
-			echo "<label><input type=checkbox class='${row['input_class']}' name='${row['input_name']}[]' value='${row['input_value']}'";
-			if (array_key_exists ('input_extraattrs', $row))
-				echo ' ' . $row['input_extraattrs'];
-			echo '> <span class="' . $tag_class . '">' . $row['text_tagname'] . '</span>';
-			if (array_key_exists ('text_refcnt', $row))
-				echo " <i>(${row['text_refcnt']})</i>";
-			echo '</label></td></tr>';
+			if ($addto != null)
+			{
+				$tag_class = isset ($taginfo['id']) && isset ($taginfo['refcnt']) ? getTagClassName ($row['input_value']) : '';
+				$tagobj = $tplm->generateSubmodule("TagRow", "TagTreeCell", $addto);
+				$tagobj->setOutput("TrClass", 		$row['tr_class']);
+				$tagobj->setOutput("TdClass", 		$row['td_class']);
+				$tagobj->setOutput("LevelPx", 		$row['level'] * 16);
+				$tagobj->setOutput("InputClass",	$row['input_class']);
+				$tagobj->setOutput("InputName",		$row['input_name']);
+				$tagobj->setOutput("InputValue",	$row['input_value']);
+				if (array_key_exists ('input_extraattrs', $row))
+				{
+					$tagobj->setOutput("ExtraAttrs",$row['input_extraattrs']);
+				}
+				else
+				{
+					$tagobj->setOutput("ExtraAttrs","");
+				}
+				$tagobj->setOutput("TagClass",		$tag_class);
+				$tagobj->setOutput("TagName", 		$row['text_tagname']);
+				if (array_key_exists ('text_refcnt', $row))
+				{
+					$tagobj->setOutput("RefCnt", 	$row['text_refcnt']);
+				}
+				else
+				{
+					$tagobj->setOutput("RefCnt", 	"");
+				}
+			}
+			else
+			{
+				$tag_class = isset ($taginfo['id']) && isset ($taginfo['refcnt']) ? getTagClassName ($row['input_value']) : '';
+				echo "<tr class='${row['tr_class']}'><td class='${row['td_class']}' style='padding-left: " . ($row['level'] * 16) . "px;'>";
+				echo "<label><input type=checkbox class='${row['input_class']}' name='${row['input_name']}[]' value='${row['input_value']}'";
+				if (array_key_exists ('input_extraattrs', $row))
+					echo ' ' . $row['input_extraattrs'];
+				echo '> <span class="' . $tag_class . '">' . $row['text_tagname'] . '</span>';
+				if (array_key_exists ('text_refcnt', $row))
+					echo " <i>(${row['text_refcnt']})</i>";
+				echo '</label></td></tr>';
+			}
 		}
 }
 
@@ -5157,11 +5190,14 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	$title = $filterc ? "Tag filters (${filterc})" : 'Tag filters';
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->generateSubmodule("CellFilterPortlet", "CellFilterPortlet");
+	$mod = $tplm->generateSubmodule("CellFilterPortlet", "CellFilterPortlet");
 	//startPortlet ($title);
+	
+	$mod->setOutput("PortletTitle", $title);
+	
 	//echo "<form method=get>\n";
 	//echo '<table border=0 align=center cellspacing=0 class="tagtree">';
-	$ruler = "<tr><td colspan=2 class=tagbox><hr></td></tr>\n";
+	$ruler = "<tr><td colspan=2 class=tagbox><hr></td></tr>\n"; //@TODO: Get ruler in template.
 	$hr = '';
 	// "reset filter" button only gets active when a filter is applied
 	$enable_reset = FALSE;
@@ -5170,17 +5206,25 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	// and/or block
 	if (getConfigVar ('FILTER_SUGGEST_ANDOR') == 'yes' or strlen ($preselect['andor']))
 	{
-		echo $hr;
+		$andormod = $tplm->generateSubmodule("TableContent", "CellFilterAndOrCell",$mod);
+		//echo $hr;
 		$hr = $ruler;
 		$andor = strlen ($preselect['andor']) ? $preselect['andor'] : getConfigVar ('FILTER_DEFAULT_ANDOR');
-		echo '<tr>';
+		//echo '<tr>';
+		$cells = array();
 		foreach (array ('and', 'or') as $boolop)
 		{
-			$class = 'tagbox' . ($andor == $boolop ? ' selected' : '');
-			$checked = $andor == $boolop ? ' checked' : '';
-			echo "<td class='${class}'><label><input type=radio name=andor value=${boolop}";
-			echo $checked . ">${boolop}</input></label></td>";
+			//$class = 'tagbox' . ($andor == $boolop ? ' selected' : '');
+			$arr = array();
+			$arr["Selected"] = ($andor == $boolop ? 'selected' : '');
+			$arr["Boolop"] = $boolop;
+			$arr["Checked"] = ($andor == $boolop ? 'checked' : '');
+			$cells[] = $arr;
+			//$checked = $andor == $boolop ? ' checked' : '';
+			//echo "<td class='${class}'><label><input type=radio name=andor value=${boolop}";
+			//echo $checked . ">${boolop}</input></label></td>";
 		}
+		$andormod->addOutput("AndOr", $cells);
 	}
 
 	$negated_chain = array();
@@ -5197,11 +5241,12 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		// Show a tree of tags, pre-select according to currently requested list filter.
 		$objectivetags = getShrinkedTagTree($cell_list, $realm, $preselect);
 		if (!count ($objectivetags))
-			echo "<tr><td colspan=2 class='tagbox sparenetwork'>(nothing is tagged yet)</td></tr>";
+			$tplm->generateSubmodule("TableContent", "CellFilterNoTags", $mod, true);
+			//echo "<tr><td colspan=2 class='tagbox sparenetwork'>(nothing is tagged yet)</td></tr>";
 		else
 		{
 			$enable_apply = TRUE;
-			printTagCheckboxTable ('cft', buildTagChainFromIds ($preselect['tagidlist']), $negated_chain, $objectivetags, $realm);
+			printTagCheckboxTable ('cft', buildTagChainFromIds ($preselect['tagidlist']), $negated_chain, $objectivetags, $realm, $mod);
 		}
 
 		if (getConfigVar('SHRINK_TAG_TREE_ON_CLICK') == 'yes')
@@ -5222,7 +5267,8 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 			if (preg_match ("/${psieve}/", $pname))
 				$myPredicates[] = array ('id' => $pname, 'tag' => $pname);
 		if (!count ($myPredicates))
-			echo "<tr><td colspan=2 class='tagbox sparenetwork'>(no predicates to show)</td></tr>";
+			$tplm->generateSubmodule("TableContent", "CellFilterNoPredicates", $mod, true);
+			//echo "<tr><td colspan=2 class='tagbox sparenetwork'>(no predicates to show)</td></tr>";
 		else
 		{
 			$enable_apply = TRUE;
@@ -5230,7 +5276,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 			$myPreselect = array();
 			foreach ($preselect['pnamelist'] as $pname)
 				$myPreselect[] = array ('id' => $pname);
-			printTagCheckboxTable ('cfp', $myPreselect, $negated_chain, $myPredicates);
+			printTagCheckboxTable ('cfp', $myPreselect, $negated_chain, $myPredicates, '', $mod);
 		}
 	}
 	// extra code
@@ -5244,10 +5290,11 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		echo $hr;
 		$hr = $ruler;
 		$class = isset ($preselect['extraclass']) ? 'class=' . $preselect['extraclass'] : '';
-		echo "<tr><td colspan=2><textarea name=cfe ${class}>\n" . $preselect['extratext'];
-		echo "</textarea></td></tr>\n";
+		$tplm->generateSubmodule("TableContent", "CellFilterExtraText", $mod, true, array("Class"=>$class,"Extratext"=>$preselect["extratext"]));
+		//echo "<tr><td colspan=2><textarea name=cfe ${class}>\n" . $preselect['extratext'];
+		//echo "</textarea></td></tr>\n";
 	}
-	// submit block
+	// submit block //@TODO rausfinden warum das funktioniert.
 	{
 		echo $hr;
 		$hr = $ruler;

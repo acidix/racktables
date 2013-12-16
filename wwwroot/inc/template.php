@@ -170,7 +170,7 @@ class TemplateManager
 	 * @param string $name
 	 * @return NULL|object
 	 */
-	public function createMainModule($name)
+	public function createMainModule($name = "index")
 	{
 		/**if ($this->tpl == "")
 		 **{
@@ -178,7 +178,7 @@ class TemplateManager
 		 **}
 			*/
 		if ($this->mainmod == null) {
-			$this->mainmod = new TemplateModule($this->tpl, "main", $name);
+			$this->mainmod = new TemplateModule($this->tpl, $name);
 		}
 		return $this->mainmod;
 	}
@@ -488,6 +488,10 @@ class TemplateModule
 	{
 		$this->tpl = $tpl;
 		$this->module = $module;
+		if (!is_array($mout))
+		{
+			throw new TemplateException("TplErr: Mout has to be an array!");
+		}
 		$this->output = $mout;
 	}
 	

@@ -24,4 +24,22 @@ $this->setInMemoryTemplate("HeaderJsInline",'<script type="text/javascript">' . 
  * Usage: interface-lib.php (printPageHeaders())
 */
 $this->setInMemoryTemplate("HeaderJsInclude","<link rel=stylesheet type='text/css' href='?module=chrome&uri={{path}}' />\n");
+
+/**
+ * Template for: CellFilterPortlet in case there are no tags
+ * Usage: interface.php (renderCellFilterPortlet())
+ */
+$this->setInMemoryTemplate("CelLFilterNoTags","<tr><td colspan=2 class='tagbox sparenetwork'>(nothing is tagged yet)</td></tr>");
+
+/**
+ * Template for: CellFilterPortlet in case there are no predicates
+ * Usage: interface.php (renderCellFilterPortlet())
+ */
+$this->setInMemoryTemplate("CelLFilterNoPredicates","<tr><td colspan=2 class='tagbox sparenetwork'>(no predicates to show)</td></tr>");
+
+/**
+ * Template for: CelLFilterPortlet in case you want extra-tags.
+ * Usage: interface.php (renderCellFilterPortlet())
+ */
+$this->setInMemoryTemplate("CellFilterExtraText","<tr><td colspan=2><textarea name=cfe {{Class}}>{{Extratext}}</textarea></td></tr>");
 ?>
