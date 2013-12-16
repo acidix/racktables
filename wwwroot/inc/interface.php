@@ -396,8 +396,17 @@ function renderRackspace ()
 	if (isset ($_REQUEST['location_id']))
 		$_SESSION['locationFilter'] = $_REQUEST['location_id'];
 	session_commit();
+	
+	//Added by AK, loading TPLM
+	$tplm = TemplateManager::getInstance();
+	$tplm->createMainModule("index");
+	//$tplm->setGlobalOutputVariable("module", "rackspace");
+	//$tplm->setGlobalOutputVaraible("tab", "default");
+	
+	$mod = $tplm->generateSubmodule("payload", "RackspaceOverview");
+	$mod->setNamespace("rackspace",true);
 
-	echo "<table class=objview border=0 width='100%'><tr><td class=pcleft>";
+	//echo "<table class=objview border=0 width='100%'><tr><td class=pcleft>";
 
 	$found_racks = array();
 	$cellfilter = getCellFilter();
@@ -429,22 +438,32 @@ function renderRackspace ()
 			$order = 'odd';
 			if (count ($rows))
 			{
-				echo '<table border=0 cellpadding=10 class=cooltable>';
-				echo '<tr><th class=tdleft>Location</th><th class=tdleft>Row</th><th class=tdleft>Racks</th></tr>';
+				
+				//Generate the table module instead.
+				
+				//echo '<table border=0 cellpadding=10 class=cooltable>';
+				//echo '<tr><th class=tdleft>Location</th><th class=tdleft>Row</th><th class=tdleft>Racks</th></tr>';
+				$table = $tplm->generateSubmodule("RackspaceOverviewTable", "RackspaceOverviewTable", $mod);
+				$row_objects = array();
 				foreach ($rows as $row)
 				{
 					$location_id = $row['location_id'];
 					$row_id = $row['row_id'];
 					$row_name = $row['row_name'];
 					$rackList = $row['racks'];
+					
 
 					if (
 						$location_id != '' and isset ($_SESSION['locationFilter']) and !in_array ($location_id, $_SESSION['locationFilter']) or
 						empty ($rackList) and ! $cellfilter['is_empty']
 					)
 						continue;
+
+					
+					$rowo["Order"] = $order;
+					
 					$rackListIdx = 0;
-					echo "<tr class=row_${order}><th class=tdleft>";
+					//echo "<tr class=row_${order}><th class=tdleft>";
 					$locationTree = '';
 					while ($location_id)
 					{
@@ -456,42 +475,66 @@ function renderRackspace ()
 							$location_id = $parentLocation['parent_id'];
 					}
 					$locationTree = substr ($locationTree, 8);
-					echo $locationTree;
-					echo "</th><th class=tdleft><a href='".makeHref(array('page'=>'row', 'row_id'=>$row_id))."${cellfilter['urlextra']}'>${row_name}</a></th>";
-					echo "<th class=tdleft><table border=0 cellspacing=5><tr>";
+
+					//echo $locationTree;
+					$rowo["LocationTree"] = $locationTree;
+					$rowo["HrefToRow"] = "<a href='".makeHref(array('page'=>'row', 'row_id'=>$row_id))."${cellfilter['urlextra']}'>${row_name}</a>";
+					
+					//echo "</th><th class=tdleft><a href='".makeHref(array('page'=>'row', 'row_id'=>$row_id))."${cellfilter['urlextra']}'>${row_name}</a></th>";
+					//echo "<th class=tdleft><table border=0 cellspacing=5><tr>";
+					
 					if (!count ($rackList))
-						echo "<td>(empty row)</td>";
+						$rowo["RowOverview"] = "<td>(empty row)</td>";
 					else
+					{
+						$rowo["RowOverview"] = array();
 						foreach ($rackList as $rack)
 						{
+							
 							if ($rackListIdx > 0 and $maxPerRow > 0 and $rackListIdx % $maxPerRow == 0)
 							{
-								echo '</tr></table></th></tr>';
-								echo "<tr class=row_${order}><th class=tdleft></th><th class=tdleft>${row_name} (continued)";
-								echo "</th><th class=tdleft><table border=0 cellspacing=5><tr>";
+								$rowo["RowOverview"][] = $tplm->generateModule("RackspaceOverviewTableTacklineNew",$rowo,false,array("RowOrder"=>$order,"RowName",$row_name));
+								//echo '</tr></table></th></tr>';
+								//echo "<tr class=row_${order}><th class=tdleft></th><th class=tdleft>${row_name} (continued)";
+								//echo "</th><th class=tdleft><table border=0 cellspacing=5><tr>";
 							}
-							echo "<td align=center valign=bottom><a href='".makeHref(array('page'=>'rack', 'rack_id'=>$rack['id']))."'>";
-							echo "<img border=0 width=${rackwidth} height=";
-							echo getRackImageHeight ($rack['height']);
-							echo " title='${rack['height']} units'";
-							echo "src='?module=image&img=minirack&rack_id=${rack['id']}'>";
-							echo "<br>${rack['name']}</a></td>";
+							$output = array("RackLink"=>makeHref(array('page'=>'rack', 'rack_id'=>$rack['id'])),
+											"RackImageWidth"=>$rackwidth,
+											"RackImageHeight"=>getRackImageHeight ($rack['height']),
+											"RackId"=>$rack['id'],
+											"RackName"=>$rack['name'],
+											"RackHeight"=>$rack['height']
+							);
+							$rowo["RowOverview"][] = $tplm->generateModule("RackSpaceOverviewTableRackline",$rowo,false,$output);
+							//echo "<td align=center valign=bottom><a href='".makeHref(array('page'=>'rack', 'rack_id'=>$rack['id']))."'>";
+							//echo "<img border=0 width=${rackwidth} height=";
+							//echo getRackImageHeight ($rack['height']);
+							//	echo " title='${rack['height']} units'";
+							//echo "src='?module=image&img=minirack&rack_id=${rack['id']}'>";
+							//echo "<br>${rack['name']}</a></td>";
 							$rackListIdx++;
 						}
-					$order = $nextorder[$order];
-					echo "</tr></table></th></tr>\n";
+						$order = $nextorder[$order];
+					//echo "</tr></table></th></tr>\n";
+					}
+					$table->addOutput("OverviewTable", $rowo);
 				}
-				echo "</table>\n";
+				//echo "</table>\n";
+				
 			}
 			else
-				echo "<h2>No rows found</h2>\n";
+			{
+				$mod->setOutputVariable("RackspaceOverviewTable", "");
+				$mod->setOutputVariable("RackspaceOverviewHeadline", "No rows found.");
+				//echo "<h2>No rows found</h2>\n";
+			}
 		}
 	}
-	echo '</td><td class=pcright width="25%">';
+	//echo '</td><td class=pcright width="25%">';
 	renderCellFilterPortlet ($cellfilter, 'rack', $found_racks);
-	echo "<br>\n";
+	//echo "<br>\n";
 	renderLocationFilterPortlet ();
-	echo "</td></tr></table>\n";
+	//echo "</td></tr></table>\n";
 }
 
 function renderLocationRowForEditor ($subtree, $level = 0)
@@ -541,7 +584,7 @@ function renderLocationSelectTree ($selected_id = NULL)
 
 function renderRackspaceLocationEditor ()
 {
-	$js = <<<JSTXT
+	/** $js = <<<JSTXT
 	function locationeditor_showselectbox(e) {
 		$(this).load('index.php', {module: 'ajax', ac: 'get-location-select', locationid: this.id});
 		$(this).unbind('mousedown', locationeditor_showselectbox);
@@ -551,7 +594,12 @@ function renderRackspaceLocationEditor ()
 	});
 JSTXT;
 
-	addJS($js, TRUE	);
+	addJS($js, TRUE	);*/
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->createMainModule("index");
+	$tplm->addRequirement("Header", "RackspaceLocationEditorJs","rackspace");
+	
 	function printNewItemTR ()
 	{
 		printOpFormIntro ('addLocation');
@@ -564,9 +612,9 @@ JSTXT;
 		echo "</td></tr></form>\n";
 	}
 
-	startPortlet ('Locations');
-	echo "<table border=0 cellspacing=0 cellpadding=5 align=center class=widetable>\n";
-	echo "<tr><th>&nbsp;</th><th>Parent</th><th>Name</th><th>&nbsp;</th></tr>\n";
+	//startPortlet ('Locations');
+	//echo "<table border=0 cellspacing=0 cellpadding=5 align=center class=widetable>\n";
+	//echo "<tr><th>&nbsp;</th><th>Parent</th><th>Name</th><th>&nbsp;</th></tr>\n";
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
 		printNewItemTR();
 
@@ -5096,8 +5144,8 @@ function renderEntityTags ($entity_id)
 // This one is going to replace the tag filter.
 function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $bypass_params = array())
 {
-	addJS ('js/tag-cb.js');
-	addJS ('tag_cb.enableNegation()', TRUE);
+	//addJS ('js/tag-cb.js');
+	//addJS ('tag_cb.enableNegation()', TRUE);
 
 	global $pageno, $tabno, $taglist, $tagtree;
 	$filterc =
@@ -5107,9 +5155,12 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		(mb_strlen ($preselect['extratext']) ? 1 : 0)
 	);
 	$title = $filterc ? "Tag filters (${filterc})" : 'Tag filters';
-	startPortlet ($title);
-	echo "<form method=get>\n";
-	echo '<table border=0 align=center cellspacing=0 class="tagtree">';
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->generateSubmodule("CellFilterPortlet", "CellFilterPortlet");
+	//startPortlet ($title);
+	//echo "<form method=get>\n";
+	//echo '<table border=0 align=center cellspacing=0 class="tagtree">';
 	$ruler = "<tr><td colspan=2 class=tagbox><hr></td></tr>\n";
 	$hr = '';
 	// "reset filter" button only gets active when a filter is applied
@@ -5166,7 +5217,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		global $pTable;
 		$myPredicates = array();
 		$psieve = getConfigVar ('FILTER_PREDICATE_SIEVE');
-		// Repack matching predicates in a way that tagOnChain() understands.
+		// Repack matching predicates in a way, which tagOnChain() understands.
 		foreach (array_keys ($pTable) as $pname)
 			if (preg_match ("/${psieve}/", $pname))
 				$myPredicates[] = array ('id' => $pname, 'tag' => $pname);
@@ -5229,7 +5280,8 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 			echo " <a href=\"#\" onclick=\"textifyCellFilter(this, '$text'); return false\">";
 			printImageHREF ('COPY', 'Make text expression from current filter');
 			echo '</a>';
-			addJS (<<<END
+			$js = <<<END
+
 function textifyCellFilter(target, text)
 {
 	var portlet = $(target).closest ('.portlet');
@@ -5237,9 +5289,10 @@ function textifyCellFilter(target, text)
 	portlet.find ('input[type="checkbox"]').attr('checked', '');
 	portlet.find ('input[type="radio"][value="and"]').attr('checked','true');
 }
-END
-				, TRUE
-			);
+END;
+			addJS ($js, TRUE);
+
+
 		}
 		echo '</td><td class=tdright>';
 		// "reset"

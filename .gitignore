@@ -3,3 +3,8 @@ wwwroot/inc/local.php
 /.project
 tags
 plugins/*
+.settings/*
+.buildpath
+.project
+wwwroot/tpl/testplate/*
+wwwroot/test.php

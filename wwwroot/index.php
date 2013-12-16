@@ -45,7 +45,15 @@ try {
 		// empties color message buffer).
 		$contents = ob_get_contents();
 		ob_clean();
-		renderInterfaceHTML ($pageno, $tabno, $contents);
+		$tplm = TemplateManager::getInstance();
+		if ($tplm->getMainModule() != null)
+		{
+			$tplm->run(true,"vanilla");
+		}
+		else
+		{
+			renderInterfaceHTML ($pageno, $tabno, $contents);
+		}
 		break;
 
 	case 'chrome':
