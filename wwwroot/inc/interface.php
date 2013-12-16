@@ -493,7 +493,7 @@ function renderRackspace ()
 							
 							if ($rackListIdx > 0 and $maxPerRow > 0 and $rackListIdx % $maxPerRow == 0)
 							{
-								$rowo["RowOverview"][] = $tplm->generateModule("RackspaceOverviewTableTacklineNew",$rowo,false,array("RowOrder"=>$order,"RowName",$row_name));
+								$rowo["RowOverview"][] = $tplm->generateModule("RackspaceOverviewTableTacklineNew",false,array("RowOrder"=>$order,"RowName",$row_name));
 								//echo '</tr></table></th></tr>';
 								//echo "<tr class=row_${order}><th class=tdleft></th><th class=tdleft>${row_name} (continued)";
 								//echo "</th><th class=tdleft><table border=0 cellspacing=5><tr>";
@@ -505,7 +505,7 @@ function renderRackspace ()
 											"RackName"=>$rack['name'],
 											"RackHeight"=>$rack['height']
 							);
-							$rowo["RowOverview"][] = $tplm->generateModule("RackSpaceOverviewTableRackline",$rowo,false,$output);
+							$rowo["RowOverview"][] = $tplm->generateModule("RackSpaceOverviewTableRackline",false,$output);
 							//echo "<td align=center valign=bottom><a href='".makeHref(array('page'=>'rack', 'rack_id'=>$rack['id']))."'>";
 							//echo "<img border=0 width=${rackwidth} height=";
 							//echo getRackImageHeight ($rack['height']);

@@ -211,7 +211,7 @@ class TemplateManager
 			return "";
 		}
 		$this->mainmod->mergeOutputArray($this->gout,true);
-		
+		$this->mainmod->setTemplate($this->tpl);
 		$cont = $this->mainmod->run();
 		if ($echo)
 		{
@@ -514,7 +514,7 @@ class TemplateModule
 		$this->tpl = $tpl;
 		if ($global)
 		{
-			foreach ($this->submodules as $mod) {
+			foreach ($this->getAllModules($this->output) as $mod) {
 				$mod->setTemplate($tpl,true);
 			}
 		}
