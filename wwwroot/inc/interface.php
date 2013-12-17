@@ -399,12 +399,13 @@ function renderRackspace ()
 	
 	//Added by AK, loading TPLM
 	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule("index");
 
 	//$tplm->setGlobalOutputVariable("module", "rackspace");
 	//$tplm->setGlobalOutputVaraible("tab", "default");
 	
-	$mod = $tplm->generateSubmodule("payload", "RackspaceOverview");
+	$mod = $tplm->generateSubmodule("Payload", "RackspaceOverview");
 	$mod->setNamespace("rackspace",true);
 
 	//echo "<table class=objview border=0 width='100%'><tr><td class=pcleft>";
@@ -460,7 +461,7 @@ function renderRackspace ()
 					)
 						continue;
 
-					
+					$rowo = array();
 					$rowo["Order"] = $order;
 					
 					$rackListIdx = 0;
@@ -485,7 +486,10 @@ function renderRackspace ()
 					//echo "<th class=tdleft><table border=0 cellspacing=5><tr>";
 					
 					if (!count ($rackList))
+					{
+
 						$rowo["RowOverview"] = "<td>(empty row)</td>";
+					}
 					else
 					{
 						$rowo["RowOverview"] = array();
@@ -494,7 +498,7 @@ function renderRackspace ()
 							
 							if ($rackListIdx > 0 and $maxPerRow > 0 and $rackListIdx % $maxPerRow == 0)
 							{
-								$rowo["RowOverview"][] = $tplm->generateModule("RackspaceOverviewTableTacklineNew",false,array("RowOrder"=>$order,"RowName",$row_name));
+								$rowo["RowOverview"][] = $tplm->generateModule("RackspaceOverviewTableRacklineNew",false,array("RowOrder"=>$order,"RowName",$row_name));
 								//echo '</tr></table></th></tr>';
 								//echo "<tr class=row_${order}><th class=tdleft></th><th class=tdleft>${row_name} (continued)";
 								//echo "</th><th class=tdleft><table border=0 cellspacing=5><tr>";
@@ -506,7 +510,7 @@ function renderRackspace ()
 											"RackName"=>$rack['name'],
 											"RackHeight"=>$rack['height']
 							);
-							$rowo["RowOverview"][] = $tplm->generateModule("RackSpaceOverviewTableRackline",false,$output);
+							$rowo["RowOverview"][] = $tplm->generateModule("RackspaceOverviewTableRackline",false,$output);
 							//echo "<td align=center valign=bottom><a href='".makeHref(array('page'=>'rack', 'rack_id'=>$rack['id']))."'>";
 							//echo "<img border=0 width=${rackwidth} height=";
 							//echo getRackImageHeight ($rack['height']);
@@ -518,8 +522,9 @@ function renderRackspace ()
 						$order = $nextorder[$order];
 					//echo "</tr></table></th></tr>\n";
 					}
-					$table->addOutput("OverviewTable", $rowo);
+					$row_objects[] = $rowo;
 				}
+				$table->addOutput("OverviewTable", $row_objects);
 				//echo "</table>\n";
 				
 			}
@@ -532,9 +537,9 @@ function renderRackspace ()
 		}
 	}
 	//echo '</td><td class=pcright width="25%">';
-	renderCellFilterPortlet ($cellfilter, 'rack', $found_racks);
+	//renderCellFilterPortlet ($cellfilter, 'rack', $found_racks);
 	//echo "<br>\n";
-	renderLocationFilterPortlet ();
+	//renderLocationFilterPortlet ();
 	//echo "</td></tr></table>\n";
 }
 

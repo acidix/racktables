@@ -1,0 +1,3549 @@
+Setting template: vanilla
+Generating submodule: RackspaceOverview (Placeholder: Payload InMemory: Parent and Output: array(2) {
+  [0]=>
+  NULL
+  [1]=>
+  array(0) {
+  }
+}
+
+Generating submodule: RackspaceOverviewTable (Placeholder: RackspaceOverviewTable InMemory: Parent and Output: array(2) {
+  [0]=>
+  object(TemplateModule)#4 (10) {
+    ["tpl":protected]=>
+    string(7) "vanilla"
+    ["module":protected]=>
+    string(17) "RackspaceOverview"
+    ["submodules":protected]=>
+    array(0) {
+    }
+    ["namespace":protected]=>
+    string(9) "rackspace"
+    ["namespace_global":protected]=>
+    bool(true)
+    ["loop":protected]=>
+    int(0)
+    ["loopplaceholder":protected]=>
+    string(0) ""
+    ["loopi":protected]=>
+    int(0)
+    ["output":protected]=>
+    array(0) {
+    }
+    ["locked":protected]=>
+    bool(false)
+  }
+  [1]=>
+  array(0) {
+  }
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=967"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "967"
+  ["RackName"]=>
+  string(3) "L01"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=968"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(30)
+  ["RackId"]=>
+  string(3) "968"
+  ["RackName"]=>
+  string(3) "L02"
+  ["RackHeight"]=>
+  string(2) "12"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=969"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "969"
+  ["RackName"]=>
+  string(3) "L03"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=972"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "972"
+  ["RackName"]=>
+  string(3) "M01"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=970"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(38)
+  ["RackId"]=>
+  string(3) "970"
+  ["RackName"]=>
+  string(5) "NY100"
+  ["RackHeight"]=>
+  string(2) "16"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=971"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "971"
+  ["RackName"]=>
+  string(5) "NY101"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=973"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "973"
+  ["RackName"]=>
+  string(5) "NY102"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=974"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(38)
+  ["RackId"]=>
+  string(3) "974"
+  ["RackName"]=>
+  string(3) "T01"
+  ["RackHeight"]=>
+  string(2) "16"
+}
+
+Running with template: vanilla Mainmod: object(TemplateModule)#3 (10) {
+  ["tpl":protected]=>
+  string(7) "vanilla"
+  ["module":protected]=>
+  string(5) "index"
+  ["submodules":protected]=>
+  array(0) {
+  }
+  ["namespace":protected]=>
+  string(0) ""
+  ["namespace_global":protected]=>
+  bool(false)
+  ["loop":protected]=>
+  int(0)
+  ["loopplaceholder":protected]=>
+  string(0) ""
+  ["loopi":protected]=>
+  int(0)
+  ["output":protected]=>
+  array(1) {
+    ["Payload"]=>
+    object(TemplateModule)#4 (10) {
+      ["tpl":protected]=>
+      string(7) "vanilla"
+      ["module":protected]=>
+      string(17) "RackspaceOverview"
+      ["submodules":protected]=>
+      array(0) {
+      }
+      ["namespace":protected]=>
+      string(9) "rackspace"
+      ["namespace_global":protected]=>
+      bool(true)
+      ["loop":protected]=>
+      int(0)
+      ["loopplaceholder":protected]=>
+      string(0) ""
+      ["loopi":protected]=>
+      int(0)
+      ["output":protected]=>
+      array(1) {
+        ["RackspaceOverviewTable"]=>
+        object(TemplateModule)#5 (10) {
+          ["tpl":protected]=>
+          string(7) "vanilla"
+          ["module":protected]=>
+          string(22) "RackspaceOverviewTable"
+          ["submodules":protected]=>
+          array(0) {
+          }
+          ["namespace":protected]=>
+          string(0) ""
+          ["namespace_global":protected]=>
+          bool(false)
+          ["loop":protected]=>
+          int(0)
+          ["loopplaceholder":protected]=>
+          string(0) ""
+          ["loopi":protected]=>
+          int(0)
+          ["output":protected]=>
+          array(1) {
+            ["OverviewTable"]=>
+            array(7) {
+              ["Order"]=>
+              string(3) "odd"
+              ["LocationTree"]=>
+              string(61) "<a href='index.php?page=location&location_id=978'>London</a> "
+              ["HrefToRow"]=>
+              string(49) "<a href='index.php?page=row&row_id=966'>Row 1</a>"
+              ["RowOverview"]=>
+              array(3) {
+                [0]=>
+                object(TemplateModule)#6 (10) {
+                  ["tpl":protected]=>
+                  string(7) "vanilla"
+                  ["module":protected]=>
+                  string(30) "RackspaceOverviewTableRackline"
+                  ["submodules":protected]=>
+                  array(0) {
+                  }
+                  ["namespace":protected]=>
+                  string(0) ""
+                  ["namespace_global":protected]=>
+                  bool(false)
+                  ["loop":protected]=>
+                  int(0)
+                  ["loopplaceholder":protected]=>
+                  string(0) ""
+                  ["loopi":protected]=>
+                  int(0)
+                  ["output":protected]=>
+                  array(6) {
+                    ["RackLink"]=>
+                    string(31) "index.php?page=rack&rack_id=967"
+                    ["RackImageWidth"]=>
+                    int(45)
+                    ["RackImageHeight"]=>
+                    int(90)
+                    ["RackId"]=>
+                    string(3) "967"
+                    ["RackName"]=>
+                    string(3) "L01"
+                    ["RackHeight"]=>
+                    string(2) "42"
+                  }
+                  ["locked":protected]=>
+                  bool(false)
+                }
+                [1]=>
+                object(TemplateModule)#7 (10) {
+                  ["tpl":protected]=>
+                  string(7) "vanilla"
+                  ["module":protected]=>
+                  string(30) "RackspaceOverviewTableRackline"
+                  ["submodules":protected]=>
+                  array(0) {
+                  }
+                  ["namespace":protected]=>
+                  string(0) ""
+                  ["namespace_global":protected]=>
+                  bool(false)
+                  ["loop":protected]=>
+                  int(0)
+                  ["loopplaceholder":protected]=>
+                  string(0) ""
+                  ["loopi":protected]=>
+                  int(0)
+                  ["output":protected]=>
+                  array(6) {
+                    ["RackLink"]=>
+                    string(31) "index.php?page=rack&rack_id=968"
+                    ["RackImageWidth"]=>
+                    int(45)
+                    ["RackImageHeight"]=>
+                    int(30)
+                    ["RackId"]=>
+                    string(3) "968"
+                    ["RackName"]=>
+                    string(3) "L02"
+                    ["RackHeight"]=>
+                    string(2) "12"
+                  }
+                  ["locked":protected]=>
+                  bool(false)
+                }
+                [2]=>
+                object(TemplateModule)#8 (10) {
+                  ["tpl":protected]=>
+                  string(7) "vanilla"
+                  ["module":protected]=>
+                  string(30) "RackspaceOverviewTableRackline"
+                  ["submodules":protected]=>
+                  array(0) {
+                  }
+                  ["namespace":protected]=>
+                  string(0) ""
+                  ["namespace_global":protected]=>
+                  bool(false)
+                  ["loop":protected]=>
+                  int(0)
+                  ["loopplaceholder":protected]=>
+                  string(0) ""
+                  ["loopi":protected]=>
+                  int(0)
+                  ["output":protected]=>
+                  array(6) {
+                    ["RackLink"]=>
+                    string(31) "index.php?page=rack&rack_id=969"
+                    ["RackImageWidth"]=>
+                    int(45)
+                    ["RackImageHeight"]=>
+                    int(90)
+                    ["RackId"]=>
+                    string(3) "969"
+                    ["RackName"]=>
+                    string(3) "L03"
+                    ["RackHeight"]=>
+                    string(2) "42"
+                  }
+                  ["locked":protected]=>
+                  bool(false)
+                }
+              }
+              [0]=>
+              array(4) {
+                ["Order"]=>
+                string(4) "even"
+                ["LocationTree"]=>
+                string(61) "<a href='index.php?page=location&location_id=975'>Moscow</a> "
+                ["HrefToRow"]=>
+                string(49) "<a href='index.php?page=row&row_id=963'>Row 1</a>"
+                ["RowOverview"]=>
+                array(1) {
+                  [0]=>
+                  object(TemplateModule)#9 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=972"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(90)
+                      ["RackId"]=>
+                      string(3) "972"
+                      ["RackName"]=>
+                      string(3) "M01"
+                      ["RackHeight"]=>
+                      string(2) "42"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                }
+              }
+              [1]=>
+              array(4) {
+                ["Order"]=>
+                string(3) "odd"
+                ["LocationTree"]=>
+                string(63) "<a href='index.php?page=location&location_id=977'>New-York</a> "
+                ["HrefToRow"]=>
+                string(48) "<a href='index.php?page=row&row_id=965'>CF-4</a>"
+                ["RowOverview"]=>
+                array(3) {
+                  [0]=>
+                  object(TemplateModule)#10 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=970"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(38)
+                      ["RackId"]=>
+                      string(3) "970"
+                      ["RackName"]=>
+                      string(5) "NY100"
+                      ["RackHeight"]=>
+                      string(2) "16"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                  [1]=>
+                  object(TemplateModule)#11 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=971"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(90)
+                      ["RackId"]=>
+                      string(3) "971"
+                      ["RackName"]=>
+                      string(5) "NY101"
+                      ["RackHeight"]=>
+                      string(2) "42"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                  [2]=>
+                  object(TemplateModule)#12 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=973"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(90)
+                      ["RackId"]=>
+                      string(3) "973"
+                      ["RackName"]=>
+                      string(5) "NY102"
+                      ["RackHeight"]=>
+                      string(2) "42"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                }
+              }
+              [2]=>
+              array(4) {
+                ["Order"]=>
+                string(4) "even"
+                ["LocationTree"]=>
+                string(60) "<a href='index.php?page=location&location_id=976'>Tokyo</a> "
+                ["HrefToRow"]=>
+                string(49) "<a href='index.php?page=row&row_id=964'>Row A</a>"
+                ["RowOverview"]=>
+                array(1) {
+                  [0]=>
+                  object(TemplateModule)#13 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=974"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(38)
+                      ["RackId"]=>
+                      string(3) "974"
+                      ["RackName"]=>
+                      string(3) "T01"
+                      ["RackHeight"]=>
+                      string(2) "16"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                }
+              }
+            }
+          }
+          ["locked":protected]=>
+          bool(false)
+        }
+      }
+      ["locked":protected]=>
+      bool(false)
+    }
+  }
+  ["locked":protected]=>
+  bool(false)
+}
+
+Loop: 
+array(7) {
+  ["Order"]=>
+  string(3) "odd"
+  ["LocationTree"]=>
+  string(61) "<a href='index.php?page=location&location_id=978'>London</a> "
+  ["HrefToRow"]=>
+  string(49) "<a href='index.php?page=row&row_id=966'>Row 1</a>"
+  ["RowOverview"]=>
+  array(3) {
+    [0]=>
+    string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=967'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=967'>
+	<br>L01</a></td>
+"
+    [1]=>
+    string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=968'>
+	<img border=0 width=45 height=30 title='12 units' src='?module=image&img=minirack&rack_id=968'>
+	<br>L02</a></td>
+"
+    [2]=>
+    string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=969'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=969'>
+	<br>L03</a></td>
+"
+  }
+  [0]=>
+  array(4) {
+    ["Order"]=>
+    string(4) "even"
+    ["LocationTree"]=>
+    string(61) "<a href='index.php?page=location&location_id=975'>Moscow</a> "
+    ["HrefToRow"]=>
+    string(49) "<a href='index.php?page=row&row_id=963'>Row 1</a>"
+    ["RowOverview"]=>
+    array(1) {
+      [0]=>
+      string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=972'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=972'>
+	<br>M01</a></td>
+"
+    }
+  }
+  [1]=>
+  array(4) {
+    ["Order"]=>
+    string(3) "odd"
+    ["LocationTree"]=>
+    string(63) "<a href='index.php?page=location&location_id=977'>New-York</a> "
+    ["HrefToRow"]=>
+    string(48) "<a href='index.php?page=row&row_id=965'>CF-4</a>"
+    ["RowOverview"]=>
+    array(3) {
+      [0]=>
+      string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=970'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=970'>
+	<br>NY100</a></td>
+"
+      [1]=>
+      string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=971'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=971'>
+	<br>NY101</a></td>
+"
+      [2]=>
+      string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=973'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=973'>
+	<br>NY102</a></td>
+"
+    }
+  }
+  [2]=>
+  array(4) {
+    ["Order"]=>
+    string(4) "even"
+    ["LocationTree"]=>
+    string(60) "<a href='index.php?page=location&location_id=976'>Tokyo</a> "
+    ["HrefToRow"]=>
+    string(49) "<a href='index.php?page=row&row_id=964'>Row A</a>"
+    ["RowOverview"]=>
+    array(1) {
+      [0]=>
+      string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=974'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=974'>
+	<br>T01</a></td>
+"
+    }
+  }
+}
+
+Putting Array together: array(1) {
+  [0]=>
+  string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=972'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=972'>
+	<br>M01</a></td>
+"
+}
+
+Putting Array together: array(3) {
+  [0]=>
+  string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=970'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=970'>
+	<br>NY100</a></td>
+"
+  [1]=>
+  string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=971'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=971'>
+	<br>NY101</a></td>
+"
+  [2]=>
+  string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=973'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=973'>
+	<br>NY102</a></td>
+"
+}
+
+Putting Array together: array(1) {
+  [0]=>
+  string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=974'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=974'>
+	<br>T01</a></td>
+"
+}
+
+Loop-i = 7
+Loading helper:H2
+Adding helper: H2
+Setting template: vanilla
+Generating submodule: RackspaceOverview (Placeholder: Payload InMemory: Parent and Output: array(2) {
+  [0]=>
+  NULL
+  [1]=>
+  array(0) {
+  }
+}
+
+Generating submodule: RackspaceOverviewTable (Placeholder: RackspaceOverviewTable InMemory: Parent and Output: array(2) {
+  [0]=>
+  object(TemplateModule)#4 (10) {
+    ["tpl":protected]=>
+    string(7) "vanilla"
+    ["module":protected]=>
+    string(17) "RackspaceOverview"
+    ["submodules":protected]=>
+    array(0) {
+    }
+    ["namespace":protected]=>
+    string(9) "rackspace"
+    ["namespace_global":protected]=>
+    bool(true)
+    ["loop":protected]=>
+    int(0)
+    ["loopplaceholder":protected]=>
+    string(0) ""
+    ["loopi":protected]=>
+    int(0)
+    ["output":protected]=>
+    array(0) {
+    }
+    ["locked":protected]=>
+    bool(false)
+  }
+  [1]=>
+  array(0) {
+  }
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=967"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "967"
+  ["RackName"]=>
+  string(3) "L01"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=968"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(30)
+  ["RackId"]=>
+  string(3) "968"
+  ["RackName"]=>
+  string(3) "L02"
+  ["RackHeight"]=>
+  string(2) "12"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=969"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "969"
+  ["RackName"]=>
+  string(3) "L03"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=972"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "972"
+  ["RackName"]=>
+  string(3) "M01"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=970"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(38)
+  ["RackId"]=>
+  string(3) "970"
+  ["RackName"]=>
+  string(5) "NY100"
+  ["RackHeight"]=>
+  string(2) "16"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=971"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "971"
+  ["RackName"]=>
+  string(5) "NY101"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=973"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "973"
+  ["RackName"]=>
+  string(5) "NY102"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=974"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(38)
+  ["RackId"]=>
+  string(3) "974"
+  ["RackName"]=>
+  string(3) "T01"
+  ["RackHeight"]=>
+  string(2) "16"
+}
+
+Running with template: vanilla Mainmod: object(TemplateModule)#3 (10) {
+  ["tpl":protected]=>
+  string(7) "vanilla"
+  ["module":protected]=>
+  string(5) "index"
+  ["submodules":protected]=>
+  array(0) {
+  }
+  ["namespace":protected]=>
+  string(0) ""
+  ["namespace_global":protected]=>
+  bool(false)
+  ["loop":protected]=>
+  int(0)
+  ["loopplaceholder":protected]=>
+  string(0) ""
+  ["loopi":protected]=>
+  int(0)
+  ["output":protected]=>
+  array(1) {
+    ["Payload"]=>
+    object(TemplateModule)#4 (10) {
+      ["tpl":protected]=>
+      string(7) "vanilla"
+      ["module":protected]=>
+      string(17) "RackspaceOverview"
+      ["submodules":protected]=>
+      array(0) {
+      }
+      ["namespace":protected]=>
+      string(9) "rackspace"
+      ["namespace_global":protected]=>
+      bool(true)
+      ["loop":protected]=>
+      int(0)
+      ["loopplaceholder":protected]=>
+      string(0) ""
+      ["loopi":protected]=>
+      int(0)
+      ["output":protected]=>
+      array(1) {
+        ["RackspaceOverviewTable"]=>
+        object(TemplateModule)#5 (10) {
+          ["tpl":protected]=>
+          string(7) "vanilla"
+          ["module":protected]=>
+          string(22) "RackspaceOverviewTable"
+          ["submodules":protected]=>
+          array(0) {
+          }
+          ["namespace":protected]=>
+          string(0) ""
+          ["namespace_global":protected]=>
+          bool(false)
+          ["loop":protected]=>
+          int(0)
+          ["loopplaceholder":protected]=>
+          string(0) ""
+          ["loopi":protected]=>
+          int(0)
+          ["output":protected]=>
+          array(1) {
+            ["OverviewTable"]=>
+            array(7) {
+              ["Order"]=>
+              string(3) "odd"
+              ["LocationTree"]=>
+              string(61) "<a href='index.php?page=location&location_id=978'>London</a> "
+              ["HrefToRow"]=>
+              string(49) "<a href='index.php?page=row&row_id=966'>Row 1</a>"
+              ["RowOverview"]=>
+              array(3) {
+                [0]=>
+                object(TemplateModule)#6 (10) {
+                  ["tpl":protected]=>
+                  string(7) "vanilla"
+                  ["module":protected]=>
+                  string(30) "RackspaceOverviewTableRackline"
+                  ["submodules":protected]=>
+                  array(0) {
+                  }
+                  ["namespace":protected]=>
+                  string(0) ""
+                  ["namespace_global":protected]=>
+                  bool(false)
+                  ["loop":protected]=>
+                  int(0)
+                  ["loopplaceholder":protected]=>
+                  string(0) ""
+                  ["loopi":protected]=>
+                  int(0)
+                  ["output":protected]=>
+                  array(6) {
+                    ["RackLink"]=>
+                    string(31) "index.php?page=rack&rack_id=967"
+                    ["RackImageWidth"]=>
+                    int(45)
+                    ["RackImageHeight"]=>
+                    int(90)
+                    ["RackId"]=>
+                    string(3) "967"
+                    ["RackName"]=>
+                    string(3) "L01"
+                    ["RackHeight"]=>
+                    string(2) "42"
+                  }
+                  ["locked":protected]=>
+                  bool(false)
+                }
+                [1]=>
+                object(TemplateModule)#7 (10) {
+                  ["tpl":protected]=>
+                  string(7) "vanilla"
+                  ["module":protected]=>
+                  string(30) "RackspaceOverviewTableRackline"
+                  ["submodules":protected]=>
+                  array(0) {
+                  }
+                  ["namespace":protected]=>
+                  string(0) ""
+                  ["namespace_global":protected]=>
+                  bool(false)
+                  ["loop":protected]=>
+                  int(0)
+                  ["loopplaceholder":protected]=>
+                  string(0) ""
+                  ["loopi":protected]=>
+                  int(0)
+                  ["output":protected]=>
+                  array(6) {
+                    ["RackLink"]=>
+                    string(31) "index.php?page=rack&rack_id=968"
+                    ["RackImageWidth"]=>
+                    int(45)
+                    ["RackImageHeight"]=>
+                    int(30)
+                    ["RackId"]=>
+                    string(3) "968"
+                    ["RackName"]=>
+                    string(3) "L02"
+                    ["RackHeight"]=>
+                    string(2) "12"
+                  }
+                  ["locked":protected]=>
+                  bool(false)
+                }
+                [2]=>
+                object(TemplateModule)#8 (10) {
+                  ["tpl":protected]=>
+                  string(7) "vanilla"
+                  ["module":protected]=>
+                  string(30) "RackspaceOverviewTableRackline"
+                  ["submodules":protected]=>
+                  array(0) {
+                  }
+                  ["namespace":protected]=>
+                  string(0) ""
+                  ["namespace_global":protected]=>
+                  bool(false)
+                  ["loop":protected]=>
+                  int(0)
+                  ["loopplaceholder":protected]=>
+                  string(0) ""
+                  ["loopi":protected]=>
+                  int(0)
+                  ["output":protected]=>
+                  array(6) {
+                    ["RackLink"]=>
+                    string(31) "index.php?page=rack&rack_id=969"
+                    ["RackImageWidth"]=>
+                    int(45)
+                    ["RackImageHeight"]=>
+                    int(90)
+                    ["RackId"]=>
+                    string(3) "969"
+                    ["RackName"]=>
+                    string(3) "L03"
+                    ["RackHeight"]=>
+                    string(2) "42"
+                  }
+                  ["locked":protected]=>
+                  bool(false)
+                }
+              }
+              [0]=>
+              array(4) {
+                ["Order"]=>
+                string(4) "even"
+                ["LocationTree"]=>
+                string(61) "<a href='index.php?page=location&location_id=975'>Moscow</a> "
+                ["HrefToRow"]=>
+                string(49) "<a href='index.php?page=row&row_id=963'>Row 1</a>"
+                ["RowOverview"]=>
+                array(1) {
+                  [0]=>
+                  object(TemplateModule)#9 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=972"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(90)
+                      ["RackId"]=>
+                      string(3) "972"
+                      ["RackName"]=>
+                      string(3) "M01"
+                      ["RackHeight"]=>
+                      string(2) "42"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                }
+              }
+              [1]=>
+              array(4) {
+                ["Order"]=>
+                string(3) "odd"
+                ["LocationTree"]=>
+                string(63) "<a href='index.php?page=location&location_id=977'>New-York</a> "
+                ["HrefToRow"]=>
+                string(48) "<a href='index.php?page=row&row_id=965'>CF-4</a>"
+                ["RowOverview"]=>
+                array(3) {
+                  [0]=>
+                  object(TemplateModule)#10 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=970"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(38)
+                      ["RackId"]=>
+                      string(3) "970"
+                      ["RackName"]=>
+                      string(5) "NY100"
+                      ["RackHeight"]=>
+                      string(2) "16"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                  [1]=>
+                  object(TemplateModule)#11 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=971"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(90)
+                      ["RackId"]=>
+                      string(3) "971"
+                      ["RackName"]=>
+                      string(5) "NY101"
+                      ["RackHeight"]=>
+                      string(2) "42"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                  [2]=>
+                  object(TemplateModule)#12 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=973"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(90)
+                      ["RackId"]=>
+                      string(3) "973"
+                      ["RackName"]=>
+                      string(5) "NY102"
+                      ["RackHeight"]=>
+                      string(2) "42"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                }
+              }
+              [2]=>
+              array(4) {
+                ["Order"]=>
+                string(4) "even"
+                ["LocationTree"]=>
+                string(60) "<a href='index.php?page=location&location_id=976'>Tokyo</a> "
+                ["HrefToRow"]=>
+                string(49) "<a href='index.php?page=row&row_id=964'>Row A</a>"
+                ["RowOverview"]=>
+                array(1) {
+                  [0]=>
+                  object(TemplateModule)#13 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=974"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(38)
+                      ["RackId"]=>
+                      string(3) "974"
+                      ["RackName"]=>
+                      string(3) "T01"
+                      ["RackHeight"]=>
+                      string(2) "16"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                }
+              }
+            }
+          }
+          ["locked":protected]=>
+          bool(false)
+        }
+      }
+      ["locked":protected]=>
+      bool(false)
+    }
+  }
+  ["locked":protected]=>
+  bool(false)
+}
+
+Loop: 
+array(7) {
+  ["Order"]=>
+  string(3) "odd"
+  ["LocationTree"]=>
+  string(61) "<a href='index.php?page=location&location_id=978'>London</a> "
+  ["HrefToRow"]=>
+  string(49) "<a href='index.php?page=row&row_id=966'>Row 1</a>"
+  ["RowOverview"]=>
+  array(3) {
+    [0]=>
+    string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=967'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=967'>
+	<br>L01</a></td>
+"
+    [1]=>
+    string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=968'>
+	<img border=0 width=45 height=30 title='12 units' src='?module=image&img=minirack&rack_id=968'>
+	<br>L02</a></td>
+"
+    [2]=>
+    string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=969'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=969'>
+	<br>L03</a></td>
+"
+  }
+  [0]=>
+  array(4) {
+    ["Order"]=>
+    string(4) "even"
+    ["LocationTree"]=>
+    string(61) "<a href='index.php?page=location&location_id=975'>Moscow</a> "
+    ["HrefToRow"]=>
+    string(49) "<a href='index.php?page=row&row_id=963'>Row 1</a>"
+    ["RowOverview"]=>
+    array(1) {
+      [0]=>
+      string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=972'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=972'>
+	<br>M01</a></td>
+"
+    }
+  }
+  [1]=>
+  array(4) {
+    ["Order"]=>
+    string(3) "odd"
+    ["LocationTree"]=>
+    string(63) "<a href='index.php?page=location&location_id=977'>New-York</a> "
+    ["HrefToRow"]=>
+    string(48) "<a href='index.php?page=row&row_id=965'>CF-4</a>"
+    ["RowOverview"]=>
+    array(3) {
+      [0]=>
+      string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=970'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=970'>
+	<br>NY100</a></td>
+"
+      [1]=>
+      string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=971'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=971'>
+	<br>NY101</a></td>
+"
+      [2]=>
+      string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=973'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=973'>
+	<br>NY102</a></td>
+"
+    }
+  }
+  [2]=>
+  array(4) {
+    ["Order"]=>
+    string(4) "even"
+    ["LocationTree"]=>
+    string(60) "<a href='index.php?page=location&location_id=976'>Tokyo</a> "
+    ["HrefToRow"]=>
+    string(49) "<a href='index.php?page=row&row_id=964'>Row A</a>"
+    ["RowOverview"]=>
+    array(1) {
+      [0]=>
+      string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=974'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=974'>
+	<br>T01</a></td>
+"
+    }
+  }
+}
+
+Putting Array together: array(1) {
+  [0]=>
+  string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=972'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=972'>
+	<br>M01</a></td>
+"
+}
+
+Putting Array together: array(3) {
+  [0]=>
+  string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=970'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=970'>
+	<br>NY100</a></td>
+"
+  [1]=>
+  string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=971'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=971'>
+	<br>NY101</a></td>
+"
+  [2]=>
+  string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=973'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=973'>
+	<br>NY102</a></td>
+"
+}
+
+Putting Array together: array(1) {
+  [0]=>
+  string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=974'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=974'>
+	<br>T01</a></td>
+"
+}
+
+Loop-i = 7
+Loading helper:H2
+Adding helper: H2
+Setting template: vanilla
+Generating submodule: RackspaceOverview (Placeholder: Payload InMemory: Parent and Output: array(2) {
+  [0]=>
+  NULL
+  [1]=>
+  array(0) {
+  }
+}
+
+Generating submodule: RackspaceOverviewTable (Placeholder: RackspaceOverviewTable InMemory: Parent and Output: array(2) {
+  [0]=>
+  object(TemplateModule)#4 (10) {
+    ["tpl":protected]=>
+    string(7) "vanilla"
+    ["module":protected]=>
+    string(17) "RackspaceOverview"
+    ["submodules":protected]=>
+    array(0) {
+    }
+    ["namespace":protected]=>
+    string(9) "rackspace"
+    ["namespace_global":protected]=>
+    bool(true)
+    ["loop":protected]=>
+    int(0)
+    ["loopplaceholder":protected]=>
+    string(0) ""
+    ["loopi":protected]=>
+    int(0)
+    ["output":protected]=>
+    array(0) {
+    }
+    ["locked":protected]=>
+    bool(false)
+  }
+  [1]=>
+  array(0) {
+  }
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=967"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "967"
+  ["RackName"]=>
+  string(3) "L01"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=968"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(30)
+  ["RackId"]=>
+  string(3) "968"
+  ["RackName"]=>
+  string(3) "L02"
+  ["RackHeight"]=>
+  string(2) "12"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=969"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "969"
+  ["RackName"]=>
+  string(3) "L03"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=972"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "972"
+  ["RackName"]=>
+  string(3) "M01"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=970"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(38)
+  ["RackId"]=>
+  string(3) "970"
+  ["RackName"]=>
+  string(5) "NY100"
+  ["RackHeight"]=>
+  string(2) "16"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=971"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "971"
+  ["RackName"]=>
+  string(5) "NY101"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=973"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "973"
+  ["RackName"]=>
+  string(5) "NY102"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=974"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(38)
+  ["RackId"]=>
+  string(3) "974"
+  ["RackName"]=>
+  string(3) "T01"
+  ["RackHeight"]=>
+  string(2) "16"
+}
+
+Running with template: vanilla Mainmod: object(TemplateModule)#3 (10) {
+  ["tpl":protected]=>
+  string(7) "vanilla"
+  ["module":protected]=>
+  string(5) "index"
+  ["submodules":protected]=>
+  array(0) {
+  }
+  ["namespace":protected]=>
+  string(0) ""
+  ["namespace_global":protected]=>
+  bool(false)
+  ["loop":protected]=>
+  int(0)
+  ["loopplaceholder":protected]=>
+  string(0) ""
+  ["loopi":protected]=>
+  int(0)
+  ["output":protected]=>
+  array(1) {
+    ["Payload"]=>
+    object(TemplateModule)#4 (10) {
+      ["tpl":protected]=>
+      string(7) "vanilla"
+      ["module":protected]=>
+      string(17) "RackspaceOverview"
+      ["submodules":protected]=>
+      array(0) {
+      }
+      ["namespace":protected]=>
+      string(9) "rackspace"
+      ["namespace_global":protected]=>
+      bool(true)
+      ["loop":protected]=>
+      int(0)
+      ["loopplaceholder":protected]=>
+      string(0) ""
+      ["loopi":protected]=>
+      int(0)
+      ["output":protected]=>
+      array(1) {
+        ["RackspaceOverviewTable"]=>
+        object(TemplateModule)#5 (10) {
+          ["tpl":protected]=>
+          string(7) "vanilla"
+          ["module":protected]=>
+          string(22) "RackspaceOverviewTable"
+          ["submodules":protected]=>
+          array(0) {
+          }
+          ["namespace":protected]=>
+          string(0) ""
+          ["namespace_global":protected]=>
+          bool(false)
+          ["loop":protected]=>
+          int(0)
+          ["loopplaceholder":protected]=>
+          string(0) ""
+          ["loopi":protected]=>
+          int(0)
+          ["output":protected]=>
+          array(1) {
+            ["OverviewTable"]=>
+            array(7) {
+              ["Order"]=>
+              string(3) "odd"
+              ["LocationTree"]=>
+              string(61) "<a href='index.php?page=location&location_id=978'>London</a> "
+              ["HrefToRow"]=>
+              string(49) "<a href='index.php?page=row&row_id=966'>Row 1</a>"
+              ["RowOverview"]=>
+              array(3) {
+                [0]=>
+                object(TemplateModule)#6 (10) {
+                  ["tpl":protected]=>
+                  string(7) "vanilla"
+                  ["module":protected]=>
+                  string(30) "RackspaceOverviewTableRackline"
+                  ["submodules":protected]=>
+                  array(0) {
+                  }
+                  ["namespace":protected]=>
+                  string(0) ""
+                  ["namespace_global":protected]=>
+                  bool(false)
+                  ["loop":protected]=>
+                  int(0)
+                  ["loopplaceholder":protected]=>
+                  string(0) ""
+                  ["loopi":protected]=>
+                  int(0)
+                  ["output":protected]=>
+                  array(6) {
+                    ["RackLink"]=>
+                    string(31) "index.php?page=rack&rack_id=967"
+                    ["RackImageWidth"]=>
+                    int(45)
+                    ["RackImageHeight"]=>
+                    int(90)
+                    ["RackId"]=>
+                    string(3) "967"
+                    ["RackName"]=>
+                    string(3) "L01"
+                    ["RackHeight"]=>
+                    string(2) "42"
+                  }
+                  ["locked":protected]=>
+                  bool(false)
+                }
+                [1]=>
+                object(TemplateModule)#7 (10) {
+                  ["tpl":protected]=>
+                  string(7) "vanilla"
+                  ["module":protected]=>
+                  string(30) "RackspaceOverviewTableRackline"
+                  ["submodules":protected]=>
+                  array(0) {
+                  }
+                  ["namespace":protected]=>
+                  string(0) ""
+                  ["namespace_global":protected]=>
+                  bool(false)
+                  ["loop":protected]=>
+                  int(0)
+                  ["loopplaceholder":protected]=>
+                  string(0) ""
+                  ["loopi":protected]=>
+                  int(0)
+                  ["output":protected]=>
+                  array(6) {
+                    ["RackLink"]=>
+                    string(31) "index.php?page=rack&rack_id=968"
+                    ["RackImageWidth"]=>
+                    int(45)
+                    ["RackImageHeight"]=>
+                    int(30)
+                    ["RackId"]=>
+                    string(3) "968"
+                    ["RackName"]=>
+                    string(3) "L02"
+                    ["RackHeight"]=>
+                    string(2) "12"
+                  }
+                  ["locked":protected]=>
+                  bool(false)
+                }
+                [2]=>
+                object(TemplateModule)#8 (10) {
+                  ["tpl":protected]=>
+                  string(7) "vanilla"
+                  ["module":protected]=>
+                  string(30) "RackspaceOverviewTableRackline"
+                  ["submodules":protected]=>
+                  array(0) {
+                  }
+                  ["namespace":protected]=>
+                  string(0) ""
+                  ["namespace_global":protected]=>
+                  bool(false)
+                  ["loop":protected]=>
+                  int(0)
+                  ["loopplaceholder":protected]=>
+                  string(0) ""
+                  ["loopi":protected]=>
+                  int(0)
+                  ["output":protected]=>
+                  array(6) {
+                    ["RackLink"]=>
+                    string(31) "index.php?page=rack&rack_id=969"
+                    ["RackImageWidth"]=>
+                    int(45)
+                    ["RackImageHeight"]=>
+                    int(90)
+                    ["RackId"]=>
+                    string(3) "969"
+                    ["RackName"]=>
+                    string(3) "L03"
+                    ["RackHeight"]=>
+                    string(2) "42"
+                  }
+                  ["locked":protected]=>
+                  bool(false)
+                }
+              }
+              [0]=>
+              array(4) {
+                ["Order"]=>
+                string(4) "even"
+                ["LocationTree"]=>
+                string(61) "<a href='index.php?page=location&location_id=975'>Moscow</a> "
+                ["HrefToRow"]=>
+                string(49) "<a href='index.php?page=row&row_id=963'>Row 1</a>"
+                ["RowOverview"]=>
+                array(1) {
+                  [0]=>
+                  object(TemplateModule)#9 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=972"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(90)
+                      ["RackId"]=>
+                      string(3) "972"
+                      ["RackName"]=>
+                      string(3) "M01"
+                      ["RackHeight"]=>
+                      string(2) "42"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                }
+              }
+              [1]=>
+              array(4) {
+                ["Order"]=>
+                string(3) "odd"
+                ["LocationTree"]=>
+                string(63) "<a href='index.php?page=location&location_id=977'>New-York</a> "
+                ["HrefToRow"]=>
+                string(48) "<a href='index.php?page=row&row_id=965'>CF-4</a>"
+                ["RowOverview"]=>
+                array(3) {
+                  [0]=>
+                  object(TemplateModule)#10 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=970"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(38)
+                      ["RackId"]=>
+                      string(3) "970"
+                      ["RackName"]=>
+                      string(5) "NY100"
+                      ["RackHeight"]=>
+                      string(2) "16"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                  [1]=>
+                  object(TemplateModule)#11 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=971"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(90)
+                      ["RackId"]=>
+                      string(3) "971"
+                      ["RackName"]=>
+                      string(5) "NY101"
+                      ["RackHeight"]=>
+                      string(2) "42"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                  [2]=>
+                  object(TemplateModule)#12 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=973"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(90)
+                      ["RackId"]=>
+                      string(3) "973"
+                      ["RackName"]=>
+                      string(5) "NY102"
+                      ["RackHeight"]=>
+                      string(2) "42"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                }
+              }
+              [2]=>
+              array(4) {
+                ["Order"]=>
+                string(4) "even"
+                ["LocationTree"]=>
+                string(60) "<a href='index.php?page=location&location_id=976'>Tokyo</a> "
+                ["HrefToRow"]=>
+                string(49) "<a href='index.php?page=row&row_id=964'>Row A</a>"
+                ["RowOverview"]=>
+                array(1) {
+                  [0]=>
+                  object(TemplateModule)#13 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=974"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(38)
+                      ["RackId"]=>
+                      string(3) "974"
+                      ["RackName"]=>
+                      string(3) "T01"
+                      ["RackHeight"]=>
+                      string(2) "16"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                }
+              }
+            }
+          }
+          ["locked":protected]=>
+          bool(false)
+        }
+      }
+      ["locked":protected]=>
+      bool(false)
+    }
+  }
+  ["locked":protected]=>
+  bool(false)
+}
+
+Loop: 
+array(7) {
+  ["Order"]=>
+  string(3) "odd"
+  ["LocationTree"]=>
+  string(61) "<a href='index.php?page=location&location_id=978'>London</a> "
+  ["HrefToRow"]=>
+  string(49) "<a href='index.php?page=row&row_id=966'>Row 1</a>"
+  ["RowOverview"]=>
+  array(3) {
+    [0]=>
+    string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=967'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=967'>
+	<br>L01</a></td>
+"
+    [1]=>
+    string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=968'>
+	<img border=0 width=45 height=30 title='12 units' src='?module=image&img=minirack&rack_id=968'>
+	<br>L02</a></td>
+"
+    [2]=>
+    string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=969'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=969'>
+	<br>L03</a></td>
+"
+  }
+  [0]=>
+  array(4) {
+    ["Order"]=>
+    string(4) "even"
+    ["LocationTree"]=>
+    string(61) "<a href='index.php?page=location&location_id=975'>Moscow</a> "
+    ["HrefToRow"]=>
+    string(49) "<a href='index.php?page=row&row_id=963'>Row 1</a>"
+    ["RowOverview"]=>
+    array(1) {
+      [0]=>
+      string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=972'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=972'>
+	<br>M01</a></td>
+"
+    }
+  }
+  [1]=>
+  array(4) {
+    ["Order"]=>
+    string(3) "odd"
+    ["LocationTree"]=>
+    string(63) "<a href='index.php?page=location&location_id=977'>New-York</a> "
+    ["HrefToRow"]=>
+    string(48) "<a href='index.php?page=row&row_id=965'>CF-4</a>"
+    ["RowOverview"]=>
+    array(3) {
+      [0]=>
+      string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=970'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=970'>
+	<br>NY100</a></td>
+"
+      [1]=>
+      string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=971'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=971'>
+	<br>NY101</a></td>
+"
+      [2]=>
+      string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=973'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=973'>
+	<br>NY102</a></td>
+"
+    }
+  }
+  [2]=>
+  array(4) {
+    ["Order"]=>
+    string(4) "even"
+    ["LocationTree"]=>
+    string(60) "<a href='index.php?page=location&location_id=976'>Tokyo</a> "
+    ["HrefToRow"]=>
+    string(49) "<a href='index.php?page=row&row_id=964'>Row A</a>"
+    ["RowOverview"]=>
+    array(1) {
+      [0]=>
+      string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=974'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=974'>
+	<br>T01</a></td>
+"
+    }
+  }
+}
+
+Putting Array together: array(1) {
+  [0]=>
+  string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=972'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=972'>
+	<br>M01</a></td>
+"
+}
+
+Putting Array together: array(3) {
+  [0]=>
+  string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=970'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=970'>
+	<br>NY100</a></td>
+"
+  [1]=>
+  string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=971'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=971'>
+	<br>NY101</a></td>
+"
+  [2]=>
+  string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=973'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=973'>
+	<br>NY102</a></td>
+"
+}
+
+Putting Array together: array(1) {
+  [0]=>
+  string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=974'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=974'>
+	<br>T01</a></td>
+"
+}
+
+Loop-i = 7
+Loading helper:H2
+Adding helper: H2
+Setting template: vanilla
+Generating submodule: RackspaceOverview (Placeholder: Payload InMemory: Parent and Output: array(2) {
+  [0]=>
+  NULL
+  [1]=>
+  array(0) {
+  }
+}
+
+Generating submodule: RackspaceOverviewTable (Placeholder: RackspaceOverviewTable InMemory: Parent and Output: array(2) {
+  [0]=>
+  object(TemplateModule)#4 (10) {
+    ["tpl":protected]=>
+    string(7) "vanilla"
+    ["module":protected]=>
+    string(17) "RackspaceOverview"
+    ["submodules":protected]=>
+    array(0) {
+    }
+    ["namespace":protected]=>
+    string(9) "rackspace"
+    ["namespace_global":protected]=>
+    bool(true)
+    ["loop":protected]=>
+    int(0)
+    ["loopplaceholder":protected]=>
+    string(0) ""
+    ["loopi":protected]=>
+    int(0)
+    ["output":protected]=>
+    array(0) {
+    }
+    ["locked":protected]=>
+    bool(false)
+  }
+  [1]=>
+  array(0) {
+  }
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=967"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "967"
+  ["RackName"]=>
+  string(3) "L01"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=968"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(30)
+  ["RackId"]=>
+  string(3) "968"
+  ["RackName"]=>
+  string(3) "L02"
+  ["RackHeight"]=>
+  string(2) "12"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=969"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "969"
+  ["RackName"]=>
+  string(3) "L03"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=972"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "972"
+  ["RackName"]=>
+  string(3) "M01"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=970"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(38)
+  ["RackId"]=>
+  string(3) "970"
+  ["RackName"]=>
+  string(5) "NY100"
+  ["RackHeight"]=>
+  string(2) "16"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=971"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "971"
+  ["RackName"]=>
+  string(5) "NY101"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=973"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "973"
+  ["RackName"]=>
+  string(5) "NY102"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=974"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(38)
+  ["RackId"]=>
+  string(3) "974"
+  ["RackName"]=>
+  string(3) "T01"
+  ["RackHeight"]=>
+  string(2) "16"
+}
+
+Running with template: vanilla Mainmod: object(TemplateModule)#3 (10) {
+  ["tpl":protected]=>
+  string(7) "vanilla"
+  ["module":protected]=>
+  string(5) "index"
+  ["submodules":protected]=>
+  array(0) {
+  }
+  ["namespace":protected]=>
+  string(0) ""
+  ["namespace_global":protected]=>
+  bool(false)
+  ["loop":protected]=>
+  int(0)
+  ["loopplaceholder":protected]=>
+  string(0) ""
+  ["loopi":protected]=>
+  int(0)
+  ["output":protected]=>
+  array(1) {
+    ["Payload"]=>
+    object(TemplateModule)#4 (10) {
+      ["tpl":protected]=>
+      string(7) "vanilla"
+      ["module":protected]=>
+      string(17) "RackspaceOverview"
+      ["submodules":protected]=>
+      array(0) {
+      }
+      ["namespace":protected]=>
+      string(9) "rackspace"
+      ["namespace_global":protected]=>
+      bool(true)
+      ["loop":protected]=>
+      int(0)
+      ["loopplaceholder":protected]=>
+      string(0) ""
+      ["loopi":protected]=>
+      int(0)
+      ["output":protected]=>
+      array(1) {
+        ["RackspaceOverviewTable"]=>
+        object(TemplateModule)#5 (10) {
+          ["tpl":protected]=>
+          string(7) "vanilla"
+          ["module":protected]=>
+          string(22) "RackspaceOverviewTable"
+          ["submodules":protected]=>
+          array(0) {
+          }
+          ["namespace":protected]=>
+          string(0) ""
+          ["namespace_global":protected]=>
+          bool(false)
+          ["loop":protected]=>
+          int(0)
+          ["loopplaceholder":protected]=>
+          string(0) ""
+          ["loopi":protected]=>
+          int(0)
+          ["output":protected]=>
+          array(1) {
+            ["OverviewTable"]=>
+            array(7) {
+              ["Order"]=>
+              string(3) "odd"
+              ["LocationTree"]=>
+              string(61) "<a href='index.php?page=location&location_id=978'>London</a> "
+              ["HrefToRow"]=>
+              string(49) "<a href='index.php?page=row&row_id=966'>Row 1</a>"
+              ["RowOverview"]=>
+              array(3) {
+                [0]=>
+                object(TemplateModule)#6 (10) {
+                  ["tpl":protected]=>
+                  string(7) "vanilla"
+                  ["module":protected]=>
+                  string(30) "RackspaceOverviewTableRackline"
+                  ["submodules":protected]=>
+                  array(0) {
+                  }
+                  ["namespace":protected]=>
+                  string(0) ""
+                  ["namespace_global":protected]=>
+                  bool(false)
+                  ["loop":protected]=>
+                  int(0)
+                  ["loopplaceholder":protected]=>
+                  string(0) ""
+                  ["loopi":protected]=>
+                  int(0)
+                  ["output":protected]=>
+                  array(6) {
+                    ["RackLink"]=>
+                    string(31) "index.php?page=rack&rack_id=967"
+                    ["RackImageWidth"]=>
+                    int(45)
+                    ["RackImageHeight"]=>
+                    int(90)
+                    ["RackId"]=>
+                    string(3) "967"
+                    ["RackName"]=>
+                    string(3) "L01"
+                    ["RackHeight"]=>
+                    string(2) "42"
+                  }
+                  ["locked":protected]=>
+                  bool(false)
+                }
+                [1]=>
+                object(TemplateModule)#7 (10) {
+                  ["tpl":protected]=>
+                  string(7) "vanilla"
+                  ["module":protected]=>
+                  string(30) "RackspaceOverviewTableRackline"
+                  ["submodules":protected]=>
+                  array(0) {
+                  }
+                  ["namespace":protected]=>
+                  string(0) ""
+                  ["namespace_global":protected]=>
+                  bool(false)
+                  ["loop":protected]=>
+                  int(0)
+                  ["loopplaceholder":protected]=>
+                  string(0) ""
+                  ["loopi":protected]=>
+                  int(0)
+                  ["output":protected]=>
+                  array(6) {
+                    ["RackLink"]=>
+                    string(31) "index.php?page=rack&rack_id=968"
+                    ["RackImageWidth"]=>
+                    int(45)
+                    ["RackImageHeight"]=>
+                    int(30)
+                    ["RackId"]=>
+                    string(3) "968"
+                    ["RackName"]=>
+                    string(3) "L02"
+                    ["RackHeight"]=>
+                    string(2) "12"
+                  }
+                  ["locked":protected]=>
+                  bool(false)
+                }
+                [2]=>
+                object(TemplateModule)#8 (10) {
+                  ["tpl":protected]=>
+                  string(7) "vanilla"
+                  ["module":protected]=>
+                  string(30) "RackspaceOverviewTableRackline"
+                  ["submodules":protected]=>
+                  array(0) {
+                  }
+                  ["namespace":protected]=>
+                  string(0) ""
+                  ["namespace_global":protected]=>
+                  bool(false)
+                  ["loop":protected]=>
+                  int(0)
+                  ["loopplaceholder":protected]=>
+                  string(0) ""
+                  ["loopi":protected]=>
+                  int(0)
+                  ["output":protected]=>
+                  array(6) {
+                    ["RackLink"]=>
+                    string(31) "index.php?page=rack&rack_id=969"
+                    ["RackImageWidth"]=>
+                    int(45)
+                    ["RackImageHeight"]=>
+                    int(90)
+                    ["RackId"]=>
+                    string(3) "969"
+                    ["RackName"]=>
+                    string(3) "L03"
+                    ["RackHeight"]=>
+                    string(2) "42"
+                  }
+                  ["locked":protected]=>
+                  bool(false)
+                }
+              }
+              [0]=>
+              array(4) {
+                ["Order"]=>
+                string(4) "even"
+                ["LocationTree"]=>
+                string(61) "<a href='index.php?page=location&location_id=975'>Moscow</a> "
+                ["HrefToRow"]=>
+                string(49) "<a href='index.php?page=row&row_id=963'>Row 1</a>"
+                ["RowOverview"]=>
+                array(1) {
+                  [0]=>
+                  object(TemplateModule)#9 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=972"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(90)
+                      ["RackId"]=>
+                      string(3) "972"
+                      ["RackName"]=>
+                      string(3) "M01"
+                      ["RackHeight"]=>
+                      string(2) "42"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                }
+              }
+              [1]=>
+              array(4) {
+                ["Order"]=>
+                string(3) "odd"
+                ["LocationTree"]=>
+                string(63) "<a href='index.php?page=location&location_id=977'>New-York</a> "
+                ["HrefToRow"]=>
+                string(48) "<a href='index.php?page=row&row_id=965'>CF-4</a>"
+                ["RowOverview"]=>
+                array(3) {
+                  [0]=>
+                  object(TemplateModule)#10 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=970"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(38)
+                      ["RackId"]=>
+                      string(3) "970"
+                      ["RackName"]=>
+                      string(5) "NY100"
+                      ["RackHeight"]=>
+                      string(2) "16"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                  [1]=>
+                  object(TemplateModule)#11 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=971"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(90)
+                      ["RackId"]=>
+                      string(3) "971"
+                      ["RackName"]=>
+                      string(5) "NY101"
+                      ["RackHeight"]=>
+                      string(2) "42"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                  [2]=>
+                  object(TemplateModule)#12 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=973"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(90)
+                      ["RackId"]=>
+                      string(3) "973"
+                      ["RackName"]=>
+                      string(5) "NY102"
+                      ["RackHeight"]=>
+                      string(2) "42"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                }
+              }
+              [2]=>
+              array(4) {
+                ["Order"]=>
+                string(4) "even"
+                ["LocationTree"]=>
+                string(60) "<a href='index.php?page=location&location_id=976'>Tokyo</a> "
+                ["HrefToRow"]=>
+                string(49) "<a href='index.php?page=row&row_id=964'>Row A</a>"
+                ["RowOverview"]=>
+                array(1) {
+                  [0]=>
+                  object(TemplateModule)#13 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=974"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(38)
+                      ["RackId"]=>
+                      string(3) "974"
+                      ["RackName"]=>
+                      string(3) "T01"
+                      ["RackHeight"]=>
+                      string(2) "16"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                }
+              }
+            }
+          }
+          ["locked":protected]=>
+          bool(false)
+        }
+      }
+      ["locked":protected]=>
+      bool(false)
+    }
+  }
+  ["locked":protected]=>
+  bool(false)
+}
+
+Loop: 
+array(7) {
+  ["Order"]=>
+  string(3) "odd"
+  ["LocationTree"]=>
+  string(61) "<a href='index.php?page=location&location_id=978'>London</a> "
+  ["HrefToRow"]=>
+  string(49) "<a href='index.php?page=row&row_id=966'>Row 1</a>"
+  ["RowOverview"]=>
+  array(3) {
+    [0]=>
+    string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=967'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=967'>
+	<br>L01</a></td>
+"
+    [1]=>
+    string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=968'>
+	<img border=0 width=45 height=30 title='12 units' src='?module=image&img=minirack&rack_id=968'>
+	<br>L02</a></td>
+"
+    [2]=>
+    string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=969'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=969'>
+	<br>L03</a></td>
+"
+  }
+  [0]=>
+  array(4) {
+    ["Order"]=>
+    string(4) "even"
+    ["LocationTree"]=>
+    string(61) "<a href='index.php?page=location&location_id=975'>Moscow</a> "
+    ["HrefToRow"]=>
+    string(49) "<a href='index.php?page=row&row_id=963'>Row 1</a>"
+    ["RowOverview"]=>
+    array(1) {
+      [0]=>
+      string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=972'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=972'>
+	<br>M01</a></td>
+"
+    }
+  }
+  [1]=>
+  array(4) {
+    ["Order"]=>
+    string(3) "odd"
+    ["LocationTree"]=>
+    string(63) "<a href='index.php?page=location&location_id=977'>New-York</a> "
+    ["HrefToRow"]=>
+    string(48) "<a href='index.php?page=row&row_id=965'>CF-4</a>"
+    ["RowOverview"]=>
+    array(3) {
+      [0]=>
+      string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=970'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=970'>
+	<br>NY100</a></td>
+"
+      [1]=>
+      string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=971'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=971'>
+	<br>NY101</a></td>
+"
+      [2]=>
+      string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=973'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=973'>
+	<br>NY102</a></td>
+"
+    }
+  }
+  [2]=>
+  array(4) {
+    ["Order"]=>
+    string(4) "even"
+    ["LocationTree"]=>
+    string(60) "<a href='index.php?page=location&location_id=976'>Tokyo</a> "
+    ["HrefToRow"]=>
+    string(49) "<a href='index.php?page=row&row_id=964'>Row A</a>"
+    ["RowOverview"]=>
+    array(1) {
+      [0]=>
+      string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=974'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=974'>
+	<br>T01</a></td>
+"
+    }
+  }
+}
+
+Putting Array together: array(1) {
+  [0]=>
+  string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=972'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=972'>
+	<br>M01</a></td>
+"
+}
+
+Putting Array together: array(3) {
+  [0]=>
+  string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=970'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=970'>
+	<br>NY100</a></td>
+"
+  [1]=>
+  string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=971'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=971'>
+	<br>NY101</a></td>
+"
+  [2]=>
+  string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=973'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=973'>
+	<br>NY102</a></td>
+"
+}
+
+Putting Array together: array(1) {
+  [0]=>
+  string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=974'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=974'>
+	<br>T01</a></td>
+"
+}
+
+Loop-i = 7
+Loading helper:H2
+Adding helper: H2
+Setting template: vanilla
+Generating submodule: RackspaceOverview (Placeholder: Payload InMemory: Parent and Output: array(2) {
+  [0]=>
+  NULL
+  [1]=>
+  array(0) {
+  }
+}
+
+Generating submodule: RackspaceOverviewTable (Placeholder: RackspaceOverviewTable InMemory: Parent and Output: array(2) {
+  [0]=>
+  object(TemplateModule)#4 (10) {
+    ["tpl":protected]=>
+    string(7) "vanilla"
+    ["module":protected]=>
+    string(17) "RackspaceOverview"
+    ["submodules":protected]=>
+    array(0) {
+    }
+    ["namespace":protected]=>
+    string(9) "rackspace"
+    ["namespace_global":protected]=>
+    bool(true)
+    ["loop":protected]=>
+    int(0)
+    ["loopplaceholder":protected]=>
+    string(0) ""
+    ["loopi":protected]=>
+    int(0)
+    ["output":protected]=>
+    array(0) {
+    }
+    ["locked":protected]=>
+    bool(false)
+  }
+  [1]=>
+  array(0) {
+  }
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=967"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "967"
+  ["RackName"]=>
+  string(3) "L01"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=968"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(30)
+  ["RackId"]=>
+  string(3) "968"
+  ["RackName"]=>
+  string(3) "L02"
+  ["RackHeight"]=>
+  string(2) "12"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=969"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "969"
+  ["RackName"]=>
+  string(3) "L03"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=972"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "972"
+  ["RackName"]=>
+  string(3) "M01"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=970"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(38)
+  ["RackId"]=>
+  string(3) "970"
+  ["RackName"]=>
+  string(5) "NY100"
+  ["RackHeight"]=>
+  string(2) "16"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=971"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "971"
+  ["RackName"]=>
+  string(5) "NY101"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=973"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(90)
+  ["RackId"]=>
+  string(3) "973"
+  ["RackName"]=>
+  string(5) "NY102"
+  ["RackHeight"]=>
+  string(2) "42"
+}
+
+Generating module: RackspaceOverviewTableRackline (InMemory:  Output: array(6) {
+  ["RackLink"]=>
+  string(31) "index.php?page=rack&rack_id=974"
+  ["RackImageWidth"]=>
+  int(45)
+  ["RackImageHeight"]=>
+  int(38)
+  ["RackId"]=>
+  string(3) "974"
+  ["RackName"]=>
+  string(3) "T01"
+  ["RackHeight"]=>
+  string(2) "16"
+}
+
+Running with template: vanilla Mainmod: object(TemplateModule)#3 (10) {
+  ["tpl":protected]=>
+  string(7) "vanilla"
+  ["module":protected]=>
+  string(5) "index"
+  ["submodules":protected]=>
+  array(0) {
+  }
+  ["namespace":protected]=>
+  string(0) ""
+  ["namespace_global":protected]=>
+  bool(false)
+  ["loop":protected]=>
+  int(0)
+  ["loopplaceholder":protected]=>
+  string(0) ""
+  ["loopi":protected]=>
+  int(0)
+  ["output":protected]=>
+  array(1) {
+    ["Payload"]=>
+    object(TemplateModule)#4 (10) {
+      ["tpl":protected]=>
+      string(7) "vanilla"
+      ["module":protected]=>
+      string(17) "RackspaceOverview"
+      ["submodules":protected]=>
+      array(0) {
+      }
+      ["namespace":protected]=>
+      string(9) "rackspace"
+      ["namespace_global":protected]=>
+      bool(true)
+      ["loop":protected]=>
+      int(0)
+      ["loopplaceholder":protected]=>
+      string(0) ""
+      ["loopi":protected]=>
+      int(0)
+      ["output":protected]=>
+      array(1) {
+        ["RackspaceOverviewTable"]=>
+        object(TemplateModule)#5 (10) {
+          ["tpl":protected]=>
+          string(7) "vanilla"
+          ["module":protected]=>
+          string(22) "RackspaceOverviewTable"
+          ["submodules":protected]=>
+          array(0) {
+          }
+          ["namespace":protected]=>
+          string(0) ""
+          ["namespace_global":protected]=>
+          bool(false)
+          ["loop":protected]=>
+          int(0)
+          ["loopplaceholder":protected]=>
+          string(0) ""
+          ["loopi":protected]=>
+          int(0)
+          ["output":protected]=>
+          array(1) {
+            ["OverviewTable"]=>
+            array(4) {
+              [0]=>
+              array(4) {
+                ["Order"]=>
+                string(3) "odd"
+                ["LocationTree"]=>
+                string(61) "<a href='index.php?page=location&location_id=978'>London</a> "
+                ["HrefToRow"]=>
+                string(49) "<a href='index.php?page=row&row_id=966'>Row 1</a>"
+                ["RowOverview"]=>
+                array(3) {
+                  [0]=>
+                  object(TemplateModule)#6 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=967"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(90)
+                      ["RackId"]=>
+                      string(3) "967"
+                      ["RackName"]=>
+                      string(3) "L01"
+                      ["RackHeight"]=>
+                      string(2) "42"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                  [1]=>
+                  object(TemplateModule)#7 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=968"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(30)
+                      ["RackId"]=>
+                      string(3) "968"
+                      ["RackName"]=>
+                      string(3) "L02"
+                      ["RackHeight"]=>
+                      string(2) "12"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                  [2]=>
+                  object(TemplateModule)#8 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=969"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(90)
+                      ["RackId"]=>
+                      string(3) "969"
+                      ["RackName"]=>
+                      string(3) "L03"
+                      ["RackHeight"]=>
+                      string(2) "42"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                }
+              }
+              [1]=>
+              array(4) {
+                ["Order"]=>
+                string(4) "even"
+                ["LocationTree"]=>
+                string(61) "<a href='index.php?page=location&location_id=975'>Moscow</a> "
+                ["HrefToRow"]=>
+                string(49) "<a href='index.php?page=row&row_id=963'>Row 1</a>"
+                ["RowOverview"]=>
+                array(1) {
+                  [0]=>
+                  object(TemplateModule)#9 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=972"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(90)
+                      ["RackId"]=>
+                      string(3) "972"
+                      ["RackName"]=>
+                      string(3) "M01"
+                      ["RackHeight"]=>
+                      string(2) "42"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                }
+              }
+              [2]=>
+              array(4) {
+                ["Order"]=>
+                string(3) "odd"
+                ["LocationTree"]=>
+                string(63) "<a href='index.php?page=location&location_id=977'>New-York</a> "
+                ["HrefToRow"]=>
+                string(48) "<a href='index.php?page=row&row_id=965'>CF-4</a>"
+                ["RowOverview"]=>
+                array(3) {
+                  [0]=>
+                  object(TemplateModule)#10 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=970"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(38)
+                      ["RackId"]=>
+                      string(3) "970"
+                      ["RackName"]=>
+                      string(5) "NY100"
+                      ["RackHeight"]=>
+                      string(2) "16"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                  [1]=>
+                  object(TemplateModule)#11 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=971"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(90)
+                      ["RackId"]=>
+                      string(3) "971"
+                      ["RackName"]=>
+                      string(5) "NY101"
+                      ["RackHeight"]=>
+                      string(2) "42"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                  [2]=>
+                  object(TemplateModule)#12 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=973"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(90)
+                      ["RackId"]=>
+                      string(3) "973"
+                      ["RackName"]=>
+                      string(5) "NY102"
+                      ["RackHeight"]=>
+                      string(2) "42"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                }
+              }
+              [3]=>
+              array(4) {
+                ["Order"]=>
+                string(4) "even"
+                ["LocationTree"]=>
+                string(60) "<a href='index.php?page=location&location_id=976'>Tokyo</a> "
+                ["HrefToRow"]=>
+                string(49) "<a href='index.php?page=row&row_id=964'>Row A</a>"
+                ["RowOverview"]=>
+                array(1) {
+                  [0]=>
+                  object(TemplateModule)#13 (10) {
+                    ["tpl":protected]=>
+                    string(7) "vanilla"
+                    ["module":protected]=>
+                    string(30) "RackspaceOverviewTableRackline"
+                    ["submodules":protected]=>
+                    array(0) {
+                    }
+                    ["namespace":protected]=>
+                    string(0) ""
+                    ["namespace_global":protected]=>
+                    bool(false)
+                    ["loop":protected]=>
+                    int(0)
+                    ["loopplaceholder":protected]=>
+                    string(0) ""
+                    ["loopi":protected]=>
+                    int(0)
+                    ["output":protected]=>
+                    array(6) {
+                      ["RackLink"]=>
+                      string(31) "index.php?page=rack&rack_id=974"
+                      ["RackImageWidth"]=>
+                      int(45)
+                      ["RackImageHeight"]=>
+                      int(38)
+                      ["RackId"]=>
+                      string(3) "974"
+                      ["RackName"]=>
+                      string(3) "T01"
+                      ["RackHeight"]=>
+                      string(2) "16"
+                    }
+                    ["locked":protected]=>
+                    bool(false)
+                  }
+                }
+              }
+            }
+          }
+          ["locked":protected]=>
+          bool(false)
+        }
+      }
+      ["locked":protected]=>
+      bool(false)
+    }
+  }
+  ["locked":protected]=>
+  bool(false)
+}
+
+Loop: 
+array(4) {
+  [0]=>
+  array(4) {
+    ["Order"]=>
+    string(3) "odd"
+    ["LocationTree"]=>
+    string(61) "<a href='index.php?page=location&location_id=978'>London</a> "
+    ["HrefToRow"]=>
+    string(49) "<a href='index.php?page=row&row_id=966'>Row 1</a>"
+    ["RowOverview"]=>
+    array(3) {
+      [0]=>
+      string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=967'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=967'>
+	<br>L01</a></td>
+"
+      [1]=>
+      string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=968'>
+	<img border=0 width=45 height=30 title='12 units' src='?module=image&img=minirack&rack_id=968'>
+	<br>L02</a></td>
+"
+      [2]=>
+      string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=969'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=969'>
+	<br>L03</a></td>
+"
+    }
+  }
+  [1]=>
+  array(4) {
+    ["Order"]=>
+    string(4) "even"
+    ["LocationTree"]=>
+    string(61) "<a href='index.php?page=location&location_id=975'>Moscow</a> "
+    ["HrefToRow"]=>
+    string(49) "<a href='index.php?page=row&row_id=963'>Row 1</a>"
+    ["RowOverview"]=>
+    array(1) {
+      [0]=>
+      string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=972'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=972'>
+	<br>M01</a></td>
+"
+    }
+  }
+  [2]=>
+  array(4) {
+    ["Order"]=>
+    string(3) "odd"
+    ["LocationTree"]=>
+    string(63) "<a href='index.php?page=location&location_id=977'>New-York</a> "
+    ["HrefToRow"]=>
+    string(48) "<a href='index.php?page=row&row_id=965'>CF-4</a>"
+    ["RowOverview"]=>
+    array(3) {
+      [0]=>
+      string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=970'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=970'>
+	<br>NY100</a></td>
+"
+      [1]=>
+      string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=971'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=971'>
+	<br>NY101</a></td>
+"
+      [2]=>
+      string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=973'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=973'>
+	<br>NY102</a></td>
+"
+    }
+  }
+  [3]=>
+  array(4) {
+    ["Order"]=>
+    string(4) "even"
+    ["LocationTree"]=>
+    string(60) "<a href='index.php?page=location&location_id=976'>Tokyo</a> "
+    ["HrefToRow"]=>
+    string(49) "<a href='index.php?page=row&row_id=964'>Row A</a>"
+    ["RowOverview"]=>
+    array(1) {
+      [0]=>
+      string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=974'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=974'>
+	<br>T01</a></td>
+"
+    }
+  }
+}
+
+Putting Array together: array(3) {
+  [0]=>
+  string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=967'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=967'>
+	<br>L01</a></td>
+"
+  [1]=>
+  string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=968'>
+	<img border=0 width=45 height=30 title='12 units' src='?module=image&img=minirack&rack_id=968'>
+	<br>L02</a></td>
+"
+  [2]=>
+  string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=969'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=969'>
+	<br>L03</a></td>
+"
+}
+
+Putting Array together: array(1) {
+  [0]=>
+  string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=972'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=972'>
+	<br>M01</a></td>
+"
+}
+
+Putting Array together: array(3) {
+  [0]=>
+  string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=970'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=970'>
+	<br>NY100</a></td>
+"
+  [1]=>
+  string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=971'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=971'>
+	<br>NY101</a></td>
+"
+  [2]=>
+  string(192) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=973'>
+	<img border=0 width=45 height=90 title='42 units' src='?module=image&img=minirack&rack_id=973'>
+	<br>NY102</a></td>
+"
+}
+
+Putting Array together: array(1) {
+  [0]=>
+  string(190) "	<td align=center valign=bottom><a href='index.php?page=rack&rack_id=974'>
+	<img border=0 width=45 height=38 title='16 units' src='?module=image&img=minirack&rack_id=974'>
+	<br>T01</a></td>
+"
+}
+
+Loop-i = 4
+Loading helper:H2
+Adding helper: H2

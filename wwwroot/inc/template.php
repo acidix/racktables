@@ -628,7 +628,7 @@ class TemplateModule
 		ob_start();
 		$this->sout = array();
 		
-		$this->runModules($this->output);
+		$this->output = $this->runModules($this->output);
 		
 		$this->output["css"] = './tpl/' . $this->tpl . '/css/';
 		$this->output["img"] = './tpl/' . $this->tpl . '/img/';
@@ -754,6 +754,11 @@ class TemplateModule
 		$helper = $tplm->getHelper($name);
 		$helper->run($this,$params);
 	}
+
+	public function getHelper($name,$params = array())
+	{
+		$this->getH($name,$params);
+	}
 	
 	/**
 	 * For use in templates, initializes a loop, uses the content of the given placeholder to fill the rows (has to be an array of arrays).
@@ -792,16 +797,24 @@ class TemplateModule
 			$cont = ob_get_clean();
 			//echo $cont;
 			$this->loopi = 0;
-			for ($i = 0; $i < count($this->output[$this->loopplaceholder]); $i++)
+			//for ($i = 0; $i < count($this->output[$this->loopplaceholder]); $i++)
+			TemplateManager::log("Loop: \n\r",$this->output[$this->loopplaceholder]);
+			foreach ($this->output[$this->loopplaceholder] as $i => $row)
 			{
 				$ret = "";
 				$this->loopi = $i;
 				$ret = $cont;
-				foreach ($this->output[$this->loopplaceholder][$i] as $name => $value) {
+				foreach ($row as $name => $value) {
+					if (is_array($value))
+					{
+						TemplateManager::log("Putting Array together: " , $value);
+						$value = implode($value);
+					}
 					$ret = str_replace("{{".$name."}}", $value, $ret);
 				}
 				echo $ret;
 			}
+			TemplateManager::log("Loop-i = " . count($this->output[$this->loopplaceholder]));
 			$this->loop = 0;
 			$this->loopi = 0;
 			$this->loopplaceholder = "";
@@ -840,12 +853,12 @@ class TemplateModule
 	 * 
 	 * @param array $array
 	 */
-	protected function runModules(&$array)
+	protected function runModules($array)
 	{
 		foreach ($array as $pos => $obj) {
 			if (is_array($obj))
 			{
-				$this->runModules($obj);
+				$array[$pos] = $this->runModules($obj);
 			}
 			if (is_object($obj))
 			{
@@ -856,6 +869,7 @@ class TemplateModule
 				$array[$pos] = $obj->run();
 			}
 		}
+		return $array;
 	}
 	
 	/**
