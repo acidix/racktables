@@ -48,6 +48,8 @@ try {
 		$tplm = TemplateManager::getInstance();
 		if ($tplm->getMainModule() != null)
 		{
+			showPathAndSearch($pageno,$tabno,true);
+			showTabs($pageno, $tabno, true);
 			$tplm->run(true,"vanilla");
 		}
 		else

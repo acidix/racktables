@@ -65,6 +65,12 @@ class TemplateManager
 	 */
 	protected $helpers = array();
 	
+	/**
+	 * Contains all added requirements to check wether they already got added.
+	 * @var array
+	 */
+	protected $requirements = array();
+	
 	public function inMemoryExists($name)
 	{
 		return array_key_exists($name,$this->inmemory_templates);
@@ -302,10 +308,20 @@ class TemplateManager
 	 */
 	public function addRequirement($placeholder,$name,$namespace="",$inmemory=false,$cont=array())
 	{
+		$test = array($placeholder,$name,$namespace,$inmemory,$cont);
+		foreach ($this->requirements as $req)
+		{
+			if ($req == $test)
+			{
+				self:log("Adding requirement failed: " . $name . " -> " . $placeholder);
+				return false;
+			}
+		}
+		$this->requirements[] = $test;
 		self::log("Adding requirement: ".$placeholder . " on " . $name . " (Namespace: " . $namespace . " InMemory: " . $inmemory . " Cont: ", $cont);
 		$mod = $this->generateSubmodule($placeholder, $name, null, $inmemory, $cont);
 		$mod->setNamespace($namespace);
-		return $mod;
+		$mod->setLock(true);
 	}
 	
 	/**
@@ -832,7 +848,7 @@ class TemplateModule
 	{
 		if (array_key_exists($placeholder, $this->output))
 		{
-			if(is_array($this->output[$placeholder]))
+			if(is_array($this->output[$placeholder])&&!$this->isAssoc($this->output[$placeholder]))
 			{
 				$this->output[$placeholder][] = $cont ;
 			}
@@ -845,6 +861,16 @@ class TemplateModule
 		{
 			$this->output[$placeholder] = $cont;
 		}
+	}
+	
+	
+	/**
+	 * Used in addOutput to check wether an array is associative.
+	 * @param unknown $array
+	 * @return boolean
+	 */
+	protected function isAssoc($array) {
+  		return (bool)count(array_filter(array_keys($array), 'is_string'));
 	}
 	
 	/**

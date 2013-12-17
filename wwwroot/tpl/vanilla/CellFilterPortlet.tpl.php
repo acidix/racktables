@@ -4,7 +4,13 @@
 	<div class=portlet><h2><?php $this->get("PortletTitle"); ?></h2>
 		<form method=get>
 			<table border=0 align=center cellspacing=0 class="tagtree">
-				<?php $this->get("TableContent"); ?>
+				<?php $this->TableContent; ?>
+				<tr>
+					<td class="tdleft">
+						<input type=hidden name=page value=<?php $this->PageNo; ?>>
+						<input type=hidden name=tab value=<?php $this->TabNo; ?>>
+						<?php  $this->HiddenParams; ?>
+						
 			</table>
 		</form>
 	</div>

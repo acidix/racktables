@@ -42,4 +42,34 @@ $this->setInMemoryTemplate("CelLFilterNoPredicates","<tr><td colspan=2 class='ta
  * Usage: interface.php (renderCellFilterPortlet())
  */
 $this->setInMemoryTemplate("CellFilterExtraText","<tr><td colspan=2><textarea name=cfe {{Class}}>{{Extratext}}</textarea></td></tr>");
+
+/**
+ * Template for: Tablist, the currently active Tab
+ * Usage: interface.php (showTabs)
+ */
+$this->setInMemoryTemplate("TabActive","<li><a class=current href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
+
+/**
+ * Template for: Tablist, currently inactive tabs
+ * Usage: interface.php (showTabs)
+ */
+$this->setInMemoryTemplate("TabInactive","<li><a class=std href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
+
+/**
+ * Template for: Tablist, tabs with warnings
+ * Usage: interface.php (showTabs)
+ */
+$this->setInMemoryTemplate("TabAttention","<li><a class=attn href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
+
+/**
+ * Template for: Part of the path  in the PathAndSearch module
+ * Usage: interface.php (showPathAndSearch)
+ */
+$this->setInMemoryTemplate("PathLink"," : <a href='index.php?{{Params}}{{AnchorTail}}'>{{Name}}</a>");
+
+/**
+ * Template for spacer in CellFilterPortlet
+ * UsagE: interface.php (renderCellFilterPortlet)
+ */
+$this->setInMemoryTemplate("CellFilterSpacer","<tr><td colspan=2 class=tagbox><hr></td></tr>\n");
 ?>

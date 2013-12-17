@@ -5111,6 +5111,7 @@ function printTagCheckboxTable ($input_name, $preselect, $neg_preselect, $taglis
 			}
 			else
 			{
+				//@TODO Remove old version, replace with template engine
 				$tag_class = isset ($taginfo['id']) && isset ($taginfo['refcnt']) ? getTagClassName ($row['input_value']) : '';
 				echo "<tr class='${row['tr_class']}'><td class='${row['td_class']}' style='padding-left: " . ($row['level'] * 16) . "px;'>";
 				echo "<label><input type=checkbox class='${row['input_class']}' name='${row['input_name']}[]' value='${row['input_value']}'";
@@ -5205,6 +5206,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	//echo '<table border=0 align=center cellspacing=0 class="tagtree">';
 	$ruler = "<tr><td colspan=2 class=tagbox><hr></td></tr>\n"; //@TODO: Get ruler in template.
 	$hr = '';
+	$rulerfirst = true;
 	// "reset filter" button only gets active when a filter is applied
 	$enable_reset = FALSE;
 	// "apply filter" button only gets active when there are checkbox/textarea inputs on the roster
@@ -5214,6 +5216,11 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	{
 		$andormod = $tplm->generateSubmodule("TableContent", "CellFilterAndOrCell",$mod);
 		//echo $hr;
+		if (!$rulerfirst)
+		{
+			$tplm->generateSubmodule("TableContent", "CellFilterSpacer", $mod, true);
+			$rulerfirst = false;
+		}
 		$hr = $ruler;
 		$andor = strlen ($preselect['andor']) ? $preselect['andor'] : getConfigVar ('FILTER_DEFAULT_ANDOR');
 		//echo '<tr>';
@@ -5241,9 +5248,13 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	{
 		if (count ($preselect['tagidlist']))
 			$enable_reset = TRUE;
-		echo $hr;
-		$hr = $ruler;
-
+		//echo $hr;
+		//$hr = $ruler;
+		if (!$rulerfirst)
+		{
+			$tplm->generateSubmodule("TableContent", "CellFilterSpacer", $mod, true);
+			$rulerfirst = false;
+		}
 		// Show a tree of tags, pre-select according to currently requested list filter.
 		$objectivetags = getShrinkedTagTree($cell_list, $realm, $preselect);
 		if (!count ($objectivetags))
@@ -5255,16 +5266,21 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 			printTagCheckboxTable ('cft', buildTagChainFromIds ($preselect['tagidlist']), $negated_chain, $objectivetags, $realm, $mod);
 		}
 
-		if (getConfigVar('SHRINK_TAG_TREE_ON_CLICK') == 'yes')
-			addJS ('tag_cb.enableSubmitOnClick()', TRUE);
+		//if (getConfigVar('SHRINK_TAG_TREE_ON_CLICK') == 'yes')
+			//addJS ('tag_cb.enableSubmitOnClick()', TRUE);
 	}
 	// predicates block
 	if (getConfigVar ('FILTER_SUGGEST_PREDICATES') == 'yes' or count ($preselect['pnamelist']))
 	{
 		if (count ($preselect['pnamelist']))
 			$enable_reset = TRUE;
-		echo $hr;
-		$hr = $ruler;
+		//echo $hr;
+		//$hr = $ruler;
+		if (!$rulerfirst)
+		{
+			$tplm->generateSubmodule("TableContent", "CellFilterSpacer", $mod, true);
+			$rulerfirst = false;
+		}
 		global $pTable;
 		$myPredicates = array();
 		$psieve = getConfigVar ('FILTER_PREDICATE_SIEVE');
@@ -5293,8 +5309,13 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		$enable_apply = TRUE;
 		if (strlen ($preselect['extratext']))
 			$enable_reset = TRUE;
-		echo $hr;
-		$hr = $ruler;
+		//echo $hr;
+		//$hr = $ruler;
+		if (!$rulerfirst)
+		{
+			$tplm->generateSubmodule("TableContent", "CellFilterSpacer", $mod, true);
+			$rulerfirst = false;
+		}
 		$class = isset ($preselect['extraclass']) ? 'class=' . $preselect['extraclass'] : '';
 		$tplm->generateSubmodule("TableContent", "CellFilterExtraText", $mod, true, array("Class"=>$class,"Extratext"=>$preselect["extratext"]));
 		//echo "<tr><td colspan=2><textarea name=cfe ${class}>\n" . $preselect['extratext'];
@@ -5302,8 +5323,13 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	}
 	// submit block //@TODO rausfinden warum das funktioniert.
 	{
-		echo $hr;
-		$hr = $ruler;
+		//echo $hr;
+		//$hr = $ruler;
+		if (!$rulerfirst)
+		{
+			$tplm->generateSubmodule("TableContent", "CellFilterSpacer", $mod, true);
+			$rulerfirst = false;
+		}
 		echo '<tr><td class=tdleft>';
 		// "apply"
 		echo "<input type=hidden name=page value=${pageno}>\n";
@@ -5314,7 +5340,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		// input. To make things consistent, it is necessary to avoid pritning both <FORM>
 		// and "and/or" radio-buttons, when enable_apply isn't TRUE.
 		if (!$enable_apply)
-			printImageHREF ('setfilter gray');
+			printImageHREF ('setfilter gray'); //@TODO Find solution for primtImageHREF
 		else
 			printImageHREF ('setfilter', 'set filter', TRUE);
 		echo '</form>';
@@ -6114,7 +6140,7 @@ function renderTextEditor ($file_id)
 	echo "</td></tr>\n</table></form>\n";
 }
 
-function showPathAndSearch ($pageno, $tabno)
+function showPathAndSearch ($pageno, $tabno, $tpl = false)
 {
 	// This function returns array of page numbers leading to the target page
 	// plus page number of target page itself. The first element is the target
@@ -6145,8 +6171,14 @@ function showPathAndSearch ($pageno, $tabno)
 	}
 	global $page, $tab;
 	// Path.
+	if ($tpl)
+	{
+	////New Version
 	$path = getPath ($pageno);
 	$items = array();
+	
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateSubmodule("PathAndSearch", "PathAndSearch");
 	foreach (array_reverse ($path) as $no)
 	{
 		if (preg_match ('/(.*):(.*)/', $no, $m) && isset ($tab[$m[1]][$m[2]]))
@@ -6163,13 +6195,16 @@ function showPathAndSearch ($pageno, $tabno)
 			);
 		else
 			$title = callHook ('dynamic_title_decoder', $no);
-		$item = "<a href='index.php?";
+		//$item = "<a href='index.php?";
+		$item = $tplm->generateModule("PathLink", true);
+		
 		if (! isset ($title['params']['page']))
 			$title['params']['page'] = $no;
 		if (! isset ($title['params']['tab']))
 			$title['params']['tab'] = 'default';
 		$is_first = TRUE;
 		$anchor_tail = '';
+		$params = '';
 		foreach ($title['params'] as $param_name => $param_value)
 		{
 			if ($param_name == '#')
@@ -6177,11 +6212,15 @@ function showPathAndSearch ($pageno, $tabno)
 				$anchor_tail = '#' . $param_value;
 				continue;
 			}
-			$item .= ($is_first ? '' : '&') . "${param_name}=${param_value}";
+			$params .= ($is_first ? '' : '&') . "${param_name}=${param_value}";
 			$is_first = FALSE;
 		}
-		$item .= $anchor_tail;
-		$item .= "'>" . $title['name'] . "</a>";
+		//$item .= $anchor_tail;
+		//$item .= "'>" . $title['name'] . "</a>";
+		$item->addOutput("Params", $params);
+		$item->addOutput("AnchorTail", $anchor_tail);
+		$item->addOutput("Name", $title['name']);
+		
 		$items[] = $item;
 
 		// location bread crumbs insert for Rows and Racks
@@ -6198,6 +6237,84 @@ function showPathAndSearch ($pageno, $tabno)
 		}
 	}
 	// Search form.
+	//echo "<div class='searchbox' style='float:right'>";
+	//echo "<form name=search method=get>";
+	//echo '<input type=hidden name=page value=search>';
+	//echo "<input type=hidden name=last_page value=$pageno>";
+	//echo "<input type=hidden name=last_tab value=$tabno>";
+	// This input will be the first, if we don't add ports or addresses.
+	//echo "<label>Search:<input type=text name=q size=20 tabindex=1000 value='".(isset ($_REQUEST['q']) ? htmlspecialchars ($_REQUEST['q'], ENT_QUOTES) : '')."'></label></form></div>";
+	$mod->addOutput("PageNo", $pageno);
+	$mod->addOutput("TabNo", $tabno);
+	$mod->addOutput("SearchValue", (isset ($_REQUEST['q']) ? htmlspecialchars ($_REQUEST['q'], ENT_QUOTES) : '')) ;
+	$mod->addOutput("Path", array_reverse($items));
+	// Path (breadcrumbs)
+	//echo implode(' : ', array_reverse ($items));
+	}
+	else
+	{
+	///////Old Version
+	//@TODO Remove Old Version change to template engine
+		$path = getPath ($pageno);
+		$items = array();
+		
+		foreach (array_reverse ($path) as $no)
+		{
+			if (preg_match ('/(.*):(.*)/', $no, $m) && isset ($tab[$m[1]][$m[2]]))
+			$title = array
+		(
+				'name' => $tab[$m[1]][$m[2]],
+				'params' => array('page' => $m[1], 'tab' => $m[2]),
+		);
+	elseif (isset ($page[$no]['title']))
+	$title = array
+	(
+			'name' => $page[$no]['title'],
+			'params' => array()
+	);
+	else
+		$title = callHook ('dynamic_title_decoder', $no);
+	
+	$item = "<a href='index.php?";
+	
+	
+
+	if (! isset ($title['params']['page']))
+		$title['params']['page'] = $no;
+	if (! isset ($title['params']['tab']))
+		$title['params']['tab'] = 'default';
+		$is_first = TRUE;
+		$anchor_tail = '';
+		$params = '';
+		foreach ($title['params'] as $param_name => $param_value)
+		{
+				if ($param_name == '#')
+			{
+				$anchor_tail = '#' . $param_value;
+				continue;
+			}
+			$params .= ($is_first ? '' : '&') . "${param_name}=${param_value}";
+			$is_first = FALSE;
+	}
+	$item .= $anchor_tail;
+	$item .= "'>" . $title['name'] . "</a>";
+	
+	$items[] = $item;
+	
+	// location bread crumbs insert for Rows and Racks
+	if ($no == 'row')
+	{
+		$trail = getLocationTrail ($title['params']['location_id']);
+		if(!empty ($trail))
+			$items[] = $trail;
+	}
+	if($no == 'location')
+	{
+		// overwrite the bread crumb for current location with whole path
+			$items[count ($items)-1] = getLocationTrail ($title['params']['location_id']);
+		}
+	}
+	// Search form.
 	echo "<div class='searchbox' style='float:right'>";
 	echo "<form name=search method=get>";
 	echo '<input type=hidden name=page value=search>';
@@ -6205,9 +6322,10 @@ function showPathAndSearch ($pageno, $tabno)
 	echo "<input type=hidden name=last_tab value=$tabno>";
 	// This input will be the first, if we don't add ports or addresses.
 	echo "<label>Search:<input type=text name=q size=20 tabindex=1000 value='".(isset ($_REQUEST['q']) ? htmlspecialchars ($_REQUEST['q'], ENT_QUOTES) : '')."'></label></form></div>";
-
+	
 	// Path (breadcrumbs)
 	echo implode(' : ', array_reverse ($items));
+	}
 }
 
 function getTitle ($pageno)
@@ -6219,34 +6337,87 @@ function getTitle ($pageno)
 	return $tmp['name'];
 }
 
-function showTabs ($pageno, $tabno)
+function showTabs ($pageno, $tabno,$tpl = false)
 {
 	global $tab, $page, $trigger;
 	if (!isset ($tab[$pageno]['default']))
 		return;
-	echo "<div class=greynavbar><ul id=foldertab style='margin-bottom: 0px; padding-top: 10px;'>";
+	
+	if($tpl)
+	{
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateSubmodule("Tabs", "Tabs");
+	
+	//echo "<div class=greynavbar><ul id=foldertab style='margin-bottom: 0px; padding-top: 10px;'>";
 	foreach ($tab[$pageno] as $tabidx => $tabtitle)
 	{
 		// Hide forbidden tabs.
 		if (!permitted ($pageno, $tabidx))
+		{
 			continue;
+		}
 		// Dynamic tabs should only be shown in certain cases (trigger exists and returns true).
 		if (!isset ($trigger[$pageno][$tabidx]))
-			$tabclass = 'std';
-		elseif (!strlen ($tabclass = call_user_func ($trigger[$pageno][$tabidx])))
+			$tabclass = 'TabInactive';
+		elseif (strlen ($tabclass = call_user_func ($trigger[$pageno][$tabidx])))
+		{
+			switch ($tabclass)
+			{
+				case 'std': $tabclass = "TabInactive";
+				case 'attn': $tabclass = "TabAttention";
+				default: $tabclass = "TabInactive";
+			}
+		}
+		else
+		{
 			continue;
+		}
+		
 		if ($tabidx == $tabno)
-			$tabclass = 'current'; // override any class for an active selection
-		echo "<li><a class=${tabclass}";
-		echo " href='index.php?page=${pageno}&tab=${tabidx}";
+			$tabclass = 'TabActive'; // override any class for an active selection
+		//echo "<li><a class=${tabclass}";
+		//echo " href='index.php?page=${pageno}&tab=${tabidx}";
 		$args = array();
 		fillBypassValues ($pageno, $args);
+		$extraargs = "";
 		foreach ($args as $param_name => $param_value)
-			echo "&" . urlencode ($param_name) . '=' . urlencode ($param_value);
-
-		echo "'>${tabtitle}</a></li>\n";
+			$extraargs.= "&" . urlencode ($param_name) . '=' . urlencode ($param_value);
+		$params = array("Page"=>$pageno,
+						"Tab"=>$tabidx,
+						"Args"=>$extraargs,
+						"Title"=>$tabtitle);
+		$tplm->generateSubmodule("Tabs", $tabclass, $mod, true, $params);
+		//echo "'>${tabtitle}</a></li>\n";
 	}
-	echo "</ul></div>";
+	//echo "</ul></div>";
+	}
+	else
+	{ ////Old version
+		//@TODO Remove Old version, change to TemplateEngine
+		echo "<div class=greynavbar><ul id=foldertab style='margin-bottom: 0px; padding-top: 10px;'>";
+		foreach ($tab[$pageno] as $tabidx => $tabtitle)
+		{
+			// Hide forbidden tabs.
+			if (!permitted ($pageno, $tabidx))
+				continue;
+			// Dynamic tabs should only be shown in certain cases (trigger exists and returns true).
+			if (!isset ($trigger[$pageno][$tabidx]))
+				$tabclass = 'std';
+			elseif (!strlen ($tabclass = call_user_func ($trigger[$pageno][$tabidx])))
+			continue;
+			if ($tabidx == $tabno)
+				$tabclass = 'current'; // override any class for an active selection
+			echo "<li><a class=${tabclass}";
+			echo " href='index.php?page=${pageno}&tab=${tabidx}";
+			$args = array();
+			fillBypassValues ($pageno, $args);
+			foreach ($args as $param_name => $param_value)
+				echo "&" . urlencode ($param_name) . '=' . urlencode ($param_value);
+		
+				echo "'>${tabtitle}</a></li>\n";
+		}
+				echo "</ul></div>";
+	}
 }
 
 // Arg is path page number, which can be different from the primary page number,

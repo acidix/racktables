@@ -8,7 +8,7 @@
 	<div class="maintable">
  		<div class="mainheader">
   			<div style="float: right" class=greeting><a href='index.php?page=myaccount&tab=default'><?php global $remote_displayname; echo $remote_displayname ?></a> [ <a href='?logout'>logout</a> ]</div>
- 			<?php $this->get("enterprise"); //echo getConfigVar ('enterprise') ?> RackTables <a href="http://racktables.org" title="Visit RackTables site"><?php echo CODE_VERSION ?></a><?php renderQuickLinks() ?>
+ 			<?php $this->get("Enterprise"); //echo getConfigVar ('enterprise') ?> RackTables <a href="http://racktables.org" title="Visit RackTables site"><?php echo CODE_VERSION ?></a><?php renderQuickLinks() ?>
  		</div>
  	<div class="menubar"><?php $this->get("PathAndSearch"); //showPathAndSearch ($pageno, $tabno); ?></div>
  	<div class="tabbar"><?php $this->get("Tabs") //showTabs ($pageno, $tabno); ?></div>
