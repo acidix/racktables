@@ -1793,7 +1793,7 @@ function renderIPForObject ($object_id)
 // Use new showError, showWarning, showSuccess functions.
 // Log array is stored in global $log_messages. Its format is simple: plain ordered array
 // with values having keys 'c' (both message code and severity) and 'a' (sprintf arguments array)
-function showMessageOrError ()
+function showMessageOrError ($tpl = false)
 {
 	global $log_messages;
 
@@ -1863,13 +1863,22 @@ function showMessageOrError ()
 		300 => array ('code' => 'neutral', 'format' => '%s'),
 
 	);
+	
+	$tplm = TemplateManager::getInstance();
 	// Handle the arguments. Is there any better way to do it?
 	foreach ($log_messages as $record)
 	{
 		if (!isset ($record['c']) or !isset ($msginfo[$record['c']]))
 		{
 			$prefix = isset ($record['c']) ? $record['c'] . ': ' : '';
-			echo "<div class=msg_neutral>(${prefix}this message was lost)</div>";
+			if ($tpl)
+			{
+				$tplm->generateSubmodule("Message","MessageNeutral",null,true,array("Message"=>"(${prefix}this message was lost)"));
+			}
+			else
+			{ //@TODO Remove old version, use template engine instead
+				echo "<div class=msg_neutral>(${prefix}this message was lost)</div>";
+			}
 			continue;
 		}
 		if (isset ($record['a']))
@@ -1913,7 +1922,15 @@ function showMessageOrError ()
 			}
 		else
 			$msgtext = $msginfo[$record['c']]['format'];
+		if ($tpl)
+		{
+			$modname = "Message" . ucfirst($msginfo[$record['c']]['code']);
+			$tplm->generateSubmodule("Message",$modname,null,true,array("Message"=>$msgtext));
+		}
+		else 
+		{ // @TODO Remove old version, use TEmplate Engine instead
 		echo '<div class=msg_' . $msginfo[$record['c']]['code'] . ">${msgtext}</div>";
+		}
 	}
 	$log_messages = array();
 }
@@ -5334,13 +5351,14 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		// "apply"
 		echo "<input type=hidden name=page value=${pageno}>\n";
 		echo "<input type=hidden name=tab value=${tabno}>\n";
+		$bypass_out = '';
 		foreach ($bypass_params as $bypass_name => $bypass_value)
-			echo '<input type=hidden name="' . htmlspecialchars ($bypass_name, ENT_QUOTES) . '" value="' . htmlspecialchars ($bypass_value, ENT_QUOTES) . '">' . "\n";
+			$bypass_out .= '<input type=hidden name="' . htmlspecialchars ($bypass_name, ENT_QUOTES) . '" value="' . htmlspecialchars ($bypass_value, ENT_QUOTES) . '">' . "\n";
 		// FIXME: The user will be able to "submit" the empty form even without a "submit"
 		// input. To make things consistent, it is necessary to avoid pritning both <FORM>
 		// and "and/or" radio-buttons, when enable_apply isn't TRUE.
 		if (!$enable_apply)
-			printImageHREF ('setfilter gray'); //@TODO Find solution for primtImageHREF
+			printImageHREF ('setfilter gray');	 
 		else
 			printImageHREF ('setfilter', 'set filter', TRUE);
 		echo '</form>';
@@ -6178,7 +6196,7 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 	$items = array();
 	
 	$tplm = TemplateManager::getInstance();
-	$mod = $tplm->generateSubmodule("PathAndSearch", "PathAndSearch");
+	$mod = $tplm->getMainModule();
 	foreach (array_reverse ($path) as $no)
 	{
 		if (preg_match ('/(.*):(.*)/', $no, $m) && isset ($tab[$m[1]][$m[2]]))
@@ -6346,7 +6364,7 @@ function showTabs ($pageno, $tabno,$tpl = false)
 	if($tpl)
 	{
 	$tplm = TemplateManager::getInstance();
-	$mod = $tplm->generateSubmodule("Tabs", "Tabs");
+	$mod = $tplm->getMainModule();
 	
 	//echo "<div class=greynavbar><ul id=foldertab style='margin-bottom: 0px; padding-top: 10px;'>";
 	foreach ($tab[$pageno] as $tabidx => $tabtitle)
