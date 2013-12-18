@@ -220,6 +220,11 @@ class TemplateManager
 			throw new TemplateException("TplErr: Mainmodule and template need be created/set before running the TplManager.");
 			return "";
 		}
+		
+		global $pageno, $tabno;
+		$this->setGlobalOutputVariable("PageNo", $pageno);
+		$this->setGlobalOutputVariable("TabNo", $tabno);
+		
 		$this->mainmod->mergeOutputArray($this->gout,true);
 		$this->mainmod->setTemplate($this->tpl);
 		self::log("Running with template: " . $this->tpl . " Mainmod: " , $this->mainmod);

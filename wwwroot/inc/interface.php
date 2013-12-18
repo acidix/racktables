@@ -6196,7 +6196,7 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 	$items = array();
 	
 	$tplm = TemplateManager::getInstance();
-	$mod = $tplm->generateSubmodule("PathAndSearch", "PathAndSearch");
+	$mod = $tplm->getMainModule();
 	foreach (array_reverse ($path) as $no)
 	{
 		if (preg_match ('/(.*):(.*)/', $no, $m) && isset ($tab[$m[1]][$m[2]]))
@@ -6364,7 +6364,7 @@ function showTabs ($pageno, $tabno,$tpl = false)
 	if($tpl)
 	{
 	$tplm = TemplateManager::getInstance();
-	$mod = $tplm->generateSubmodule("Tabs", "Tabs");
+	$mod = $tplm->getMainModule();
 	
 	//echo "<div class=greynavbar><ul id=foldertab style='margin-bottom: 0px; padding-top: 10px;'>";
 	foreach ($tab[$pageno] as $tabidx => $tabtitle)
