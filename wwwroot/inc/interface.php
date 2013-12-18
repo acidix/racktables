@@ -275,7 +275,7 @@ function getRenderedAlloc ($object_id, $alloc)
 function renderLocationFilterPortlet ()
 {
 	// Recursive function used to build the location tree
-	function renderLocationCheckbox ($subtree, $level = 0)
+	function renderLocationCheckbox (TemplateModule $tpl, $subtree, $level = 0)
 	{
 		$self = __FUNCTION__;
 
@@ -537,9 +537,9 @@ function renderRackspace ()
 		}
 	}
 	//echo '</td><td class=pcright width="25%">';
-	//renderCellFilterPortlet ($cellfilter, 'rack', $found_racks);
+	renderCellFilterPortlet ($cellfilter, 'rack', $found_racks);
 	//echo "<br>\n";
-	//renderLocationFilterPortlet ();
+	renderLocationFilterPortlet ();
 	//echo "</td></tr></table>\n";
 }
 
@@ -5221,8 +5221,8 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	
 	//echo "<form method=get>\n";
 	//echo '<table border=0 align=center cellspacing=0 class="tagtree">';
-	$ruler = "<tr><td colspan=2 class=tagbox><hr></td></tr>\n"; //@TODO: Get ruler in template.
-	$hr = '';
+	//$ruler = "<tr><td colspan=2 class=tagbox><hr></td></tr>\n"; 
+	//$hr = '';
 	$rulerfirst = true;
 	// "reset filter" button only gets active when a filter is applied
 	$enable_reset = FALSE;
@@ -5347,21 +5347,24 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 			$tplm->generateSubmodule("TableContent", "CellFilterSpacer", $mod, true);
 			$rulerfirst = false;
 		}
-		echo '<tr><td class=tdleft>';
+		//echo '<tr><td class=tdleft>';
 		// "apply"
-		echo "<input type=hidden name=page value=${pageno}>\n";
-		echo "<input type=hidden name=tab value=${tabno}>\n";
+		//echo "<input type=hidden name=page value=${pageno}>\n";
+		//echo "<input type=hidden name=tab value=${tabno}>\n";
 		$bypass_out = '';
 		foreach ($bypass_params as $bypass_name => $bypass_value)
 			$bypass_out .= '<input type=hidden name="' . htmlspecialchars ($bypass_name, ENT_QUOTES) . '" value="' . htmlspecialchars ($bypass_value, ENT_QUOTES) . '">' . "\n";
+		$mod->addOutput("HiddenParams", $bypass_out);
 		// FIXME: The user will be able to "submit" the empty form even without a "submit"
 		// input. To make things consistent, it is necessary to avoid pritning both <FORM>
 		// and "and/or" radio-buttons, when enable_apply isn't TRUE.
 		if (!$enable_apply)
-			printImageHREF ('setfilter gray');	 
+			//printImageHREF ('setfilter gray');	
+			$mod->setOutput("EnableApply", false); 
 		else
-			printImageHREF ('setfilter', 'set filter', TRUE);
-		echo '</form>';
+			//printImageHREF ('setfilter', 'set filter', TRUE);
+			$mod->setOUtput("EnableApply", true);
+		//echo '</form>';
 		if ($enable_textify)
 		{
 			$text = empty ($preselect['text']) || empty ($preselect['extratext'])
@@ -5374,10 +5377,12 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 				? $preselect['extratext']
 				: '(' . $preselect['extratext'] . ')';
 			$text = addslashes ($text);
-			echo " <a href=\"#\" onclick=\"textifyCellFilter(this, '$text'); return false\">";
-			printImageHREF ('COPY', 'Make text expression from current filter');
-			echo '</a>';
-			$js = <<<END
+			$submod = $tplm->generateSubmodule("Textify", "CellFilterPortletTextify", $mod);
+			$submod->setOutput("Text",$text);
+			//echo " <a href=\"#\" onclick=\"textifyCellFilter(this, '$text'); return false\">";
+			//printImageHREF ('COPY', 'Make text expression from current filter');
+			//echo '</a>';
+			/*$js = <<<END
 
 function textifyCellFilter(target, text)
 {
@@ -5388,32 +5393,36 @@ function textifyCellFilter(target, text)
 }
 END;
 			addJS ($js, TRUE);
-
+			*/
 
 		}
-		echo '</td><td class=tdright>';
+		//echo '</td><td class=tdright>';
 		// "reset"
 		if (!$enable_reset)
-			printImageHREF ('resetfilter gray');
+			//printImageHREF ('resetfilter gray');
+			$mod->setOutput("EnableReset",false);
 		else
 		{
-			echo "<form method=get>\n";
-			echo "<input type=hidden name=page value=${pageno}>\n";
-			echo "<input type=hidden name=tab value=${tabno}>\n";
-			echo "<input type=hidden name='cft[]' value=''>\n";
-			echo "<input type=hidden name='cfp[]' value=''>\n";
-			echo "<input type=hidden name='nft[]' value=''>\n";
-			echo "<input type=hidden name='nfp[]' value=''>\n";
-			echo "<input type=hidden name='cfe' value=''>\n";
+			//echo "<form method=get>\n";
+			//echo "<input type=hidden name=page value=${pageno}>\n";
+			//echo "<input type=hidden name=tab value=${tabno}>\n";
+			//echo "<input type=hidden name='cft[]' value=''>\n";
+			//echo "<input type=hidden name='cfp[]' value=''>\n";
+			//echo "<input type=hidden name='nft[]' value=''>\n";
+			//echo "<input type=hidden name='nfp[]' value=''>\n";
+			//echo "<input type=hidden name='cfe' value=''>\n";
+			$mod->setOutput("EnableReset",true);
+			$bypass_out = '';
 			foreach ($bypass_params as $bypass_name => $bypass_value)
-				echo '<input type=hidden name="' . htmlspecialchars ($bypass_name, ENT_QUOTES) . '" value="' . htmlspecialchars ($bypass_value, ENT_QUOTES) . '">' . "\n";
-			printImageHREF ('resetfilter', 'reset filter', TRUE);
-			echo '</form>';
+				$bypass_out .= '<input type=hidden name="' . htmlspecialchars ($bypass_name, ENT_QUOTES) . '" value="' . htmlspecialchars ($bypass_value, ENT_QUOTES) . '">' . "\n";
+			$mod->setOutput("HiddenParamsReset",$bypass_out);
+			//printImageHREF ('resetfilter', 'reset filter', TRUE);
+			//echo '</form>';
 		}
-		echo '</td></tr>';
+		//echo '</td></tr>';
 	}
-	echo '</table>';
-	finishPortlet();
+	//echo '</table>';
+	//finishPortlet();
 }
 
 // Dump all tags in a single SELECT element.
