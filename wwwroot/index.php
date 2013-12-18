@@ -50,6 +50,7 @@ try {
 		{
 			showPathAndSearch($pageno,$tabno,true);
 			showTabs($pageno, $tabno, true);
+			showMessageOrError(true);
 			$tplm->run(true,"vanilla");
 		}
 		else

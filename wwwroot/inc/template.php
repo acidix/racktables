@@ -518,6 +518,12 @@ class TemplateModule
 	protected $locked = false;
 	
 	/**
+	 * Checks how deep we are in isset levels atm.
+	 * @var integer
+	 */
+	protected $islevel = 0;
+	
+	/**
 	 * Constructor
 	 * 
 	 * Set the template, the module-placeholder for the parent (doesn'T matter if you create the main module),
@@ -931,6 +937,41 @@ class TemplateModule
 			$return[] = $icont;
 		}
 		return $return;
+	}
+	
+	protected function is()
+	{
+		$this->islevel++;
+		ob_start();
+	}
+	
+	protected function endIs($placeholder,$value=null)
+	{
+		if ($this->islevel <= 0)
+		{
+			throw new TemplateException("TplErr: Disallowed usage of endIs in " . $this->module);
+		}
+		else
+		{
+			if (array_key_exists($placeholder, $this->output))
+			{
+				if ($value != null && $this->output[$placeholder] == $value)
+				{
+					ob_end_flush();
+					$this->islevel--;
+					return true;
+				}
+				else 
+				{
+					ob_end_flush();
+					$this->islevel--;
+					return true;
+				}
+			}
+			ob_end_clean();
+			$this->islevel--;
+			return false;
+		}
 	}
 	
 }

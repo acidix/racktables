@@ -72,4 +72,21 @@ $this->setInMemoryTemplate("PathLink"," : <a href='index.php?{{Params}}{{AnchorT
  * UsagE: interface.php (renderCellFilterPortlet)
  */
 $this->setInMemoryTemplate("CellFilterSpacer","<tr><td colspan=2 class=tagbox><hr></td></tr>\n");
+
+/**
+ * The four error messages.
+ * Usage: interface.php (showMessageOrError)
+ */
+$this->setInMemoryTemplate("MessageNeutral","<div class=msg_neutral'> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageSuccess","<div class=msg_success'> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageError","<div class=msg_error'> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageWarning","<div class=msg_warning'> {{Message}} </div>");
+
+/**
+ * Img-Tag, to replace the old code in the getImageHref.
+ * Usage: interface.php getImageHref.
+ * 
+ * @TODO: Find a goddamm workaround.
+ */
+
 ?>
