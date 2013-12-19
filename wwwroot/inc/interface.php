@@ -272,31 +272,43 @@ function getRenderedAlloc ($object_id, $alloc)
 	return $ret;
 }
 
-function renderLocationFilterPortlet ()
+function renderLocationFilterPortlet (TemplateModule $parent,$placeholder)
 {
 	// Recursive function used to build the location tree
 	function renderLocationCheckbox (TemplateModule $tpl, $subtree, $level = 0)
 	{
 		$self = __FUNCTION__;
 
+		$tplm = TemplateManager::getInstance();
 		foreach ($subtree as $location_id => $location)
 		{
-			echo "<div class=tagbox style='text-align:left; padding-left:" . ($level * 16) . "px;'>";
 			$checked = (! isset ($_SESSION['locationFilter']) || in_array ($location['id'], $_SESSION['locationFilter'])) ? 'checked' : '';
-			echo "<label><input type=checkbox name='location_id[]' class=${level} value='${location['id']}'${checked} onClick=checkAll(this)>${location['name']}";
-			echo '</label>';
+			
+			$smod = $tplm->generateSubmodule("Locations", "LocationFilterPortletCheckbox", $tpl);
+			$smod->addOutput("Name", $location["name"]);
+			$smod->setOutput("Id",$location["id"]);
+			$smod->setOutput("Checked",$checked);
+			$smod->setOutput("LevelSpace",$level*16);
+			$smod->setOutput("Level",$level);
+			
+			//echo "<div class=tagbox style='text-align:left; padding-left:" . ($level * 16) . "px;'>";
+			//echo "<label><input type=checkbox name='location_id[]' class=${level} value='${location['id']}'${checked} onClick=checkAll(this)>${location['name']}";
+			//echo '</label>';
 			if ($location['kidc'])
 			{
-				echo "<a id='lfa" . $location['id'] . "' onclick=\"expand('${location['id']}')\" href\"#\" > - </a>";
-				echo "<div id='lfd" . $location['id'] . "'>";
-				$self ($location['kids'], $level + 1);
-				echo '</div>';
+				//echo "<a id='lfa" . $location['id'] . "' onclick=\"expand('${location['id']}')\" href\"#\" > - </a>";
+				//echo "<div id='lfd" . $location['id'] . "'>";
+				$smod->setOutput("Kidc",true);
+				$self ($smod, $location['kids'], $level + 1);
+				//echo '</div>';
 			}
-			echo '</div>';
+			//echo '</div>';
 		}
 	}
-
-	addJS(<<<END
+	
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateSubmodule($placeholder, "LocationFilterPortlet", $parent);
+	/**addJS(<<<END
 function checkAll(bx) {
 	for (var tbls=document.getElementsByTagName("table"), i=tbls.length; i--;)
 		if (tbls[i].id == "locationFilter") {
@@ -359,32 +371,34 @@ END
     <input type=hidden name=page value=rackspace>
     <input type=hidden name=tab value=default>
     <input type=hidden name=changeLocationFilter value=true>
-END;
+END;*/
 
 	$locationlist = listCells ('location');
 	if (count ($locationlist))
 	{
-		echo "<tr><td class=tagbox style='padding-left: 0px'><label>";
-		echo "<input type=checkbox name='location'  onClick=checkAll(this)> Toggle all";
-		echo "<img src=pix/1x1t.gif onLoad=collapseAll(this)>"; // dirty hack to collapse all when page is displayed
-		echo "</label></td></tr>\n";
-		echo "<tr><td class=tagbox><hr>\n";
-		renderLocationCheckbox (treeFromList ($locationlist));
-		echo "<hr></td></tr>\n";
-		echo '<tr><td>';
-		printImageHREF ('setfilter', 'set filter', TRUE);
-		echo "</td></tr>\n";
+		//echo "<tr><td class=tagbox style='padding-left: 0px'><label>";
+		//echo "<input type=checkbox name='location'  onClick=checkAll(this)> Toggle all";
+		//echo "<img src=pix/1x1t.gif onLoad=collapseAll(this)>"; // dirty hack to collapse all when page is displayed
+		//echo "</label></td></tr>\n";
+		//echo "<tr><td class=tagbox><hr>\n";
+		$mod->addOutput("LocationsExist", true);
+		renderLocationCheckbox ($mod,$treeFromList ($locationlist));
+		//echo "<hr></td></tr>\n";
+		//echo '<tr><td>';
+		//printImageHREF ('setfilter', 'set filter', TRUE);
+		//echo "</td></tr>\n";
 	}
 	else
 	{
-		echo "<tr><td class='tagbox sparenetwork'>(no locations exist)</td></tr>\n";
-		echo "<tr><td>";
-		printImageHREF ('setfilter gray');
-		echo "</td></tr>\n";
+		$mod->addOutput("LocationsExist", false);
+		//echo "<tr><td class='tagbox sparenetwork'>(no locations exist)</td></tr>\n";
+		//echo "<tr><td>";
+		//printImageHREF ('setfilter gray');
+		//echo "</td></tr>\n";
 	}
 
-	echo "</form></table>\n";
-	finishPortlet ();
+	//echo "</form></table>\n";
+	//finishPortlet ();
 }
 
 function renderRackspace ()
