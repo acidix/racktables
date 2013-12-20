@@ -9,20 +9,20 @@
 					<td class="tdleft">
 						<input type=hidden name=page value=<?php $this->PageNo; ?>>
 						<input type=hidden name=tab value=<?php $this->TabNo; ?>>
-						<?php  $this->HiddenParams; ?>
-						<?php  $this->if(); ?>
+						<?php $this->HiddenParams; ?>
+						<?php if ($this->is("EnableApply",true)) { ?>
 							<input class="icon" type="image" border="0" title="set filter" src="?module=chrome&uri=pix/pgadmin3-viewfiltereddata.png" name="submit"></input>
-						<?php $this->endIf("EnableApply",true); ?>
-						<?php  $this->if(); ?>
+						<?php } ?>
+						<?php if ($this->is("EnableAppply",false)) { ?>
 							<img src="pix/pgadmin3-viewfiltereddata-grayscale.png" width=32 height=32 border=0>
-						<?php $this->endIf("EnableApply",false); ?>
+						<?php }?>
 						<?php $this->Textify; ?>
 					</td>
 					<td class=tdright>
-						<?php $this->if(); ?>
+						<?php if ($this->is("EnableReset",false)) { ?>
 							<img src="pix/pix/pgadmin3-viewdata-grayscale.png" width=32 height=32 border=0>
-						<?php $this->endIf("EnableReset",false); ?>
-						<?php $this->if(); ?>
+						<?php } ?>
+						<?php if ($this->is("EnableReset",true)) { ?>
 							<form method=get>
 								<input type=hidden name=page value=<?php $this->PageNo; ?>>
 								<input type=hidden name=tab value=<?php $this->TabNo; ?>>
@@ -34,7 +34,7 @@
 								<?php $this->HiddenParamsReset; ?>
 								<input class="icon" type="image" border="0" title="reset filter" src="?module=chrome&uri=pix/pgadmin3-viewdata.png" name="submit"></input>
 							</form>
-						<?php $this->endIf("EnableReset",true); ?>
+						<?php } ?>
 					</td>
 				</tr>
 			</form>

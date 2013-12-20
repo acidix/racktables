@@ -63,7 +63,7 @@ END;
     			<input type=hidden name=page value=rackspace>
     			<input type=hidden name=tab value=default>
     			<input type=hidden name=changeLocationFilter value=true>
-    			<?php $this->if(); ?>
+    			<?php if($this->is("LocationsExist",true)) { ?>
     				<tr><td class=tagbox style='padding-left: 0px'><label>
 					<input type=checkbox name='location'  onClick=checkAll(this)> Toggle all
 					<img src=pix/1x1t.gif onLoad=collapseAll(this)>
@@ -74,16 +74,16 @@ END;
 					<tr><td>
 						<input class="icon" type="image" border="0" title="set filter" src="?module=chrome&uri=pix/pgadmin3-viewfiltereddata.png" name="submit"></input>
 					</td></tr>
-    			<?php $this->endIf("LocationsExist",true); ?>
-    			<?php $this->if(); ?>
+    			<?php } ?>
+    			<?php if ($this->is("LocationsExist",false)) { ?>
  					<tr><td class='tagbox sparenetwork'>(no locations exist)</td></tr>
 					<tr><td>
 					<img src="pix/pgadmin3-viewfiltereddata-grayscale.png" width=32 height=32 border=0>
 					</td></tr>		
+    			<?php } ?>
 			</form>
 		</table>
 	</div>	
-    			<?php $this->endIf("LocationsExist",false); ?>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />
