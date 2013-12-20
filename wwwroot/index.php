@@ -51,7 +51,9 @@ try {
 			showPathAndSearch($pageno,$tabno,true);
 			showTabs($pageno, $tabno, true);
 			showMessageOrError(true);
+			renderQuickLinks();
 			$tplm->run(true,"vanilla");
+
 		}
 		else
 		{
