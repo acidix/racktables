@@ -22,6 +22,10 @@
 
 		<!-- Sidebar -->
 		<div class="sidebar-wrapper" id="sideBarMenu" data-spy="affix" style="display: none;"> 
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href='index.php?page=myaccount&tab=default'><?php global $remote_displayname; echo $remote_displayname ?></a></li>
+				<li><a class="navbar-brand" href="#"><?php $this->get("Enterprise"); ?></a>	</li>
+			</ul>
 			<ul class="sidebar-nav" style="height: 100%;">
 				<li><a href="#">Rackspace</a></li>
 				<li><a href="#">Objects</a></li>
@@ -35,9 +39,9 @@
 				<li><a href="#">Log records</a></li>
 				<li><a href="#">Virtual Resources</a></li>
 				<li role="presentation" class="divider"></li>
-				<li><a href="#">Logout</a></li>
+				<li><a href="?logout"> <strong> Logout</strong> </a></li>
 			</ul>
-		</div>	
+		</div>
 
 		<!-- Navigation bar -->
 		<nav class="navbar navbar-inverse navbar-fixed-top" style="width: 100%;">
@@ -69,51 +73,58 @@
 					</ul>
 					<?php $this->get("Quicklinks_Table") ?>
 
+					<!--
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href='index.php?page=myaccount&tab=default'><?php global $remote_displayname; echo $remote_displayname ?></a></li>
+						<li><a href='?logout'> <strong>Logout</strong></a></li>
+					</ul> -->
+					<form class="navbar-form navbar-right" role="search">
 
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href='index.php?page=myaccount&tab=default'><?php global $remote_displayname; echo $remote_displayname ?></a></li>
-					<li><a href='?logout'> <strong>Logout</strong></a></li>
-				</ul>
-				<form class="navbar-form navbar-right" role="search">
+						<div class="form-group">
+							<input type=hidden name=page value=search>
+							<input type=hidden name=last_page value=<?php $this->PageNo; ?>>
+							<input type=hidden name=last_tab value=<?php $this->TabNo; ?>>
+							<input type="text" class="form-control" name=q placeholder="Search" value='<?php $this->SearchValue; ?>'>
+						</div>
+						
+						<button type="submit" class="btn btn-default"><span class='glyphicon glyphicon-search'></span></button>
+					</form>
 
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="">
-					</div>
-					<button type="submit" class="btn btn-default"><span class='glyphicon glyphicon-search'></span></button>
-				</form>
-				
-			</div> <!-- navbar collapsable -->
-		</div>
-	</nav>
+				</div> <!-- navbar collapsable -->
+			</div>
+		</nav>
 
 
 
 
-	<div class="container" style="margin-top: 100px; margin-bottom: 50px;">
+		<div class="container" style="margin-top: 100px; margin-bottom: 50px;">
 
 
-		<div class="maintable">
-			<div class="menubar"><?php $this->get("PathAndSearch"); //showPathAndSearch ($pageno, $tabno); ?></div>
-			<div class="tabbar"><?php $this->get("Tabs") //showTabs ($pageno, $tabno); ?></div>
-			<div class="msgbar"><?php $this->get("Message"); //showMessageOrError(); ?></div>
-			<div class="pagebar"><?php $this->get("Payload"); //echo $payload; ?></div>
+
+			<ul   id=foldertab class="nav nav-tabs">
+				<?php $this->Tabs; ?>
+			</ul>
+
+
+			<div class="msgbar" ><?php $this->get("Message"); //showMessageOrError(); ?></div>
+			<div class="pagebar" style="padding-top: 20px;"><?php $this->get("Payload"); //echo $payload; ?></div>
 		</div>
 	</div>
-</div>
 
-<!-- Doing Ínitalscripts here --> 
-		<script type="text/javascript">
-			$("#showSideMenuButton").click(function (){
-				if($('#sideBarMenu').css('display') == "none"){
-					$('#sideBarMenu').show();
-				}else{
-					$('#sideBarMenu').hide();
-				}
+	<!-- Doing Ínitalscripts here --> 
+	<script type="text/javascript">
+		$("#showSideMenuButton").click(function (){
+			if($('#sideBarMenu').css('display') == "none"){
+				$('#sideBarMenu').show();
+			}else{
+				$('#sideBarMenu').hide();
+			}
 
-			})
-			$(".sidebar-nav").height($(document).height());
-			
-		</script>
+		})
+		$(".sidebar-nav").height($(document).height());
+
+
+	</script>
 
 </body>
 </html>

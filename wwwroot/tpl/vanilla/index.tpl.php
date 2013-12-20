@@ -2,13 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <!-- Template taken from: interface.php:94 -->
 <head><title><?php $this->get("page_title"); //echo getTitle ($pageno); ?></title>
+	<link rel="stylesheet" type="text/css" href="?module=chrome&amp;uri=css/pi.css">
 	<?php $this->get("Header"); //printPageHeaders(); ?>
 </head>
 <body>
 	<div class="maintable">
  		<div class="mainheader">
   			<div style="float: right" class=greeting><a href='index.php?page=myaccount&tab=default'><?php global $remote_displayname; echo $remote_displayname ?></a> [ <a href='?logout'>logout</a> ]</div>
- 			<?php $this->get("Enterprise"); //echo getConfigVar ('enterprise') ?> RackTables <a href="http://racktables.org" title="Visit RackTables site"><?php echo CODE_VERSION ?></a><?php renderQuickLinks() ?>
+ 			<?php $this->get("Enterprise"); //echo getConfigVar ('enterprise') ?> RackTables <a href="http://racktables.org" title="Visit RackTables site"><?php echo CODE_VERSION ?></a>
+ 			<?php $this->get("Quicklinks_Table") ?>  
+
+
  		</div>
  	<div class="menubar">
  		<div class='searchbox' style='float:right'>

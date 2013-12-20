@@ -74,6 +74,19 @@ $this->setInMemoryTemplate("PathLink"," : <a href='index.php?{{Params}}{{AnchorT
 $this->setInMemoryTemplate("CellFilterSpacer","<tr><td colspan=2 class=tagbox><hr></td></tr>\n");
 
 /**
+ * Template for ObjectLogs when no log exists
+ * Usage: interface.php (allObjectLogs)
+**/
+$this->setInMemoryTemplate("NoObjectLogFound","<center><h2>No logs exist</h2></center>");
+
+/**
+ * Template for Search when nothing was found
+ * Usage: interface.php (renderSearchResults)
+**/
+$this->setInMemoryTemplate("NoSearchItemFound","<center><h2>Nothing found for {{Terms}}</h2></center>");
+
+
+/**
  * The four error messages.
  * Usage: interface.php (showMessageOrError)
  */

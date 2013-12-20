@@ -3,9 +3,7 @@
 	<?php $this->getH("H2",array("%%RackspaceOverviewHeadline")); ?>
 	<?php $this->get("RackspaceOverviewTable"); ?>
 	</td><td class=pcright width="25%">
-	<?php $this->get("CellFilterPortlet");?>
-	<br />
-	<?php $this->get("LocationFilterPortlet");?>
+
 	</td></tr></table>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
