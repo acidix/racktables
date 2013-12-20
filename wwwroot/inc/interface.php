@@ -3613,37 +3613,37 @@ function renderSearchResults ($terms, $summary)
 			case 'ipv4net':
 			case 'ipv6net':
 
-				$foundIPVNet = $tplm->generateSubmodule("FoundItems", "SearchIpv6net", $mod);
+		//		$foundIPVNet = $tplm->generateSubmodule("FoundItems", "SearchIpv6net", $mod);
 
 				if ($where == 'ipv4net')
 				{
-					$foundIPVNet->setOutputVariable("IpvSpace", "ipv4space");
-					$foundIPVNet->setOutputVariable("IpvSpaceName", "IPv4 networks");
-		//			startPortlet ("<a href='index.php?page=ipv4space'>IPv4 networks</a>");
+		//			$foundIPVNet->setOutputVariable("IpvSpace", "ipv4space");
+		//			$foundIPVNet->setOutputVariable("IpvSpaceName", "IPv4 networks");
+					startPortlet ("<a href='index.php?page=ipv4space'>IPv4 networks</a>");
 				}
 				elseif ($where == 'ipv6net')
 				{
-					$foundIPVNet->setOutputVariable("IpvSpace", "ipv6space");
-					$foundIPVNet->setOutputVariable("IpvSpaceName", "IPv6 networks");
-		//			startPortlet ("<a href='index.php?page=ipv6space'>IPv6 networks</a>");
+		//			$foundIPVNet->setOutputVariable("IpvSpace", "ipv6space");
+		//			$foundIPVNet->setOutputVariable("IpvSpaceName", "IPv6 networks");
+					startPortlet ("<a href='index.php?page=ipv6space'>IPv6 networks</a>");
 				}	
 				//echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
 				$ipvOutArray = array();
 
 				foreach ($what as $cell)
 				{
-					$ipvOutArray['order'] = $order;
-					//echo "<tr class=row_${order} valign=top><td>";
+					//$ipvOutArray['order'] = $order;
+					echo "<tr class=row_${order} valign=top><td>";
 							
 //TODO: Change renderCell to  renderCell ($cell);
-					
-					//echo "</td></tr>\n";
+					renderCell($cell);
+					echo "</td></tr>\n";
 					$order = $nextorder[$order];
 				}
 
-				$foundIPVNet->setOutputVariable("IPVNetObjs",$ipvOutArray);
-	//			echo '</table>';
-	//			finishPortlet();
+		//		$foundIPVNet->setOutputVariable("IPVNetObjs",$ipvOutArray);
+				echo '</table>';
+				finishPortlet();
 				break;
 			case 'ipv4addressbydescr':
 			case 'ipv6addressbydescr':
