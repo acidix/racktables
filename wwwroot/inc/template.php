@@ -944,41 +944,29 @@ class TemplateModule
 		return $return;
 	}
 	
-	protected function is()
-	{
-		$this->islevel++;
-		ob_start();
-	}
 	
-	protected function endIs($placeholder,$value=null)
+	public function is($placeholder,$value=null)
 	{
-		if ($this->islevel <= 0)
+		if (array_key_exists($placeholder, $this->output))
 		{
-			throw new TemplateException("TplErr: Disallowed usage of endIs in " . $this->module);
-		}
-		else
-		{
-			if (array_key_exists($placeholder, $this->output))
+			if ($value !== null && $this->output[$placeholder] == $value)
 			{
-				if ($value != null && $this->output[$placeholder] == $value)
+				return true;
+			}
+			else
+			{
+				if ($value===null)
 				{
-					ob_end_flush();
-					$this->islevel--;
 					return true;
 				}
-				else 
+				else
 				{
-					ob_end_flush();
-					$this->islevel--;
-					return true;
+					return false;
 				}
 			}
-			ob_end_clean();
-			$this->islevel--;
-			return false;
 		}
+		return false;
 	}
-	
 }
 
 /**
