@@ -2,7 +2,7 @@
 	<div class=tagbox style='text-align:left; padding-left: <?php $this->LevelSpace; ?>px;'>
 		<label>
 			<input type=checkbox name='location_id[]' class=<?php $this->Level; ?> value='<?php $this->Id; ?>'<?php $this->Checked; ?> onClick=checkAll(this)>
-				<?php $this->Name; ?>
+			<?php $this->Name; ?>
 		</label>
 		<?php if ($this->is("Kidc")) { ?>
 			<a id='lfa<?php $this->Id; ?>' onclick="expand('<?php $this->Id; ?>')\" href="#" > - </a>

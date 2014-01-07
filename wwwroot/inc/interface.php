@@ -416,8 +416,6 @@ function renderRackspace ()
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule("index");
 
-	//$tplm->setGlobalOutputVariable("module", "rackspace");
-	//$tplm->setGlobalOutputVaraible("tab", "default");
 	
 	$mod = $tplm->generateSubmodule("Payload", "RackspaceOverview");
 	$mod->setNamespace("rackspace",true);
@@ -544,8 +542,8 @@ function renderRackspace ()
 			}
 			else
 			{
-				$mod->setOutputVariable("RackspaceOverviewTable", "");
-				$mod->setOutputVariable("RackspaceOverviewHeadline", "No rows found.");
+				$mod->setOutput("RackspaceOverviewTable", "");
+				$mod->setOutput("RackspaceOverviewHeadline", "No rows found.");
 				//echo "<h2>No rows found</h2>\n";
 			}
 		}
@@ -4653,7 +4651,7 @@ function dragon ()
 {
 	startPortlet ('Here be dragons');
 ?>
-<div class=dragon><pre><font color="#00ff33">
+<div class=dragon><pre><font color="#00ff33	">
                  \||/
                  |  <font color="#ff0000">@</font>___oo
        /\  /\   / (__<font color=yellow>,,,,</font>|
