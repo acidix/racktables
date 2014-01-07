@@ -47,59 +47,30 @@ $this->setInMemoryTemplate("CellFilterExtraText","<tr><td colspan=2><textarea na
  * Template for: Tablist, the currently active Tab
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabActive","<li><a class=current href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
+$this->setInMemoryTemplate("TabActive","<li class='active'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
 
 /**
  * Template for: Tablist, currently inactive tabs
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabInactive","<li><a class=std href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
+$this->setInMemoryTemplate("TabInactive","<li><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
 
 /**
  * Template for: Tablist, tabs with warnings
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabAttention","<li><a class=attn href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
+$this->setInMemoryTemplate("TabAttention","<li style='background-color: #F0AD4E' ><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
 
 /**
  * Template for: Part of the path  in the PathAndSearch module
  * Usage: interface.php (showPathAndSearch)
  */
-$this->setInMemoryTemplate("PathLink"," : <a href='index.php?{{Params}}{{AnchorTail}}'>{{Name}}</a>");
+$this->setInMemoryTemplate("PathLink","<li><a href='index.php?{{Params}}{{AnchorTail}}'>{{Name}}</a></li>");
 
 /**
  * Template for spacer in CellFilterPortlet
  * UsagE: interface.php (renderCellFilterPortlet)
  */
 $this->setInMemoryTemplate("CellFilterSpacer","<tr><td colspan=2 class=tagbox><hr></td></tr>\n");
-
-/**
- * Template for ObjectLogs when no log exists
- * Usage: interface.php (allObjectLogs)
-**/
-$this->setInMemoryTemplate("NoObjectLogFound","<center><h2>No logs exist</h2></center>");
-
-/**
- * Template for Search when nothing was found
- * Usage: interface.php (renderSearchResults)
-**/
-$this->setInMemoryTemplate("NoSearchItemFound","<center><h2>Nothing found for {{Terms}}</h2></center>");
-
-
-/**
- * The four error messages.
- * Usage: interface.php (showMessageOrError)
- */
-$this->setInMemoryTemplate("MessageNeutral","<div class=msg_neutral'> {{Message}} </div>");
-$this->setInMemoryTemplate("MessageSuccess","<div class=msg_success'> {{Message}} </div>");
-$this->setInMemoryTemplate("MessageError","<div class=msg_error'> {{Message}} </div>");
-$this->setInMemoryTemplate("MessageWarning","<div class=msg_warning'> {{Message}} </div>");
-
-/**
- * Img-Tag, to replace the old code in the getImageHref.
- * Usage: interface.php getImageHref.
- * 
- * @TODO: Find a goddamm workaround.
- */
 
 ?>

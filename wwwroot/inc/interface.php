@@ -83,12 +83,33 @@ $quick_links = NULL; // you can override this in your local.php, but first initi
 function renderQuickLinks()
 {
 	global $quick_links;
+	
+
 	if (! isset ($quick_links))
 		$quick_links = getConfiguredQuickLinks();
-	echo '<ul class="qlinks">';
+
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->createMainModule("index");
+	$mod = $tplm->generateSubmodule("Quicklinks_Table", "Quicklinks");
+//	$mod = $tplm->getMainModule(); 
+	//if($mod == null)
+	//	return;
+
+	$quicklinks_data =  array();
+	//echo '<ul class="qlinks">';
 	foreach ($quick_links as $link)
-		echo '<li><a href="' . $link['href'] . '">' . str_replace (' ', '&nbsp;', $link['title']) . '</a></li>';
-	echo '</ul>';
+	{
+		//Generating the QuickLinks Array
+		$quicklinks_row_data = array();
+		$quicklinks_row_data['href'] = $link['href'];
+		$quicklinks_row_data['title'] = str_replace (' ', '&nbsp;', $link['title']) ;	
+		$quicklinks_data[] = $quicklinks_row_data ;
+		//	echo '<li><a href="' . $link['href'] . '">' . str_replace (' ', '&nbsp;', $link['title']) . '</a></li>';
+	}
+	$mod->addOutput("Quicklinks_Data", $quicklinks_data);
+	//echo '</ul>';
+	
 }
 
 function renderInterfaceHTML ($pageno, $tabno, $payload)
@@ -3403,6 +3424,8 @@ function renderAddMultipleObjectsForm ()
 
 function searchHandler()
 {
+	//Handles the search strings and genererats a result website
+
 	$terms = trim ($_REQUEST['q']);
 	if (!strlen ($terms))
 		throw new InvalidRequestArgException('q', $_REQUEST['q'], 'Search string cannot be empty.');
@@ -3411,14 +3434,25 @@ function searchHandler()
 
 function renderSearchResults ($terms, $summary)
 {
+	//Changed for template engine 
+	//Initalising
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
 	// calculate the number of found objects
+	
+
 	$nhits = 0;
 	foreach ($summary as $realm => $list)
 		$nhits += count ($list);
 
 	if ($nhits == 0)
 	{
-		echo "<center><h2>Nothing found for '${terms}'</h2></center>";
+		//echo "<center><h2>Nothing found for '${terms}'</h2></center>";
+		$params = array("Terms" => ${terms} );
+		$mod = $tplm->generateSubmodule("Payload", "NoSearchItemFound", null, true, $params);
+
+		
 		return;
 	}
 	elseif ($nhits == 1)
@@ -3435,44 +3469,79 @@ function renderSearchResults ($terms, $summary)
 	}
 	global $nextorder;
 	$order = 'odd';
-	echo "<center><h2>${nhits} result(s) found for '${terms}'</h2></center>";
+
+	$mod = $tplm->generateSubmodule("Payload", "SearchMain")
+	$mod->setNamespace("search",true);
+	//$mod->setOutputVariable("NHITS", $nhits);
+	//$mod->setOutputVariable("TERMS", ${terms});
+	//echo "<center><h2>${nhits} result(s) found for '${terms}'</h2></center>";
+
 	foreach ($summary as $where => $what)
 		switch ($where)
 		{
 			case 'object':
-				startPortlet ("<a href='index.php?page=depot'>Objects</a>");
-				echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
-				echo '<tr><th>what</th><th>why</th></tr>';
+
+				//startPortlet ("<a href='index.php?page=depot'>Objects</a>");
+				//echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				//echo '<tr><th>what</th><th>why</th></tr>';
+				
 				foreach ($what as $obj)
 				{
-					echo "<tr class=row_${order} valign=top><td>";
+			
+			//		echo "<tr class=row_${order} valign=top><td>";
 					$object = spotEntity ('object', $obj['id']);
 					renderCell ($object);
-					echo "</td><td class=tdleft>";
+			//		echo "</td><td class=tdleft>";
+
+					$foundObjects = $tplm->generateSubmodule("FoundItems", "SearchObject", $mod);
+					$outArray = array();
+					
 					if (isset ($obj['by_attr']))
 					{
 						// only explain non-obvious reasons for listing
-						echo '<ul>';
+						
+						$outArray = array();
+						$foundObjectsAttr = $tplm->generateSubmodule("ObjectsByAttr", "SearchObject_Attr", $foundObjects);
+					
+
+					//	echo '<ul>';
 						foreach ($obj['by_attr'] as $attr_name)
 							if ($attr_name != 'name')
-								echo "<li>${attr_name} matched</li>";
-						echo '</ul>';
+								$outArray[] = array("Attr_Name" => $attr_name);
+					//			echo "<li>${attr_name} matched</li>";
+					//	echo '</ul>';
+
+						
+						$foundObjectsAttr->setOutputVariable("Objects_Attr", $outArray);
 					}
+
+
 					if (isset ($obj['by_sticker']))
 					{
-						echo '<table>';
+						$outArray = array();
+						$foundObjectsSticker = $tplm->generateSubmodule("ObjectsBySticker", "SearchObject_Sticker", $foundObjects);
+
+						//echo '<table>';
 						$aval = getAttrValues ($obj['id']);
 						foreach ($obj['by_sticker'] as $attr_id)
 						{
 							$record = $aval[$attr_id];
-							echo "<tr><th width='50%' class=sticker>${record['name']}:</th>";
-							echo "<td class=sticker>" . formatAttributeValue ($record) . "</td></tr>";
+							$outArray[] = array('Name' => $record['name'],
+												 'AttrValue' => formatAttributeValue ($record));
+							//echo "<tr><th width='50%' class=sticker>${record['name']}:</th>";
+							//echo "<td class=sticker>" . formatAttributeValue ($record) . "</td></tr>";
 						}
-						echo '</table>';
+						//echo '</table>';
+						$foundObjectsSticker->setOutputVariable("Objects_Sticker", $outArray);
 					}
+
+
 					if (isset ($obj['by_port']))
 					{
-						echo '<table>';
+						$outArray = array();
+						$foundObjectsPort = $tplm->generateSubmodule("ObjectsByPort", "SearchObject_Port", $foundObjects);
+
+						//echo '<table>';
 						amplifyCell ($object);
 						foreach ($obj['by_port'] as $port_id => $text)
 							foreach ($object['ports'] as $port)
@@ -3484,54 +3553,93 @@ function renderSearchResults ($terms, $summary)
 										'object_id' => $object['id'],
 										'hl_port_id' => $port_id
 									)) . '">port ' . $port['name'] . '</a>';
-									echo "<tr><td>${port_href}:</td>";
-									echo "<td class=tdleft>${text}</td></tr>";
+									$outArray[] = array('Href' =>  $port_href,
+														'Text' => $text );
+								//	echo "<tr><td>${port_href}:</td>";
+								//	echo "<td class=tdleft>${text}</td></tr>";
 									break; // next reason
 								}
-						echo '</table>';
+						//echo '</table>';
+						$foundObjectsPort->setOutputVariable("Objects_Port", $outArray);
 					}
+
+
 					if (isset ($obj['by_iface']))
 					{
-						echo '<ul>';
+						$outArray = array();
+						$foundObjectsIface = $tplm->generateSubmodule("ObjectsByIface", "SearchObject_Iface", $foundObjects);
+
+					//	echo '<ul>';
 						foreach ($obj['by_iface'] as $ifname)
-							echo "<li>interface ${ifname}</li>";
-						echo '</ul>';
+							$outArray[] = array( 'Ifname' => $ifname);
+					//		echo "<li>interface ${ifname}</li>";
+					//	echo '</ul>';
+						$foundObjectsIface->setOutputVariable("Objects_Iface", $outArray);
 					}
+
 					if (isset ($obj['by_nat']))
 					{
-						echo '<ul>';
+						$outArray = array();
+						$foundObjectsNAT = $tplm->generateSubmodule("ObjectsByNAT", "SearchObject_NAT", $foundObjects);
+
+					//	echo '<ul>';
 						foreach ($obj['by_nat'] as $comment)
-							echo "<li>NAT rule: ${comment}</li>";
-						echo '</ul>';
+							$outArray[] = array('Comment' => $comment);
+					//		echo "<li>NAT rule: ${comment}</li>";
+					//	echo '</ul>';
+						$foundObjectsNAT->setOutputVariable("Objects_NAT", $outArray);
 					}
+
 					if (isset ($obj['by_cableid']))
 					{
-						echo '<ul>';
+						$outArray = array();
+						$foundObjectsCableID = $tplm->generateSubmodule("ObjectsByCableID", "SearchObject_CableID", $foundObjects);
+
+						//echo '<ul>';
 						foreach ($obj['by_cableid'] as $cableid)
-							echo "<li>link cable ID: ${cableid}</li>";
-						echo '</ul>';
+							$outArray[] = array('CableID' => $cableid);
+						//	echo "<li>link cable ID: ${cableid}</li>";
+						//echo '</ul>';
 					}
 					echo "</td></tr>";
 					$order = $nextorder[$order];
 				}
-				echo '</table>';
-				finishPortlet();
+				//echo '</table>';
+				//finishPortlet();
+
 				break;
 			case 'ipv4net':
 			case 'ipv6net':
-				if ($where == 'ipv4net')
-					startPortlet ("<a href='index.php?page=ipv4space'>IPv4 networks</a>");
-				elseif ($where == 'ipv6net')
-					startPortlet ("<a href='index.php?page=ipv6space'>IPv6 networks</a>");
 
-				echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+		//		$foundIPVNet = $tplm->generateSubmodule("FoundItems", "SearchIpv6net", $mod);
+
+				if ($where == 'ipv4net')
+				{
+		//			$foundIPVNet->setOutputVariable("IpvSpace", "ipv4space");
+		//			$foundIPVNet->setOutputVariable("IpvSpaceName", "IPv4 networks");
+					startPortlet ("<a href='index.php?page=ipv4space'>IPv4 networks</a>");
+				}
+				elseif ($where == 'ipv6net')
+				{
+		//			$foundIPVNet->setOutputVariable("IpvSpace", "ipv6space");
+		//			$foundIPVNet->setOutputVariable("IpvSpaceName", "IPv6 networks");
+					startPortlet ("<a href='index.php?page=ipv6space'>IPv6 networks</a>");
+				}	
+				//echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$ipvOutArray = array();
+
 				foreach ($what as $cell)
 				{
+					//$ipvOutArray['order'] = $order;
 					echo "<tr class=row_${order} valign=top><td>";
-					renderCell ($cell);
+							
+//TODO: Change renderCell to  renderCell ($cell);
+					renderCell($cell);
 					echo "</td></tr>\n";
 					$order = $nextorder[$order];
 				}
+
+		//		$foundIPVNet->setOutputVariable("IPVNetObjs",$ipvOutArray);
 				echo '</table>';
 				finishPortlet();
 				break;
@@ -8628,6 +8736,8 @@ function renderObjectLogEditor ()
 		$order = $nextorder[$order];
 	}
 	echo '</table>';
+
+
 }
 
 //
@@ -8635,18 +8745,31 @@ function renderObjectLogEditor ()
 //
 function allObjectLogs ()
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+
 	$logs = getLogRecords ();
+
 
 	if (count($logs) > 0)
 	{
+		$mod = $tplm->generateSubmodule("Payload", "AllObjectLogs");
+		$mod->setNamespace("objectlog",true);
+
 		global $nextorder;
-		echo "<br><table width='80%' align=center border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>";
-		echo '<tr valign=top><th class=tdleft>Object</th><th class=tdleft>Date/user</th>';
-		echo '<th class=tdcenter>' . getImageHREF ('text') . '</th></tr>';
+		//echo "<br><table width='80%' align=center border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>";
+		//echo '<tr valign=top><th class=tdleft>Object</th><th class=tdleft>Date/user</th>';
+		//echo '<th class=tdcenter>' . getImageHREF ('text') . '</th></tr>';
+		
 
 		$order = 'odd';
+
+		$log_data_array = array();
+
 		foreach ($logs as $row)
 		{
+			$row_data = array();
 			// Link to a different page if the object is a Rack
 			if ($row['objtype_id'] == 1560)
 			{
@@ -8659,17 +8782,30 @@ function allObjectLogs ()
 				$text = $object['dname'];
 				$entity = 'object';
 			}
-			echo "<tr class=row_${order} valign=top>";
-			echo '<td class=tdleft>' . mkA ($text, $entity, $row['object_id'], 'log') . '</td>';
-			echo '<td class=tdleft>' . $row['date'] . '<br>' . $row['user'] . '</td>';
-			echo '<td class="logentry">' . string_insert_hrefs (htmlspecialchars ($row['content'], ENT_NOQUOTES)) . '</td>';
-			echo "</tr>\n";
+
+			$row_data["Object_id"] = mkA ($text, $entity, $row['object_id'], 'log');
+			$row_data["Date"] = $row['date'];
+			$row_data["User"] = $row['user'];
+			$row_data["Logentry"] = string_insert_hrefs (htmlspecialchars ($row['content'], ENT_NOQUOTES));
+
+			//echo "<tr class=row_${order} valign=top>";
+			//echo '<td class=tdleft>' . mkA ($text, $entity, $row['object_id'], 'log') . '</td>';
+			//echo '<td class=tdleft>' . $row['date'] . '<br>' . $row['user'] . '</td>';
+			//echo '<td class="logentry">' . string_insert_hrefs (htmlspecialchars ($row['content'], ENT_NOQUOTES)) . '</td>';
+			//echo "</tr>\n";
 			$order = $nextorder[$order];
+			
+			$log_data_array[] = $row_data;
 		}
-		echo '</table>';
+		
+		$mod->setOutputVariable("IMAGE_HREF", getImageHREF('text'));
+		$mod->addOutput("LogTableData", $log_data_array);
+		//echo '</table>';
 	}
 	else
-		echo '<center><h2>No logs exist</h2></center>';
+		$tplm->generateSubmodule("Payload", "NoObjectLogFound", null, true);
+	//	echo '<center><h2>No logs exist</h2></center>';
+
 }
 
 function renderGlobalLogEditor()
