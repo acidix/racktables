@@ -269,9 +269,6 @@ class TemplateManager
 		}
 		else 
 		{
-			if ($parent == null) {
-				throw new TemplateException("TplErr: Can't add an submodule to an non-object.");
-			}
 			$parent->addOutput($placeholder,$module);
 		}
 		return $module;

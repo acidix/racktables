@@ -407,7 +407,7 @@ END;*/
 		//echo "</label></td></tr>\n";
 		//echo "<tr><td class=tagbox><hr>\n";
 		$mod->addOutput("LocationsExist", true);
-		renderLocationCheckbox ($mod,$treeFromList ($locationlist));
+		renderLocationCheckbox($mod,treeFromList($locationlist));
 		//echo "<hr></td></tr>\n";
 		//echo '<tr><td>';
 		//printImageHREF ('setfilter', 'set filter', TRUE);
@@ -443,7 +443,7 @@ function renderRackspace ()
 
 	
 	$mod = $tplm->generateSubmodule("Payload", "RackspaceOverview");
-	$mod->setNamespace("Rackspace",true);
+	$mod->setNamespace("rackspace",true);
 
 	//echo "<table class=objview border=0 width='100%'><tr><td class=pcleft>";
 
@@ -574,9 +574,9 @@ function renderRackspace ()
 		}
 	}
 	//echo '</td><td class=pcright width="25%">';
-	renderCellFilterPortlet ($cellfilter, 'rack', $found_racks, $mod, 'CellFilter');
+	renderCellFilterPortlet ($cellfilter, 'rack', $found_racks, 'CellFilter', $mod);
 	//echo "<br>\n";
-	renderLocationFilterPortlet ($mod, 'LocationFilter');
+	renderLocationFilterPortlet($mod, 'LocationFilter');
 	//echo "</td></tr></table>\n";
 }
 
@@ -5323,7 +5323,7 @@ function renderEntityTags ($entity_id)
 }
 
 // This one is going to replace the tag filter.
-function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $bypass_params = array(), $parent = null, $parentplaceholder = "CellFilterPortlet");
+function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $bypass_params = array(), $parent = null, $parentplaceholder = "CellFilterPortlet")
 {
 	//addJS ('js/tag-cb.js');
 	//addJS ('tag_cb.enableNegation()', TRUE);
@@ -5338,7 +5338,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	$title = $filterc ? "Tag filters (${filterc})" : 'Tag filters';
 
 	$tplm = TemplateManager::getInstance();
-	$mod = $tplm->generateSubmodule($placeholder, "CellFilterPortlet", $parent);
+	$mod = $tplm->generateSubmodule($parentplaceholder, "CellFilterPortlet", $parent);
 	//startPortlet ($title);
 	$mod->setNamespace("");
 	$mod->setLock(true);
