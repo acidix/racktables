@@ -572,7 +572,7 @@ function renderRackspace ()
 		}
 	}
 	//echo '</td><td class=pcright width="25%">';
-	renderCellFilterPortlet ($cellfilter, 'rack', $found_racks, 'CellFilter', $mod);
+	renderCellFilterPortlet ($cellfilter, 'rack', $found_racks, array(), $mod, 'CellFilter');
 	//echo "<br>\n";
 	renderLocationFilterPortlet($mod, 'LocationFilter');
 	//echo "</td></tr></table>\n";
