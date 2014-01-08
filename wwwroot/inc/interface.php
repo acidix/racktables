@@ -329,6 +329,10 @@ function renderLocationFilterPortlet (TemplateModule $parent,$placeholder)
 	
 	$tplm = TemplateManager::getInstance();
 	$mod = $tplm->generateSubmodule($placeholder, "LocationFilterPortlet", $parent);
+	
+	
+	$mod->setNamespace("");
+	$mod->setLock(true);
 	/**addJS(<<<END
 function checkAll(bx) {
 	for (var tbls=document.getElementsByTagName("table"), i=tbls.length; i--;)
@@ -439,7 +443,7 @@ function renderRackspace ()
 
 	
 	$mod = $tplm->generateSubmodule("Payload", "RackspaceOverview");
-	$mod->setNamespace("rackspace",true);
+	$mod->setNamespace("Rackspace",true);
 
 	//echo "<table class=objview border=0 width='100%'><tr><td class=pcleft>";
 
@@ -570,9 +574,9 @@ function renderRackspace ()
 		}
 	}
 	//echo '</td><td class=pcright width="25%">';
-	renderCellFilterPortlet ($cellfilter, 'rack', $found_racks);
+	renderCellFilterPortlet ($cellfilter, 'rack', $found_racks, $mod, 'CellFilter');
 	//echo "<br>\n";
-	renderLocationFilterPortlet ();
+	renderLocationFilterPortlet ($mod, 'LocationFilter');
 	//echo "</td></tr></table>\n";
 }
 
@@ -5319,7 +5323,7 @@ function renderEntityTags ($entity_id)
 }
 
 // This one is going to replace the tag filter.
-function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $bypass_params = array())
+function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $bypass_params = array(), $parent = null, $parentplaceholder = "CellFilterPortlet");
 {
 	//addJS ('js/tag-cb.js');
 	//addJS ('tag_cb.enableNegation()', TRUE);
@@ -5334,8 +5338,10 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	$title = $filterc ? "Tag filters (${filterc})" : 'Tag filters';
 
 	$tplm = TemplateManager::getInstance();
-	$mod = $tplm->generateSubmodule("CellFilterPortlet", "CellFilterPortlet");
+	$mod = $tplm->generateSubmodule($placeholder, "CellFilterPortlet", $parent);
 	//startPortlet ($title);
+	$mod->setNamespace("");
+	$mod->setLock(true);
 	
 	$mod->setOutput("PortletTitle", $title);
 	
@@ -5358,7 +5364,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 			$tplm->generateSubmodule("TableContent", "CellFilterSpacer", $mod, true);
 			$rulerfirst = false;
 		}
-		$hr = $ruler;
+		//$hr = $ruler;
 		$andor = strlen ($preselect['andor']) ? $preselect['andor'] : getConfigVar ('FILTER_DEFAULT_ANDOR');
 		//echo '<tr>';
 		$cells = array();
