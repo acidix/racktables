@@ -8,7 +8,7 @@
 		portlet.find ('input[type="radio"][value="and"]').attr('checked','true');
 	}
 END;
-	$this->addRequirement("Header","HeaderJsInline","",true,array("code"=>$js));
+	$this->addRequirement("Header","HeaderJsInline",array("code"=>$js));
 ?>
 	<a href="#" onclick="textifyCellFilter(this, '<?php $this->Text; ?>'); return false">
 		<img src="pix/pix/pgadmin3-viewdata-grayscale.png" width=32 height=32 border=0 title="Make text expression from current filter">

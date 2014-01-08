@@ -29,13 +29,13 @@ $this->setInMemoryTemplate("HeaderJsInclude","<link rel=stylesheet type='text/cs
  * Template for: CellFilterPortlet in case there are no tags
  * Usage: interface.php (renderCellFilterPortlet())
  */
-$this->setInMemoryTemplate("CelLFilterNoTags","<tr><td colspan=2 class='tagbox sparenetwork'>(nothing is tagged yet)</td></tr>");
+$this->setInMemoryTemplate("CellFilterNoTags","<tr><td colspan=2 class='tagbox sparenetwork'>(nothing is tagged yet)</td></tr>");
 
 /**
  * Template for: CellFilterPortlet in case there are no predicates
  * Usage: interface.php (renderCellFilterPortlet())
  */
-$this->setInMemoryTemplate("CelLFilterNoPredicates","<tr><td colspan=2 class='tagbox sparenetwork'>(no predicates to show)</td></tr>");
+$this->setInMemoryTemplate("CellFilterNoPredicates","<tr><td colspan=2 class='tagbox sparenetwork'>(no predicates to show)</td></tr>");
 
 /**
  * Template for: CelLFilterPortlet in case you want extra-tags.

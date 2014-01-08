@@ -1,4 +1,5 @@
 <?php if (defined("RS_TPL")) {?>
+
 <?php $js = <<<END
 function checkAll(bx) {
 	for (var tbls=document.getElementsByTagName("table"), i=tbls.length; i--;)
@@ -54,7 +55,8 @@ function expand(id) {
 	}
 }
 END;
-	$this->addRequirement("Header","HeaderJsInline","",true,array("code"=>$js));
+
+	$this->addRequirement("Header","HeaderJsInline",array("code" => $js));
 ?>
 	<div class=portlet>
 		<h2>Location filter</h2>
