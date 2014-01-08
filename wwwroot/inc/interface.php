@@ -329,8 +329,6 @@ function renderLocationFilterPortlet (TemplateModule $parent,$placeholder)
 	
 	$tplm = TemplateManager::getInstance();
 	$mod = $tplm->generateSubmodule($placeholder, "LocationFilterPortlet", $parent);
-	
-	
 	$mod->setNamespace("");
 	$mod->setLock(true);
 	/**addJS(<<<END
