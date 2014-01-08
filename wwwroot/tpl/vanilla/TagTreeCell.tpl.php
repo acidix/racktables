@@ -1,5 +1,5 @@
 <?php if (defined("RS_TPL")) {?>
-			<?php $this->addRequirement("Header","HeaderJsInline","",true,array("code"=>"tag_cb.enableSubmitOnClick()")); ?>
+			<?php $this->addRequirement("Header","HeaderJsInline",array("code"=>"tag_cb.enableSubmitOnClick()")); ?>
 			<tr class='<?php $this->get("TrClass"); ?>'>
 				<td class='<?php $this->get("TdClass"); ?>' style='padding-left: <?php $this->get("LevelPx"); ?>px;'>
 					<label>

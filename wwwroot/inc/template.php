@@ -311,7 +311,7 @@ class TemplateManager
 	 * @param array $cont
 	 * @param string $namespace
 	 */
-	public function addRequirement($placeholder,$name,$namespace="",$inmemory=false,$cont=array())
+	public function addRequirement($placeholder,$name,$namespace="",$inmemory=false,$cont=array() )
 	{
 		$test = array($placeholder,$name,$namespace,$inmemory,$cont);
 		foreach ($this->requirements as $req)
@@ -323,7 +323,7 @@ class TemplateManager
 			}
 		}
 		$this->requirements[] = $test;
-		self::log("Adding requirement: ".$placeholder . " on " . $name . " (Namespace: " . $namespace . " InMemory: " . $inmemory . " Cont: ", $cont);
+		self::log("Adding requirement: ".$placeholder . " on " . $name . " Namespace: " . $namespace . " InMemory: " . $inmemory . " Cont: ", $cont);
 		$mod = $this->generateSubmodule($placeholder, $name, null, $inmemory, $cont);
 		$mod->setNamespace($namespace);
 		$mod->setLock(true);
@@ -764,7 +764,7 @@ class TemplateModule
 	 * @param unknown $placeholder
 	 * @param unknown $tplname
 	 */
-	public function addRequirement($placeholder,$name,$cont=array(),$namespace="",$inmemory=false)
+	public function addRequirement($placeholder,$name,$cont=array(),$namespace="",$inmemory=true)
 	{
 			$tplm = TemplateManager::getInstance();
 			return $tplm->addRequirement($placeholder,$name,$namespace,$inmemory,$cont);

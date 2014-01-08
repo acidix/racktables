@@ -1,6 +1,6 @@
 lsls<?php if (defined("RS_TPL")) {?>
-	<?php 	$this->addRequirement("Header","HeaderJsInclude","",true,array("path"=>"tpl/vanilla/js/tag-cb.js"));
-			$this->addRequirement("Header","HeaderJsInline","",true,array("code"=>"tag_cb.enableNegation()")); ?>
+	<?php 	$this->addRequirement("Header","HeaderJsInclude",array("path"=>"tpl/vanilla/js/tag-cb.js"));
+			$this->addRequirement("Header","HeaderJsInline",array("code"=>"tag_cb.enableNegation()")); ?>
 	<div class=portlet><h2><?php $this->get("PortletTitle"); ?></h2>
 		<table border=0 align=center cellspacing=0 class="tagtree">
 			<form method=get>

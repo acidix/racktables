@@ -6,7 +6,7 @@
 		<?php $this->get("CellFilter"); ?>
 		<br />
 		<?php $this->get("LocationFilter"); ?>
-	</td></tr></table>
+
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

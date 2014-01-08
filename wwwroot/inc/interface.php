@@ -557,7 +557,7 @@ function renderRackspace ()
 							$rackListIdx++;
 						}
 						$order = $nextorder[$order];
-					//echo "</tr></table></th></tr>\n";
+					//echo "</tr></tab></th></tr>\n";
 					}
 					$row_objects[] = $rowo;
 				}
@@ -3474,7 +3474,7 @@ function renderSearchResults ($terms, $summary)
 	global $nextorder;
 	$order = 'odd';
 
-	$mod = $tplm->generateSubmodule("Payload", "SearchMain")
+	$mod = $tplm->generateSubmodule("Payload", "SearchMain");
 	$mod->setNamespace("search",true);
 	//$mod->setOutputVariable("NHITS", $nhits);
 	//$mod->setOutputVariable("TERMS", ${terms});
