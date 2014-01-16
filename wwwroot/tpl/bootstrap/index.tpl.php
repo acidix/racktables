@@ -23,7 +23,7 @@
 		<!-- Sidebar -->
 		<div class="sidebar-wrapper" id="sideBarMenu" data-spy="affix" style="display: none;"> 
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href='index.php?page=myaccount&tab=default'><?php global $remote_displayname; echo $remote_displayname ?></a></li>
+				<li><a href='index.php?page=myaccount&tab=default'><?php $this->DisplayName; ?></a></li>
 				<li><a class="navbar-brand" href="#"><?php $this->get("Enterprise"); ?></a>	</li>
 			</ul>
 			<ul class="sidebar-nav" style="height: 100%;">
@@ -71,11 +71,11 @@
 					<ul class="nav navbar-nav">
 						<li><a href="http://racktables.org" title="Visit RackTables site"><?php echo CODE_VERSION ?></a></li>
 					</ul>
-					<?php $this->get("Quicklinks_Table") ?>
+					<?php $this->get("QuicklinksTable") ?>
 
 					<!--
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href='index.php?page=myaccount&tab=default'><?php global $remote_displayname; echo $remote_displayname ?></a></li>
+						<li><a href='index.php?page=myaccount&tab=default'><?php $this->Displayname; ?></a></li>
 						<li><a href='?logout'> <strong>Logout</strong></a></li>
 					</ul> -->
 					<form class="navbar-form navbar-right" role="search">
@@ -111,7 +111,7 @@
 		</div>
 	</div>
 
-	<!-- Doing Ínitalscripts here --> 
+	<!-- Doing Ã�nitalscripts here --> 
 	<script type="text/javascript">
 		$("#showSideMenuButton").click(function (){
 			if($('#sideBarMenu').css('display') == "none"){

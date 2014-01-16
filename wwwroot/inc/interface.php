@@ -578,49 +578,78 @@ function renderRackspace ()
 	//echo "</td></tr></table>\n";
 }
 
-function renderLocationRowForEditor ($subtree, $level = 0)
+function renderLocationRowForEditor ($parentmod,$subtree, $level = 0)
 {
+	$tplm = TemplateManager::getInstance();
 	$self = __FUNCTION__;
 	foreach ($subtree as $locationinfo)
 	{
-		echo "<tr><td align=left style='padding-left: " . ($locationinfo['kidc'] ? $level : ($level + 1) * 16) . "px;'>";
+		$smod = $tplm->generateSubmodule("LocationList", "RackspaceLocationEditorRow", $parentmod);
+		//echo "<tr><td align=left style='padding-left: " . ($locationinfo['kidc'] ? $level : ($level + 1) * 16) . "px;'>";
 		if ($locationinfo['kidc'])
-			printImageHREF ('node-expanded-static');
+			$smod->addOutput("HasSublocations", true);
+			//printImageHREF ('node-expanded-static');
 		if ($locationinfo['refcnt'] > 0 || $locationinfo['kidc'] > 0)
-			printImageHREF ('nodestroy');
-		else
-			echo getOpLink (array ('op' => 'deleteLocation', 'location_id' => $locationinfo['id']), '', 'destroy', 'Delete location');
-		echo '</td><td class=tdleft>';
-		printOpFormIntro ('updateLocation', array ('location_id' => $locationinfo['id']));
+			$smod->addOutput("IsDeletable",true);
+			//printImageHREF ('nodestroy');
+		//else
+			//echo getOpLink (array ('op' => 'deleteLocation', 'location_id' => $locationinfo['id']), '', 'destroy', 'Delete location');
+		//echo '</td><td class=tdleft>';
+		//printOpFormIntro ('updateLocation', array ('location_id' => $locationinfo['id']));
 		$parent = isset ($locationinfo['parent_id']) ? $locationinfo['parent_id'] : 0;
-		echo getSelect
-		(
-			array ( $parent => $parent ? htmlspecialchars ($locationinfo['parent_name']) : '-- NONE --'),
-			array ('name' => 'parent_id', 'id' => 'locationid_' . $locationinfo['id'], 'class' => 'locationlist-popup'),
-			$parent,
-			FALSE
-		);
-		echo "</td><td class=tdleft>";
-		echo "<input type=text size=48 name=name value='${locationinfo['name']}'>";
-		echo '</td><td>' . getImageHREF ('save', 'Save changes', TRUE) . "</form></td></tr>\n";
+		//echo getSelect
+		//(
+		//	array ( $parent => $parent ? htmlspecialchars ($locationinfo['parent_name']) : '-- NONE --'), //@XXX: How can a single element generate multiple.
+		//	array ('name' => 'parent_id', 'id' => 'locationid_' . $locationinfo['id'], 'class' => 'locationlist-popup'),
+		//	$parent,
+		//	FALSE
+		//);
+		$plist = array ( $parent => $parent ? htmlspecialchars ($locationinfo['parent_name']) : '-- NONE --');
+		foreach ($plist as $key => $value) {
+			$smod->addOutput("Parentselect", array("ParentListSelected"=>$key,"ParentListContent"=>$value));
+		}
+		//echo "</td><td class=tdleft>";
+		//echo "<input type=text size=48 name=name value='${locationinfo['name']}'>";
+		//echo '</td><td>' . getImageHREF ('save', 'Save changes', TRUE) . "</form></td></tr>\n";
 		if ($locationinfo['kidc'])
-			$self ($locationinfo['kids'], $level + 1);
+			$self ($smod,$locationinfo['kids'], $level + 1);
 	}
 }
 
-function renderLocationSelectTree ($selected_id = NULL)
+function renderLocationSelectTree ($selected_id = NULL, $parentmod = null)
 {
-	echo '<option value=0>-- NONE --</option>';
-	$locationlist = listCells ('location');
-	foreach (treeFromList ($locationlist) as $location)
+	if ($parentmod != null)
 	{
-		echo "<option value=${location['id']} style='font-weight: bold' ";
-		if ($location['id'] == $selected_id )
-		    echo ' selected';
-		echo ">${location['name']}</option>";
-		printLocationChildrenSelectOptions ($location, 0, $selected_id);
+		$tplm = TemplateManager::getInstance();
+		$locationlist = listCells ('location');
+		foreach (treeFromList ($locationlist) as $location)
+		{
+			$mod = $tplm->generateSubmodule("Options", "LocationChildrenBold", $parentmod);
+			$mod->setNamespace('',true);
+			$mod->setLock(true);
+			
+			if ($location['id'] == $selected_id )
+				$mod->addOutput('Selected', 'selected');
+			$mod->addOutput('Content',$location['name']);
+			printLocationChildrenSelectOptions ($location, 0, $selected_id, $mod);
+		}
+		//echo '</select>';		
 	}
-	echo '</select>';
+	else
+	{
+		echo '<option value=0>-- NONE --</option>';
+		$locationlist = listCells ('location');
+		foreach (treeFromList ($locationlist) as $location)
+		{
+			echo "<option value=${location['id']} style='font-weight: bold' ";
+			if ($location['id'] == $selected_id )
+				echo ' selected';
+		echo ">${location['name']}</option>";
+				printLocationChildrenSelectOptions ($location, 0, $selected_id);
+		}
+		echo '</select>';		
+	}
+
 }
 
 function renderRackspaceLocationEditor ()
@@ -639,33 +668,38 @@ JSTXT;
 	
 	$tplm = TemplateManager::getInstance();
 	$tplm->createMainModule("index");
-	$tplm->addRequirement("Header", "RackspaceLocationEditorJs","rackspace");
 	
-	function printNewItemTR ()
+	$mod = $tplm->generateSubmodule("Payload", "RackspaceLocationEditor");
+	$mod->setNamespace('rackspace',true);
+	
+	function printNewItemTR ($placeholder,$parentmod)
 	{
-		printOpFormIntro ('addLocation');
-		echo '<tr><td>';
-		printImageHREF ('create', 'Add new location', TRUE);
-		echo '</td><td><select name=parent_id tabindex=100>';
-		renderLocationSelectTree ();
-		echo '</td><td><input type=text size=48 name=name tabindex=101></td><td>';
-		printImageHREF ('create', 'Add new location', TRUE, 102);
-		echo "</td></tr></form>\n";
+		$tplm = TemplateManager::getInstance();
+		$mod = $tplm->generateSubmodule($placeholder, "RackLocationEditorNew", $parentmod);
+		renderLocationSelectTree ($parentmod);
+		
+		//printOpFormIntro ('addLocation');
+		//echo '<tr><td>';
+		//printImageHREF ('create', 'Add new location', TRUE);
+		//echo '</td><td><select name=parent_id tabindex=100>';
+		//echo '</td><td><input type=text size=48 name=name tabindex=101></td><td>';
+		//printImageHREF ('create', 'Add new location', TRUE, 102);
+		//echo "</td></tr></form>\n";
 	}
 
 	//startPortlet ('Locations');
 	//echo "<table border=0 cellspacing=0 cellpadding=5 align=center class=widetable>\n";
 	//echo "<tr><th>&nbsp;</th><th>Parent</th><th>Name</th><th>&nbsp;</th></tr>\n";
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR();
+		printNewItemTR("NewTop",$mod);
 
 	$locations = listCells ('location');
-	renderLocationRowForEditor (treeFromList ($locations));
+	renderLocationRowForEditor ($mod,treeFromList ($locations));
 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR();
-	echo "</table><br>\n";
-	finishPortlet();
+		printNewItemTR("NewBottom",$mod);
+	//echo "</table><br>\n";
+	//finishPortlet();
 }
 
 function renderRackspaceRowEditor ()

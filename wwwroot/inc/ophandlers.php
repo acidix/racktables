@@ -3291,6 +3291,23 @@ function clearVlan()
 		showSuccess ("VLAN $vlan_id removed from $n_cleared ports");
 }
 
+//Sets the currently used template for only one session. Perm-Template is set via config.
+function setTemporaryTemplate()
+{
+	assertUintArg('tplid',true);
+	$id = $_REQUEST['tplid'];
+	$arr = TemplateManager::getOrderedTemplateList();
+	if (array_key_exists($id, $arr))
+	{
+		$_SESSION['template'] = $arr[$id];
+		showSuccess("Template is set to:" . $arr[$id] . " for this session.");
+	}
+	else 
+	{
+		showError("Unable to find this template, please try again.");
+	}
+}
+
 function deleteVlan()
 {
 	assertStringArg ('vlan_ck');
@@ -3428,6 +3445,7 @@ function buildOpspecColumns ($opspec, $listname)
 		} // switch (TRUE)
 	return $columns;
 }
+
 
 # execute a single SQL statement defined by an opspec descriptor
 function tableHandler()

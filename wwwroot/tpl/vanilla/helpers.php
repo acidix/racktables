@@ -23,8 +23,8 @@ class TemplateHelperH2 extends TemplateHelperAbstract
 }
 
 /**
- * Template Helper that generates the default form intro.
- * 
+ * Template Helper that generates the default form intro. $this->getH("myhelper","ardes");
+ * $this->("Form","myOperation");
  * Params:
  * [0] = Opname
  * [1] = File-Upload? (Boolean!)
