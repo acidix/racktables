@@ -729,7 +729,7 @@ function renderRackspaceRowEditor ()
 	$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload", "RackspaceRowEditor");
-	$mod->setNamespace("Rackspace",true);
+	$mod->setNamespace("rackspace",true);
 	
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
 		printNewItemTR ("NewTop",$mod);
