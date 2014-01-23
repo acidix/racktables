@@ -3974,7 +3974,7 @@ function renderUserListEditor ()
 	function printNewItemTR ($parent,$placeholder)
 	{
 		$tplm = TemplateManager::getInstance();
-		$smod = $tplm->generateSubmodule($placeholder, "UserListNew", $parent);
+		$smod = $tplm->generateSubmodule($placeholder, "UserListEditorNew", $parent);
 		
 		//startPortlet ('Add new');
 		//printOpFormIntro ('createUser');
