@@ -24,6 +24,7 @@ class TemplateManager
 	
 	/**
 	 * Returns the TemplateManager instance
+	 * 
 	 * @return TemplateManager
 	 */
 	public static function getInstance()
@@ -79,42 +80,49 @@ class TemplateManager
 	
 	/**
 	 * Contains the main template.
+	 * 
 	 * @var string
 	 */
 	protected $tpl = "";
 	
 	/**
 	 * Contains the main module if created.
+	 * 
 	 * @var object
 	 */
 	protected $mainmod = null;
 	
 	/**
 	 * Contains the placeholders available in every module.
+	 * 
 	 * @var array
 	 */
 	protected $gout = array();
 	
 	/**
 	 * A list of inmemory templates for short but oftenly used modules
+	 * 
 	 * @var array
 	 */
 	protected $inmemory_templates = array();
 	
 	/**
 	 * Contains all loaded helpers.
+	 * 
 	 * @var 
 	 */
 	protected $helpers = array();
 	
 	/**
 	 * Contains all added requirements to check wether they already got added.
+	 * 
 	 * @var array
 	 */
 	protected $requirements = array();
 	
 	/**
 	 * Checks wether an given inmemory template is already available.
+	 * 
 	 * @param string $name
 	 * @return boolean
 	 */
@@ -125,9 +133,7 @@ class TemplateManager
 	
 	/**
 	 * Tries to load an unknown in-memory template.
-	 * 
 	 * $name might consist of a path without file ending: "thisisanexample/template"
-	 * 
 	 * Checks:
 	 * thisisanexample/template.itpl.php
 	 * globals.itpl.php
@@ -182,7 +188,6 @@ class TemplateManager
 	
 	/**
 	 * Sets an in-memory template.
-	 * 
 	 * Use {{placeholder}} for placeholders.
 	 * 
 	 * @param string $name
@@ -210,6 +215,7 @@ class TemplateManager
 	
 	/**
 	 * Set the main template
+	 * 
 	 * @param string $name
 	 */
 	public function setTemplate($name)
@@ -220,6 +226,7 @@ class TemplateManager
 	
 	/**
 	 * Returns the main template
+	 * 
 	 * @return string
 	 */
 	public function getTemplate()
@@ -229,6 +236,7 @@ class TemplateManager
 	
 	/**
 	 * Set the global output variables
+	 * 
 	 * @param array $out
 	 */
 	public function setGlobalOutput($out) {
@@ -237,6 +245,7 @@ class TemplateManager
 	
 	/**
 	 * Set a single global output variable
+	 * 
 	 * @param string $name
 	 * @param string $value
 	 */
@@ -247,11 +256,10 @@ class TemplateManager
 	
 	/**
 	 * Automatically create the main module, using the template set in the manager.
-	 * 
 	 * Returns null if no template is set.
 	 * 
 	 * @param string $name
-	 * @return NULL|object
+	 * @return NULL|TemplateModule
 	 */
 	public function createMainModule($name = "index")
 	{
@@ -268,6 +276,7 @@ class TemplateManager
 	
 	/**
 	 * Returns the main module.
+	 * 
 	 * @return TemplateModule
 	 */
 	public function getMainModule()
@@ -277,7 +286,6 @@ class TemplateManager
 	
 	/**
 	 * Run all template-modules.
-	 * 
 	 * If you set echo on true, the result will be sent instead of returning it.
 	 * 
 	 * @param boolean $echo
@@ -312,7 +320,6 @@ class TemplateManager
 	/**
 	 * Use this to automatically set the global output variables for a new TemplateModule and the template name itself,
 	 * it will get added to its parent automatically. If you leave parent empty, it will get added to the main module.
-	 * 
 	 * It might be easier to use this one instead of loading the templates on your own.
 	 * 
 	 * @param string $placeholder
@@ -374,11 +381,10 @@ class TemplateManager
 	 * Adds an global module to the main module, supposed to be loaded there somewhere else,
 	 * this can be used to include certain css code or other special stuff somewhere else then in the module itself.
 	 * 
-	 * 
 	 * @param string $placeholder
 	 * @param string $name
 	 * @param string $inmemory
-	 * @param array $cont
+	 * @param Multitype $cont
 	 * @param string $namespace
 	 */
 	public function addRequirement($placeholder,$name,$namespace="",$inmemory=false,$cont=array() )
@@ -400,13 +406,13 @@ class TemplateManager
 	}
 	
 	/**
-	 * Adds an global template, so called Helper, that will be available in every Module as Helper{$name}
-	 * 
+	 * Adds an global template, called Helper, that will be available in every Module
 	 * You can add helpers on your own, they have to implement the function run() (Interface is TemplateInterface)
 	 * and they have to echo the content, based on the passed params.
+	 * In templates they can be accessed via: $this->getH("Name",$param or array of params)
 	 * 
 	 * @param string $helper
-	 * @param TemplateModule $object
+	 * @param TemplateHelper $object
 	 */
 	public function addHelper($helper,TemplateHelper $object = null)
 	{
@@ -436,8 +442,9 @@ class TemplateManager
 	
 	/**
 	 * Returns an helper, tries to load it if it is still unknown.
+	 * 
 	 * @param string $helper
-	 * @return NULL|TemplateHelperAbstract:
+	 * @return NULL|TemplateHelper:
 	 */
 	public function getHelper($helper)
 	{
@@ -456,6 +463,7 @@ class TemplateManager
 	 * Used for debug logging,
 	 * as long as TPL_DEBUG is set in this file,
 	 * it will fill a logfile with informations.
+	 * 
 	 * @param String $text
 	 * @param mixed $var
 	 */
@@ -479,11 +487,8 @@ class TemplateManager
 
 /**
  * An interface you can use if you want to create your own helpers in the helpers.php of your template
- * 
  * Params should be an array that takes either values like "Testoutput" or "%%placeholder", the second one will search for an
  * output variable with the name "placeholder" in the module where the helper is used.
- * 
- * 
  * It might be better to use the abstract class defined below, as this one already implements a small algorithm to parse the output variables.
  * 
  * @author Alexander Kastius
@@ -497,7 +502,6 @@ interface TemplateHelper
 /**
  * Use this to easily create your own template helpers,
  * just extend the class and implement the generate($params) function.
- * 
  * This function should echo the content using the passed parameters, thoose will be already parsed (placeholder will be replaced with values, or with "" when the placeholder didn't exist).
  * You should make shure that your helper will output nothing, not even the surrounding tags, when launched with empty parameters.
  * 
@@ -623,6 +627,7 @@ class TemplateModule
 	 * 
 	 * Set the template, the module-placeholder for the parent (doesn'T matter if you create the main module),
 	 * the module name itself and the module output (can be changed later on).
+	 * 
 	 * @param string $tpl
 	 * @param string $placeholder
 	 * @param string $module
@@ -1015,21 +1020,14 @@ class TemplateModule
 	
 	/**
 	 * Use this to parse an array into several submodules of the same type.
-	 *
 	 * The array that should be passed to this function should look like this:
-	 *
 	 * [["content1stuff","content2stuff"],["content1otherstuff","content2otherstuff"],....]
-	 *
 	 * The internalplaceholdersarray should contain the placeholders for the values in the array:
-	 *
 	 * ["content1","content2"]
-	 *
 	 * You can use this for example to show a table containing stuff, using a module for a single line of the template and the parent
 	 * to define the table itself.
-	 * 
 	 * Its supposed to be used within loops.
 	 *
-	 * 
 	 * @param string $placeholder
 	 * @param array $internalplaceholders
 	 * @param array $content
@@ -1093,7 +1091,8 @@ class TemplateModule
  * Inmemory-Template Class
  * 
  * This is an template that is not loaded everytime you run it, but it's content is stored in-memory before
- * you run it the first time. This is good for small templates you need often (for example a line of a table)
+ * you run it the first time. This is good for small templates you need often (for example a line of a table).
+ * IM-templates don't support some advanced features real templates as they don't support inline-code without using eval.
  * 
  * @author Alexander Kastius
  *
@@ -1104,7 +1103,7 @@ class TemplateInMemory extends TemplateModule
 	/**
 	 * Use this to run the InMemoryTemplate, important:
 	 * It will search for the inmemory template, if its not included yet.
-	 * (non-PHPdoc)
+	 * 
 	 * @see TemplateModule::run()
 	 */
 	public function run()
