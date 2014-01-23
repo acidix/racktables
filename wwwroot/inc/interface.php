@@ -2360,7 +2360,7 @@ function renderDepot ()
 
 // This function returns TRUE if the result set is too big to be rendered, and no filter is set.
 // In this case it renders the describing message instead.
-function renderEmptyResults($cellfilter, $entities_name, $count = NULL)
+function renderEmptyResults($pmod, $placeholder, $cellfilter, $entities_name, $count = NULL)
 {
 	if (!$cellfilter['is_empty'])
 		return FALSE;
@@ -2372,11 +2372,17 @@ function renderEmptyResults($cellfilter, $entities_name, $count = NULL)
 
 	$href_show_all = trim($_SERVER['REQUEST_URI'], '&');
 	$href_show_all .= htmlspecialchars('&show_all_objects=1');
+	
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateSubmodule($placeholder, "EmptyResults", $pmod, true);
 	$suffix = isset ($count) ? " ($count)" : '';
-	echo <<<END
-<p>Please set a filter to display the corresponging $entities_name.
-<br><a href="$href_show_all">Show all $entities_name$suffix</a>
-END;
+	$mod->addOutput("Name", $entities_name);
+	$mod->addOutput("Suffix", $suffix);
+	$mod->addOutput("ShowAll", $href_show_all);
+	//echo <<<END
+//<p>Please set a filter to display the corresponging $entities_name.
+//<br><a href="$href_show_all">Show all $entities_name$suffix</a>
+//END;
 	return TRUE;
 }
 
@@ -3890,7 +3896,7 @@ function renderAtomGrid ($data)
 	}
 }
 
-function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $celllist = NULL)
+function renderCellList ($parent = NULL, $placeholder = "CellList", $realm = NULL, $title = 'items', $do_amplify = FALSE, $celllist = NULL)
 {
 	if ($realm === NULL)
 	{
@@ -3903,29 +3909,44 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 	if (! isset ($celllist))
 		$celllist = listCells ($realm);
 	$celllist = filterCellList ($celllist, $cellfilter['expression']);
+	
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateSubmodule($placeholder, "CellList", $parent);
+	$mod->setNamespace("",true);
+	$mod->setLock();
 
-	echo "<table border=0 class=objectview>\n";
-	echo "<tr><td class=pcleft>";
+	//echo "<table border=0 class=objectview>\n";
+	//echo "<tr><td class=pcleft>";
 
-	if ($realm != 'file' || ! renderEmptyResults ($cellfilter, 'files', count($celllist)))
+	if ($realm != 'file' || ! renderEmptyResults ($mod, "EmptyResults", $cellfilter, 'files', count($celllist)))
 	{
 		if ($do_amplify)
 			array_walk ($celllist, 'amplifyCell');
-		startPortlet ($title . ' (' . count ($celllist) . ')');
-		echo "<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>\n";
+		
+		$mod->setOutput("EmptyResults", "");
+		//startPortlet ($title . ' (' . count ($celllist) . ')');
+		//echo "<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>\n"
+		$renderedCells = array();
 		foreach ($celllist as $cell)
 		{
-			echo "<tr class=row_${order}><td>";
-			renderCell ($cell);
-			echo "</td></tr>\n";
+			$singleCell = array();
+			$singleCell["Order"] = $order;
+			$singleCell["CellContent"] = renderCell($cell);
+			//echo "<tr class=row_${order}><td>";
+			//renderCell ($cell);
+			//echo "</td></tr>\n";
 			$order = $nextorder[$order];
+			
+			$renderedCells[] = $singleCell;
 		}
-		echo '</table>';
-		finishPortlet();
+		$mod->setOutput("CellListContent", $renderedCells);
+		
+		//echo '</table>';
+		//finishPortlet();
 	}
-	echo '</td><td class=pcright>';
-	renderCellFilterPortlet ($cellfilter, $realm, $celllist);
-	echo "</td></tr></table>\n";
+	//echo '</td><td class=pcright>';
+	renderCellFilterPortlet ($cellfilter, $realm, $celllist, array(), $mod);
+	//echo "</td></tr></table>\n";
 }
 
 function renderUserList ()
@@ -3935,43 +3956,60 @@ function renderUserList ()
 
 function renderUserListEditor ()
 {
-	function printNewItemTR ()
+	function printNewItemTR ($parent,$placeholder)
 	{
-		startPortlet ('Add new');
-		printOpFormIntro ('createUser');
-		echo '<table cellspacing=0 cellpadding=5 align=center>';
-		echo '<tr><th>&nbsp;</th><th>&nbsp;</th><th>Assign tags</th></tr>';
-		echo '<tr><th class=tdright>Username</th><td class=tdleft><input type=text size=64 name=username tabindex=100></td>';
-		echo '<td rowspan=4>';
-		renderNewEntityTags ('user');
-		echo '</td></tr>';
-		echo '<tr><th class=tdright>Real name</th><td class=tdleft><input type=text size=64 name=realname tabindex=101></td></tr>';
-		echo '<tr><th class=tdright>Password</th><td class=tdleft><input type=password size=64 name=password tabindex=102></td></tr>';
-		echo '<tr><td colspan=2>';
-		printImageHREF ('CREATE', 'Add new account', TRUE, 103);
-		echo '</td></tr>';
-		echo '</table></form>';
-		finishPortlet();
+		$tplm = TemplateManager::getInstance();
+		$smod = $tplm->generateSubmodule($placeholder, "UserListNew", $parent);
+		
+		//startPortlet ('Add new');
+		//printOpFormIntro ('createUser');
+		//echo '<table cellspacing=0 cellpadding=5 align=center>';
+		//echo '<tr><th>&nbsp;</th><th>&nbsp;</th><th>Assign tags</th></tr>';
+		//echo '<tr><th class=tdright>Username</th><td class=tdleft><input type=text size=64 name=username tabindex=100></td>';
+		//echo '<td rowspan=4>';
+		renderNewEntityTags ($smod,'user');
+		//echo '</td></tr>';
+		//echo '<tr><th class=tdright>Real name</th><td class=tdleft><input type=text size=64 name=realname tabindex=101></td></tr>';
+		//echo '<tr><th class=tdright>Password</th><td class=tdleft><input type=password size=64 name=password tabindex=102></td></tr>';
+		//echo '<tr><td colspan=2>';
+		//printImageHREF ('CREATE', 'Add new account', TRUE, 103);
+		//echo '</td></tr>';
+		//echo '</table></form>';
+		//finishPortlet();
 	}
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateSubmodule("payload", "UserListEditor");
+	$mod->setNamespace("userlist",true);
+	
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR();
+		printNewitemTR($mod,"AddNewTop");
+		//printNewItemTR();
 	$accounts = listCells ('user');
-	startPortlet ('Manage existing (' . count ($accounts) . ')');
-	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-	echo '<tr><th>Username</th><th>Real name</th><th>Password</th><th>&nbsp;</th></tr>';
+	//startPortlet ('Manage existing (' . count ($accounts) . ')');
+	$mod->addOutput("Count", count($accounts));
+	//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	//echo '<tr><th>Username</th><th>Real name</th><th>Password</th><th>&nbsp;</th></tr>';
 	foreach ($accounts as $account)
 	{
-		printOpFormIntro ('updateUser', array ('user_id' => $account['user_id']));
-		echo "<tr><td><input type=text name=username value='${account['user_name']}' size=16></td>";
-		echo "<td><input type=text name=realname value='${account['user_realname']}' size=24></td>";
-		echo "<td><input type=password name=password value='${account['user_password_hash']}' size=40></td><td>";
-		printImageHREF ('save', 'Save changes', TRUE);
-		echo '</td></form></tr>';
+		$smod = $tplm->generateSubmodule("Users", "UserListEditorRow", $mod);
+		$smod->addOutput("UserId", $account['user_id']);
+		$smod->addOutput("Name", $account['user_name']);
+		$smod->addOutput("RealName", $account['user_realname']);
+		$smod->addOutput("PwHash", $user['user_password_hash']);
+		
+		$mod->addOutput("Users", $smod);
+		//printOpFormIntro ('updateUser', array ('user_id' => $account['user_id']));
+		//echo "<tr><td><input type=text name=username value='${account['user_name']}' size=16></td>";
+		//echo "<td><input type=text name=realname value='${account['user_realname']}' size=24></td>";
+		//echo "<td><input type=password name=password value='${account['user_password_hash']}' size=40></td><td>";
+		//printImageHREF ('save', 'Save changes', TRUE);
+		//echo '</td></form></tr>';
 	}
-	echo '</table><br>';
-	finishPortlet();
+	//echo '</table><br>';
+	//finishPortlet();
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR();
+		printNewitemTR($mod,"AddNewBottom");
+		//printNewItemTR();
 }
 
 function renderOIFCompatViewer()
@@ -5281,6 +5319,8 @@ function printTagCheckboxTable ($input_name, $preselect, $neg_preselect, $taglis
 			{
 				$tag_class = isset ($taginfo['id']) && isset ($taginfo['refcnt']) ? getTagClassName ($row['input_value']) : '';
 				$tagobj = $tplm->generateSubmodule("TagRow", "TagTreeCell", $addto);
+				$tagobj->setNamespace("",true);
+				$tagobj->setLock();
 				$tagobj->setOutput("TrClass", 		$row['tr_class']);
 				$tagobj->setOutput("TdClass", 		$row['td_class']);
 				$tagobj->setOutput("LevelPx", 		$row['level'] * 16);
@@ -5608,17 +5648,17 @@ END;
 }
 
 // Dump all tags in a single SELECT element.
-function renderNewEntityTags ($for_realm = '')
+function renderNewEntityTags ($parent, $for_realm = '')
 {
 	global $taglist, $tagtree;
 	if (!count ($taglist))
 	{
-		echo "No tags defined";
+		$parent->addOutput("TagsEmpty",true);
 		return;
 	}
-	echo '<div class=tagselector><table border=0 align=center cellspacing=0 class="tagtree">';
-	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm);
-	echo '</table></div>';
+	//echo '<div class=tagselector><table border=0 align=center cellspacing=0 class="tagtree">';
+	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm, $parent);
+	//echo '</table></div>';
 }
 
 function renderTagRollerForRow ($row_id)
