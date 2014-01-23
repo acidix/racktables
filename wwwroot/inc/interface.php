@@ -2310,17 +2310,25 @@ function renderDepot ()
 	$objects = array();
 	$objects_count = getEntitiesCount ('object');
 
-	echo "<table border=0 class=objectview>\n";
-	echo "<tr><td class=pcleft>";
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule("payload", "Depot");
+	$mod->setNamespace("depot",true);
+	
+	//echo "<table border=0 class=objectview>\n";
+	//echo "<tr><td class=pcleft>";
 
 	if ($objects_count == 0)
-		echo '<h2>No objects exist</h2>';
+		$mod->addOutput("NoObjects", true);
+		//echo '<h2>No objects exist</h2>';
 	// 1st attempt: do not fetch all objects if cellfilter is empty and rendering empty result is enabled
-	elseif (! ($cellfilter['is_empty'] && renderEmptyResults ($cellfilter, 'objects', $objects_count)))
+	elseif (! ($cellfilter['is_empty'] && renderEmptyResults ($mod, 'Content', $cellfilter, 'objects', $objects_count)))
 	{
 		$objects = filterCellList (listCells ('object'), $cellfilter['expression']);
 		// 2st attempt: do not render all fetched objects if rendering empty result is enabled
-		if (! renderEmptyResults ($cellfilter, 'objects', count($objects)))
+		if (! renderEmptyResults ($mod, 'Content', $cellfilter, 'objects', count($objects)))
 		{
 			startPortlet ('Objects (' . count ($objects) . ')');
 			echo '<br><br><table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
@@ -2359,7 +2367,7 @@ function renderDepot ()
 
 	echo "</td><td class=pcright width='25%'>";
 
-	renderCellFilterPortlet ($cellfilter, 'object', $objects);
+	renderCellFilterPortlet ($cellfilter, 'object', $objects, array(), $mod);
 	echo "</td></tr></table>\n";
 }
 
