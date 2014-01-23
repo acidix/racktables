@@ -676,7 +676,7 @@ JSTXT;
 	function printNewItemTR ($placeholder,$parentmod)
 	{
 		$tplm = TemplateManager::getInstance();
-		$mod = $tplm->generateSubmodule($placeholder, "RackLocationEditorNew", $parentmod);
+		$mod = $tplm->generateSubmodule($placeholder, "RackspaceLocationEditorNew", $parentmod);
 		renderLocationSelectTree ($parentmod);
 		
 		//printOpFormIntro ('addLocation');
