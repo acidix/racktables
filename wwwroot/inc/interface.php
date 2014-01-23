@@ -704,41 +704,54 @@ JSTXT;
 
 function renderRackspaceRowEditor ()
 {
-	function printNewItemTR ()
+	function printNewItemTR ($plc,$parentmod)
 	{
-		printOpFormIntro ('addRow');
-		echo '<tr><td>';
-		printImageHREF ('create', 'Add new row', TRUE);
-		echo '</td><td><select name=location_id tabindex=100>';
-		renderLocationSelectTree ();
-		echo '</td><td><input type=text name=name tabindex=100></td><td>';
-		printImageHREF ('create', 'Add new row', TRUE, 102);
-		echo '</td></tr></form>';
+		$tplm = TemplateManager::getInstance();
+		$mod = $tplm->generateSubmodule($plc, "RackspaceRowEditorNew", $parentmod);
+		renderLocationSelectTree (null,$mod);
+		
+		//printOpFormIntro ('addRow');
+		//echo '<tr><td>';
+		//printImageHREF ('create', 'Add new row', TRUE);
+		//echo '</td><td><select name=location_id tabindex=100>';
+		//echo '</td><td><input type=text name=name tabindex=100></td><td>';
+		//printImageHREF ('create', 'Add new row', TRUE, 102);
+		//echo '</td></tr></form>';
 	}
-	startPortlet ('Rows');
-	echo "<table border=0 cellspacing=0 cellpadding=5 align=center class=widetable>\n";
-	echo "<tr><th>&nbsp;</th><th>Location</th><th>Name</th><th>&nbsp;</th></tr>\n";
+	//startPortlet ('Rows');
+	//echo "<table border=0 cellspacing=0 cellpadding=5 align=center class=widetable>\n";
+	//echo "<tr><th>&nbsp;</th><th>Location</th><th>Name</th><th>&nbsp;</th></tr>\n";
+	
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateSubmodule("Payload", "RackspaceRowEditor");
+	$mod->setNamespace("Rackspace",true);
+	
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR ();
+		printNewItemTR ("NewTop",$mod);
 	foreach (getAllRows() as $row_id => $rowInfo)
 	{
-		echo '<tr><td>';
+		$smod = $tplm->generateSubmodule("RowList","RackspaceRowEditorRow",$mod);
+		//echo '<tr><td>';
 		if ($rc = $rowInfo['rackc'])
-			printImageHREF ('nodestroy', "${rc} rack(s) here");
-		else
-			echo getOpLink (array('op'=>'deleteRow', 'row_id'=>$row_id), '', 'destroy', 'Delete row');
-		printOpFormIntro ('updateRow', array ('row_id' => $row_id));
-		echo '</td><td>';
-		echo '<select name=location_id tabindex=100>';
-		renderLocationSelectTree ($rowInfo['location_id']);
-		echo "</td><td><input type=text name=name value='${rowInfo['name']}' tabindex=100></td><td>";
-		printImageHREF ('save', 'Save changes', TRUE);
-		echo "</form></td></tr>\n";
+			$smod->addOutput("HasChildren", true);
+			//printImageHREF ('nodestroy', "${rc} rack(s) here");
+		//else
+		//	echo getOpLink (array('op'=>'deleteRow', 'row_id'=>$row_id), '', 'destroy', 'Delete row');
+		//printOpFormIntro ('updateRow', array ('row_id' => $row_id));
+		//echo '</td><td>';
+		//echo '<select name=location_id tabindex=100>';
+		$smod->addOutput("RowId",$row_id);
+		$smod->addOutput("RackCount",$rc);
+		$smod->addOutput("RowName",$rowInfo['name']);
+		renderLocationSelectTree ($rowInfo['location_id'],$smod);
+		//echo "</td><td><input type=text name=name value='${rowInfo['name']}' tabindex=100></td><td>";
+		//printImageHREF ('save', 'Save changes', TRUE);
+		//echo "</form></td></tr>\n";
 	}
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR ();
-	echo "</table><br>\n";
-	finishPortlet();
+		printNewItemTR ("NewBottom",$mod);
+	//echo "</table><br>\n";
+	//finishPortlet();
 }
 
 function renderRow ($row_id)
@@ -2407,58 +2420,69 @@ function renderRackspaceHistory ()
 	$object_id = 1;
 	if ($op_id)
 		list ($omid, $nmid) = getOperationMolecules ($op_id);
-
+	
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateSubmodule("Payload","RackspaceHistory");
+	$mod->setNamespace("rackspace",true);
+	
 	// Main layout starts.
-	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
+	//echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
 
 	// Left top portlet with old allocation.
-	echo "<tr><td class=pcleft>";
-	startPortlet ('Old allocation');
+	//echo "<tr><td class=pcleft>";
+	//startPortlet ('Old allocation');
 	if ($omid)
 	{
 		$oldMolecule = getMolecule ($omid);
 		renderMolecule ($oldMolecule, $object_id);
 	}
 	else
-		echo "nothing";
-	finishPortlet();
+		$mod->setOutput("OldAlloc","nothing");
+	//finishPortlet();
 
-	echo '</td><td class=pcright>';
+	//echo '</td><td class=pcright>';
 
 	// Right top portlet with new allocation
-	startPortlet ('New allocation');
+	//startPortlet ('New allocation');
 	if ($nmid)
 	{
 		$newMolecule = getMolecule ($nmid);
 		renderMolecule ($newMolecule, $object_id);
 	}
 	else
-		echo "nothing";
-	finishPortlet();
+		$mod->setOutput("NewAlloc","nothing");
+	//finishPortlet();
 
-	echo '</td></tr><tr><td colspan=2>';
+	//echo '</td></tr><tr><td colspan=2>';
 
 	// Bottom portlet with list
 
-	startPortlet ('Rackspace allocation history');
-	echo "<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
-	echo "<tr><th>timestamp</th><th>author</th><th>object</th><th>comment</th></tr>\n";
+	//startPortlet ('Rackspace allocation history');
+	//echo "<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
+	//echo "<tr><th>timestamp</th><th>author</th><th>object</th><th>comment</th></tr>\n";
 	foreach ($history as $row)
 	{
+		$smod = $tplm->generateSubmodule("HistoryRows","RackspaceHistoryRow",$mod);
 		if ($row['mo_id'] == $op_id)
 			$class = 'hl';
 		else
 			$class = "row_${order}";
-		echo "<tr class=${class}><td><a href='".makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'op_id'=>$row['mo_id']))."'>${row['ctime']}</a></td>";
-		echo "<td>${row['user_name']}</td><td>";
-		renderCell (spotEntity ('object', $row['ro_id']));
-		echo '</td><td>' . niftyString ($row['comment'], 0) . '</td></tr>';
+		$smod->addOutput("Class",$class);
+		$smod->addOutput("Link",makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'op_id'=>$row['mo_id'])));
+		$smod->addOutput("Time",$row['ctime']);
+		$smod->addOutput("UserName",$row['user_name']);
+		$smod->addOutput("renderedCell",renderCell (spotEntity ('object', $row['ro_id'])));
+		$smod->addOutput("Comment",$row['comment']);
+		//echo "<tr class=${class}><td><a href='".makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'op_id'=>$row['mo_id']))."'>${row['ctime']}</a></td>";
+		//echo "<td>${row['user_name']}</td><td>";
+		//renderCell (spotEntity ('object', $row['ro_id']));
+		//echo '</td><td>' . niftyString ($row['comment'], 0) . '</td></tr>';
 		$order = $nextorder[$order];
 	}
-	echo "</table>\n";
-	finishPortlet();
+	//echo "</table>\n";
+	//finishPortlet();
 
-	echo '</td></tr></table>';
+	//echo '</td></tr></table>';
 }
 
 function renderIPSpaceRecords ($tree, $baseurl, $target = 0, $level = 1)
