@@ -667,6 +667,7 @@ JSTXT;
 	addJS($js, TRUE	);*/
 	
 	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload", "RackspaceLocationEditor");
@@ -723,6 +724,10 @@ function renderRackspaceRowEditor ()
 	//echo "<tr><th>&nbsp;</th><th>Location</th><th>Name</th><th>&nbsp;</th></tr>\n";
 	
 	$tplm = TemplateManager::getInstance();
+	
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
 	$mod = $tplm->generateSubmodule("Payload", "RackspaceRowEditor");
 	$mod->setNamespace("Rackspace",true);
 	
@@ -2428,6 +2433,10 @@ function renderRackspaceHistory ()
 		list ($omid, $nmid) = getOperationMolecules ($op_id);
 	
 	$tplm = TemplateManager::getInstance();
+	
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
 	$mod = $tplm->generateSubmodule("Payload","RackspaceHistory");
 	$mod->setNamespace("rackspace",true);
 	
@@ -3951,7 +3960,13 @@ function renderCellList ($parent = NULL, $placeholder = "CellList", $realm = NUL
 
 function renderUserList ()
 {
-	renderCellList ('user', 'User accounts');
+
+	$tplm = TemplateManager::getInstance();
+	
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
+	renderCellList (NULL,'payload', 'user', 'User accounts');
 }
 
 function renderUserListEditor ()
@@ -3978,6 +3993,11 @@ function renderUserListEditor ()
 		//finishPortlet();
 	}
 	$tplm = TemplateManager::getInstance();
+	
+
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
 	$mod = $tplm->generateSubmodule("payload", "UserListEditor");
 	$mod->setNamespace("userlist",true);
 	
