@@ -5453,7 +5453,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	// and/or block
 	if (getConfigVar ('FILTER_SUGGEST_ANDOR') == 'yes' or strlen ($preselect['andor']))
 	{
-		$andormod = $tplm->generateSubmodule("TableContent", "CellFilterAndOrCell",$mod);
+		$andormod = $tplm->generateSubmodule("TableContent", "CellFilterAndOr",$mod);
 		//echo $hr;
 		if (!$rulerfirst)
 		{
