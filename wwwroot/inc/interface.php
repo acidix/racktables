@@ -689,7 +689,7 @@ JSTXT;
 	{
 		$tplm = TemplateManager::getInstance();
 		$mod = $tplm->generateSubmodule($placeholder, "RackspaceLocationEditorNew", $parentmod);
-		renderLocationSelectTree ($parentmod);
+		renderLocationSelectTree ($mod);
 		
 		//printOpFormIntro ('addLocation');
 		//echo '<tr><td>';
