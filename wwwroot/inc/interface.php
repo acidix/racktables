@@ -3943,7 +3943,6 @@ function renderCellList ($parent = NULL, $placeholder = "CellList", $realm = NUL
 		$mod->setOutput("EmptyResults", "");
 		//startPortlet ($title . ' (' . count ($celllist) . ')');
 		//echo "<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>\n"
-		$renderedCells = array();
 		foreach ($celllist as $cell)
 		{
 			$singleCell = array();
@@ -3954,9 +3953,8 @@ function renderCellList ($parent = NULL, $placeholder = "CellList", $realm = NUL
 			//echo "</td></tr>\n";
 			$order = $nextorder[$order];
 			
-			$renderedCells[] = $singleCell;
+			$mod->addOutput("CellListContent", $singleCell);
 		}
-		$mod->setOutput("CellListContent", $renderedCells);
 		
 		//echo '</table>';
 		//finishPortlet();
@@ -3974,7 +3972,7 @@ function renderUserList ()
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule();
 	
-	renderCellList (NULL,'payload', 'user', 'User accounts');
+	renderCellList (NULL, 'payload', 'user', 'User accounts');
 }
 
 function renderUserListEditor ()
@@ -3982,7 +3980,7 @@ function renderUserListEditor ()
 	function printNewItemTR ($parent,$placeholder)
 	{
 		$tplm = TemplateManager::getInstance();
-		$smod = $tplm->generateSubmodule($placeholder, "UserListEditorNew", $parent);
+		$smod2 = $tplm->generateSubmodule($placeholder, "UserListEditorNew", $parent);
 		
 		//startPortlet ('Add new');
 		//printOpFormIntro ('createUser');
@@ -3990,7 +3988,7 @@ function renderUserListEditor ()
 		//echo '<tr><th>&nbsp;</th><th>&nbsp;</th><th>Assign tags</th></tr>';
 		//echo '<tr><th class=tdright>Username</th><td class=tdleft><input type=text size=64 name=username tabindex=100></td>';
 		//echo '<td rowspan=4>';
-		renderNewEntityTags ($smod,'user');
+		renderNewEntityTags ($smod2,'user');
 		//echo '</td></tr>';
 		//echo '<tr><th class=tdright>Real name</th><td class=tdleft><input type=text size=64 name=realname tabindex=101></td></tr>';
 		//echo '<tr><th class=tdright>Password</th><td class=tdleft><input type=password size=64 name=password tabindex=102></td></tr>';
@@ -4002,7 +4000,6 @@ function renderUserListEditor ()
 	}
 	$tplm = TemplateManager::getInstance();
 	
-
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule();
 	
