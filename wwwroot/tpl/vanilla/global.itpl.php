@@ -102,4 +102,33 @@ $this->setInMemoryTemplate("MessageWarning","<div class=msg_warning'> {{Message}
  * @TODO: Find a goddamm workaround.
  */
 
+$this->setInMemoryTemplate("GetImageHrefDoInput", "<input type=image name=submit class=icon src={{SrcPath}} border=0 {{TabIndex}} {{Title}}>");
+$this->setInMemoryTemplate("GetImageHrefNoInput", "<img src={{SrcPath}} width={{ImgWidth}} height={{ImgHeight}} border=0 {{Title}} >");
+
+
+/**
+*	getRenderedIPv4NetCapacity: 
+*	Usage: interface.php, interface-lib.php
+*
+**/
+$this->setInMemoryTemplate("RenderedIPv4NetCapacityAddrc", "<img width='{{width}}' height=10 border=0 title='{{title2}}' src='?module=progressbar4&px1={{px1}}" . 
+															"&px2={{px2}}&px3={{px3}}'><small class='title'>{{title}}</small>");
+$this->setInMemoryTemplate("RenderedIPv4NetCapacityReturn","<div class=\"{{class}}\" id=\"{{div_id}}\"> {{textVal}}</div>");
+
+/**
+*	getRenderedIPv6NetCapacity: 
+*	Usage: interface.php, interface-lib.php
+*
+**/
+$this->setInMemoryTemplate("RenderedIPv6NetCapacity","<div class=\"{{class}}\" id=\"{{div_id}}\"> {{addrc}}{{cnt}}{{mult}}{{what}}  </div>");
+
+/**
+*	renderNetVLAN: 
+*	Usage: interface.php, interface-lib.php
+*
+**/
+$this->setInMemoryTemplate("RenderNetVLAN","<div class='vlan'><strong><small>{{noun}}</small>{{link}} </strong></div>");
+
+
+
 ?>

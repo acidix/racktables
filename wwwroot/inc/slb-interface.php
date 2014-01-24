@@ -23,48 +23,86 @@ function renderSLBDefConfig()
 
 function renderSLBEntityCell ($cell, $highlighted = FALSE)
 {
+	$tplm = TemplateManager::getInstance();
+	//TODO Remove after change to config
+	$tplm->setTemplate("vanilla");
+	
+	$mod = $tplm->generateModule("RenderSLBEntityCell");
+	$mod->setNamespace("slb_interface");
+
 	$class = "slbcell realm-${cell['realm']} id-${cell['id']}";
 	$a_class = $highlighted ? 'highlight' : '';
+	$mod->setOutput("tableClass", $class);
+	//echo "<table class='$class'>";
+	
 
-	echo "<table class='$class'>";
 	switch ($cell['realm'])
 	{
 	case 'object':
-		echo "<tr><td><a class='$a_class' href='index.php?page=object&object_id=${cell['id']}'>${cell['dname']}</a>";
-		echo "</td></tr><tr><td>";
-		printImageHREF ('LB');
-		echo "</td></tr>";
+		$mod->setOutput("typeObject",true);
+
+		$mod->setOutput("aClass", $a_class);
+		$mod->setOutput("cellID", $cell['id']);
+		$mod->setOutput("cellDName", $cell['dname']);
+		$mod->setOutput("cellImage", printImageHREF('LB'));
+
+	//	echo "<tr><td><a class='$a_class' href='index.php?page=object&object_id=${cell['id']}'>${cell['dname']}</a>";
+	//	echo "</td></tr><tr><td>";
+	//	printImageHREF ('LB');
+	//	echo "</td></tr>";
 		break;
 	case 'ipv4vs':
-		echo "<tr><td rowspan=3 width='5%'>";
-		printImageHREF ('VS');
-		echo "</td><td>";
-		echo "<a class='$a_class' href='index.php?page=ipv4vs&vs_id=${cell['id']}'>";
-		echo $cell['dname'] . "</a></td></tr><tr><td>";
-		echo $cell['name'] . '</td></tr>';
+		$mod->setOutput("typeIPV4s",true);
+		$mod->setOutput("cellID", $cell['id']);
+		$mod->setOutput("cellDName", $cell['dname']);
+		$mod->setOutput("cellName", $cell['name']);
+		$mod->setOutput("cellImage", printImageHREF('VS'));
+
+	//	echo "<tr><td rowspan=3 width='5%'>";
+	//	printImageHREF ('VS');
+	//	echo "</td><td>";
+	//	echo "<a class='$a_class' href='index.php?page=ipv4vs&vs_id=${cell['id']}'>";
+	//	echo $cell['dname'] . "</a></td></tr><tr><td>";
+	//	echo $cell['name'] . '</td></tr>';
 		break;
 	case 'ipvs':
-		echo "<tr><td rowspan=3 width='5%'>";
-		printImageHREF ('VS');
-		echo "</td><td>";
-		echo "<a class='$a_class' href='index.php?page=ipvs&vs_id=${cell['id']}'>";
-		echo $cell['name'] . "</a></td></tr>";
+		$mod->setOutput("typeIPVs",true);
+		$mod->setOutput("cellID", $cell['id']);
+		$mod->setOutput("cellName", $cell['name']);
+		$mod->setOutput("cellImage", printImageHREF('VS'));
+
+		//echo "<tr><td rowspan=3 width='5%'>";
+		//printImageHREF ('VS');
+		//echo "</td><td>";
+		//echo "<a class='$a_class' href='index.php?page=ipvs&vs_id=${cell['id']}'>";
+		//echo $cell['name'] . "</a></td></tr>";
 		break;
 	case 'ipv4rspool':
-		echo "<tr><td>";
-		echo "<a class='$a_class' href='index.php?page=ipv4rspool&pool_id=${cell['id']}'>";
-		echo !strlen ($cell['name']) ? "ANONYMOUS pool [${cell['id']}]" : niftyString ($cell['name']);
-		echo "</a></td></tr><tr><td>";
-		printImageHREF ('RS pool');
-		if ($cell['rscount'])
-			echo ' <small>(' . $cell['rscount'] . ')</small>';
-		echo "</td></tr>";
-		break;
-	}
-	echo "<tr><td>";
-	echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
-	echo "</td></tr></table>";
+		$mod->setOutput("typeIPV4rspool",true);
+		$mod->setOutput("cellID", $cell['id']);
+		$mod->setOutput("cellName", !strlen ($cell['name']) ? "ANONYMOUS pool [${cell['id']}]" : niftyString ($cell['name']));
 
+		$mod->setOutput("cellImage", printImageHREF('RS pool'));
+
+//		echo "<tr><td>";
+//		echo "<a class='$a_class' href='index.php?page=ipv4rspool&pool_id=${cell['id']}'>";
+//		echo !strlen ($cell['name']) ? "ANONYMOUS pool [${cell['id']}]" : niftyString ($cell['name']);
+//		echo "</a></td></tr><tr><td>";
+//		printImageHREF ('RS pool');
+
+		if ($cell['rscount']){
+			$mod->setOutput("showRSCount", true);
+			$mod->setOutput("cellRSCount", $cell['rscount']);
+			//echo ' <small>(' . $cell['rscount'] . ')</small>';
+		}
+//		echo "</td></tr>";
+//		break;
+	}
+//echo "<tr><td>";
+	$mod->setOutput("cellETags", count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;');
+//	echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
+//	echo "</td></tr></table>";
+	return $mod->run();
 }
 
 function renderSLBEditTab ($entity_id)

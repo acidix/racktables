@@ -441,7 +441,7 @@ function renderRackspace ()
 
 	
 	$mod = $tplm->generateSubmodule("Payload", "RackspaceOverview");
-	$mod->setNamespace("rackspace",true);
+	$mod->setNamespace("rackspace", true);
 
 	//echo "<table class=objview border=0 width='100%'><tr><td class=pcleft>";
 
@@ -3453,8 +3453,6 @@ function renderSearchResults ($terms, $summary)
 		//echo "<center><h2>Nothing found for '${terms}'</h2></center>";
 		$params = array("Terms" => ${terms} );
 		$mod = $tplm->generateSubmodule("Payload", "NoSearchItemFound", null, true, $params);
-
-		
 		return;
 	}
 	elseif ($nhits == 1)
@@ -3474,8 +3472,8 @@ function renderSearchResults ($terms, $summary)
 
 	$mod = $tplm->generateSubmodule("Payload", "SearchMain");
 	$mod->setNamespace("search",true);
-	//$mod->setOutputVariable("NHITS", $nhits);
-	//$mod->setOutputVariable("TERMS", ${terms});
+	$mod->setOutput("NHITS", $nhits);
+	$mod->setOutput("TERMS", ${terms});
 	//echo "<center><h2>${nhits} result(s) found for '${terms}'</h2></center>";
 
 	foreach ($summary as $where => $what)
@@ -3492,10 +3490,12 @@ function renderSearchResults ($terms, $summary)
 			
 			//		echo "<tr class=row_${order} valign=top><td>";
 					$object = spotEntity ('object', $obj['id']);
-					renderCell ($object);
+					
 			//		echo "</td><td class=tdleft>";
 
 					$foundObjects = $tplm->generateSubmodule("FoundItems", "SearchObject", $mod);
+					$foundObjects->setOutput("objImage", renderCell($object), true);
+					
 					$outArray = array();
 					
 					if (isset ($obj['by_attr']))
@@ -3503,8 +3503,7 @@ function renderSearchResults ($terms, $summary)
 						// only explain non-obvious reasons for listing
 						
 						$outArray = array();
-						$foundObjectsAttr = $tplm->generateSubmodule("ObjectsByAttr", "SearchObject_Attr", $foundObjects);
-					
+						$foundObjects->setOutput('ObjectsByAttr', true);
 
 					//	echo '<ul>';
 						foreach ($obj['by_attr'] as $attr_name)
@@ -3514,14 +3513,14 @@ function renderSearchResults ($terms, $summary)
 					//	echo '</ul>';
 
 						
-						$foundObjectsAttr->setOutputVariable("Objects_Attr", $outArray);
+						$foundObjects->setOutput("Objects_Attr", $outArray);
 					}
 
 
 					if (isset ($obj['by_sticker']))
 					{
 						$outArray = array();
-						$foundObjectsSticker = $tplm->generateSubmodule("ObjectsBySticker", "SearchObject_Sticker", $foundObjects);
+						$foundObjects->setOutput('ObjectsBySticker', true);
 
 						//echo '<table>';
 						$aval = getAttrValues ($obj['id']);
@@ -3530,22 +3529,23 @@ function renderSearchResults ($terms, $summary)
 							$record = $aval[$attr_id];
 							$outArray[] = array('Name' => $record['name'],
 												 'AttrValue' => formatAttributeValue ($record));
-							//echo "<tr><th width='50%' class=sticker>${record['name']}:</th>";
+							//echo "<tr><th width='50%' class=sticker>${record['name']:</th>";
 							//echo "<td class=sticker>" . formatAttributeValue ($record) . "</td></tr>";
 						}
 						//echo '</table>';
-						$foundObjectsSticker->setOutputVariable("Objects_Sticker", $outArray);
+						$foundObjects->setOutput("Objects_Sticker", $outArray);
 					}
 
 
 					if (isset ($obj['by_port']))
 					{
 						$outArray = array();
-						$foundObjectsPort = $tplm->generateSubmodule("ObjectsByPort", "SearchObject_Port", $foundObjects);
+						$foundObjects->setOutput('ObjectsByPort', true);
 
 						//echo '<table>';
 						amplifyCell ($object);
 						foreach ($obj['by_port'] as $port_id => $text)
+
 							foreach ($object['ports'] as $port)
 								if ($port['id'] == $port_id)
 								{
@@ -3562,46 +3562,47 @@ function renderSearchResults ($terms, $summary)
 									break; // next reason
 								}
 						//echo '</table>';
-						$foundObjectsPort->setOutputVariable("Objects_Port", $outArray);
+						$foundObjects->setOutput("Objects_Port", $outArray);
 					}
 
 
 					if (isset ($obj['by_iface']))
 					{
 						$outArray = array();
-						$foundObjectsIface = $tplm->generateSubmodule("ObjectsByIface", "SearchObject_Iface", $foundObjects);
+						$foundObjects->setOutput('ObjectsByIface', true);
 
 					//	echo '<ul>';
 						foreach ($obj['by_iface'] as $ifname)
 							$outArray[] = array( 'Ifname' => $ifname);
 					//		echo "<li>interface ${ifname}</li>";
 					//	echo '</ul>';
-						$foundObjectsIface->setOutputVariable("Objects_Iface", $outArray);
+						$foundObjects->setOutput("Objects_Iface", $outArray);
 					}
 
 					if (isset ($obj['by_nat']))
 					{
 						$outArray = array();
-						$foundObjectsNAT = $tplm->generateSubmodule("ObjectsByNAT", "SearchObject_NAT", $foundObjects);
+						$foundObjects->setOutput('ObjectsByNAT', true);
 
 					//	echo '<ul>';
 						foreach ($obj['by_nat'] as $comment)
 							$outArray[] = array('Comment' => $comment);
 					//		echo "<li>NAT rule: ${comment}</li>";
 					//	echo '</ul>';
-						$foundObjectsNAT->setOutputVariable("Objects_NAT", $outArray);
+						$foundObjects->setOutput("Objects_NAT", $outArray);
 					}
 
 					if (isset ($obj['by_cableid']))
 					{
 						$outArray = array();
-						$foundObjectsCableID = $tplm->generateSubmodule("ObjectsByCableID", "SearchObject_CableID", $foundObjects);
+						$foundObjects->setOutput('ObjectsByCableID', true);
 
 						//echo '<ul>';
 						foreach ($obj['by_cableid'] as $cableid)
 							$outArray[] = array('CableID' => $cableid);
 						//	echo "<li>link cable ID: ${cableid}</li>";
 						//echo '</ul>';
+						$foundObjects->setOutput("Objects_CableID", $outArray);
 					}
 					echo "</td></tr>";
 					$order = $nextorder[$order];
@@ -3613,19 +3614,19 @@ function renderSearchResults ($terms, $summary)
 			case 'ipv4net':
 			case 'ipv6net':
 
-		//		$foundIPVNet = $tplm->generateSubmodule("FoundItems", "SearchIpv6net", $mod);
+				$foundIPVNet = $tplm->generateSubmodule("FoundItems", "SearchIpv6net", $mod);
 
 				if ($where == 'ipv4net')
 				{
-		//			$foundIPVNet->setOutputVariable("IpvSpace", "ipv4space");
-		//			$foundIPVNet->setOutputVariable("IpvSpaceName", "IPv4 networks");
-					startPortlet ("<a href='index.php?page=ipv4space'>IPv4 networks</a>");
+					$foundIPVNet->setOutput("IpvSpace", "ipv4space");
+					$foundIPVNet->setOutput("IpvSpaceName", "IPv4 networks");
+					//startPortlet ("<a href='index.php?page=ipv4space'>IPv4 networks</a>");
 				}
 				elseif ($where == 'ipv6net')
 				{
-		//			$foundIPVNet->setOutputVariable("IpvSpace", "ipv6space");
-		//			$foundIPVNet->setOutputVariable("IpvSpaceName", "IPv6 networks");
-					startPortlet ("<a href='index.php?page=ipv6space'>IPv6 networks</a>");
+					$foundIPVNet->setOutput("IpvSpace", "ipv6space");
+					$foundIPVNet->setOutput("IpvSpaceName", "IPv6 networks");
+					//startPortlet ("<a href='index.php?page=ipv6space'>IPv6 networks</a>");
 				}	
 				//echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
 				$ipvOutArray = array();
@@ -3642,8 +3643,8 @@ function renderSearchResults ($terms, $summary)
 				}
 
 		//		$foundIPVNet->setOutputVariable("IPVNetObjs",$ipvOutArray);
-				echo '</table>';
-				finishPortlet();
+	//			echo '</table>';
+	//			finishPortlet();
 				break;
 			case 'ipv4addressbydescr':
 			case 'ipv6addressbydescr':
@@ -6095,120 +6096,204 @@ function printIPNetInfoTDs ($netinfo, $decor = array())
 	echo "</td>";
 }
 
-function renderCell ($cell)
+function renderCell ($cell, $newVersion = false)
 {
+
+	//Use TemplateEngine
+
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");		
+
+	$mod = $tplm->generateModule("renderCell");
+	$mod->setNamespace("renderCell", true);
+
+
 	switch ($cell['realm'])
 	{
 	case 'user':
-		echo "<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>";
-		printImageHREF ('USER');
-		echo '</td><td>' . mkA ($cell['user_name'], 'user', $cell['user_id']) . '</td></tr>';
-		if (strlen ($cell['user_realname']))
-			echo "<tr><td><strong>" . niftyString ($cell['user_realname']) . "</strong></td></tr>";
-		else
-			echo "<tr><td class=sparenetwork>no name</td></tr>";
-		echo '<td>';
+		$mod->setOutput("typeUser", true);
+
+		//echo "<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>";
+		$mod->setOutput("userImgSpace", printImageHREF ('USER'));
+		
+		//echo '</td><td>' . mkA ($cell['user_name'], 'user', $cell['user_id']) . '</td></tr>';
+		$mod->setOutput('UserRef', mkA ($cell['user_name'], 'user', $cell['user_id']) );
+
+		if (strlen ($cell['user_realname'])){
+			$mod->setOutput("hasUserRealname", true);
+		//	echo "<tr><td><strong>" . niftyString ($cell['user_realname']) . "</strong></td></tr>";
+			$mod->setOutput("userRealname", niftyString($cell['user_realname']));
+		}
+		else{
+			$mod->setOutput("hasUserRealname", false);
+			//echo "<tr><td class=sparenetwork>no name</td></tr>";
+		}
+	//	echo '<td>';
 		if (!isset ($cell['etags']))
 			$cell['etags'] = getExplicitTagsOnly (loadEntityTags ('user', $cell['user_id']));
-		echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
-		echo "</td></tr></table>";
+		//echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
+		$mod->setOutput("userTags", count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;' );
+		//echo "</td></tr></table>";
 		break;
+
 	case 'file':
-		echo "<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>";
+
+		$mod->setOutput("typeFile", true);
+		//echo "<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>		";
 		switch ($cell['type'])
 		{
 			case 'text/plain':
-				printImageHREF ('text file');
+				$mod->setOutput("fileImgSpace", printImageHREF ('text file'));
 				break;
 			case 'image/jpeg':
 			case 'image/png':
 			case 'image/gif':
-				printImageHREF ('image file');
+				$mod->setOutput("fileImgSpace", printImageHREF ('image file'));
 				break;
 			default:
-				printImageHREF ('empty file');
+				$mod->setOutput("fileImgSpace", printImageHREF ('empty file'));
 				break;
 		}
-		echo "</td><td>";
-		echo mkA ('<strong>' . niftyString ($cell['name']) . '</strong>', 'file', $cell['id']);
-		echo "</td><td rowspan=3 valign=top>";
+		//echo "</td><td>";
+		//echo mkA ('<strong>' . niftyString ($cell['name']) . '</strong>', 'file', $cell['id']);
+		$mod->setOutput("nameAndID", mkA ('<strong>' . niftyString ($cell['name']) . '</strong>', 'file', $cell['id']) );
+
+		//echo "</td><td rowspan=3 valign=top>";
+		
 		if (isset ($cell['links']) and count ($cell['links']))
-			printf ("<small>%s</small>", serializeFileLinks ($cell['links']));
-		echo "</td></tr><tr><td>";
-		echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
-		echo '</td></tr><tr><td>';
+			$mod->setOutput("serializedLinks", serializeFileLinks ($cell['links']));
+		//	printf ("<small>%s</small>", serializeFileLinks ($cell['links']));
+		
+
+	//	echo "</td></tr><tr><td>";
+	//	echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
+		$mod->setOutput("fileCount", count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;');
+	//	echo '</td></tr><tr><td>';
 		if (isolatedPermission ('file', 'download', $cell))
 		{
 			// FIXME: reuse renderFileDownloader()
-			echo "<a href='?module=download&file_id=${cell['id']}'>";
-			printImageHREF ('download', 'Download file');
-			echo '</a>&nbsp;';
+			$mod->setOutput("isolatedPerm", true);
+			$mod->setOutput("cellID", $cell['id']);
+		//	echo "<a href='?module=download&file_id=${cell['id']}'>";
+			
+			$mod->setOutput("isoPermImg", printImageHREF ('download', 'Download file'));
+		//	echo '</a>&nbsp;';
 		}
-		echo formatFileSize ($cell['size']);
-		echo "</td></tr></table>";
+	//	echo formatFileSize ($cell['size']);
+		$mod->setOutput("fileSize", formatFileSize ($cell['size']));
+	//	echo "</td></tr></table>";
 		break;
+
+
+
 	case 'ipv4vs':
 	case 'ipvs':
 	case 'ipv4rspool':
-		renderSLBEntityCell ($cell);
+		$mod->setOutput("typeIPV4", true);
+		$mod->setOutput("ipv4ImgSpace", renderSLBEntityCell ($cell));
 		break;
 	case 'ipv4net':
 	case 'ipv6net':
-		echo "<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>";
-		printImageHREF ('NET');
-		echo '</td><td>' . mkA ("${cell['ip']}/${cell['mask']}", $cell['realm'], $cell['id']);
-		echo getRenderedIPNetCapacity ($cell);
-		echo '</td></tr>';
 
-		echo "<tr><td>";
-		if (strlen ($cell['name']))
-			echo "<strong>" . niftyString ($cell['name']) . "</strong>";
-		else
-			echo "<span class=sparenetwork>no name</span>";
+		$mod->setOutput("typeIPV6", true);
+
+	//	echo "<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>";
+		//printImageHREF ('NET');
+		$mod->setOutput("mkACell",mkA ("${cell['ip']}/${cell['mask']}", $cell['realm'], $cell['id']) );
+		//echo '</td><td>' . mkA ("${cell['ip']}/${cell['mask']}", $cell['realm'], $cell['id']);
+		//echo getRenderedIPNetCapacity ($cell);
+		//echo '</td></tr>';
+		$mod->setOutput("renderdIPNetCap",getRenderedIPNetCapacity ($cell) );
+		//echo "<tr><td>";
+
+
+		if (strlen ($cell['name'])){
+			$mod->setOutput("cellName",true );
+			$mod->setOutput("niftyCellName", niftyString ($cell['name']) );
+		//	echo "<strong>" . niftyString ($cell['name']) . "</strong>";
+		}
+//			else
+//				echo "<span class=sparenetwork>no name</span>";
+		
 		// render VLAN
-		renderNetVLAN ($cell);
-		echo "</td></tr>";
-		echo '<tr><td>';
-		echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
-		echo "</td></tr></table>";
+//		renderNetVLAN ($cell);
+		$mod->setOutput("renderedVLan",renderNetVLAN ($cell) );
+//		echo "</td></tr>";
+//		echo '<tr><td>';
+		$mod->setOutput("etags", count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;');
+//		echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
+//		echo "</td></tr></table>";
 		break;
 	case 'rack':
-		echo "<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>";
+		$mod->setOutput("typeRack", true);
+		
+		//echo "<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>";
 		$thumbwidth = getRackImageWidth();
 		$thumbheight = getRackImageHeight ($cell['height']);
-		echo "<img border=0 width=${thumbwidth} height=${thumbheight} title='${cell['height']} units' ";
-		echo "src='?module=image&img=minirack&rack_id=${cell['id']}'>";
-		echo "</td><td>";
-		echo mkA ('<strong>' . niftyString ($cell['name']) . '</strong>', 'rack', $cell['id']);
-		echo "</td></tr><tr><td>";
-		echo niftyString ($cell['comment']);
-		echo "</td></tr><tr><td>";
-		echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
-		echo "</td></tr></table>";
+
+		$mod->setOutput("thumbWidth", $thumbwidth);
+		$mod->setOUtput("thumbHeight", $thumbheight);
+		$mod->setOutput("cellHeight", $cell['height']);
+		$mod->setOutput("cellID", $cell['id']);
+		$mod->setOutput("cellName", $cell['name']);
+		$mod->setOutput("cellComment", niftyString ($cell['comment']));
+		$mod->setOutput("etags", count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;');
+	
+
+//			echo "<img border=0 width=${thumbwidth} height=${thumbheight} title='${cell['height']} units' ";
+//			echo "src='?module=image&img=minirack&rack_id=${cell['id']}'>";
+//			echo "</td><td>";
+//			echo mkA ('<strong>' . niftyString ($cell['name']) . '</strong>', 'rack', $cell['id']);
+//			echo "</td></tr><tr><td>";
+//			echo niftyString ($cell['comment']);
+//			echo "</td></tr><tr><td>";
+//			echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
+//			echo "</td></tr></table>";
 		break;
 	case 'location':
-		echo "<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>";
-		printImageHREF ('LOCATION');
-		echo "</td><td>";
-		echo mkA ('<strong>' . niftyString ($cell['name']) . '</strong>', 'location', $cell['id']);
-		echo "</td></tr><tr><td>";
-		echo niftyString ($cell['comment']);
-		echo "</td></tr><tr><td>";
-		echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
-		echo "</td></tr></table>";
+		$mod->setOutput("typeLocation", true);
+
+		$mod->setOutput("imgLocation", printImageHREF ('LOCATION'));
+		$mod->setOutput("cellName", $cell['name']);
+		$mod->setOutput("cellID", $cell['id']);
+		$mod->setOutput("cellComment", niftyString ($cell['comment']));
+		$mod->setOutput("etags", count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;');
+
+//			echo "<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>";
+//			printImageHREF ('LOCATION');
+//			echo "</td><td>";
+//			echo mkA ('<strong>' . niftyString ($cell['name']) . '</strong>', 'location', $cell['id']);
+//			echo "</td></tr><tr><td>";
+//			echo niftyString ($cell['comment']);
+//			echo "</td></tr><tr><td>";
+//			echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
+//			echo "</td></tr></table>";
 		break;
 	case 'object':
-		echo "<table class='slbcell vscell'><tr><td rowspan=2 width='5%'>";
-		printImageHREF ('OBJECT');
-		echo '</td><td>';
-		echo mkA ('<strong>' . niftyString ($cell['dname']) . '</strong>', 'object', $cell['id']);
-		echo '</td></tr><tr><td>';
-		echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
-		echo "</td></tr></table>";
+		$mod->setOutput("typeObject", true);
+
+		$mod->setOutput("imgObject", printImageHREF ('OBJECT'));
+		$mod->setOutput("cellDName", $cell['dname']);
+		$mod->setOutput("cellID", $cell['id']);
+		$mod->setOutput("etags", count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;');
+		
+//			echo "<table class='slbcell vscell'><tr><td rowspan=2 width='5%'>";
+//			printImageHREF ('OBJECT');
+//			echo '</td><td>';
+//			echo mkA ('<strong>' . niftyString ($cell['dname']) . '</strong>', 'object', $cell['id']);
+//			echo '</td></tr><tr><td>';
+//			echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
+//			echo "</td></tr></table>";
 		break;
 	default:
 		throw new InvalidArgException ('realm', $cell['realm']);
 	}
+
+	return $mod->run();
+
+
 }
 
 function renderRouterCell ($ip_bin, $ifname, $cell)
