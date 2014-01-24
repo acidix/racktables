@@ -59,6 +59,117 @@ class TemplateHelperForm extends TemplateHelperAbstract
 	}
 }
 
+/**
+*	TemplateHelper for the PrintImageHREF funktion
+*
+*	Params:
+*	[0] = Object to Render
+**/
+class TemplateHelperPrintImageHref extends TemplateHelperAbstract
+{
+	protected function generate($params){
+		if (count($params) == 0||$params[0]=="")
+		{
+			echo "";
+		}
+		//Implemente HREF standard parameters
+		if (count($params) < 2)
+		{
+			$title = "";
+		}
+		else
+			$title = $params[1];
+
+		if (count($params) < 3)
+		{
+			$do_input = FALSE;
+		}
+		else
+			$do_input = $params[2];
+
+		if (count($params) < 4)
+		{
+			$tabindex = 0;
+		}
+		else
+			$tabindex = $params[3];
+
+		global $image;
+		if (!isset ($image[$tag]))
+			$tag = 'error';
+		$img = $image[$tag];
+		$img['path'] = '?module=chrome&uri=' . $img['path'];
+
+		//Loading and rendering small module in memory and returning the
+		if ($do_input == TRUE){
+			$tplm = TemplateManager::getInstance();
+			$tplm->setTemplate("vanilla");
+			
+			$mod = $tplm->generateModule( "GetImageHrefDoInput", true, 
+					array( "SrcPath" => $img['path'],  "TabIndex" => ($tabindex ? "tabindex=${tabindex}" : ''),
+							"Title" => (!strlen ($title) ? '' : " title='${title}'") ));
+
+			echo $mod->run();
+		}
+		else{
+			$tplm = TemplateManager::getInstance();
+			$tplm->setTemplate("vanilla");
+
+			$mod = $tplm->generateModule("GetImageHrefNoInput", true, 
+					array( "SrcPath" => $img['path'],  "ImgWidth" => $img['width'], "ImgHeight" => $img['height'] ,
+							"Title" => (!strlen ($title) ? '' : " title='${title}'") ));
+
+			echo $mod->run();
+		}
+	}
+}
+
+/**
+*	TemplateHelper for the PrintImageHREF funktion
+*
+*	Params:
+*	[0] = Object to Render
+**/
+class TemplateHelperMkA extends TemplateHelperAbstract
+{
+	protected function generate($params){
+		$text = $params[0];
+		$nextpage = $params[1];
+		if (count($params) < 3)
+		{
+			$bypass = NULL;
+		}
+		else
+			$bypass = $params[2]; 
+		if (count($params) < 4)
+		{
+			$nexttab = NULL;
+		}
+		else
+			$nexttab = $params[3];
+
+		global $page, $tab;
+		if ($text == '')
+			throw new InvalidArgException ('text', $text);
+		if (! array_key_exists ($nextpage, $page))
+			throw new InvalidArgException ('nextpage', $nextpage, 'not found');
+		$args = array ('page' => $nextpage);
+		if ($nexttab !== NULL)
+		{
+			if (! array_key_exists ($nexttab, $tab[$nextpage]))
+				throw new InvalidArgException ('nexttab', $nexttab, 'not found');
+			$args['tab'] = $nexttab;
+		}
+		if (array_key_exists ('bypass', $page[$nextpage]))
+		{
+			if ($bypass === NULL)
+				throw new InvalidArgException ('bypass', '(NULL)');
+			$args[$page[$nextpage]['bypass']] = $bypass;
+		}
+		echo '<a href="' . makeHref ($args) . '">' . $text . '</a>';
+	}
+}
+
 class TemplateHelperNiftyString extends TemplateHelperAbstract
 {
 	protected function generate($params)
@@ -101,4 +212,5 @@ class TemplateHelperNiftyString extends TemplateHelperAbstract
 		}
 	}
 }
+
 ?>

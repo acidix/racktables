@@ -426,15 +426,35 @@ function getImageHREF ($tag, $title = '', $do_input = FALSE, $tabindex = 0)
 		$tag = 'error';
 	$img = $image[$tag];
 	$img['path'] = '?module=chrome&uri=' . $img['path'];
-	if ($do_input == TRUE)
-		return
+
+	//Loading and rendering small module in memory and returning the
+	if ($do_input == TRUE){
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");
+		
+		$mod = $tplm->generateModule( "GetImageHrefDoInput", true, 
+				array( "SrcPath" => $img['path'],  "TabIndex" => ($tabindex ? "tabindex=${tabindex}" : ''),
+						"Title" => (!strlen ($title) ? '' : " title='${title}'") ));
+
+		return $mod->run();
+	/*	return 
 			"<input type=image name=submit class=icon " .
 			"src='${img['path']}' " .
 			"border=0 " .
 			($tabindex ? "tabindex=${tabindex}" : '') .
 			(!strlen ($title) ? '' : " title='${title}'") . // JT: Add title to input hrefs too
-			">";
-	else
+			">";*/
+	}
+	else{
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");
+
+		$mod = $tplm->generateModule("GetImageHrefNoInput", true, 
+				array( "SrcPath" => $img['path'],  "ImgWidth" => $img['width'], "ImgHeight" => $img['height'] ,
+						"Title" => (!strlen ($title) ? '' : " title='${title}'") ));
+
+		return $mod->run();
+/*
 		return
 			"<img " .
 			"src='${img['path']}' " .
@@ -442,7 +462,8 @@ function getImageHREF ($tag, $title = '', $do_input = FALSE, $tabindex = 0)
 			"height=${img['height']} " .
 			"border=0 " .
 			(!strlen ($title) ? '' : "title='${title}'") .
-			">";
+			">";*/
+	}
 }
 
 function escapeString ($value, $do_db_escape = FALSE)
@@ -584,6 +605,11 @@ function getRenderedIPNetCapacity ($range)
 
 function getRenderedIPv4NetCapacity ($range)
 {
+	//Use TemplateEngine 
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");	
+
 	$class = 'net-usage';
 	if (isset ($range['addrc']))
 	{
@@ -632,8 +658,16 @@ function getRenderedIPv4NetCapacity ($range)
 		}
 		$title = implode (', ', $title_items);
 		$title2 = implode (', ', $title2_items);
-		$text = "<img width='$width' height=10 border=0 title='$title2' src='?module=progressbar4&px1=$px1&px2=$px2&px3=$px3'>" .
-			" <small class='title'>$title</small>";
+	
+		$text = $tplm->generateModule("RenderedIPv4NetCapacityAddrc", true)->run();
+		$text->setOutput("px1", $px1);
+		$text->setOutput("px2", $px2);
+		$text->setOutput("px3", $px3);		
+		$text->setOutput("width", $width);
+		$text->setOutput("title", $title);
+		$text->setOutput("title2", $title2);
+	//	$text = "<img width='$width' height=10 border=0 title='$title2' src='?module=progressbar4&px1=$px1&px2=$px2&px3=$px3'>" .
+	//		" <small class='title'>$title</small>";
 	}
 	else
 	{
@@ -656,8 +690,12 @@ function getRenderedIPv4NetCapacity ($range)
 	}
 
 	$div_id = $range['ip'] . '/' . $range['mask'];
+	$mod = $tplm->generateModule("RenderedIPv4NetCapacityReturn", true);
+	$mod->setOutput("textVal", text);
+	$mod->setOutput("class", $class);
+	$mod->setOutput("div_id", $div_id);
 
-	return "<div class=\"$class\" id=\"$div_id\">" . $text . "</div>";
+	return $mod->run();
 }
 
 function getRenderedIPv6NetCapacity ($range)
@@ -706,8 +744,21 @@ function getRenderedIPv6NetCapacity ($range)
 	$cnt = 1 << ((128 - $range['mask']) % 10);
 	if ($cnt == 1 && $mult == '')
 		$cnt = '1';
+	
+	//Use TemplateEngine 
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");	
 
-	return "<div class=\"$class\" id=\"$div_id\">" . "{$addrc}${cnt}${mult} ${what}" . "</div>";
+	$mod = $tplm->generateModule("RenderedIPv6NetCapacity", true);
+	$mod->setOutput("class", $class);
+	$mod->setOutput("div_id", $div_id);
+	$mod->setOutput("addrc", $addrc);
+	$mod->setOutput("cnt", $cnt);
+	$mod->setOutput("mult", $mult);
+	$mod->setOutput("what", $what);
+	//return "<div class=\"$class\" id=\"$div_id\">" . "{$addrc}${cnt}${mult} ${what}" . "</div>";
+	return $mod->run();
 }
 
 // print part of HTML HEAD block
@@ -745,6 +796,7 @@ function cmpTags ($a, $b)
 			return -1;
 		elseif ($a_root > $b_root)
 			return 1;
+	
 	}
 	elseif (isset ($a['id']))
 		return -1;
@@ -946,7 +998,13 @@ function renderNetVLAN ($cell)
 	foreach ($cell['8021q'] as $vi)
 		$links[] = mkA ($vi['vlan_id'], 'vlan', "${vi['domain_id']}-${vi['vlan_id']}");
 	$noun = count ($cell['8021q']) > 1 ? 'VLANs' : 'VLAN';
-	echo "<div class='vlan'><strong><small>${noun}</small> " . implode (', ', $links) . '</strong></div>';
+
+
+	$mod = $tplm->generateModule("RenderNetVLAN", true);
+	$mod->setOutput("noun", $noun);
+	$mod->setOutput("links",  implode (', ', $links));
+	//echo "<div class='vlan'><strong><small>${noun}</small> " . implode (', ', $links) . '</strong></div>';
+	return $mod->run();
 }
 
 function includeJQueryUI ($do_css = TRUE)
