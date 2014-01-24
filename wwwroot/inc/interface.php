@@ -609,12 +609,12 @@ function renderLocationRowForEditor ($parentmod,$subtree, $level = 0)
 		foreach ($plist as $key => $value) {
 			$outarr[] = array("ParentListSelected"=>$key,"ParentListContent"=>$value,"ParentListSelected"=>"");
 		}
-		$smod->addOutput("Parentselect",$outarr);
+		$smod->addOutput("Options",$outarr);
 		//echo "</td><td class=tdleft>";
 		//echo "<input type=text size=48 name=name value='${locationinfo['name']}'>";
 		//echo '</td><td>' . getImageHREF ('save', 'Save changes', TRUE) . "</form></td></tr>\n";
 		if ($locationinfo['kidc'])
-			$self ($smod,$locationinfo['kids'], $level + 1);
+			$self ($parentmod,$locationinfo['kids'], $level + 1);
 	}
 }
 
