@@ -5044,7 +5044,7 @@ function showNotice  ($message, $option = '')
 function setMessage ($type, $message, $direct_rendering)
 {
 	global $script_mode;
-	if ($direct_rendering)
+	if ($direct_rendering) //@TODO: Remove output here, adjust it to use tpl engine.
 		echo '<div class="msg_' . $type . '">' . $message . '</div>';
 	elseif (isset ($script_mode) and $script_mode)
 	{
@@ -6018,20 +6018,50 @@ function nullEmptyStr ($str)
 	return strlen ($str) ? $str : NULL;
 }
 
-function printLocationChildrenSelectOptions ($location, $level, $parent_id, $location_id = NULL)
+function printLocationChildrenSelectOptions ($location, $level, $parent_id, $location_id = NULL, $parentmod = null)
 {
 	$self = __FUNCTION__;
 	$level++;
-	foreach ($location['kids'] as $subLocation)
+	if ($parentmod != null)
 	{
-		if ($subLocation['id'] == $location_id)
-			continue;
-		echo "<option value=${subLocation['id']}";
-		if ($subLocation['id'] == $parent_id)
-			echo ' selected';
-		echo '>' . str_repeat ('&raquo; ', $level) . "${subLocation['name']}</option>\n";
-		if ($subLocation['kidc'] > 0)
-			$self ($subLocation, $level, $parent_id, $location_id);
+		$tplm = TemplateManager::getInstance();
+		
+		
+		
+		foreach ($location['kids'] as $subLocation)
+		{
+			if ($subLocation['id'] == $location_id)
+				continue;
+
+			//Load module
+			$mod = $tplm->generateSubmodule("Options", "LocationChildren", $parentmod);
+			$mod->addOutput("Id", $subLocation['id']);
+			$mod->setNamespace('',true);
+			$mod->setLock(true);
+			
+			echo "<option value=${subLocation['id']}";
+			if ($subLocation['id'] == $parent_id)
+				$mod->addOutput('Selected', 'selected');
+				//echo ' selected';
+			$mod->addOutput('Content', str_repeat ('&raquo; ', $level) . $subLocation['name'])	;
+			//echo '>' . str_repeat ('&raquo; ', $level) . "${subLocation['name']}</option>\n";
+				if ($subLocation['kidc'] > 0)
+					$self ($subLocation, $level, $parent_id, $location_id, $mod);
+		}
+	}
+	else
+	{
+		foreach ($location['kids'] as $subLocation)
+		{
+			if ($subLocation['id'] == $location_id)
+				continue;
+			echo "<option value=${subLocation['id']}";
+			if ($subLocation['id'] == $parent_id)
+				echo ' selected';
+				echo '>' . str_repeat ('&raquo; ', $level) . "${subLocation['name']}</option>\n";
+				if ($subLocation['kidc'] > 0)
+					$self ($subLocation, $level, $parent_id, $location_id);
+		}		
 	}
 }
 

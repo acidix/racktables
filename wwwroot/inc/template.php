@@ -2,6 +2,7 @@
 //Use this to test wether a template was called within the main module or without it.
 define("TPL_DEBUG",true);
 define("RS_TPL",true);
+
 /**
  * Class used by the other TemplateClass to throw exceptions.
  * @author Alexander Kastius
@@ -23,6 +24,7 @@ class TemplateManager
 	
 	/**
 	 * Returns the TemplateManager instance
+	 * 
 	 * @return TemplateManager
 	 */
 	public static function getInstance()
@@ -36,46 +38,112 @@ class TemplateManager
 	//End Singleton Implementation
 	
 	/**
+	 * Default function to initialize template logic.
+	 * Uses $_SESSION to store the currently used template.
+	 */
+	public static function intializeTemplate()
+	{
+		if (!array_key_exists('template', $_SESSION))
+		{
+			$_SESSION['template'] = getConfigVar('default_template');
+		}
+		
+		if (!array_search($_SESSION['template'], self::getOrderedTemplateList()))
+		{
+			if (!array_search('vanilla', self::getOrderedTemplateList()))
+			{
+				throw new TemplateException('TplErr: Vanilla template is not installed, can\'t fall back to another template.');
+			}
+			else 
+			{
+				$_SESSION['template'] = 'vanilla';
+			}
+		}
+		
+		$inst = self::getInstance();
+		
+		//@XXX escape string!!
+		$inst->setTemplate($_SESSION['template']);
+		$inst->createMainModule('index');
+	}
+
+	/**
+	 * Returns a list of all available templates.
+	 * @return multitype:string
+	 */
+	public static function getOrderedTemplateList()
+	{
+		$arr = glob('./tpl/*' , GLOB_ONLYDIR);
+		sort($arr);
+		return $arr;
+	}
+	
+	/**
 	 * Contains the main template.
+	 * 
 	 * @var string
 	 */
 	protected $tpl = "";
 	
 	/**
 	 * Contains the main module if created.
+	 * 
 	 * @var object
 	 */
 	protected $mainmod = null;
 	
 	/**
 	 * Contains the placeholders available in every module.
+	 * 
 	 * @var array
 	 */
 	protected $gout = array();
 	
 	/**
 	 * A list of inmemory templates for short but oftenly used modules
+	 * 
 	 * @var array
 	 */
 	protected $inmemory_templates = array();
 	
 	/**
 	 * Contains all loaded helpers.
+	 * 
 	 * @var 
 	 */
 	protected $helpers = array();
 	
 	/**
 	 * Contains all added requirements to check wether they already got added.
+	 * 
 	 * @var array
 	 */
 	protected $requirements = array();
 	
+	/**
+	 * Checks wether an given inmemory template is already available.
+	 * 
+	 * @param string $name
+	 * @return boolean
+	 */
 	public function inMemoryExists($name)
 	{
 		return array_key_exists($name,$this->inmemory_templates);
 	}
 	
+	/**
+	 * Tries to load an unknown in-memory template.
+	 * $name might consist of a path without file ending: "thisisanexample/template"
+	 * Checks:
+	 * thisisanexample/template.itpl.php
+	 * globals.itpl.php
+	 * thisisanexample/globals.itpl.php
+	 * 
+	 * @param unknown $name
+	 * @param string $template
+	 * @throws TemplateException
+	 * @return boolean
+	 */
 	public function loadInMemoryTemplate($name,$template="")
 	{
 		if ($this->tpl == "" && $template== "")
@@ -94,22 +162,20 @@ class TemplateManager
 		{
 			require_once('./tpl/'. $template . '/' . $name . '.itpl.php'); //Check for the template in its own file
 		}
-		else
+		if (strpos($name,'/') !== false)
 		{
-			if (strpos($name,'/') !== false)
+			$arr = explode('/',$name,-1);
+			$dir = implode('/',$arr);
+			if (file_exists('./tpl/'. $template . '/' . $dir . '/global.itpl.php'))
 			{
-				$arr = explode('/',$name,-1);
-				$dir = implode('/',$arr);
-				if (file_exists('./tpl/'. $template . '/' . $dir . '/global.itpl.php'))
-				{
-					require_once('./tpl/'. $template . '/' . $dir . '/global.itpl.php'); //Check for the template in the global file
-				}				
-			}
-			if (file_exists('./tpl/'. $template . '/global.itpl.php'))
-			{
-				require_once('./tpl/'. $template . '/global.itpl.php'); //Check for the template in the global file
-			}
+				require_once('./tpl/'. $template . '/' . $dir . '/global.itpl.php'); //Check for the template in the global file
+			}				
 		}
+		if (file_exists('./tpl/'. $template . '/global.itpl.php'))
+		{
+			require_once('./tpl/'. $template . '/global.itpl.php'); //Check for the template in the global file
+		}
+		
 		if (!key_exists($name, $this->inmemory_templates))
 		{
 			return false; //Still not existing? Return false.
@@ -120,11 +186,24 @@ class TemplateManager
 		}
 	}
 	
+	/**
+	 * Sets an in-memory template.
+	 * Use {{placeholder}} for placeholders.
+	 * 
+	 * @param string $name
+	 * @param string $code
+	 */
 	public function setInMemoryTemplate($name,$code)
 	{
 		$this->inmemory_templates[$name] = $code;
 	}
 	
+	/**
+	 * Returns an in-memory template.
+	 * 
+	 * @param string $name
+	 * @return string
+	 */
 	public function getInMemoryTemplate($name)
 	{
 		if (key_exists($name, $this->inmemory_templates))
@@ -136,6 +215,7 @@ class TemplateManager
 	
 	/**
 	 * Set the main template
+	 * 
 	 * @param string $name
 	 */
 	public function setTemplate($name)
@@ -146,6 +226,7 @@ class TemplateManager
 	
 	/**
 	 * Returns the main template
+	 * 
 	 * @return string
 	 */
 	public function getTemplate()
@@ -155,15 +236,16 @@ class TemplateManager
 	
 	/**
 	 * Set the global output variables
+	 * 
 	 * @param array $out
 	 */
 	public function setGlobalOutput($out) {
-		self::log("Setting template: " . $name);
 		$this->gout = $out;
 	}
 	
 	/**
 	 * Set a single global output variable
+	 * 
 	 * @param string $name
 	 * @param string $value
 	 */
@@ -174,11 +256,10 @@ class TemplateManager
 	
 	/**
 	 * Automatically create the main module, using the template set in the manager.
-	 * 
 	 * Returns null if no template is set.
 	 * 
 	 * @param string $name
-	 * @return NULL|object
+	 * @return NULL|TemplateModule
 	 */
 	public function createMainModule($name = "index")
 	{
@@ -195,6 +276,7 @@ class TemplateManager
 	
 	/**
 	 * Returns the main module.
+	 * 
 	 * @return TemplateModule
 	 */
 	public function getMainModule()
@@ -204,7 +286,6 @@ class TemplateManager
 	
 	/**
 	 * Run all template-modules.
-	 * 
 	 * If you set echo on true, the result will be sent instead of returning it.
 	 * 
 	 * @param boolean $echo
@@ -239,7 +320,6 @@ class TemplateManager
 	/**
 	 * Use this to automatically set the global output variables for a new TemplateModule and the template name itself,
 	 * it will get added to its parent automatically. If you leave parent empty, it will get added to the main module.
-	 * 
 	 * It might be easier to use this one instead of loading the templates on your own.
 	 * 
 	 * @param string $placeholder
@@ -301,11 +381,10 @@ class TemplateManager
 	 * Adds an global module to the main module, supposed to be loaded there somewhere else,
 	 * this can be used to include certain css code or other special stuff somewhere else then in the module itself.
 	 * 
-	 * 
 	 * @param string $placeholder
 	 * @param string $name
 	 * @param string $inmemory
-	 * @param array $cont
+	 * @param Multitype $cont
 	 * @param string $namespace
 	 */
 	public function addRequirement($placeholder,$name,$namespace="",$inmemory=false,$cont=array() )
@@ -327,13 +406,13 @@ class TemplateManager
 	}
 	
 	/**
-	 * Adds an global template, so called Helper, that will be available in every Module as Helper{$name}
-	 * 
+	 * Adds an global template, called Helper, that will be available in every Module
 	 * You can add helpers on your own, they have to implement the function run() (Interface is TemplateInterface)
 	 * and they have to echo the content, based on the passed params.
+	 * In templates they can be accessed via: $this->getH("Name",$param or array of params)
 	 * 
 	 * @param string $helper
-	 * @param TemplateModule $object
+	 * @param TemplateHelper $object
 	 */
 	public function addHelper($helper,TemplateHelper $object = null)
 	{
@@ -361,6 +440,12 @@ class TemplateManager
 		}
 	}
 	
+	/**
+	 * Returns an helper, tries to load it if it is still unknown.
+	 * 
+	 * @param string $helper
+	 * @return NULL|TemplateHelper:
+	 */
 	public function getHelper($helper)
 	{
 		self::log("Loading helper:" . $helper);
@@ -374,6 +459,14 @@ class TemplateManager
 		return $this->helpers[$helper];
 	}
 	
+	/**
+	 * Used for debug logging,
+	 * as long as TPL_DEBUG is set in this file,
+	 * it will fill a logfile with informations.
+	 * 
+	 * @param String $text
+	 * @param mixed $var
+	 */
 	public static function log($text,$var=null)
 	{
 		if (defined('TPL_DEBUG'))
@@ -394,11 +487,8 @@ class TemplateManager
 
 /**
  * An interface you can use if you want to create your own helpers in the helpers.php of your template
- * 
  * Params should be an array that takes either values like "Testoutput" or "%%placeholder", the second one will search for an
  * output variable with the name "placeholder" in the module where the helper is used.
- * 
- * 
  * It might be better to use the abstract class defined below, as this one already implements a small algorithm to parse the output variables.
  * 
  * @author Alexander Kastius
@@ -412,7 +502,6 @@ interface TemplateHelper
 /**
  * Use this to easily create your own template helpers,
  * just extend the class and implement the generate($params) function.
- * 
  * This function should echo the content using the passed parameters, thoose will be already parsed (placeholder will be replaced with values, or with "" when the placeholder didn't exist).
  * You should make shure that your helper will output nothing, not even the surrounding tags, when launched with empty parameters.
  * 
@@ -422,6 +511,14 @@ interface TemplateHelper
 abstract class TemplateHelperAbstract
 {
 	abstract protected function generate($params);
+	
+	/**
+	 * Default public run function, takes the parent, and an array of params. Params can also be a single param,
+	 * it will create an array($param).
+	 * 
+	 * @param TemplateModule $parent
+	 * @param mixed $params
+	 */
 	public function run(TemplateModule $parent,$params=array())
 	{
 		if (!is_array($params))
@@ -530,6 +627,7 @@ class TemplateModule
 	 * 
 	 * Set the template, the module-placeholder for the parent (doesn'T matter if you create the main module),
 	 * the module name itself and the module output (can be changed later on).
+	 * 
 	 * @param string $tpl
 	 * @param string $placeholder
 	 * @param string $module
@@ -671,6 +769,10 @@ class TemplateModule
 		return ob_get_clean();
 	}
 	
+	/**
+	 * Wrapper for $this->get, so you can use $this->placeholder in templates.
+	 * @param string $name
+	 */
 	public function __get($name)
 	{
 		$this->get($name);
@@ -779,6 +881,11 @@ class TemplateModule
 		$helper->run($this,$params);
 	}
 
+	/**
+	 * Alternative version of getH
+	 * @param string $name
+	 * @param array $params
+	 */
 	public function getHelper($name,$params = array())
 	{
 		$this->getH($name,$params);
@@ -808,6 +915,11 @@ class TemplateModule
 		}
 	}
 	
+	/**
+	 * Used to end a loop started with startLoop. For use in templates.
+	 * 
+	 * @throws TemplateException
+	 */
 	protected function endLoop()
 	{
 		if (array_key_exists($this->loopplaceholder, $this->output))
@@ -908,25 +1020,18 @@ class TemplateModule
 	
 	/**
 	 * Use this to parse an array into several submodules of the same type.
-	 *
 	 * The array that should be passed to this function should look like this:
-	 *
 	 * [["content1stuff","content2stuff"],["content1otherstuff","content2otherstuff"],....]
-	 *
 	 * The internalplaceholdersarray should contain the placeholders for the values in the array:
-	 *
 	 * ["content1","content2"]
-	 *
 	 * You can use this for example to show a table containing stuff, using a module for a single line of the template and the parent
 	 * to define the table itself.
-	 * 
 	 * Its supposed to be used within loops.
 	 *
-	 * 
 	 * @param string $placeholder
 	 * @param array $internalplaceholders
 	 * @param array $content
-	 * @return multitype:multitype:unknown
+	 * @return unknown
 	 */
 	public function parseArray($placeholder,$internalplaceholders,$content)
 	{
@@ -942,6 +1047,13 @@ class TemplateModule
 	}
 	
 	
+	/**
+	 * Returns true if either the placeholder is set (as long as $value == null) or the placeholder has the specified value.
+	 * 
+	 * @param string $placeholder
+	 * @param mixed $value
+	 * @return boolean
+	 */
 	public function is($placeholder,$value=null)
 	{
 		if (array_key_exists($placeholder, $this->output))
@@ -964,13 +1076,23 @@ class TemplateModule
 		}
 		return false;
 	}
+	
+	/**
+	 * Sets the namespace to "" (root-dir) and locks the template. Usefull for oftenly used templates.
+	 */
+	public function defNamespace()
+	{
+		$this->setNamespace("");
+		$this->setLock();
+	}
 }
 
 /**
  * Inmemory-Template Class
  * 
  * This is an template that is not loaded everytime you run it, but it's content is stored in-memory before
- * you run it the first time. This is good for small templates you need often (for example a line of a table)
+ * you run it the first time. This is good for small templates you need often (for example a line of a table).
+ * IM-templates don't support some advanced features real templates as they don't support inline-code without using eval.
  * 
  * @author Alexander Kastius
  *
@@ -981,7 +1103,7 @@ class TemplateInMemory extends TemplateModule
 	/**
 	 * Use this to run the InMemoryTemplate, important:
 	 * It will search for the inmemory template, if its not included yet.
-	 * (non-PHPdoc)
+	 * 
 	 * @see TemplateModule::run()
 	 */
 	public function run()

@@ -578,49 +578,78 @@ function renderRackspace ()
 	//echo "</td></tr></table>\n";
 }
 
-function renderLocationRowForEditor ($subtree, $level = 0)
+function renderLocationRowForEditor ($parentmod,$subtree, $level = 0)
 {
+	$tplm = TemplateManager::getInstance();
 	$self = __FUNCTION__;
 	foreach ($subtree as $locationinfo)
 	{
-		echo "<tr><td align=left style='padding-left: " . ($locationinfo['kidc'] ? $level : ($level + 1) * 16) . "px;'>";
+		$smod = $tplm->generateSubmodule("LocationList", "RackspaceLocationEditorRow", $parentmod);
+		//echo "<tr><td align=left style='padding-left: " . ($locationinfo['kidc'] ? $level : ($level + 1) * 16) . "px;'>";
 		if ($locationinfo['kidc'])
-			printImageHREF ('node-expanded-static');
+			$smod->addOutput("HasSublocations", true);
+			//printImageHREF ('node-expanded-static');
 		if ($locationinfo['refcnt'] > 0 || $locationinfo['kidc'] > 0)
-			printImageHREF ('nodestroy');
-		else
-			echo getOpLink (array ('op' => 'deleteLocation', 'location_id' => $locationinfo['id']), '', 'destroy', 'Delete location');
-		echo '</td><td class=tdleft>';
-		printOpFormIntro ('updateLocation', array ('location_id' => $locationinfo['id']));
+			$smod->addOutput("IsDeletable",true);
+			//printImageHREF ('nodestroy');
+		//else
+			//echo getOpLink (array ('op' => 'deleteLocation', 'location_id' => $locationinfo['id']), '', 'destroy', 'Delete location');
+		//echo '</td><td class=tdleft>';
+		//printOpFormIntro ('updateLocation', array ('location_id' => $locationinfo['id']));
 		$parent = isset ($locationinfo['parent_id']) ? $locationinfo['parent_id'] : 0;
-		echo getSelect
-		(
-			array ( $parent => $parent ? htmlspecialchars ($locationinfo['parent_name']) : '-- NONE --'),
-			array ('name' => 'parent_id', 'id' => 'locationid_' . $locationinfo['id'], 'class' => 'locationlist-popup'),
-			$parent,
-			FALSE
-		);
-		echo "</td><td class=tdleft>";
-		echo "<input type=text size=48 name=name value='${locationinfo['name']}'>";
-		echo '</td><td>' . getImageHREF ('save', 'Save changes', TRUE) . "</form></td></tr>\n";
+		//echo getSelect
+		//(
+		//	array ( $parent => $parent ? htmlspecialchars ($locationinfo['parent_name']) : '-- NONE --'), //@XXX: How can a single element generate multiple.
+		//	array ('name' => 'parent_id', 'id' => 'locationid_' . $locationinfo['id'], 'class' => 'locationlist-popup'),
+		//	$parent,
+		//	FALSE
+		//);
+		$plist = array ( $parent => $parent ? htmlspecialchars ($locationinfo['parent_name']) : '-- NONE --');
+		foreach ($plist as $key => $value) {
+			$smod->addOutput("Parentselect", array("ParentListSelected"=>$key,"ParentListContent"=>$value));
+		}
+		//echo "</td><td class=tdleft>";
+		//echo "<input type=text size=48 name=name value='${locationinfo['name']}'>";
+		//echo '</td><td>' . getImageHREF ('save', 'Save changes', TRUE) . "</form></td></tr>\n";
 		if ($locationinfo['kidc'])
-			$self ($locationinfo['kids'], $level + 1);
+			$self ($smod,$locationinfo['kids'], $level + 1);
 	}
 }
 
-function renderLocationSelectTree ($selected_id = NULL)
+function renderLocationSelectTree ($selected_id = NULL, $parentmod = null)
 {
-	echo '<option value=0>-- NONE --</option>';
-	$locationlist = listCells ('location');
-	foreach (treeFromList ($locationlist) as $location)
+	if ($parentmod != null)
 	{
-		echo "<option value=${location['id']} style='font-weight: bold' ";
-		if ($location['id'] == $selected_id )
-		    echo ' selected';
-		echo ">${location['name']}</option>";
-		printLocationChildrenSelectOptions ($location, 0, $selected_id);
+		$tplm = TemplateManager::getInstance();
+		$locationlist = listCells ('location');
+		foreach (treeFromList ($locationlist) as $location)
+		{
+			$mod = $tplm->generateSubmodule("Options", "LocationChildrenBold", $parentmod);
+			$mod->setNamespace('',true);
+			$mod->setLock(true);
+			
+			if ($location['id'] == $selected_id )
+				$mod->addOutput('Selected', 'selected');
+			$mod->addOutput('Content',$location['name']);
+			printLocationChildrenSelectOptions ($location, 0, $selected_id, $mod);
+		}
+		//echo '</select>';		
 	}
-	echo '</select>';
+	else
+	{
+		echo '<option value=0>-- NONE --</option>';
+		$locationlist = listCells ('location');
+		foreach (treeFromList ($locationlist) as $location)
+		{
+			echo "<option value=${location['id']} style='font-weight: bold' ";
+			if ($location['id'] == $selected_id )
+				echo ' selected';
+		echo ">${location['name']}</option>";
+				printLocationChildrenSelectOptions ($location, 0, $selected_id);
+		}
+		echo '</select>';		
+	}
+
 }
 
 function renderRackspaceLocationEditor ()
@@ -638,73 +667,96 @@ JSTXT;
 	addJS($js, TRUE	);*/
 	
 	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule("index");
-	$tplm->addRequirement("Header", "RackspaceLocationEditorJs","rackspace");
 	
-	function printNewItemTR ()
+	$mod = $tplm->generateSubmodule("Payload", "RackspaceLocationEditor");
+	$mod->setNamespace('rackspace',true);
+	
+	function printNewItemTR ($placeholder,$parentmod)
 	{
-		printOpFormIntro ('addLocation');
-		echo '<tr><td>';
-		printImageHREF ('create', 'Add new location', TRUE);
-		echo '</td><td><select name=parent_id tabindex=100>';
-		renderLocationSelectTree ();
-		echo '</td><td><input type=text size=48 name=name tabindex=101></td><td>';
-		printImageHREF ('create', 'Add new location', TRUE, 102);
-		echo "</td></tr></form>\n";
+		$tplm = TemplateManager::getInstance();
+		$mod = $tplm->generateSubmodule($placeholder, "RackspaceLocationEditorNew", $parentmod);
+		renderLocationSelectTree ($parentmod);
+		
+		//printOpFormIntro ('addLocation');
+		//echo '<tr><td>';
+		//printImageHREF ('create', 'Add new location', TRUE);
+		//echo '</td><td><select name=parent_id tabindex=100>';
+		//echo '</td><td><input type=text size=48 name=name tabindex=101></td><td>';
+		//printImageHREF ('create', 'Add new location', TRUE, 102);
+		//echo "</td></tr></form>\n";
 	}
 
 	//startPortlet ('Locations');
 	//echo "<table border=0 cellspacing=0 cellpadding=5 align=center class=widetable>\n";
 	//echo "<tr><th>&nbsp;</th><th>Parent</th><th>Name</th><th>&nbsp;</th></tr>\n";
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR();
+		printNewItemTR("NewTop",$mod);
 
 	$locations = listCells ('location');
-	renderLocationRowForEditor (treeFromList ($locations));
+	renderLocationRowForEditor ($mod,treeFromList ($locations));
 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR();
-	echo "</table><br>\n";
-	finishPortlet();
+		printNewItemTR("NewBottom",$mod);
+	//echo "</table><br>\n";
+	//finishPortlet();
 }
 
 function renderRackspaceRowEditor ()
 {
-	function printNewItemTR ()
+	function printNewItemTR ($plc,$parentmod)
 	{
-		printOpFormIntro ('addRow');
-		echo '<tr><td>';
-		printImageHREF ('create', 'Add new row', TRUE);
-		echo '</td><td><select name=location_id tabindex=100>';
-		renderLocationSelectTree ();
-		echo '</td><td><input type=text name=name tabindex=100></td><td>';
-		printImageHREF ('create', 'Add new row', TRUE, 102);
-		echo '</td></tr></form>';
+		$tplm = TemplateManager::getInstance();
+		$mod = $tplm->generateSubmodule($plc, "RackspaceRowEditorNew", $parentmod);
+		renderLocationSelectTree (null,$mod);
+		
+		//printOpFormIntro ('addRow');
+		//echo '<tr><td>';
+		//printImageHREF ('create', 'Add new row', TRUE);
+		//echo '</td><td><select name=location_id tabindex=100>';
+		//echo '</td><td><input type=text name=name tabindex=100></td><td>';
+		//printImageHREF ('create', 'Add new row', TRUE, 102);
+		//echo '</td></tr></form>';
 	}
-	startPortlet ('Rows');
-	echo "<table border=0 cellspacing=0 cellpadding=5 align=center class=widetable>\n";
-	echo "<tr><th>&nbsp;</th><th>Location</th><th>Name</th><th>&nbsp;</th></tr>\n";
+	//startPortlet ('Rows');
+	//echo "<table border=0 cellspacing=0 cellpadding=5 align=center class=widetable>\n";
+	//echo "<tr><th>&nbsp;</th><th>Location</th><th>Name</th><th>&nbsp;</th></tr>\n";
+	
+	$tplm = TemplateManager::getInstance();
+	
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload", "RackspaceRowEditor");
+	$mod->setNamespace("rackspace",true);
+	
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR ();
+		printNewItemTR ("NewTop",$mod);
 	foreach (getAllRows() as $row_id => $rowInfo)
 	{
-		echo '<tr><td>';
+		$smod = $tplm->generateSubmodule("RowList","RackspaceRowEditorRow",$mod);
+		//echo '<tr><td>';
 		if ($rc = $rowInfo['rackc'])
-			printImageHREF ('nodestroy', "${rc} rack(s) here");
-		else
-			echo getOpLink (array('op'=>'deleteRow', 'row_id'=>$row_id), '', 'destroy', 'Delete row');
-		printOpFormIntro ('updateRow', array ('row_id' => $row_id));
-		echo '</td><td>';
-		echo '<select name=location_id tabindex=100>';
-		renderLocationSelectTree ($rowInfo['location_id']);
-		echo "</td><td><input type=text name=name value='${rowInfo['name']}' tabindex=100></td><td>";
-		printImageHREF ('save', 'Save changes', TRUE);
-		echo "</form></td></tr>\n";
+			$smod->addOutput("HasChildren", true);
+			//printImageHREF ('nodestroy', "${rc} rack(s) here");
+		//else
+		//	echo getOpLink (array('op'=>'deleteRow', 'row_id'=>$row_id), '', 'destroy', 'Delete row');
+		//printOpFormIntro ('updateRow', array ('row_id' => $row_id));
+		//echo '</td><td>';
+		//echo '<select name=location_id tabindex=100>';
+		$smod->addOutput("RowId",$row_id);
+		$smod->addOutput("RackCount",$rc);
+		$smod->addOutput("RowName",$rowInfo['name']);
+		renderLocationSelectTree ($rowInfo['location_id'],$smod);
+		//echo "</td><td><input type=text name=name value='${rowInfo['name']}' tabindex=100></td><td>";
+		//printImageHREF ('save', 'Save changes', TRUE);
+		//echo "</form></td></tr>\n";
 	}
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR ();
-	echo "</table><br>\n";
-	finishPortlet();
+		printNewItemTR ("NewBottom",$mod);
+	//echo "</table><br>\n";
+	//finishPortlet();
 }
 
 function renderRow ($row_id)
@@ -2258,17 +2310,25 @@ function renderDepot ()
 	$objects = array();
 	$objects_count = getEntitiesCount ('object');
 
-	echo "<table border=0 class=objectview>\n";
-	echo "<tr><td class=pcleft>";
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule("payload", "Depot");
+	$mod->setNamespace("depot",true);
+	
+	//echo "<table border=0 class=objectview>\n";
+	//echo "<tr><td class=pcleft>";
 
 	if ($objects_count == 0)
-		echo '<h2>No objects exist</h2>';
+		$mod->addOutput("NoObjects", true);
+		//echo '<h2>No objects exist</h2>';
 	// 1st attempt: do not fetch all objects if cellfilter is empty and rendering empty result is enabled
-	elseif (! ($cellfilter['is_empty'] && renderEmptyResults ($cellfilter, 'objects', $objects_count)))
+	elseif (! ($cellfilter['is_empty'] && renderEmptyResults ($mod, 'Content', $cellfilter, 'objects', $objects_count)))
 	{
 		$objects = filterCellList (listCells ('object'), $cellfilter['expression']);
 		// 2st attempt: do not render all fetched objects if rendering empty result is enabled
-		if (! renderEmptyResults ($cellfilter, 'objects', count($objects)))
+		if (! renderEmptyResults ($mod, 'Content', $cellfilter, 'objects', count($objects)))
 		{
 			startPortlet ('Objects (' . count ($objects) . ')');
 			echo '<br><br><table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
@@ -2307,13 +2367,13 @@ function renderDepot ()
 
 	echo "</td><td class=pcright width='25%'>";
 
-	renderCellFilterPortlet ($cellfilter, 'object', $objects);
+	renderCellFilterPortlet ($cellfilter, 'object', $objects, array(), $mod);
 	echo "</td></tr></table>\n";
 }
 
 // This function returns TRUE if the result set is too big to be rendered, and no filter is set.
 // In this case it renders the describing message instead.
-function renderEmptyResults($cellfilter, $entities_name, $count = NULL)
+function renderEmptyResults($pmod, $placeholder, $cellfilter, $entities_name, $count = NULL)
 {
 	if (!$cellfilter['is_empty'])
 		return FALSE;
@@ -2325,11 +2385,17 @@ function renderEmptyResults($cellfilter, $entities_name, $count = NULL)
 
 	$href_show_all = trim($_SERVER['REQUEST_URI'], '&');
 	$href_show_all .= htmlspecialchars('&show_all_objects=1');
+	
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateSubmodule($placeholder, "EmptyResults", $pmod, true);
 	$suffix = isset ($count) ? " ($count)" : '';
-	echo <<<END
-<p>Please set a filter to display the corresponging $entities_name.
-<br><a href="$href_show_all">Show all $entities_name$suffix</a>
-END;
+	$mod->addOutput("Name", $entities_name);
+	$mod->addOutput("Suffix", $suffix);
+	$mod->addOutput("ShowAll", $href_show_all);
+	//echo <<<END
+//<p>Please set a filter to display the corresponging $entities_name.
+//<br><a href="$href_show_all">Show all $entities_name$suffix</a>
+//END;
 	return TRUE;
 }
 
@@ -2373,58 +2439,73 @@ function renderRackspaceHistory ()
 	$object_id = 1;
 	if ($op_id)
 		list ($omid, $nmid) = getOperationMolecules ($op_id);
-
+	
+	$tplm = TemplateManager::getInstance();
+	
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule("Payload","RackspaceHistory");
+	$mod->setNamespace("rackspace",true);
+	
 	// Main layout starts.
-	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
+	//echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
 
 	// Left top portlet with old allocation.
-	echo "<tr><td class=pcleft>";
-	startPortlet ('Old allocation');
+	//echo "<tr><td class=pcleft>";
+	//startPortlet ('Old allocation');
 	if ($omid)
 	{
 		$oldMolecule = getMolecule ($omid);
 		renderMolecule ($oldMolecule, $object_id);
 	}
 	else
-		echo "nothing";
-	finishPortlet();
+		$mod->setOutput("OldAlloc","nothing");
+	//finishPortlet();
 
-	echo '</td><td class=pcright>';
+	//echo '</td><td class=pcright>';
 
 	// Right top portlet with new allocation
-	startPortlet ('New allocation');
+	//startPortlet ('New allocation');
 	if ($nmid)
 	{
 		$newMolecule = getMolecule ($nmid);
 		renderMolecule ($newMolecule, $object_id);
 	}
 	else
-		echo "nothing";
-	finishPortlet();
+		$mod->setOutput("NewAlloc","nothing");
+	//finishPortlet();
 
-	echo '</td></tr><tr><td colspan=2>';
+	//echo '</td></tr><tr><td colspan=2>';
 
 	// Bottom portlet with list
 
-	startPortlet ('Rackspace allocation history');
-	echo "<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
-	echo "<tr><th>timestamp</th><th>author</th><th>object</th><th>comment</th></tr>\n";
+	//startPortlet ('Rackspace allocation history');
+	//echo "<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
+	//echo "<tr><th>timestamp</th><th>author</th><th>object</th><th>comment</th></tr>\n";
 	foreach ($history as $row)
 	{
+		$smod = $tplm->generateSubmodule("HistoryRows","RackspaceHistoryRow",$mod);
 		if ($row['mo_id'] == $op_id)
 			$class = 'hl';
 		else
 			$class = "row_${order}";
-		echo "<tr class=${class}><td><a href='".makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'op_id'=>$row['mo_id']))."'>${row['ctime']}</a></td>";
-		echo "<td>${row['user_name']}</td><td>";
-		renderCell (spotEntity ('object', $row['ro_id']));
-		echo '</td><td>' . niftyString ($row['comment'], 0) . '</td></tr>';
+		$smod->addOutput("Class",$class);
+		$smod->addOutput("Link",makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'op_id'=>$row['mo_id'])));
+		$smod->addOutput("Time",$row['ctime']);
+		$smod->addOutput("UserName",$row['user_name']);
+		$smod->addOutput("renderedCell",renderCell (spotEntity ('object', $row['ro_id'])));
+		$smod->addOutput("Comment",$row['comment']);
+		//echo "<tr class=${class}><td><a href='".makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'op_id'=>$row['mo_id']))."'>${row['ctime']}</a></td>";
+		//echo "<td>${row['user_name']}</td><td>";
+		//renderCell (spotEntity ('object', $row['ro_id']));
+		//echo '</td><td>' . niftyString ($row['comment'], 0) . '</td></tr>';
 		$order = $nextorder[$order];
 	}
-	echo "</table>\n";
-	finishPortlet();
+	//echo "</table>\n";
+	//finishPortlet();
 
-	echo '</td></tr></table>';
+	//echo '</td></tr></table>';
 }
 
 function renderIPSpaceRecords ($tree, $baseurl, $target = 0, $level = 1)
@@ -3833,7 +3914,7 @@ function renderAtomGrid ($data)
 	}
 }
 
-function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $celllist = NULL)
+function renderCellList ($parent = NULL, $placeholder = "CellList", $realm = NULL, $title = 'items', $do_amplify = FALSE, $celllist = NULL)
 {
 	if ($realm === NULL)
 	{
@@ -3846,75 +3927,118 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 	if (! isset ($celllist))
 		$celllist = listCells ($realm);
 	$celllist = filterCellList ($celllist, $cellfilter['expression']);
+	
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateSubmodule($placeholder, "CellList", $parent);
+	$mod->setNamespace("",true);
+	$mod->setLock();
 
-	echo "<table border=0 class=objectview>\n";
-	echo "<tr><td class=pcleft>";
+	//echo "<table border=0 class=objectview>\n";
+	//echo "<tr><td class=pcleft>";
 
-	if ($realm != 'file' || ! renderEmptyResults ($cellfilter, 'files', count($celllist)))
+	if ($realm != 'file' || ! renderEmptyResults ($mod, "EmptyResults", $cellfilter, 'files', count($celllist)))
 	{
 		if ($do_amplify)
 			array_walk ($celllist, 'amplifyCell');
-		startPortlet ($title . ' (' . count ($celllist) . ')');
-		echo "<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>\n";
+		
+		$mod->setOutput("EmptyResults", "");
+		//startPortlet ($title . ' (' . count ($celllist) . ')');
+		//echo "<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>\n"
+		$renderedCells = array();
 		foreach ($celllist as $cell)
 		{
-			echo "<tr class=row_${order}><td>";
-			renderCell ($cell);
-			echo "</td></tr>\n";
+			$singleCell = array();
+			$singleCell["Order"] = $order;
+			$singleCell["CellContent"] = renderCell($cell);
+			//echo "<tr class=row_${order}><td>";
+			//renderCell ($cell);
+			//echo "</td></tr>\n";
 			$order = $nextorder[$order];
+			
+			$renderedCells[] = $singleCell;
 		}
-		echo '</table>';
-		finishPortlet();
+		$mod->setOutput("CellListContent", $renderedCells);
+		
+		//echo '</table>';
+		//finishPortlet();
 	}
-	echo '</td><td class=pcright>';
-	renderCellFilterPortlet ($cellfilter, $realm, $celllist);
-	echo "</td></tr></table>\n";
+	//echo '</td><td class=pcright>';
+	renderCellFilterPortlet ($cellfilter, $realm, $celllist, array(), $mod);
+	//echo "</td></tr></table>\n";
 }
 
 function renderUserList ()
 {
-	renderCellList ('user', 'User accounts');
+
+	$tplm = TemplateManager::getInstance();
+	
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
+	renderCellList (NULL,'payload', 'user', 'User accounts');
 }
 
 function renderUserListEditor ()
 {
-	function printNewItemTR ()
+	function printNewItemTR ($parent,$placeholder)
 	{
-		startPortlet ('Add new');
-		printOpFormIntro ('createUser');
-		echo '<table cellspacing=0 cellpadding=5 align=center>';
-		echo '<tr><th>&nbsp;</th><th>&nbsp;</th><th>Assign tags</th></tr>';
-		echo '<tr><th class=tdright>Username</th><td class=tdleft><input type=text size=64 name=username tabindex=100></td>';
-		echo '<td rowspan=4>';
-		renderNewEntityTags ('user');
-		echo '</td></tr>';
-		echo '<tr><th class=tdright>Real name</th><td class=tdleft><input type=text size=64 name=realname tabindex=101></td></tr>';
-		echo '<tr><th class=tdright>Password</th><td class=tdleft><input type=password size=64 name=password tabindex=102></td></tr>';
-		echo '<tr><td colspan=2>';
-		printImageHREF ('CREATE', 'Add new account', TRUE, 103);
-		echo '</td></tr>';
-		echo '</table></form>';
-		finishPortlet();
+		$tplm = TemplateManager::getInstance();
+		$smod = $tplm->generateSubmodule($placeholder, "UserListEditorNew", $parent);
+		
+		//startPortlet ('Add new');
+		//printOpFormIntro ('createUser');
+		//echo '<table cellspacing=0 cellpadding=5 align=center>';
+		//echo '<tr><th>&nbsp;</th><th>&nbsp;</th><th>Assign tags</th></tr>';
+		//echo '<tr><th class=tdright>Username</th><td class=tdleft><input type=text size=64 name=username tabindex=100></td>';
+		//echo '<td rowspan=4>';
+		renderNewEntityTags ($smod,'user');
+		//echo '</td></tr>';
+		//echo '<tr><th class=tdright>Real name</th><td class=tdleft><input type=text size=64 name=realname tabindex=101></td></tr>';
+		//echo '<tr><th class=tdright>Password</th><td class=tdleft><input type=password size=64 name=password tabindex=102></td></tr>';
+		//echo '<tr><td colspan=2>';
+		//printImageHREF ('CREATE', 'Add new account', TRUE, 103);
+		//echo '</td></tr>';
+		//echo '</table></form>';
+		//finishPortlet();
 	}
+	$tplm = TemplateManager::getInstance();
+	
+
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule("payload", "UserListEditor");
+	$mod->setNamespace("userlist",true);
+	
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR();
+		printNewitemTR($mod,"AddNewTop");
+		//printNewItemTR();
 	$accounts = listCells ('user');
-	startPortlet ('Manage existing (' . count ($accounts) . ')');
-	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-	echo '<tr><th>Username</th><th>Real name</th><th>Password</th><th>&nbsp;</th></tr>';
+	//startPortlet ('Manage existing (' . count ($accounts) . ')');
+	$mod->addOutput("Count", count($accounts));
+	//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	//echo '<tr><th>Username</th><th>Real name</th><th>Password</th><th>&nbsp;</th></tr>';
 	foreach ($accounts as $account)
 	{
-		printOpFormIntro ('updateUser', array ('user_id' => $account['user_id']));
-		echo "<tr><td><input type=text name=username value='${account['user_name']}' size=16></td>";
-		echo "<td><input type=text name=realname value='${account['user_realname']}' size=24></td>";
-		echo "<td><input type=password name=password value='${account['user_password_hash']}' size=40></td><td>";
-		printImageHREF ('save', 'Save changes', TRUE);
-		echo '</td></form></tr>';
+		$smod = $tplm->generateSubmodule("Users", "UserListEditorRow", $mod);
+		$smod->addOutput("UserId", $account['user_id']);
+		$smod->addOutput("Name", $account['user_name']);
+		$smod->addOutput("RealName", $account['user_realname']);
+		$smod->addOutput("PwHash", $user['user_password_hash']);
+		
+		$mod->addOutput("Users", $smod);
+		//printOpFormIntro ('updateUser', array ('user_id' => $account['user_id']));
+		//echo "<tr><td><input type=text name=username value='${account['user_name']}' size=16></td>";
+		//echo "<td><input type=text name=realname value='${account['user_realname']}' size=24></td>";
+		//echo "<td><input type=password name=password value='${account['user_password_hash']}' size=40></td><td>";
+		//printImageHREF ('save', 'Save changes', TRUE);
+		//echo '</td></form></tr>';
 	}
-	echo '</table><br>';
-	finishPortlet();
+	//echo '</table><br>';
+	//finishPortlet();
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR();
+		printNewitemTR($mod,"AddNewBottom");
+		//printNewItemTR();
 }
 
 function renderOIFCompatViewer()
@@ -5224,6 +5348,8 @@ function printTagCheckboxTable ($input_name, $preselect, $neg_preselect, $taglis
 			{
 				$tag_class = isset ($taginfo['id']) && isset ($taginfo['refcnt']) ? getTagClassName ($row['input_value']) : '';
 				$tagobj = $tplm->generateSubmodule("TagRow", "TagTreeCell", $addto);
+				$tagobj->setNamespace("",true);
+				$tagobj->setLock();
 				$tagobj->setOutput("TrClass", 		$row['tr_class']);
 				$tagobj->setOutput("TdClass", 		$row['td_class']);
 				$tagobj->setOutput("LevelPx", 		$row['level'] * 16);
@@ -5356,7 +5482,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	// and/or block
 	if (getConfigVar ('FILTER_SUGGEST_ANDOR') == 'yes' or strlen ($preselect['andor']))
 	{
-		$andormod = $tplm->generateSubmodule("TableContent", "CellFilterAndOrCell",$mod);
+		$andormod = $tplm->generateSubmodule("TableContent", "CellFilterAndOr",$mod);
 		//echo $hr;
 		if (!$rulerfirst)
 		{
@@ -5551,17 +5677,17 @@ END;
 }
 
 // Dump all tags in a single SELECT element.
-function renderNewEntityTags ($for_realm = '')
+function renderNewEntityTags ($parent, $for_realm = '')
 {
 	global $taglist, $tagtree;
 	if (!count ($taglist))
 	{
-		echo "No tags defined";
+		$parent->addOutput("TagsEmpty",true);
 		return;
 	}
-	echo '<div class=tagselector><table border=0 align=center cellspacing=0 class="tagtree">';
-	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm);
-	echo '</table></div>';
+	//echo '<div class=tagselector><table border=0 align=center cellspacing=0 class="tagtree">';
+	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm, $parent);
+	//echo '</table></div>';
 }
 
 function renderTagRollerForRow ($row_id)

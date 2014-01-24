@@ -96,11 +96,11 @@ $this->setInMemoryTemplate("MessageError","<div class=msg_error'> {{Message}} </
 $this->setInMemoryTemplate("MessageWarning","<div class=msg_warning'> {{Message}} </div>");
 
 /**
- * Img-Tag, to replace the old code in the getImageHref.
- * Usage: interface.php getImageHref.
- * 
- * @TODO: Find a goddamm workaround.
- */
+ * Text to render when no CellList elements are available.
+ * Usage: interface.php (renderEmptyResults)
+ **/
+$this->setInMemoryTemplate("EmptyResults","<p>Please set a filter to display the corresponging {{Name}} <br> <a href=\"{{ShowAll}}\">Show all {{Name}}{{Suffix}}</a></p>");
+
 
 $this->setInMemoryTemplate("GetImageHrefDoInput", "<input type=image name=submit class=icon src={{SrcPath}} border=0 {{TabIndex}} {{Title}}>");
 $this->setInMemoryTemplate("GetImageHrefNoInput", "<img src={{SrcPath}} width={{ImgWidth}} height={{ImgHeight}} border=0 {{Title}} >");
