@@ -607,9 +607,9 @@ function renderLocationRowForEditor ($parentmod,$subtree, $level = 0)
 		$plist = array ( $parent => $parent ? htmlspecialchars ($locationinfo['parent_name']) : '-- NONE --');
 		$outarr = array();
 		foreach ($plist as $key => $value) {
-			$outarr[] = array("ParentListSelected"=>$key,"ParentListContent"=>$value,"ParentListSelected"=>"");
+			$outarr[] = array("ParentListId"=>$key,"ParentListContent"=>$value,"ParentListSelected"=> ($key == $parent ? "selected" : ""));
 		}
-		$smod->addOutput("Options",$outarr);
+		$smod->addOutput("Parentselect",$outarr);
 		//echo "</td><td class=tdleft>";
 		//echo "<input type=text size=48 name=name value='${locationinfo['name']}'>";
 		//echo '</td><td>' . getImageHREF ('save', 'Save changes', TRUE) . "</form></td></tr>\n";
