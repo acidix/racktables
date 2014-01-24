@@ -594,6 +594,9 @@ function renderLocationRowForEditor ($parentmod,$subtree, $level = 0)
 			//printImageHREF ('nodestroy');
 		//else
 			//echo getOpLink (array ('op' => 'deleteLocation', 'location_id' => $locationinfo['id']), '', 'destroy', 'Delete location');
+			
+		$smod->addOutput("LocationName", $locationinfo['name']);
+		$smod->addOutput("LocationId", $locationinfo['id']);
 		//echo '</td><td class=tdleft>';
 		//printOpFormIntro ('updateLocation', array ('location_id' => $locationinfo['id']));
 		$parent = isset ($locationinfo['parent_id']) ? $locationinfo['parent_id'] : 0;
