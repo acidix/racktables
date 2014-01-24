@@ -6,7 +6,6 @@
 			</td>
 			<td>
 				<select name=parent_id tabindex=100>
-				<option value=0>-- NONE --</option>
 				<?php $this->Options; ?>
 				</select>
 			</td>
