@@ -622,6 +622,15 @@ function renderLocationSelectTree ($selected_id = NULL, $parentmod = null)
 	{
 		$tplm = TemplateManager::getInstance();
 		$locationlist = listCells ('location');
+		
+		
+		$mod = $tplm->generateSubmodule("Options", "LocationChildren", $parentmod);
+		$mod->defNamespace();
+		
+		$mod->addOutput('Content','-- None --');
+		$mod->addOutput('Id',0);
+				
+		
 		foreach (treeFromList ($locationlist) as $location)
 		{
 			$mod = $tplm->generateSubmodule("Options", "LocationChildrenBold", $parentmod);
@@ -631,6 +640,7 @@ function renderLocationSelectTree ($selected_id = NULL, $parentmod = null)
 			if ($location['id'] == $selected_id )
 				$mod->addOutput('Selected', 'selected');
 			$mod->addOutput('Content',$location['name']);
+			$mod->addOutput("Id", $location['id']) ;
 			printLocationChildrenSelectOptions ($location, 0, $selected_id, $mod);
 		}
 		//echo '</select>';		
