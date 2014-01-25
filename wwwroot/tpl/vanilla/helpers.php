@@ -35,6 +35,7 @@ class TemplateHelperForm extends TemplateHelperAbstract
 {
 	protected function generate($params)
 	{
+		global $pageno, $tabno;
 		if (count($params) == 0||$params[0]=="")
 		{
 			echo "";

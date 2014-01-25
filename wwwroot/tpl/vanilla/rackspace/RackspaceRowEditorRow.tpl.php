@@ -11,7 +11,7 @@
 		<input type=hidden name="row_id" value="<?php $this->RowId; ?>">
 	</td><td>
 		<select name=location_id tabindex=100>
-			<?php $this->LocationChildrenBold; ?>
+			<?php $this->Options; ?>
 		</select>
 	</td><td>
 		<input type=text name=name value='<?php $this->RowName; ?>' tabindex=100>

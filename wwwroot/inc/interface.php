@@ -594,6 +594,9 @@ function renderLocationRowForEditor ($parentmod,$subtree, $level = 0)
 			//printImageHREF ('nodestroy');
 		//else
 			//echo getOpLink (array ('op' => 'deleteLocation', 'location_id' => $locationinfo['id']), '', 'destroy', 'Delete location');
+			
+		$smod->addOutput("LocationName", $locationinfo['name']);
+		$smod->addOutput("LocationId", $locationinfo['id']);
 		//echo '</td><td class=tdleft>';
 		//printOpFormIntro ('updateLocation', array ('location_id' => $locationinfo['id']));
 		$parent = isset ($locationinfo['parent_id']) ? $locationinfo['parent_id'] : 0;
@@ -605,14 +608,16 @@ function renderLocationRowForEditor ($parentmod,$subtree, $level = 0)
 		//	FALSE
 		//);
 		$plist = array ( $parent => $parent ? htmlspecialchars ($locationinfo['parent_name']) : '-- NONE --');
+		$outarr = array();
 		foreach ($plist as $key => $value) {
-			$smod->addOutput("Parentselect", array("ParentListSelected"=>$key,"ParentListContent"=>$value));
+			$outarr[] = array("ParentListId"=>$key,"ParentListContent"=>$value,"ParentListSelected"=> ($key == $parent ? "selected" : ""));
 		}
+		$smod->addOutput("Parentselect",$outarr);
 		//echo "</td><td class=tdleft>";
 		//echo "<input type=text size=48 name=name value='${locationinfo['name']}'>";
 		//echo '</td><td>' . getImageHREF ('save', 'Save changes', TRUE) . "</form></td></tr>\n";
 		if ($locationinfo['kidc'])
-			$self ($smod,$locationinfo['kids'], $level + 1);
+			$self ($parentmod,$locationinfo['kids'], $level + 1);
 	}
 }
 
@@ -622,6 +627,15 @@ function renderLocationSelectTree ($selected_id = NULL, $parentmod = null)
 	{
 		$tplm = TemplateManager::getInstance();
 		$locationlist = listCells ('location');
+		
+		
+		$mod = $tplm->generateSubmodule("Options", "LocationChildren", $parentmod);
+		$mod->defNamespace();
+		
+		$mod->addOutput('Content','-- None --');
+		$mod->addOutput('Id',0);
+				
+		
 		foreach (treeFromList ($locationlist) as $location)
 		{
 			$mod = $tplm->generateSubmodule("Options", "LocationChildrenBold", $parentmod);
@@ -631,6 +645,7 @@ function renderLocationSelectTree ($selected_id = NULL, $parentmod = null)
 			if ($location['id'] == $selected_id )
 				$mod->addOutput('Selected', 'selected');
 			$mod->addOutput('Content',$location['name']);
+			$mod->addOutput("Id", $location['id']) ;
 			printLocationChildrenSelectOptions ($location, 0, $selected_id, $mod);
 		}
 		//echo '</select>';		
@@ -677,7 +692,7 @@ JSTXT;
 	{
 		$tplm = TemplateManager::getInstance();
 		$mod = $tplm->generateSubmodule($placeholder, "RackspaceLocationEditorNew", $parentmod);
-		renderLocationSelectTree ($parentmod);
+		renderLocationSelectTree (NULL, $mod);
 		
 		//printOpFormIntro ('addLocation');
 		//echo '<tr><td>';
@@ -4045,7 +4060,6 @@ function renderCellList ($parent = NULL, $placeholder = "CellList", $realm = NUL
 		$mod->setOutput("EmptyResults", "");
 		//startPortlet ($title . ' (' . count ($celllist) . ')');
 		//echo "<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>\n"
-		$renderedCells = array();
 		foreach ($celllist as $cell)
 		{
 			$singleCell = array();
@@ -4056,9 +4070,8 @@ function renderCellList ($parent = NULL, $placeholder = "CellList", $realm = NUL
 			//echo "</td></tr>\n";
 			$order = $nextorder[$order];
 			
-			$renderedCells[] = $singleCell;
+			$mod->addOutput("CellListContent", $singleCell);
 		}
-		$mod->setOutput("CellListContent", $renderedCells);
 		
 		//echo '</table>';
 		//finishPortlet();
@@ -4076,7 +4089,7 @@ function renderUserList ()
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule();
 	
-	renderCellList (NULL,'payload', 'user', 'User accounts');
+	renderCellList (NULL, 'payload', 'user', 'User accounts');
 }
 
 function renderUserListEditor ()
@@ -4084,7 +4097,7 @@ function renderUserListEditor ()
 	function printNewItemTR ($parent,$placeholder)
 	{
 		$tplm = TemplateManager::getInstance();
-		$smod = $tplm->generateSubmodule($placeholder, "UserListEditorNew", $parent);
+		$smod2 = $tplm->generateSubmodule($placeholder, "UserListEditorNew", $parent);
 		
 		//startPortlet ('Add new');
 		//printOpFormIntro ('createUser');
@@ -4092,7 +4105,7 @@ function renderUserListEditor ()
 		//echo '<tr><th>&nbsp;</th><th>&nbsp;</th><th>Assign tags</th></tr>';
 		//echo '<tr><th class=tdright>Username</th><td class=tdleft><input type=text size=64 name=username tabindex=100></td>';
 		//echo '<td rowspan=4>';
-		renderNewEntityTags ($smod,'user');
+		renderNewEntityTags ($smod2,'user');
 		//echo '</td></tr>';
 		//echo '<tr><th class=tdright>Real name</th><td class=tdleft><input type=text size=64 name=realname tabindex=101></td></tr>';
 		//echo '<tr><th class=tdright>Password</th><td class=tdleft><input type=password size=64 name=password tabindex=102></td></tr>';
@@ -4104,7 +4117,6 @@ function renderUserListEditor ()
 	}
 	$tplm = TemplateManager::getInstance();
 	
-
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule();
 	

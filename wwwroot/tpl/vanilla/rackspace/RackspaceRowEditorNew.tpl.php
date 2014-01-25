@@ -3,7 +3,7 @@
 	<tr><td>
 		<input class="icon" type="image" border="0" title="Add new row" src="?module=chrome&uri=pix/tango-document-new.png" name="submit"></input>
 	</td><td><select name=location_id tabindex=100>
-		<?php $this->LocationChildrenBold; ?>
+		<?php $this->Options; ?>
 		</select>
 	</td>
 	<td>

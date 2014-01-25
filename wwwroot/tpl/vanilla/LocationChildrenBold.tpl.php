@@ -1,5 +1,5 @@
 <?php if (defined("RS_TPL")) {?>
-	<option value=<?php $this->Id; ?> <?php $this->Selected; ?> style='font-weight: bold' >
+	<option value='<?php $this->Id; ?>' <?php $this->Selected; ?> style='font-weight: bold' >
 		<?php $this->Content; ?>
 	</option>
 	<?php $this->Options; ?>
