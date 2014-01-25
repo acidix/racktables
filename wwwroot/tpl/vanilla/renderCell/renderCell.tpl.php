@@ -1,10 +1,11 @@
 <?php if (defined("RS_TPL")) {?>
 
-	<?php $this->get("userImgSpace"); ?>
 	<?php if ($this->is("typeUser",true)) { ?>
+
 		<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>
+		<?php $this->getH("PrintImageHref","USER") ?> 
 		</td><td> <?php $this->get("UserRef") ?> </td></tr>
-				
+		
 		<?php if ($this->is("hasUserRealname",true)) { ?>
 			<tr><td><strong><?php $this->get("userRealname") ?></strong></td></tr>
 		<?php } else { ?>
@@ -61,16 +62,13 @@
 	<?php } ?>
 
 	<?php if ($this->is("typeRack",true)) { ?>
+
 		<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>
-		<img border=0 width=<?php $this->get("thumbWidth") ?> 
-					height=<?php $this->get("thumbHeight") ?> title='<?php $this->get("cellHeight") ?> units' 
+		<img border=0 width=<?php $this->thumbWidth ?> 
+					height=<?php $this->thumbHeight ?> title='<?php $this->cellHeight ?> units' 
 			src='?module=image&img=minirack&rack_id=<?php $this->get("cellID")?>'>
 		</td><td>
-		<?php $this->getH("MkA", array( 
-			'<strong>' . niftyString ($this->get("cellName")) . '</strong>',
-			'rack',
-			$this->get("cellID")
-		  )); ?>
+		<?php $this->get("mkACell") ?> 
 		</td></tr><tr><td>
 		<?php $this->get("cellComment") ?> 
 		</td></tr><tr><td>
@@ -80,13 +78,9 @@
 	
 	<?php if ($this->is("typeLocation",true)) { ?>	
 		<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>
-		<?php $this->get("imgLocation") ?> 
+		<?php $this->getH("PrintImageHref","LOCATION") ?> 
 		</td><td>
-		<?php $this->getH("MkA", array( 
-			'<strong>' . niftyString ($this->get("cellName")) . '</strong>',
-			'rack',
-			$this->get("cellID")
-		  )); ?>
+		<?php $this->mkACell ?> 
 		</td></tr><tr><td>
 		<?php $this->get("cellComment") ?> 
 		</td></tr><tr><td>
@@ -96,13 +90,9 @@
 
 	<?php if ($this->is("typeObject",true)) { ?>	
 		<table class='slbcell vscell'><tr><td rowspan=2 width='5%'>
-		<?php $this->get("imgObject") ?> 
+		<?php $this->getH("PrintImageHref","OBJECT") ?> 
 		</td><td>
-		<?php $this->getH("MkA", array( 
-			'<strong>' . niftyString ($this->get("cellDName")) . '</strong>',
-			'rack',
-			$this->get("cellID")
-		  )); ?>
+		<?php $this->get("mkACell") ?> 
 		</td></tr><tr><td>
 		<?php $this->get("etags") ?> 
 		</td></tr></table>

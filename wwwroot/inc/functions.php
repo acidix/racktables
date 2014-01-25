@@ -2697,6 +2697,7 @@ function convertToBytes ($value)
 function mkA ($text, $nextpage, $bypass = NULL, $nexttab = NULL)
 {
 	global $page, $tab;
+	
 	if ($text == '')
 		throw new InvalidArgException ('text', $text);
 	if (! array_key_exists ($nextpage, $page))
@@ -2714,7 +2715,15 @@ function mkA ($text, $nextpage, $bypass = NULL, $nexttab = NULL)
 			throw new InvalidArgException ('bypass', '(NULL)');
 		$args[$page[$nextpage]['bypass']] = $bypass;
 	}
-	return '<a href="' . makeHref ($args) . '">' . $text . '</a>';
+
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+		
+	$mod = $tplm->generateModule( "MkAInMemory", true,
+									array("link" => makeHref($args), "text" => $text));
+//	return '<a href="' . makeHref ($args) . '">' . $text . '</a>';
+	return $mod->run();
 }
 
 // make "HREF" HTML attribute
