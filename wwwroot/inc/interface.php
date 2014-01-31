@@ -3547,7 +3547,7 @@ function renderSearchResults ($terms, $summary)
 	if ($nhits == 0)
 	{
 		//echo "<center><h2>Nothing found for '${terms}'</h2></center>";
-		$params = array("Terms" => ${terms} );
+		$params = array("Terms" => $terms );
 		$mod = $tplm->generateSubmodule("Payload", "NoSearchItemFound", null, true, $params);
 		return;
 	}
@@ -3569,7 +3569,7 @@ function renderSearchResults ($terms, $summary)
 	$mod = $tplm->generateSubmodule("Payload", "SearchMain");
 	$mod->setNamespace("search",true);
 	$mod->setOutput("NHITS", $nhits);
-	$mod->setOutput("TERMS", ${terms});
+	$mod->setOutput("TERMS", $terms);
 	//echo "<center><h2>${nhits} result(s) found for '${terms}'</h2></center>";
 
 	foreach ($summary as $where => $what)
@@ -3580,26 +3580,26 @@ function renderSearchResults ($terms, $summary)
 				//startPortlet ("<a href='index.php?page=depot'>Objects</a>");
 				//echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
 				//echo '<tr><th>what</th><th>why</th></tr>';
+				$allObjects = $tplm->generateSubmodule("FoundItems", "SearchAllObjects", $mod);
+
 				
 				foreach ($what as $obj)
 				{
-			
+					$foundObject = $tplm->generateSubmodule("foundObject", "SearchObject", $allObjects);
 			//		echo "<tr class=row_${order} valign=top><td>";
 					$object = spotEntity ('object', $obj['id']);
 					
 			//		echo "</td><td class=tdleft>";
+		
+					$foundObject->setOutput("objImage", renderCell($object));
+					$foundObject->setOutput("rowOrder", $order);
 
-					$foundObjects = $tplm->generateSubmodule("FoundItems", "SearchObject", $mod);
-					$foundObjects->setOutput("objImage", renderCell($object), true);
-					
-					$outArray = array();
-					
 					if (isset ($obj['by_attr']))
 					{
 						// only explain non-obvious reasons for listing
 						
 						$outArray = array();
-						$foundObjects->setOutput('ObjectsByAttr', true);
+						$foundObject->setOutput('ObjectsByAttr', true);
 
 					//	echo '<ul>';
 						foreach ($obj['by_attr'] as $attr_name)
@@ -3609,14 +3609,14 @@ function renderSearchResults ($terms, $summary)
 					//	echo '</ul>';
 
 						
-						$foundObjects->setOutput("Objects_Attr", $outArray);
+						$foundObject->setOutput("Objects_Attr", $outArray);
 					}
 
 
 					if (isset ($obj['by_sticker']))
 					{
 						$outArray = array();
-						$foundObjects->setOutput('ObjectsBySticker', true);
+						$foundObject->setOutput('ObjectsBySticker', true);
 
 						//echo '<table>';
 						$aval = getAttrValues ($obj['id']);
@@ -3629,14 +3629,14 @@ function renderSearchResults ($terms, $summary)
 							//echo "<td class=sticker>" . formatAttributeValue ($record) . "</td></tr>";
 						}
 						//echo '</table>';
-						$foundObjects->setOutput("Objects_Sticker", $outArray);
+						$foundObject->setOutput("Objects_Sticker", $outArray);
 					}
 
 
 					if (isset ($obj['by_port']))
 					{
 						$outArray = array();
-						$foundObjects->setOutput('ObjectsByPort', true);
+						$foundObject->setOutput('ObjectsByPort', true);
 
 						//echo '<table>';
 						amplifyCell ($object);
@@ -3658,55 +3658,55 @@ function renderSearchResults ($terms, $summary)
 									break; // next reason
 								}
 						//echo '</table>';
-						$foundObjects->setOutput("Objects_Port", $outArray);
+						$foundObject->setOutput("Objects_Port", $outArray);
 					}
 
 
 					if (isset ($obj['by_iface']))
 					{
 						$outArray = array();
-						$foundObjects->setOutput('ObjectsByIface', true);
+						$foundObject->setOutput('ObjectsByIface', true);
 
 					//	echo '<ul>';
 						foreach ($obj['by_iface'] as $ifname)
 							$outArray[] = array( 'Ifname' => $ifname);
 					//		echo "<li>interface ${ifname}</li>";
 					//	echo '</ul>';
-						$foundObjects->setOutput("Objects_Iface", $outArray);
+						$foundObject->setOutput("Objects_Iface", $outArray);
 					}
 
 					if (isset ($obj['by_nat']))
 					{
 						$outArray = array();
-						$foundObjects->setOutput('ObjectsByNAT', true);
+						$foundObject->setOutput('ObjectsByNAT', true);
 
 					//	echo '<ul>';
 						foreach ($obj['by_nat'] as $comment)
 							$outArray[] = array('Comment' => $comment);
 					//		echo "<li>NAT rule: ${comment}</li>";
 					//	echo '</ul>';
-						$foundObjects->setOutput("Objects_NAT", $outArray);
+						$foundObject->setOutput("Objects_NAT", $outArray);
 					}
 
 					if (isset ($obj['by_cableid']))
 					{
 						$outArray = array();
-						$foundObjects->setOutput('ObjectsByCableID', true);
+						$foundObject->setOutput('ObjectsByCableID', true);
 
 						//echo '<ul>';
 						foreach ($obj['by_cableid'] as $cableid)
 							$outArray[] = array('CableID' => $cableid);
 						//	echo "<li>link cable ID: ${cableid}</li>";
 						//echo '</ul>';
-						$foundObjects->setOutput("Objects_CableID", $outArray);
+						$foundObject->setOutput("Objects_CableID", $outArray);
 					}
-					echo "</td></tr>";
+					//echo "</td></tr>";
 					$order = $nextorder[$order];
 				}
 				//echo '</table>';
 				//finishPortlet();
-
 				break;
+
 			case 'ipv4net':
 			case 'ipv6net':
 
@@ -3730,167 +3730,268 @@ function renderSearchResults ($terms, $summary)
 				foreach ($what as $cell)
 				{
 					//$ipvOutArray['order'] = $order;
-					echo "<tr class=row_${order} valign=top><td>";
+					$ipvOutArray[] = array('rowOrder' => $order,
+										   'rendCell' => renderCell($cell));
+	//				echo "<tr class=row_${order} valign=top><td>";
 							
 //TODO: Change renderCell to  renderCell ($cell);
-					renderCell($cell);
-					echo "</td></tr>\n";
+	//				renderCell($cell);
+	//				echo "</td></tr>\n";
 					$order = $nextorder[$order];
 				}
 
-		//		$foundIPVNet->setOutputVariable("IPVNetObjs",$ipvOutArray);
+				$foundIPVNet->setOutput("IPVNetObjs",$ipvOutArray);
 	//			echo '</table>';
 	//			finishPortlet();
 				break;
 			case 'ipv4addressbydescr':
 			case 'ipv6addressbydescr':
+				$foundIPVAddress = $tplm->generateSubmodule("FoundItems", "SearchIpv6address", $mod);
+
 				if ($where == 'ipv4addressbydescr')
-					startPortlet ('IPv4 addresses');
+					$foundIPVAddress->setOutput("sectionHeader", 'IPv4 addresses');
+	//				startPortlet ('IPv4 addresses');
 				elseif ($where == 'ipv6addressbydescr')
-					startPortlet ('IPv6 addresses');
-				echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+					$foundIPVAddress->setOutput("sectionHeader", 'IPv6 addresses');
+	//				startPortlet ('IPv6 addresses');
+	//			echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
 				// FIXME: address, parent network, routers (if extended view is enabled)
-				echo '<tr><th>Address</th><th>Description</th></tr>';
+	//			echo '<tr><th>Address</th><th>Description</th></tr>';
+				$ipvOutArray = array();
 				foreach ($what as $addr)
 				{
-					echo "<tr class=row_${order}><td class=tdleft>";
+	//				echo "<tr class=row_${order}><td class=tdleft>";
 					$fmt = ip_format ($addr['ip']);
 					$parentnet = getIPAddressNetworkId ($addr['ip']);
-					if ($parentnet !== NULL)
-						echo "<a href='" . makeHref (array (
-								'page' => strlen ($addr['ip']) == 16 ? 'ipv6net' : 'ipv4net',
-								'id' => $parentnet,
-								'tab' => 'default',
-								'hl_ip' => $fmt,
-							)) . "'>${fmt}</a></td>";
-					else
-						echo "<a href='index.php?page=ipaddress&tab=default&ip=${fmt}'>${fmt}</a></td>";
-					echo "<td class=tdleft>${addr['name']}</td></tr>";
+
+					$ipvOutArray[] = array( 'rowOrder' => $order,
+											'rowLink' => makeHref (array ( 'page' => strlen ($addr['ip']) == 16 ? 'ipv6net' : 'ipv4net',
+																	'id' => $parentnet,
+																	'tab' => 'default',
+																	'hl_ip' => $fmt)),
+											'rowFmt' => $fmt,
+											'rowAddr' => $addr['name'],
+											'parentNetSet' => $parentnet !== NULL);
+	//				if ($parentnet !== NULL)
+
+	//					echo "<a href='" . makeHref (array (
+	//							'page' => strlen ($addr['ip']) == 16 ? 'ipv6net' : 'ipv4net',
+	//							'id' => $parentnet,
+	//							'tab' => 'default',
+	//							'hl_ip' => $fmt,
+	//						)) . "'>${fmt}</a></td>";
+	//				else
+	//					echo "<a href='index.php?page=ipaddress&tab=default&ip=${fmt}'>${fmt}</a></td>";
+	//				echo "<td class=tdleft>${addr['name']}</td></tr>";
 					$order = $nextorder[$order];
 				}
-				echo '</table>';
-				finishPortlet();
+	//			echo '</table>';
+	//			finishPortlet();
+				$foundIPVAddress->setOutput("IPVAddrObjs", $ipvOutArray);
+
 				break;
 			case 'ipv4rspool':
-				startPortlet ("<a href='index.php?page=ipv4slb&tab=rspools'>RS pools</a>");
-				echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$foundIPVSpool = $tplm->generateSubmodule("FoundItems", "SearchStdType", $mod);
+				$foundIPVSpool->setOutput("page", "ipv4slb&tab=rspools");
+				$foundIPVSpool->setOutput("title", "RS pools");
+				
+	//			startPortlet ("<a href='index.php?page=ipv4slb&tab=rspools'>RS pools</a>");
+	//			echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$ipvOutArray = array();
 				foreach ($what as $cell)
 				{
-					echo "<tr class=row_${order}><td class=tdleft>";
-					renderCell ($cell);
-					echo "</td></tr>";
+					$ipvOutArray[] = array( 'rowOrder' => $order,
+											'renderedCell' => renderCell ($cell));
+	//				echo "<tr class=row_${order}><td class=tdleft>";
+	//				renderCell ($cell);
+	//				echo "</td></tr>";
 					$order = $nextorder[$order];
 				}
-				echo '</table>';
-				finishPortlet();
+				$foundIPVSpool->setOutput("searchLoopObjs", $ipvOutArray);
+	//			echo '</table>';
+	//			finishPortlet();
+
 				break;
 			case 'ipvs':
-				startPortlet ("<a href='index.php?page=ipv4slb&tab=vs'>VS groups</a>");
-				echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$foundIPVS = $tplm->generateSubmodule("FoundItems", "SearchStdType", $mod);
+				$foundIPVS->setOutput("page", "ipv4slb&tab=vs");
+				$foundIPVS->setOutput("title", "VS groups");
+				
+	//			startPortlet ("<a href='index.php?page=ipv4slb&tab=vs'>VS groups</a>");
+	//			echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$ipvOutArray = array();
 				foreach ($what as $cell)
 				{
-					echo "<tr class=row_${order}><td class=tdleft>";
-					renderCell ($cell);
-					echo "</td></tr>";
+					$ipvOutArray[] = array( 'rowOrder' => $order,
+											'renderedCell' => renderCell ($cell));
+	//				echo "<tr class=row_${order}><td class=tdleft>";
+	//				renderCell ($cell);
+	//				echo "</td></tr>";
 					$order = $nextorder[$order];
 				}
-				echo '</table>';
-				finishPortlet();
+
+	//			echo '</table>';
+	//			finishPortlet();
+				$foundIPVS->setOutput("searchLoopObjs", $ipvOutArray);
 				break;
 			case 'ipv4vs':
-				startPortlet ("<a href='index.php?page=ipv4slb&tab=default'>Virtual services</a>");
-				echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$foundIP4vs = $tplm->generateSubmodule("FoundItems", "SearchStdType", $mod);
+				$foundIP4vs->setOutput("page", "ipv4slb&tab=default");
+				$foundIP4vs->setOutput("title", "Virtual services");
+
+	//			startPortlet ("<a href='index.php?page=ipv4slb&tab=default'>Virtual services</a>");
+	//			echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$ipvOutArray = array();
 				foreach ($what as $cell)
 				{
-					echo "<tr class=row_${order}><td class=tdleft>";
-					renderCell ($cell);
-					echo "</td></tr>";
+					$ipvOutArray[] = array( 'rowOrder' => $order,
+											'renderedCell' => renderCell ($cell));
+	//				echo "<tr class=row_${order}><td class=tdleft>";
+	//				renderCell ($cell);
+	//				echo "</td></tr>";
 					$order = $nextorder[$order];
 				}
-				echo '</table>';
-				finishPortlet();
+	//			echo '</table>';
+	//			finishPortlet();
+				$foundIP4vs->setOutput("searchLoopObjs", $ipvOutArray);
 				break;
 			case 'user':
-				startPortlet ("<a href='index.php?page=userlist'>Users</a>");
-				echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$foundUser = $tplm->generateSubmodule("FoundItems", "SearchStdType", $mod);
+				$foundUser->setOutput("page", "userlist");
+				$foundUser->setOutput("title", "Users");
+
+	//			startPortlet ("<a href='index.php?page=userlist'>Users</a>");
+	//			echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$userOutArray = array();
 				foreach ($what as $item)
 				{
-					echo "<tr class=row_${order}><td class=tdleft>";
-					renderCell ($item);
-					echo "</td></tr>";
+					$userOutArray[] = array( 'rowOrder' => $order,
+											'renderedCell' => renderCell ($item));
+	//				echo "<tr class=row_${order}><td class=tdleft>";
+	//				renderCell ($item);
+	//				echo "</td></tr>";
 					$order = $nextorder[$order];
 				}
-				echo '</table>';
-				finishPortlet();
+	//			echo '</table>';
+	//			finishPortlet();
+				$foundUser->setOutput("searchLoopObjs", $userOutArray);
 				break;
 			case 'file':
-				startPortlet ("<a href='index.php?page=files'>Files</a>");
-				echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$foundFile = $tplm->generateSubmodule("FoundItems", "SearchStdType", $mod);
+				$foundFile->setOutput("page", "files");
+				$foundFile->setOutput("title", "Files");
+
+	//			startPortlet ("<a href='index.php?page=files'>Files</a>");
+	//			echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$fileOutArray = array();
 				foreach ($what as $cell)
 				{
-					echo "<tr class=row_${order}><td class=tdleft>";
-					renderCell ($cell);
-					echo "</td></tr>";
+					$fileOutArray[] = array( 'rowOrder' => $order,
+											'renderedCell' => renderCell ($cell));
+	//				echo "<tr class=row_${order}><td class=tdleft>";
+	//				renderCell ($item);
+	//				echo "</td></tr>";
 					$order = $nextorder[$order];
 				}
-				echo '</table>';
-				finishPortlet();
+	//			echo '</table>';
+	//			finishPortlet();
+
+				$foundFile->setOutput("searchLoopObjs", $fileOutArray);
 				break;
 			case 'rack':
-				startPortlet ("<a href='index.php?page=rackspace'>Racks</a>");
-				echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$foundRack = $tplm->generateSubmodule("FoundItems", "SearchStdType", $mod);
+				$foundRack->setOutput("page", "rackspace");
+				$foundRack->setOutput("title", "Racks");
+
+	//			startPortlet ("<a href='index.php?page=rackspace'>Racks</a>");
+	//			echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$rackOutArray = array();
 				foreach ($what as $cell)
 				{
-					echo "<tr class=row_${order}><td class=tdleft>";
-					renderCell ($cell);
-					echo "</td></tr>";
+					$rackOutArray[] = array( 'rowOrder' => $order,
+											'renderedCell' => renderCell ($cell));
+	//				echo "<tr class=row_${order}><td class=tdleft>";
+	//				renderCell ($cell);
+	//				echo "</td></tr>";
 					$order = $nextorder[$order];
 				}
-				echo '</table>';
-				finishPortlet();
+	//			echo '</table>';
+	//			finishPortlet();
+
+				$foundRack->setOutput("searchLoopObjs", $rackOutArray);
 				break;
 			case 'row':
-				startPortlet ("<a href='index.php?page=rackspace'>Rack rows</a>");
-				echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$foundRow = $tplm->generateSubmodule("FoundItems", "SearchStdType", $mod);
+				$foundRow->setOutput("page", "rackspace");
+				$foundRow->setOutput("title", "Rack rows");
+
+	//			startPortlet ("<a href='index.php?page=rackspace'>Rack rows</a>");
+	//			echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$rowOutArray = array();
 				foreach ($what as $cell)
 				{
-					echo "<tr class=row_${order}><td class=tdleft>";
-					echo mkCellA ($cell);
-					echo "</td></tr>";
+					$rowOutArray[] = array( 'rowOrder' => $order,
+											'renderedCell' => mkCellA ($cell));
+	//				echo "<tr class=row_${order}><td class=tdleft>";
+	//				mkCellA ($cell);
+	//				echo "</td></tr>";
 					$order = $nextorder[$order];
 				}
-				echo '</table>';
-				finishPortlet();
+	//			echo '</table>';
+	//			finishPortlet();
+
+				$foundRow->setOutput("searchLoopObjs", $rowOutArray);
 				break;
 			case 'location':
-				startPortlet ("<a href='index.php?page=rackspace'>Locations</a>");
-				echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$foundLoc = $tplm->generateSubmodule("FoundItems", "SearchStdType", $mod);
+				$foundLoc->setOutput("page", "rackspace");
+				$foundLoc->setOutput("title", "Locations");
+
+	//			startPortlet ("<a href='index.php?page=rackspace'>Locations</a>");
+	//			echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$locOutArray = array();
 				foreach ($what as $cell)
 				{
-					echo "<tr class=row_${order}><td class=tdleft>";
-					renderCell ($cell);
-					echo "</td></tr>";
+					$locOutArray[] = array( 'rowOrder' => $order,
+											'renderedCell' => renderCell ($cell));
+	//				echo "<tr class=row_${order}><td class=tdleft>";
+	//				renderCell ($cell);
+	//				echo "</td></tr>";
 					$order = $nextorder[$order];
 				}
-				echo '</table>';
-				finishPortlet();
+	//			echo '</table>';
+	//			finishPortlet();
+				
+				$foundLoc->setOutput("searchLoopObjs", $locOutArray);
 				break;
 			case 'vlan':
-				startPortlet ("<a href='index.php?page=8021q'>VLANs</a>");
-				echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$foundVLan = $tplm->generateSubmodule("FoundItems", "SearchStdType", $mod);
+				$foundVLan->setOutput("page", "8021q");
+				$foundVLan->setOutput("title", "VLANs");
+
+	//			startPortlet ("<a href='index.php?page=8021q'>VLANs</a>");
+	//			echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+				$vlanOutArray = array();
 				foreach ($what as $vlan)
 				{
-					echo "<tr class=row_${order}><td class=tdleft>";
-					echo formatVLANAsHyperlink (getVLANInfo ($vlan['id'])) . "</td></tr>";
+					$vlanOutArray[] = array( 'rowOrder' => $order,
+											'renderedCell' => formatVLANAsHyperlink (getVLANInfo ($vlan['id'])) ."");
+
+	//				echo "<tr class=row_${order}><td class=tdleft>";
+	//				echo formatVLANAsHyperlink (getVLANInfo ($vlan['id'])) . "</td></tr>";
+	//				echo "</td></tr>";
 					$order = $nextorder[$order];
 				}
-				echo '</table>';
-				finishPortlet();
+	//			echo '</table>';
+	//			finishPortlet();
+				
+				$foundVLan->setOutput("searchLoopObjs", $vlanOutArray);
 				break;
 			default: // you can use that in your plugins to add some non-standard search results
-				startPortlet($where);
-				echo $what;
-				finishPortlet();
+	//			startPortlet($where);
+	//			echo $what;
+	//			finishPortlet();
+				$mod->setOutput("whatCont", $what);
 		}
 }
 
@@ -6254,7 +6355,6 @@ function renderCell ($cell, $newVersion = false)
 		$mod->setOutput("typeUser", true);
 
 		//echo "<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>";
-		$mod->setOutput("userImgSpace", printImageHREF ('USER'));
 		
 		//echo '</td><td>' . mkA ($cell['user_name'], 'user', $cell['user_id']) . '</td></tr>';
 		$mod->setOutput('UserRef', mkA ($cell['user_name'], 'user', $cell['user_id']) );
@@ -6364,6 +6464,7 @@ function renderCell ($cell, $newVersion = false)
 //		echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
 //		echo "</td></tr></table>";
 		break;
+		
 	case 'rack':
 		$mod->setOutput("typeRack", true);
 		
@@ -6372,11 +6473,12 @@ function renderCell ($cell, $newVersion = false)
 		$thumbheight = getRackImageHeight ($cell['height']);
 
 		$mod->setOutput("thumbWidth", $thumbwidth);
-		$mod->setOUtput("thumbHeight", $thumbheight);
+		$mod->setOutput("thumbHeight", $thumbheight);
 		$mod->setOutput("cellHeight", $cell['height']);
 		$mod->setOutput("cellID", $cell['id']);
 		$mod->setOutput("cellName", $cell['name']);
 		$mod->setOutput("cellComment", niftyString ($cell['comment']));
+		$mod->setOutput("mkACell",mkA ('<strong>' . niftyString ($cell['name']) . '</strong>', 'rack', $cell['id']) );
 		$mod->setOutput("etags", count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;');
 	
 
@@ -6393,10 +6495,10 @@ function renderCell ($cell, $newVersion = false)
 	case 'location':
 		$mod->setOutput("typeLocation", true);
 
-		$mod->setOutput("imgLocation", printImageHREF ('LOCATION'));
 		$mod->setOutput("cellName", $cell['name']);
 		$mod->setOutput("cellID", $cell['id']);
 		$mod->setOutput("cellComment", niftyString ($cell['comment']));
+		$mod->setOutput("mkACell",mkA ('<strong>' . niftyString ($cell['name']) . '</strong>', 'location', $cell['id']) );
 		$mod->setOutput("etags", count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;');
 
 //			echo "<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>";
@@ -6412,11 +6514,11 @@ function renderCell ($cell, $newVersion = false)
 	case 'object':
 		$mod->setOutput("typeObject", true);
 
-		$mod->setOutput("imgObject", printImageHREF ('OBJECT'));
 		$mod->setOutput("cellDName", $cell['dname']);
 		$mod->setOutput("cellID", $cell['id']);
+		$mod->setOutput("mkACell",mkA ('<strong>' . niftyString ($cell['dname']) . '</strong>', 'object', $cell['id']) );
 		$mod->setOutput("etags", count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;');
-		
+//		$mod->setOutput("testtest", mkA ('<strong>' . niftyString ($cell['name']) . '</strong>', 'object', $cell['id']));		
 //			echo "<table class='slbcell vscell'><tr><td rowspan=2 width='5%'>";
 //			printImageHREF ('OBJECT');
 //			echo '</td><td>';
@@ -6430,8 +6532,6 @@ function renderCell ($cell, $newVersion = false)
 	}
 
 	return $mod->run();
-
-
 }
 
 function renderRouterCell ($ip_bin, $ifname, $cell)

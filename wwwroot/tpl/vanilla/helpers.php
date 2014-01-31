@@ -73,6 +73,8 @@ class TemplateHelperPrintImageHref extends TemplateHelperAbstract
 		{
 			echo "";
 		}
+
+		$tag = $params[0];
 		//Implemente HREF standard parameters
 		if (count($params) < 2)
 		{
@@ -134,14 +136,22 @@ class TemplateHelperPrintImageHref extends TemplateHelperAbstract
 class TemplateHelperMkA extends TemplateHelperAbstract
 {
 	protected function generate($params){
+		if(count($params) < 2 || $params[0] == "" || $params[1] == "" ){
+			echo "";
+			return;
+		}
+
 		$text = $params[0];
+		echo var_dump($params[0]);
 		$nextpage = $params[1];
+
 		if (count($params) < 3)
 		{
 			$bypass = NULL;
 		}
 		else
 			$bypass = $params[2]; 
+
 		if (count($params) < 4)
 		{
 			$nexttab = NULL;
@@ -167,6 +177,7 @@ class TemplateHelperMkA extends TemplateHelperAbstract
 				throw new InvalidArgException ('bypass', '(NULL)');
 			$args[$page[$nextpage]['bypass']] = $bypass;
 		}
+		echo 'Debug ' . $text;
 		echo '<a href="' . makeHref ($args) . '">' . $text . '</a>';
 	}
 }
@@ -178,11 +189,12 @@ class TemplateHelperNiftyString extends TemplateHelperAbstract
 		if (count($params) == 0)
 		{
 			echo "";
+			return;
 		}
 		else
 		{
 			$string = $params[0];
-			if (count($params) >= 1)
+			if (count($params) >= 2)
 			{
 				$maxlen = $params[1];
 			}
@@ -190,7 +202,7 @@ class TemplateHelperNiftyString extends TemplateHelperAbstract
 			{
 				$maxlen = 30;
 			}
-			if (count($params) >= 2)
+			if (count($params) >= 3)
 			{
 				$usetags = $params[2];
 			}

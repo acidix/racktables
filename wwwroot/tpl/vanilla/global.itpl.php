@@ -129,6 +129,14 @@ $this->setInMemoryTemplate("RenderedIPv6NetCapacity","<div class=\"{{class}}\" i
 **/
 $this->setInMemoryTemplate("RenderNetVLAN","<div class='vlan'><strong><small>{{noun}}</small>{{link}} </strong></div>");
 
+/**
+*	MkA: 
+*	Usage: functions.php
+*
+**/
+$this->setInMemoryTemplate("MkAInMemory","<a href='{{link}}'>{{text}}</a>");
+
+
 
 
 ?>

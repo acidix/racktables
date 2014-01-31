@@ -691,7 +691,7 @@ function getRenderedIPv4NetCapacity ($range)
 
 	$div_id = $range['ip'] . '/' . $range['mask'];
 	$mod = $tplm->generateModule("RenderedIPv4NetCapacityReturn", true);
-	$mod->setOutput("textVal", text);
+	$mod->setOutput("textVal", $text);
 	$mod->setOutput("class", $class);
 	$mod->setOutput("div_id", $div_id);
 
