@@ -589,7 +589,7 @@ function renderLocationRowForEditor ($parentmod,$subtree, $level = 0)
 		if ($locationinfo['kidc'])
 			$smod->addOutput("HasSublocations", true);
 			//printImageHREF ('node-expanded-static');
-		if ($locationinfo['refcnt'] > 0 || $locationinfo['kidc'] > 0)
+		if (!($locationinfo['refcnt'] > 0 || $locationinfo['kidc'] > 0))
 			$smod->addOutput("IsDeletable",true);
 			//printImageHREF ('nodestroy');
 		//else

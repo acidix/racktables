@@ -2,7 +2,7 @@
 	<tr>
 		<td align=left style='padding-left: <?php $this->Level; ?>px'>
 		<?php if($this->is("HasSublocations")) { ?>
-			<img asrc="?module=chrome&uri=pix/node-expanded-static.png" width="16" height="16">
+			<img src="?module=chrome&uri=pix/node-expanded-static.png" width="16" height="16">
 		<?php } ?>
 		<?php if($this->is("IsDeletable")) { ?>
 			<a title="Delete location" href="?module=redirect&op=deleteLocation&location_id=<?php $this->LocationId; ?>&page=rackspace&tab=editlocations">
