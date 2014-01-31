@@ -4134,6 +4134,8 @@ function renderUserListEditor ()
 	foreach ($accounts as $account)
 	{
 		$smod = $tplm->generateSubmodule("Users", "UserListEditorRow", $mod);
+		$smod->setNamespace("userlist");
+		$smod->setLock();
 		$smod->addOutput("UserId", $account['user_id']);
 		$smod->addOutput("Name", $account['user_name']);
 		$smod->addOutput("RealName", $account['user_realname']);
