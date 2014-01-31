@@ -9,7 +9,7 @@
 						<?php $this->startLoop("CellListContent"); ?>
 							<tr class=row_<?php $this->Order; ?>>
 								<td>
-									<?php $this->CelLContent; ?>
+									<?php $this->CellContent; ?>
 								</td>
 							</tr>
 						<?php $this->endLoop(); ?>
