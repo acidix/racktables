@@ -1,6 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
 	<tr>
-		<?php $this->getH("Form","updateUser"); ?>
+		<?php //$this->getH("Form","updateUser"); ?>
 		<input type=hidden name="user_id" value="<?php $this->UserId; ?>">
 		<td>
 			<input type=text name=username value='<?php $this->Name; ?>' size=16>
