@@ -4056,10 +4056,11 @@ function renderCellList ($parent = NULL, $placeholder = "CellList", $realm = NUL
 	{
 		if ($do_amplify)
 			array_walk ($celllist, 'amplifyCell');
-		
-		$mod->setOutput("EmptyResults", "");
+		//$mod->setOutput("EmptyResults", "");
 		//startPortlet ($title . ' (' . count ($celllist) . ')');
 		//echo "<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>\n"
+		$mod->addOutput("Title", $title);
+		$mod->addOutput("CellCount", count($celllist));
 		foreach ($celllist as $cell)
 		{
 			$singleCell = array();
@@ -4075,6 +4076,9 @@ function renderCellList ($parent = NULL, $placeholder = "CellList", $realm = NUL
 		
 		//echo '</table>';
 		//finishPortlet();
+	}
+	else {
+		$mod->setOutput("EmptyResults","");
 	}
 	//echo '</td><td class=pcright>';
 	renderCellFilterPortlet ($cellfilter, $realm, $celllist, array(), $mod);
