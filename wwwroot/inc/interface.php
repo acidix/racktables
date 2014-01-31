@@ -4089,7 +4089,7 @@ function renderUserList ()
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule();
 	
-	renderCellList (NULL, 'payload', 'user', 'User accounts');
+	renderCellList (NULL, 'Payload', 'user', 'User accounts');
 }
 
 function renderUserListEditor ()
@@ -4120,7 +4120,7 @@ function renderUserListEditor ()
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule();
 	
-	$mod = $tplm->generateSubmodule("payload", "UserListEditor");
+	$mod = $tplm->generateSubmodule("Payload", "UserListEditor");
 	$mod->setNamespace("userlist",true);
 	
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
