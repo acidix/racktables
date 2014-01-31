@@ -4061,6 +4061,7 @@ function renderCellList ($parent = NULL, $placeholder = "CellList", $realm = NUL
 		//echo "<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>\n"
 		$mod->addOutput("Title", $title);
 		$mod->addOutput("CellCount", count($celllist));
+		$cells = array();
 		foreach ($celllist as $cell)
 		{
 			$singleCell = array();
@@ -4070,9 +4071,9 @@ function renderCellList ($parent = NULL, $placeholder = "CellList", $realm = NUL
 			//renderCell ($cell);
 			//echo "</td></tr>\n";
 			$order = $nextorder[$order];
-			
-			$mod->addOutput("CellListContent", $singleCell);
+			$cells[] = $singleCell;
 		}
+		$mod->addOutput("CellListContent", $cells);
 		
 		//echo '</table>';
 		//finishPortlet();
