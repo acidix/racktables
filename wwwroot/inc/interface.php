@@ -4141,7 +4141,6 @@ function renderUserListEditor ()
 		$smod->addOutput("RealName", $account['user_realname']);
 		$smod->addOutput("PwHash", $user['user_password_hash']);
 		
-		$mod->addOutput("Users", $smod);
 		//printOpFormIntro ('updateUser', array ('user_id' => $account['user_id']));
 		//echo "<tr><td><input type=text name=username value='${account['user_name']}' size=16></td>";
 		//echo "<td><input type=text name=realname value='${account['user_realname']}' size=24></td>";
