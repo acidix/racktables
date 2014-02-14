@@ -626,7 +626,7 @@ function renderLocationRowForEditor ($parentmod,$subtree, $level = 0)
 		if ($locationinfo['kidc'])
 			$smod->addOutput("HasSublocations", true);
 			//printImageHREF ('node-expanded-static');
-		if ($locationinfo['refcnt'] > 0 || $locationinfo['kidc'] > 0)
+		if (!($locationinfo['refcnt'] > 0 || $locationinfo['kidc'] > 0))
 			$smod->addOutput("IsDeletable",true);
 			//printImageHREF ('nodestroy');
 		//else
@@ -4111,10 +4111,12 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 	{
 		if ($do_amplify)
 			array_walk ($celllist, 'amplifyCell');
-		
-		$mod->setOutput("EmptyResults", "");
+		//$mod->setOutput("EmptyResults", "");
 		//startPortlet ($title . ' (' . count ($celllist) . ')');
 		//echo "<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>\n"
+		$mod->addOutput("Title", $title);
+		$mod->addOutput("CellCount", count($celllist));
+		$cells = array();
 		foreach ($celllist as $cell)
 		{
 			$singleCell = array();
@@ -4124,12 +4126,15 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 			//renderCell ($cell);
 			//echo "</td></tr>\n";
 			$order = $nextorder[$order];
-			
-			$mod->addOutput("CellListContent", $singleCell);
+			$cells[] = $singleCell;
 		}
+		$mod->addOutput("CellListContent", $cells);
 		
 		//echo '</table>';
 		//finishPortlet();
+	}
+	else {
+		$mod->setOutput("EmptyResults","");
 	}
 	//echo '</td><td class=pcright>';
 	renderCellFilterPortlet ($cellfilter, $realm, $celllist, array(), $mod);
@@ -4140,7 +4145,7 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 
 function renderUserList ()
 {
-	renderCellList ('user', 'User accounts', FALSE, NULL, NULL, 'payload');
+	renderCellList ('user', 'User accounts', FALSE, NULL, NULL, 'Payload');
 }
 
 function renderUserListEditor ()
@@ -4171,7 +4176,7 @@ function renderUserListEditor ()
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule();
 	
-	$mod = $tplm->generateSubmodule("payload", "UserListEditor");
+	$mod = $tplm->generateSubmodule("Payload", "UserListEditor");
 	$mod->setNamespace("userlist",true);
 	
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
@@ -4185,12 +4190,13 @@ function renderUserListEditor ()
 	foreach ($accounts as $account)
 	{
 		$smod = $tplm->generateSubmodule("Users", "UserListEditorRow", $mod);
+		$smod->setNamespace("userlist");
+		$smod->setLock();
 		$smod->addOutput("UserId", $account['user_id']);
 		$smod->addOutput("Name", $account['user_name']);
 		$smod->addOutput("RealName", $account['user_realname']);
 		$smod->addOutput("PwHash", $user['user_password_hash']);
 		
-		$mod->addOutput("Users", $smod);
 		//printOpFormIntro ('updateUser', array ('user_id' => $account['user_id']));
 		//echo "<tr><td><input type=text name=username value='${account['user_name']}' size=16></td>";
 		//echo "<td><input type=text name=realname value='${account['user_realname']}' size=24></td>";
