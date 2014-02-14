@@ -21,13 +21,18 @@ function renderSLBDefConfig()
 	finishPortlet();
 }
 
-function renderSLBEntityCell ($cell, $highlighted = FALSE)
+function renderSLBEntityCell ($cell, $highlighted = FALSE, TemplateModule $parent = null)
 {
 	$tplm = TemplateManager::getInstance();
 	//TODO Remove after change to config
-	$tplm->setTemplate("vanilla");
-	
-	$mod = $tplm->generateModule("RenderSLBEntityCell");
+	if($parent==null){
+		$tplm->setTemplate("vanilla");
+		$mod = $tplm->generateModule("RenderSLBEntityCell",  false);
+	}
+	else
+		$mod = $tplm->generateSubmodule("RenderedSLBEntityCell", "RenderSLBEntityCell", $parent);
+
+
 	$mod->setNamespace("slb_interface");
 
 	$class = "slbcell realm-${cell['realm']} id-${cell['id']}";
@@ -97,7 +102,9 @@ function renderSLBEntityCell ($cell, $highlighted = FALSE)
 	$mod->setOutput("cellETags", count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;');
 //	echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
 //	echo "</td></tr></table>";
-	return $mod->run();
+
+	if($parent==null)
+		return $mod->run();
 }
 
 function renderSLBEditTab ($entity_id)
@@ -175,60 +182,93 @@ function renderNewSLBItemForm ($realm1, $realm2)
 }
 
 // supports object, ipv4vs, ipv4rspool, ipaddress cell types
-function renderSLBTriplets ($cell)
+function renderSLBTriplets ($cell, TemplateModule $parent = null)
 {
 	$is_cell_ip = (isset ($cell['ip_bin']) && isset ($cell['vslist']));
 	$additional_js_params = $is_cell_ip ? '' : ", {'" . $cell['realm'] . "': " . $cell['id'] . '}';
 	$triplets = SLBTriplet::getTriplets ($cell);
 	if (count ($triplets))
 	{
+		$tplm = TemplateManager::getInstance();
+		if($parent==null)
+			$tplm->setTemplate("vanilla");
+
+		if($parent==null)	
+			$mod = $tplm->generateModule("RenderSLBTriplets",  false);
+		else
+			$mod = $tplm->generateSubmodule("RenderedSLBTriplets", "RenderSLBTriplets", $parent);
+		$mod->setNamespace("slb-interface");
+
 		$cells = array();
 		foreach ($triplets[0]->display_cells as $field)
 			$cells[] = $triplets[0]->$field;
 
 		// render table header
-		startPortlet ('VS instances (' . count ($triplets) . ')');
-		echo "<table cellspacing=0 cellpadding=5 align=center class=widetable><tr>";
+		$mod->setOutput("countTriplets", count ($triplets));
+			 
+		//startPortlet ('VS instances (' . count ($triplets) . ')');
+		//echo "<table cellspacing=0 cellpadding=5 align=center class=widetable><tr>";
 		$headers = array
 		(
 			'object' => 'LB',
 			'ipv4vs' => 'VS',
 			'ipv4rspool' => 'RS pool',
 		);
+		$cellHeaderArray = array();
 		foreach ($cells as $slb_cell)
-			echo '<th>' . $headers[$slb_cell['realm']] . '</th>';
+			$cellHeaderArray[] = array("header" => $headers[$slb_cell['realm']]);
+//			echo '<th>' . $headers[$slb_cell['realm']] . '</th>';
+		$mod->setOutput("cellRealmHeaders", $cellHeaderArray);
+
+		$cellHeaderArray = array();
 		foreach (array ('VS config', 'RS config', 'Prio') as $header)
-			echo "<th>$header</th>";
-		echo "</tr>";
+			$cellHeaderArray[] = array("header" => $header);
+//			echo "<th>$header</th>";
+//		echo "</tr>";
+		$mod->setOutput("cellHeaders", $cellHeaderArray);
 
 		// render table rows
 		global $nextorder;
 		$order = 'odd';
+		$tripletsOutArray = array();
 		foreach ($triplets as $slb)
 		{
+			$tripletArray = array();
 			$cells = array();
 			foreach ($slb->display_cells as $field)
 				$cells[] = $slb->$field;
-			echo "<tr valign=top class='row_${order} triplet-row'>";
+			$tripletArray["order"] = $order;
+//			echo "<tr valign=top class='row_${order} triplet-row'>";
+			$cellsOutputArray = array();
 			foreach ($cells as $slb_cell)
 			{
-				echo "<td class=tdleft>";
+//				echo "<td class=tdleft>";
 				$highlighted = $is_cell_ip &&
 				(
 					$slb_cell['realm'] == 'ipv4vs' && $slb->vs['vip_bin'] == $cell['ip_bin'] ||
 					$slb_cell['realm'] == 'ipv4rspool' && $slb->vs['vip_bin'] != $cell['ip_bin']
 				);
-				renderSLBEntityCell ($slb_cell, $highlighted);
-				echo "</td>";
+				$cellsOutputArray[] = array("renderedEntityCell" => renderSLBEntityCell ($slb_cell, $highlighted));
+//				renderSLBEntityCell ($slb_cell, $highlighted);
+//				echo "</td>";
 			}
-			echo "<td class=slbconf>" . htmlspecialchars ($slb->slb['vsconfig']) . "</td>";
-			echo "<td class=slbconf>" . htmlspecialchars ($slb->slb['rsconfig']) . "</td>";
-			echo "<td class=slbconf>" . htmlspecialchars ($slb->slb['prio']) . "</td>";
-			echo "</tr>\n";
+			$tripletArray["cellsOutputArray"] = $cellsOutputArray;
+			array_merge($tripletArray, array("vsconfig" => htmlspecialchars ($slb->slb['vsconfig']),
+											 "rsconfig" => htmlspecialchars ($slb->slb['rsconfig']),
+											 "prio" => htmlspecialchars ($slb->slb['prio'])));
+//			echo "<td class=slbconf>" . htmlspecialchars ($slb->slb['vsconfig']) . "</td>";
+//			echo "<td class=slbconf>" . htmlspecialchars ($slb->slb['rsconfig']) . "</td>";
+//			echo "<td class=slbconf>" . htmlspecialchars ($slb->slb['prio']) . "</td>";
+//			echo "</tr>\n";
 			$order = $nextorder[$order];
+			$tripletsOutArray[] = $tripletArray;
 		}
-		echo "</table>\n";
-		finishPortlet();
+		$mod->setOutput("tripletsOutArray", $tripletsOutArray);
+			 
+//		echo "</table>\n";
+//		finishPortlet();
+		if($parent==null)
+			return $mod->run();
 	}
 }
 
@@ -243,16 +283,27 @@ function renderSLBTripletsEdit ($cell)
 	$triplets = SLBTriplet::getTriplets ($cell);
 	if (count ($triplets))
 	{
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");
+		$tplm->createMainModule("index");
+		
+		$mod = $tplm->generateSubmodule("Payload","RenderSLBTripletsEdit");
+		$mod->setNamespace("slb_interface");
+
 		$cells = array();
 		foreach ($triplets[0]->display_cells as $field)
 			$cells[] = $triplets[0]->$field;
 
-		startPortlet ('Manage existing (' . count ($triplets) . ')');
-		echo "<table cellspacing=0 cellpadding=5 align=center class=cooltable>\n";
+		$mod->setOutput("tripletsCount", count ($triplets));
+			 
+//		startPortlet ('Manage existing (' . count ($triplets) . ')');
+//		echo "<table cellspacing=0 cellpadding=5 align=center class=cooltable>\n";
 		global $nextorder;
 		$order = 'odd';
+		$allTripletsOutArray = array();
 		foreach ($triplets as $slb)
 		{
+			$tripletOut = array();
 			$cells = array();
 			foreach ($slb->display_cells as $field)
 				$cells[] = $slb->$field;
@@ -264,7 +315,17 @@ function renderSLBTripletsEdit ($cell)
 			);
 			$del_params = $ids;
 			$del_params['op'] = 'delLB';
-			printOpFormIntro ('updLB', $ids);
+			
+			$tripletOut['ids'] = $ids;
+			$tripletOut['order'] = $order;
+			$tripletOut['del_para'] = $del_params;
+			$tripletOut['entitiyCell1'] = renderSLBEntityCell ($cells[0]);
+			$tripletOut['entitiyCell2'] = renderSLBEntityCell ($cells[1]);
+			$tripletOut['vsconfig'] = htmlspecialchars ($slb->slb['vsconfig']);
+			$tripletOut['rsconfig'] = htmlspecialchars ($slb->slb['rsconfig']);
+			$tripletOut['prio'] = htmlspecialchars ($slb->slb['prio']);
+
+			//printOpFormIntro ('updLB', $ids);
 			echo "<tr valign=top class=row_${order}><td rowspan=2 class=tdright valign=middle>";
 			echo getOpLink ($del_params, '', 'DELETE', 'Unconfigure');
 			echo "</td><td class=tdleft valign=bottom>";
@@ -280,9 +341,11 @@ function renderSLBTripletsEdit ($cell)
 			echo "<div style='float:left; margin-top:10px'><label><input name=prio type=text size=10 value=\"" . htmlspecialchars ($slb->slb['prio']) . "\"> &larr; Priority</label></div>";
 			echo '</td></tr></form>';
 			$order = $nextorder[$order];
+			$allTripletsOutArray[] = $tripletOut;
 		}
-		echo "</table>\n";
-		finishPortlet();
+		$mod->setOutput("allTripletsOutput",$allTripletsOutArray);
+//		echo "</table>\n";
+//		finishPortlet();
 	}
 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
@@ -298,13 +361,23 @@ function renderLBList ()
 }
 
 function renderRSPool ($pool_id)
-{
+{	
 	$poolInfo = spotEntity ('ipv4rspool', $pool_id);
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
 
-	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
-	if (strlen ($poolInfo['name']))
-		echo "<tr><td colspan=2 align=center><h1>{$poolInfo['name']}</h1></td></tr>";
-	echo "<tr><td class=pcleft>\n";
+	$mod = $tplm->generateSubmodule("Payload","RenderRSPool");
+	$mod->setNamespace("slb-interface");
+
+// 	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
+	if (strlen ($poolInfo['name'])){
+		$mod->setOutput("isPoolInfo", true);
+		$mod->setOutput("poolInfo", $poolInfo['name']);
+	}
+//	echo "<tr><td colspan=2 align=center><h1>{$poolInfo['name']}</h1></td></tr>";
+//	echo "<tr><td class=pcleft>\n";
 
 	$summary = array();
 	$summary['Pool name'] = $poolInfo['name'];
@@ -313,15 +386,21 @@ function renderRSPool ($pool_id)
 	$summary['tags'] = '';
 	$summary['VS configuration'] = '<div class="dashed slbconf">' . htmlspecialchars ($poolInfo['vsconfig']) . '</div>';
 	$summary['RS configuration'] = '<div class="dashed slbconf">' . htmlspecialchars ($poolInfo['rsconfig']) . '</div>';
-	renderEntitySummary ($poolInfo, 'Summary', $summary);
+//	renderEntitySummary ($poolInfo, 'Summary', $summary);
+	$mod->setOutput("renderedEntity", renderEntitySummary ($poolInfo, 'Summary', $summary));
+		 
 	callHook ('portletRSPoolSrv', $pool_id);
 
-	echo "</td><td class=pcright>\n";
-	renderSLBTriplets2 ($poolInfo);
-	renderSLBTriplets ($poolInfo);
-	echo "</td></tr><tr><td colspan=2>\n";
-	renderFilesPortlet ('ipv4rspool', $pool_id);
-	echo "</td></tr></table>\n";
+//	echo "</td><td class=pcright>\n";
+	$mod->setOutput("renderedSLBTrip2", renderSLBTriplets2 ($poolInfo));
+	$mod->setOutput("renderedSLBTrip", renderSLBTriplets ($poolInfo));	
+	$mod->setOutput("renderedFiles", renderFilesPortlet ('ipv4rspool', $pool_id)); 
+//	renderSLBTriplets2 ($poolInfo);
+//	renderSLBTriplets ($poolInfo);
+//	echo "</td></tr><tr><td colspan=2>\n";
+//	renderFilesPortlet ('ipv4rspool', $pool_id);
+//	echo "</td></tr></table>\n";
+	
 }
 
 function portletRSPoolSrv ($pool_id)
@@ -397,73 +476,127 @@ function prepareRealServersTable ($rs_list)
 		);
 }
 
-function renderEditRSList ($rs_list)
+function renderEditRSList ($rs_list, TemplateModule $parent = null)
 {
 	global $nextorder;
+	$tplm = TemplateManager::getInstance();
+	if($parent==null)
+		$tplm->setTemplate("vanilla");
 
-	echo "<table cellspacing=0 cellpadding=5 align=center class=cooltable>\n";
-	echo "<tr><th>&nbsp;</th><th>Address</th><th>Port</th><th>Comment</th><th>in service</th><th>configuration</th><th>&nbsp;</th></tr>\n";
+	if($parent==null)	
+		$mod = $tplm->generateModule("RenderEditRSList",  false);
+	else
+		$mod = $tplm->generateSubmodule("RenderedEditRSList", "RenderEditRSList", $parent);
+	$mod->setNamespace("slb_interface");
+
+//	echo "<table cellspacing=0 cellpadding=5 align=center class=cooltable>\n";
+//	echo "<tr><th>&nbsp;</th><th>Address</th><th>Port</th><th>Comment</th><th>in service</th><th>configuration</th><th>&nbsp;</th></tr>\n";
 	// new RS form
-	printOpFormIntro ('addRS');
-	echo "<tr class=row_odd valign=top><td>";
-	printImageHREF ('add', 'Add new real server');
-	echo "</td><td><input type=text name=rsip></td>";
+//	printOpFormIntro ('addRS');
+//	echo "<tr class=row_odd valign=top><td>";
+//	printImageHREF ('add', 'Add new real server');
+//	echo "</td><td><input type=text name=rsip></td>";
 	$default_port = getConfigVar ('DEFAULT_SLB_RS_PORT');
 	if ($default_port == 0)
 		$default_port = '';
-	echo "<td><input type=text name=rsport size=5 value='$default_port'></td>";
-	echo "<td><input type=text name=comment size=15></td>";
+
+	$mod->setOutput("default_port", $default_port);
+//	echo "<td><input type=text name=rsport size=5 value='$default_port'></td>";
+//	echo "<td><input type=text name=comment size=15></td>";
 	$checked = (getConfigVar ('DEFAULT_IPV4_RS_INSERVICE') == 'yes') ? 'checked' : '';
-	echo "<td><input type=checkbox name=inservice $checked></td>";
-	echo "<td><textarea name=rsconfig></textarea></td><td>";
-	printImageHREF ('ADD', 'Add new real server', TRUE);
-	echo "</td></tr></form>\n";
+	$mod->setOutput("checked", $checked);	 
+//	echo "<td><input type=checkbox name=inservice $checked></td>";
+//	echo "<td><textarea name=rsconfig></textarea></td><td>";
+//	printImageHREF ('ADD', 'Add new real server', TRUE);
+//	echo "</td></tr></form>\n";
 
 	$order = 'even';
+	$rs_outTable = array();
 	foreach ($rs_list as $rsid => $rs)
 	{
-		printOpFormIntro ('updRS', array ('rs_id' => $rsid));
-		echo "<tr valign=top class=row_${order}><td>";
-		echo getOpLink (array('op'=>'delRS', 'id'=>$rsid), '', 'delete', 'Delete this real server');
-		echo "</td><td><input type=text name=rsip value='${rs['rsip']}'></td>";
-		echo "<td><input type=text name=rsport size=5 value='${rs['rsport']}'></td>";
-		echo "<td><input type=text name=comment size=15 value='${rs['comment']}'></td>";
+		$rs_element = array();
+		$rs_element['rs_id'] = $rsid;
+		$rs_element['order'] = $order;
+		$rs_element['rs_rsip'] = $rs['rsip'];
+		$rs_element['rs_rsport'] = $rs['rsport'];
+		$rs_element['rs_comment'] = $rs['comment'];
+		$rs_element['rs_rsconfig'] = $rs['rsconfig'];
+				
+//		printOpFormIntro ('updRS', array ('rs_id' => $rsid));
+//		echo "<tr valign=top class=row_${order}><td>";
+//		echo getOpLink (array('op'=>'delRS', 'id'=>$rsid), '', 'delete', 'Delete this real server');
+//		echo "</td><td><input type=text name=rsip value='${rs['rsip']}'></td>";
+//		echo "<td><input type=text name=rsport size=5 value='${rs['rsport']}'></td>";
+//		echo "<td><input type=text name=comment size=15 value='${rs['comment']}'></td>";
 		$checked = $rs['inservice'] == 'yes' ? 'checked' : '';
-		echo "<td><input type=checkbox name=inservice $checked></td>";
-		echo "<td><textarea name=rsconfig>${rs['rsconfig']}</textarea></td><td>";
-		printImageHREF ('SAVE', 'Save changes', TRUE);
-		echo "</td></tr></form>\n";
+		$rs_element['checked'] = $checked;
+//		echo "<td><input type=checkbox name=inservice $checked></td>";
+//		echo "<td><textarea name=rsconfig>${rs['rsconfig']}</textarea></td><td>";
+//		printImageHREF ('SAVE', 'Save changes', TRUE);
+//		echo "</td></tr></form>\n";
 		$order = $nextorder[$order];
+		$rs_outTable[] = $rs_element;
 	}
-	echo "</table>\n";
+//	echo "</table>\n";
+	$mod->setOutput("rs_outTable", $rs_outTable); 
+
+	if($parent==null)
+		return $mod->run();
 }
 
-function portletRSPoolAddMany ($pool_id)
+function portletRSPoolAddMany ($pool_id, TemplateModule $parent = null)
 {
-	startPortlet ('Add many');
-	printOpFormIntro ('addMany');
-	echo "<table border=0 align=center>\n<tr><td>";
-	if (getConfigVar ('DEFAULT_IPV4_RS_INSERVICE') == 'yes')
-		printImageHREF ('inservice', 'in service');
+	$tplm = TemplateManager::getInstance();
+	if($parent==null)
+		$tplm->setTemplate("vanilla");
+
+	if($parent==null)	
+		$mod = $tplm->generateModule("PortletRSPoolAddMany",  false);
 	else
-		printImageHREF ('notinservice', 'NOT in service');
-	echo "</td><td>Format: ";
+		$mod = $tplm->generateSubmodule("PortletRSPoolAddMany", "PortletRSPoolAddMany", $parent);
+	
+	$mod->setNamespace("slb_interface");
+
+
+//	startPortlet ('Add many');
+//	printOpFormIntro ('addMany');
+//	echo "<table border=0 align=center>\n<tr><td>";
+	if (getConfigVar ('DEFAULT_IPV4_RS_INSERVICE') == 'yes')
+		$mod->setOutput("isGetConfig", true);
+			 
+//		printImageHREF ('inservice', 'in service');
+//	else
+//		printImageHREF ('notinservice', 'NOT in service');
+//	echo "</td><td>Format: ";
 	$formats = callHook ('getBulkRealsFormats');
-	printSelect ($formats, array ('name' => 'format'));
-	echo "</td><td><input type=submit value=Parse></td></tr>\n";
-	echo "<tr><td colspan=3><textarea name=rawtext cols=100 rows=25></textarea></td></tr>\n";
-	echo "</table>\n";
-	finishPortlet();
+	$mod->setOutput("printedSelect", printSelect ($formats, array ('name' => 'format'))); 
+//	printSelect ($formats, array ('name' => 'format'));
+//	echo "</td><td><input type=submit value=Parse></td></tr>\n";
+//	echo "<tr><td colspan=3><textarea name=rawtext cols=100 rows=25></textarea></td></tr>\n";
+//	echo "</table>\n";
+//	finishPortlet();
+	if($parent==null)
+		return $mod->run();
 }
 
 function renderRSPoolServerForm ($pool_id)
 {
 	$poolInfo = spotEntity ('ipv4rspool', $pool_id);
-	startPortlet ("Manage RS list (${poolInfo['rscount']})");
-	renderEditRSList (getRSListInPool ($pool_id));
-	finishPortlet();
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
 
-	portletRSPoolAddMany ($pool_id);
+	$mod = $tplm->generateSubmodule("Payload","RenderRSPoolServerForm");
+	$mod->setNamespace("slb_interface");
+	$mod->setOutput("poolinfoRSCount", $poolinfo['rscount']);
+	$mod->setOutput("renderedRSList", renderEditRSList (getRSListInPool ($pool_id)) );	 
+//	startPortlet ("Manage RS list (${poolInfo['rscount']})");
+//	renderEditRSList (getRSListInPool ($pool_id));
+//	finishPortlet();
+
+//	portletRSPoolAddMany ($pool_id);
+	$mod->setOutput("renderedAddManyPortlet", portletRSPoolAddMany ($pool_id));
+
 }
 
 function getBulkRealsFormats()
@@ -593,28 +726,44 @@ function renderNewVSForm ()
 function renderEditRSPool ($pool_id)
 {
 	$poolinfo = spotEntity ('ipv4rspool', $pool_id);
-	printOpFormIntro ('updIPv4RSP');
-	echo '<table border=0 align=center>';
-	echo "<tr><th class=tdright>name:</th><td class=tdleft><input type=text name=name value='${poolinfo['name']}'></td></tr>\n";
-	echo "<tr><th class=tdright>VS config:</th><td class=tdleft><textarea name=vsconfig rows=20 cols=80>${poolinfo['vsconfig']}</textarea></td></tr>\n";
-	echo "<tr><th class=tdright>RS config:</th><td class=tdleft><textarea name=rsconfig rows=20 cols=80>${poolinfo['rsconfig']}</textarea></td></tr>\n";
-	echo "<tr><th class=submit colspan=2>";
-	printImageHREF ('SAVE', 'Save changes', TRUE);
-	echo "</td></tr>\n";
-	echo "</table></form>\n";
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload", "RenderEditRSPool");
+	$mod->setNamespace("slb_interface");
+
+	$mod->setOutput("poolinfoName", $poolinfo['name']);
+	$mod->setOutput("poolinfoVSConfig", $poolinfo['vsconfig']);
+	$mod->setOutput("poolinfoRSConfig", $poolinfo['rsconfig']);
+			 	 		 
+//	printOpFormIntro ('updIPv4RSP');
+//	echo '<table border=0 align=center>';
+//	echo "<tr><th class=tdright>name:</th><td class=tdleft><input type=text name=name value='${poolinfo['name']}'></td></tr>\n";
+//	echo "<tr><th class=tdright>VS config:</th><td class=tdleft><textarea name=vsconfig rows=20 cols=80>${poolinfo['vsconfig']}</textarea></td></tr>\n";
+//	echo "<tr><th class=tdright>RS config:</th><td class=tdleft><textarea name=rsconfig rows=20 cols=80>${poolinfo['rsconfig']}</textarea></td></tr>\n";
+//	echo "<tr><th class=submit colspan=2>";
+//	printImageHREF ('SAVE', 'Save changes', TRUE);
+//	echo "</td></tr>\n";
+//	echo "</table></form>\n";
 
 	// clone link
-	echo '<p class="centered">';
-	echo getOpLink (array	('op' => 'cloneIPv4RSP', 'pool_id' => $poolinfo['id']), 'Clone RS pool', 'copy');
-	echo '</p>';
+//	echo '<p class="centered">';
+	$mod->setOutput("poolinfoID", $poolinfo['id']);
+//	echo getOpLink (array	('op' => 'cloneIPv4RSP', 'pool_id' => $poolinfo['id']), 'Clone RS pool', 'copy'	);
+//	echo '</p>';
 
 	// delete link
-	echo '<p class="centered">';
-	if ($poolinfo['refcnt'] > 0)
-		echo getOpLink (NULL, 'Delete RS pool', 'nodestroy', "Could not delete: there are ${poolinfo['refcnt']} LB links");
-	else
-		echo getOpLink (array	('op' => 'del', 'id' => $poolinfo['id']), 'Delete RS pool', 'destroy');
-	echo '</p>';
+//	echo '<p class="centered">';
+	if ($poolinfo['refcnt'] > 0){
+//		echo getOpLink (NULL, 'Delete RS pool', 'nodestroy', "Could not delete: there are ${poolinfo['refcnt']} LB links");
+		$mod->setOutput("isPoolinfoRefcnt", true);
+		$mod->setOutput("poolinfoRefcnt", $poolinfo['refcnt']);
+	}
+//	else
+//		echo getOpLink (array	('op' => 'del', 'id' => $poolinfo['id']), 'Delete RS pool', 'destroy');
+//	echo '</p>';
+//	return $mod->run();
 }
 
 function renderEditVService ($vsid)
