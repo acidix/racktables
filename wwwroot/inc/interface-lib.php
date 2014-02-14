@@ -916,7 +916,7 @@ function modifyEntitySummary ($cell, $summary)
 // 'tags' key has a special meaning: instead of value, the result of printTagTRs call is appended to output
 // if the value is a single-element array, its value rendered as-is instead of <tr> tag and all its contents.
 // if the value is an array, its first 2 items are treated as left and right contents of row, no colon is appended. Used to enable non-unique titles
-function renderEntitySummary ($cell, $title, $values = array())
+function renderEntitySummary ($cell, $title, $values = array(), $parent = null, $placeholder = "")
 {
 	global $page_by_realm;
 	// allow plugins to override summary table
@@ -925,8 +925,10 @@ function renderEntitySummary ($cell, $title, $values = array())
 	//Initalize TemplateManager
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");
-	$mod = $tplm->generateModule("RenderEntitySummary", false);
-
+	if($parent == null)
+		$mod = $tplm->generateModule("RenderEntitySummary");
+	else
+		$mod = $tplm->generateSubmodule($placeholder, "RenderEntitySummary", $parent);
 
 	//startPortlet ($title);
 	$mod->setOutput("title", $title);
@@ -982,7 +984,9 @@ function renderEntitySummary ($cell, $title, $values = array())
 		$loopArray[] = $lineArray;
 	}
 	$mod->setOutput("loopArray", $loopArray);
-	return $mod->run();
+	
+	if($parent == null)
+		return $mod->run();
 	//echo "</table>\n";
 	//finishPortlet();
 }

@@ -147,36 +147,38 @@ function renderIndexItem ($ypageno)
 
 }
 
-function renderIndex ()
+function renderIndex()
 {
 	global $indexlayout;
-/*	
+
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule();
 
 	$mod = $tplm->generateSubmodule("Payload", "RenderIndex");
-	//$mod->setNamespace("index",true);
+	$mod->setNamespace("index");
 
 	$indexOutput = array();
 	foreach ($indexlayout as $row)
-	{
-		$rowMod = $tplm->generateSubmodule("renderedRows","RenderIndexRow", $mod);
+	{	
+		//ToDo: Findout why it's a problem to 
+		$rowMod = $tplm->generateSubmodule("renderedRows","index/RenderIndexRow", $mod);
 		
 		$rowsCont = array();
 		foreach ($row as $column)
 			if ($column === NULL)
 				$rowsCont[] = array("isNull" => true);
 			else{
-				$rowsCont[] = array("isNull" => false, "permitted" =>permitted ($ypageno), "href" => makeHref (array ('page' => $ypageno)),
-							  "pageName" =>getPageName ($ypageno), "image" =>getImageHREF ($ypageno));
+				//$rowsCont[] = array("isNull" => false);
+				$rowsCont[] = array("isNull" => false, "permitted" => (!permitted ($column)), "href" => makeHref (array ('page' => $column)),
+							  "pageName" =>getPageName ($column), "image" =>getImageHREF ($column));
 			}
-		$rowMod->setOutput("singleRowCont ", $rowsCont);
+		$rowMod->setOutput("singleRowCont", $rowsCont);
 
 		$indexOutput[] = array("renderedRows" => $rowMod);
 	}
 	$mod->setOutput("indexArrayOutput", $indexOutput);
-*/
+/*
 ?>
 <table border=0 cellpadding=0 cellspacing=0 width='100%'>
 	<tr>
@@ -200,7 +202,7 @@ foreach ($indexlayout as $row)
 		</td>
 	</tr>
 </table>
-<?php
+<?php */
 
 }
 
@@ -1423,6 +1425,8 @@ function renderObject ($object_id)
 	global $nextorder, $virtual_obj_types;
 	$info = spotEntity ('object', $object_id);
 	amplifyCell ($info);
+
+	
 	// Main layout starts.
 	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
 	echo "<tr><td colspan=2 align=center><h1>${info['dname']}</h1></td></tr>\n";
@@ -2366,7 +2370,7 @@ function renderDepot ()
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule();
 	
-	$mod = $tplm->generateSubmodule("payload", "Depot");
+	$mod = $tplm->generateSubmodule("Payload", "Depot");
 	$mod->setNamespace("depot",true);
 	
 	//echo "<table border=0 class=objectview>\n";
@@ -2382,9 +2386,11 @@ function renderDepot ()
 		// 2st attempt: do not render all fetched objects if rendering empty result is enabled
 		if (! renderEmptyResults ( $cellfilter, 'objects', count($objects), $mod, 'Content'))
 		{
-			startPortlet ('Objects (' . count ($objects) . ')');
-			echo '<br><br><table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
-			echo '<tr><th>Common name</th><th>Visible label</th><th>Asset tag</th><th>Row/Rack or Container</th></tr>';
+			$mod->setOutput("countObjs", count($objects));
+				 
+		//	startPortlet ('Objects (' . count ($objects) . ')');
+		//	echo '<br><br><table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+		//	echo '<tr><th>Common name</th><th>Visible label</th><th>Asset tag</th><th>Row/Rack or Container</th></tr>';
 			$order = 'odd';
 			# gather IDs of all objects and fetch rackspace info in one pass
 			$idlist = array();
@@ -2392,13 +2398,23 @@ function renderDepot ()
 				$idlist[] = $obj['id'];
 			$mountinfo = getMountInfo ($idlist);
 			$containerinfo = getContainerInfo ($idlist);
+
+			$objectsOutArray = array();
 			foreach ($objects as $obj)
 			{
-				echo "<tr class='row_${order} tdleft' valign=top><td>" . mkA ("<strong>${obj['dname']}</strong>", 'object', $obj['id']);
-				if (count ($obj['etags']))
-					echo '<br><small>' . serializeTags ($obj['etags'], makeHref(array('page'=>$pageno, 'tab'=>'default')) . '&') . '</small>';
-				echo "</td><td>${obj['label']}</td>";
-				echo "<td>${obj['asset_no']}</td>";
+				$singleObj = array("order" => $order, "mka" => mkA ("<strong>${obj['dname']}</strong>", 'object', $obj['id']) );
+
+			//	echo "<tr class='row_${order} tdleft' valign=top><td>" . mkA ("<strong>${obj['dname']}</strong>", 'object', $obj['id']);
+				if (count ($obj['etags'])){
+				//		echo '<br><small>' . serializeTags ($obj['etags'], makeHref(array('page'=>$pageno, 'tab'=>'default')) . '&') . '</small>';	
+					$singleObj["isEtags"] = true;
+					$singleObj["tags"] = serializeTags ($obj['etags'], makeHref(array('page'=>$pageno, 'tab'=>'default')) . '&');
+				}
+
+				$singleObj['label']	= $obj['label'];
+				$singleObj['asset_no']	= $obj['asset_no'];
+			//	echo "</td><td>${obj['label']}</td>";
+			//	echo "<td>${obj['asset_no']}</td>";
 				$places = array();
 				if (array_key_exists ($obj['id'], $containerinfo))
 					foreach ($containerinfo[$obj['id']] as $ci)
@@ -2408,24 +2424,29 @@ function renderDepot ()
 						$places[] = mkA ($mi['row_name'], 'row', $mi['row_id']) . '/' . mkA ($mi['rack_name'], 'rack', $mi['rack_id']);
 				if (! count ($places))
 					$places[] = 'Unmounted';
-				echo "<td>" . implode (', ', $places) . '</td>';
-				echo '</tr>';
+				$singleObj["places"] = implode (', ', $places);
+			//	echo "<td>" . implode (', ', $places) . '</td>';
+			//	echo '</tr>';
 				$order = $nextorder[$order];
+				$objectsOutArray[] = $singleObj;
 			}
-			echo '</table>';
-			finishPortlet();
+
+			$mod->setOutput("allObjects", $objectsOutArray);
+				 
+		//	echo '</table>';
+		//	finishPortlet();
 		}
 	}
 
-	echo "</td><td class=pcright width='25%'>";
-
+//	echo "</td><td class=pcright width='25%'>";
+	//TODO Check not working
 	renderCellFilterPortlet ($cellfilter, 'object', $objects, array(), $mod);
-	echo "</td></tr></table>\n";
+//	echo "</td></tr></table>\n";
 }
 
 // This function returns TRUE if the result set is too big to be rendered, and no filter is set.
 // In this case it renders the describing message instead.
-function renderEmptyResults($cellfilter, $entities_name, $count = NULL, $pmod = null, $placeholder = null)
+function renderEmptyResults($cellfilter, $entities_name, $count = NULL, $pmod = null, $placeholder = '')
 {
 	if (!$cellfilter['is_empty'])
 		return FALSE;
@@ -3517,53 +3538,75 @@ function renderAddMultipleObjectsForm ()
 	$max = getConfigVar ('MASSCOUNT');
 	$tabindex = 100;
 
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+
+	$mod = $tplm->generateModule("Payload","AddMultipleObjects");
+	$mod->setNamespace("depot");
+
 	// exclude location-related object types
 	global $location_obj_types;
 	foreach ($typelist['other'] as $key => $value)
 		if ($key > 0 && in_array($key, $location_obj_types))
 			unset($typelist['other'][$key]);
 
-	startPortlet ('Distinct types, same tags');
-	printOpFormIntro ('addObjects');
-	echo '<table border=0 align=center>';
-	echo "<tr><th>Object type</th><th>Common name</th><th>Visible label</th>";
-	echo "<th>Asset tag</th><th>Tags</th></tr>\n";
+//	startPortlet ('Distinct types, same tags');
+	$mod->setOutput("formIntro", printOpFormIntro ('addObjects'));
+//	printOpFormIntro ('addObjects');
+//	echo '<table border=0 align=center>';
+//	echo "<tr><th>Object type</th><th>Common name</th><th>Visible label</th>";
+//	echo "<th>Asset tag</th><th>Tags</th></tr>\n";
+	$objectListOutput = array();
 	for ($i = 0; $i < $max; $i++)
 	{
-		echo '<tr><td>';
+		$singleEntry = array();
+	//	echo '<tr><td>';
 		// Don't employ DEFAULT_OBJECT_TYPE to avoid creating ghost records for pre-selected empty rows.
-		printNiftySelect ($typelist, array ('name' => "${i}_object_type_id", 'tabindex' => $tabindex), 0);
-		echo '</td>';
-		echo "<td><input type=text size=30 name=${i}_object_name tabindex=${tabindex}></td>";
-		echo "<td><input type=text size=30 name=${i}_object_label tabindex=${tabindex}></td>";
-		echo "<td><input type=text size=20 name=${i}_object_asset_no tabindex=${tabindex}></td>";
+		//printNiftySelect ($typelist, array ('name' => "${i}_object_type_id", 'tabindex' => $tabindex), 0);
+		$singleEntry['niftySelect'] = printNiftySelect ($typelist, array ('name' => "${i}_object_type_id", 'tabindex' => $tabindex), 0);
+ 		//echo '</td>';
+ 		$singleEntry['i'] = $i;
+ 		$singleEntry['tabindex'] = $tabindex;
+ 		
+		//echo "<td><input type=text size=30 name=${i}_object_name tabindex=${tabindex}></td>";
+		//echo "<td><input type=text size=30 name=${i}_object_label tabindex=${tabindex}></td>";
+		//echo "<td><input type=text size=20 name=${i}_object_asset_no tabindex=${tabindex}></td>";
 		if ($i == 0)
 		{
-			echo "<td valign=top rowspan=${max}>";
-			renderNewEntityTags ('object');
-			echo "</td>\n";
+			$singleEntry['max'] = $max;
+			$singleEntry['renderedEnityTags'] = renderNewEntityTags ('object');
+		//	echo "<td valign=top rowspan=${max}>";
+		//	renderNewEntityTags ('object');
+		//	echo "</td>\n";
 		}
-		echo "</tr>\n";
+		//echo "</tr>\n";
 		$tabindex++;
+		$objectListOutput[] = $singleEntry;
 	}
-	echo "<tr><td class=submit colspan=5><input type=submit name=got_fast_data value='Go!'></td></tr>\n";
-	echo "</form></table>\n";
-	finishPortlet();
+	$mod->setOutput("objectListData", $objectListData);
+		 
+//	echo "<tr><td class=submit colspan=5><input type=submit name=got_fast_data value='Go!'></td></tr>\n";
+//	echo "</form></table>\n";
+//	finishPortlet();
 
-	startPortlet ('Same type, same tags');
-	printOpFormIntro ('addLotOfObjects');
-	echo "<table border=0 align=center><tr><th>names</th><th>type</th></tr>";
-	echo "<tr><td rowspan=3><textarea name=namelist cols=40 rows=25>\n";
-	echo "</textarea></td><td valign=top>";
-	printNiftySelect ($typelist, array ('name' => 'global_type_id'), getConfigVar ('DEFAULT_OBJECT_TYPE'));
-	echo "</td></tr>";
-	echo "<tr><th>Tags</th></tr>";
-	echo "<tr><td valign=top>";
-	renderNewEntityTags ('object');
-	echo "</td></tr>";
-	echo "<tr><td colspan=2><input type=submit name=got_very_fast_data value='Go!'></td></tr></table>\n";
-	echo "</form>\n";
-	finishPortlet();
+//	startPortlet ('Same type, same tags');
+	$mod->setOutput("formIntroLotOfObjects", printOpFormIntro ('addLotOfObjects'));
+//	printOpFormIntro ('addLotOfObjects');
+//	echo "<table border=0 align=center><tr><th>names</th><th>type</th></tr>";
+//	echo "<tr><td rowspan=3><textarea name=namelist cols=40 rows=25>\n";
+//	echo "</textarea></td><td valign=top>";
+	$mod->setOutput("niftySelect", printNiftySelect ($typelist, array ('name' => 'global_type_id'), getConfigVar ('DEFAULT_OBJECT_TYPE')));	 
+//	printNiftySelect ($typelist, array ('name' => 'global_type_id'), getConfigVar ('DEFAULT_OBJECT_TYPE'));
+//	echo "</td></tr>";
+//	echo "<tr><th>Tags</th></tr>";
+//	echo "<tr><td valign=top>";
+	$mod->setOutput("renderedEnityTag",renderNewEntityTags ('object'));	 
+//	renderNewEntityTags ('object');
+//	echo "</td></tr>";
+//	echo "<tr><td colspan=2><input type=submit name=got_very_fast_data value='Go!'></td></tr></table>\n";
+//	echo "</form>\n";
+//	finishPortlet();
 }
 
 function searchHandler()
@@ -4089,18 +4132,17 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 	if (! isset ($celllist))
 		$celllist = listCells ($realm);
 	$celllist = filterCellList ($celllist, $cellfilter['expression']);
-	$tplm = TemplateManager::getInstance();
 	
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
-
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
-
-	if($parent==null)	
-		$mod = $tplm->generateModule("CellList");
-	else
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");	
+	if($parent == null){	
+		$main =	$tplm->createMainModule();
+		$mod = $tplm->generateSubmodule("Payload","CellList", $main);
+	}
+	else{
 		$mod = $tplm->generateSubmodule($placeholder, "CellList", $parent);
+	}
+	
 	$mod->setNamespace("",true);
 	$mod->setLock();
 
@@ -4137,15 +4179,13 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 		$mod->setOutput("EmptyResults","");
 	}
 	//echo '</td><td class=pcright>';
-	renderCellFilterPortlet ($cellfilter, $realm, $celllist, array(), $mod);
-	if($parent == null)
-		return $mod->run();
-	//echo "</td></tr></table>\n";
+	renderCellFilterPortlet ($cellfilter, $realm, $celllist, array(), $mod );
+	//echo "</td></tr></table>\n"; */
 }
 
 function renderUserList ()
 {
-	renderCellList ('user', 'User accounts', FALSE, NULL, NULL, 'Payload');
+	renderCellList ('user', 'User accounts');
 }
 
 function renderUserListEditor ()
@@ -5516,15 +5556,13 @@ function printTagCheckboxTable ($input_name, $preselect, $neg_preselect, $taglis
 		{
 			
 			$tag_class = isset ($taginfo['id']) && isset ($taginfo['refcnt']) ? getTagClassName ($row['input_value']) : '';
-			$tplm = TemplateManager::getInstance();
-	
-			$tplm->setTemplate("vanilla");
-			$tplm->createMainModule();
-
-			if ($addto == null)
+			
+			if ($addto == null){
+			//	$main = $tplm->createMainModule();
 				$tagobj = $tplm->generateModule("TagTreeCell");
+			}
 			else
-				$tagobj = $tplm->generateSubmodule("TagRow", "TagTreeCell", $addto);
+				$tagobj = $tplm->generateSubmodule("checkbox", "TagTreeCell", $addto);
 			$tagobj->setNamespace("",true);
 			$tagobj->setLock();
 			$tagobj->setOutput("TrClass", 		$row['tr_class']);
@@ -5663,13 +5701,8 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	$title = $filterc ? "Tag filters (${filterc})" : 'Tag filters';
 
 	$tplm = TemplateManager::getInstance();
-	
-	if($parent == null){
-		$tplm->setTemplate("vanilla");
-		$mod = $tplm->generateModule("CellFilterPortlet");
-	}
-	else
-		$mod = $tplm->generateSubmodule($parentplaceholder, "CellFilterPortlet", $parent);
+
+	$mod = $tplm->generateSubmodule($parentplaceholder, "CellFilterPortlet", $parent);
 	//startPortlet ($title);
 	$mod->setNamespace("");
 	$mod->setLock(true);
@@ -5886,16 +5919,32 @@ END;
 }
 
 // Dump all tags in a single SELECT element.
-function renderNewEntityTags ($for_realm = '', $parent = null)
+function renderNewEntityTags ($for_realm = '', $parent = null , $placeholder = "RenderedNewEntityTags")
 {
+	$tplm = TemplateManager::getInstance();
+
 	global $taglist, $tagtree;
 	if (!count ($taglist))
 	{
-		$parent->addOutput("TagsEmpty",true);
+		if($parent != null)
+			$mod = $tplm->generateSubmodule($placeholder, "RenderNewEntityTags_empty", $parent,  true);
+		else{
+			$mod = $tplm->generateModule("RenderNewEntityTags_empty",  true);
+			return $mod->run();
+		}
+
 		return;
 	}
 	//echo '<div class=tagselector><table border=0 align=center cellspacing=0 class="tagtree">';
-	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm, $parent);
+	if($parent != null)
+		$mod = $tplm->generateSubmodule($placeholder, "RenderNewEntityTags", $parent,  true);
+	else
+		$mod = $tplm->generateModule("RenderNewEntityTags",  true);
+
+	$mod->setOutput("checkbox", printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm, $parent));
+	if($parent == null)
+		return $mod->run();		 	
+	//printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm, $parent);
 	//echo '</table></div>';
 }
 

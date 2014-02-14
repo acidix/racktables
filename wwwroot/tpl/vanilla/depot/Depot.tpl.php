@@ -5,8 +5,24 @@
 				<?php if($this->is("NoObjects")) { ?>
 					<h2>No objects exist</h2>
 				<?php } else { ?>
-					<?php $this->Content; ?>
+				<div class=portlet>
+					<h2> Objects ( <?php $this->countObjs ?> ) </h2>
+					<br><br><table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>
+					<tr><th>Common name</th><th>Visible label</th><th>Asset tag</th><th>Row/Rack or Container</th></tr>
+					<?php $this->startLoop("allObjects"); ?>	
+						<tr class='row_<?php $this->order ?> tdleft' valign=top><td> <?php $this->mka ?> 
+						<?php if ($this->is("isEtags")) { ?>
+							<br><small> <?php $this->tags ?> </small> 
+						<?php } ?> 
+						</td><td> <?php $this->label ?> </td>
+						<td><?php $this->asset_no ?> </td>
+						<td> <?php $this->places ?> </td>
+						</tr>
+					<?php $this->endLoop(); ?> 
+					</table>
+				</div>
 				<?php } ?>
+
 			</td><td class=pcright width='25%'>
 				<?php $this->CellFilterPortlet; ?>
 			</td>

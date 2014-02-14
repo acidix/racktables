@@ -394,7 +394,7 @@ class TemplateManager
 		{
 			if ($req == $test)
 			{
-				self:log("Adding requirement failed: " . $name . " -> " . $placeholder);
+				self::log("Adding requirement failed: " . $name . " -> " . $placeholder);
 				return false;
 			}
 		}
@@ -639,7 +639,7 @@ class TemplateModule
 		$this->module = $module;
 		if (!is_array($mout))
 		{
-			throw new TemplateException("TplErr: Mout has to be an array!");
+			throw new TemplateException("TplErr: Mout has to be an array! (Most likely you confused generateModule and generateSubmodule");
 		}
 		$this->output = $mout;
 	}

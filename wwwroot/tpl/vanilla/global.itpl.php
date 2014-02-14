@@ -158,6 +158,13 @@ $this->setInMemoryTemplate("FormatVSIPInMem","<a href='{{href}}'>{{fmt_ip}}</a>"
 **/
 $this->setInMemoryTemplate("GetSelectInLine","<input type=hidden name={{selectName}} id={{selectName}} value={{keyValue}}>{{value}}");
 
+/**
+*	RenderNewEntityTags: 
+*	Usage:  interface.php
+*
+**/
+$this->setInMemoryTemplate("RenderNewEntityTags_empty"," No tags defined");
+$this->setInMemoryTemplate("RenderNewEntityTags",'<div class=tagselector><table border=0 align=center cellspacing=0 class="tagtree">{{checkbox}}</table></div>');
 
 
 ?>

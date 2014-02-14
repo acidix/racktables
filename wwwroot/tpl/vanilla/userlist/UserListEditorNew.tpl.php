@@ -5,12 +5,7 @@
 		<tr><th>&nbsp;</th><th>&nbsp;</th><th>Assign tags</th></tr>
 		<tr><th class=tdright>Username</th><td class=tdleft><input type=text size=64 name=username tabindex=100></td>
 		<td rowspan=4>
-		<?php if($this->is("TagsEmpty")) { ?>
-			No tags available.
-		<?php } else { ?>
-			<div class=tagselector><table border=0 align=center cellspacing=0 class="tagtree">
-			<?php $this->TagRow; ?>
-			</table></div>
+		<?php $this->RenderedNewEntityTags ?> 
 		<?php } ?>
 		</td></tr>
 		<tr><th class=tdright>Real name</th><td class=tdleft><input type=text size=64 name=realname tabindex=101></td></tr>
