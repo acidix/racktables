@@ -8,7 +8,7 @@
 						<?php $this->startLoop("CellListContent"); ?>
 							<tr class=row_<?php $this->Order; ?>>
 								<td>
-									<?php $this->CelLContent; ?>
+									<?php $this->CellContent; ?>
 								</td>
 							</tr>
 						<?php $this->endLoop(); ?>
@@ -20,7 +20,7 @@
 			</td>
 			<td class=pcright>
 				<?php $this->CellFilterPortlet; ?>
-			</td>
+			</td> 
 		</tr>
 	</table>
 <?php } else { ?>
