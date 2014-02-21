@@ -2,7 +2,7 @@
 	<?php $this->getH("Form","upd"); ?>
 	<input type="hidden" name="id" value="<?php $this->Id; ?>">
 	<tr>
-		<td>y
+		<td>
 			<?php if($this->is("NumGraphs",true)) { ?>
 				<img width="16" border="0" height="16" title="cannot delete, graphs exist" src="?module=chrome&uri=pix/tango-user-trash-16x16-gray.png"></img>
 			<?php } else { ?>

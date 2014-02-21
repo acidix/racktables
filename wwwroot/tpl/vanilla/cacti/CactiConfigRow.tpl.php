@@ -1,6 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
 		<tr align=left valign=top>
-			<td><?php $this->getH("NiftyString", "%%BaseUrl"); ?></td>
+			<td><?php $this->BaseUrl; ?></td>
 			<td><?php $this->UserName; ?></td>
 			<td class=tdright><?php $this->NumGraphs; ?></td>
 		</tr>

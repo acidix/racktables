@@ -9821,12 +9821,12 @@ function renderCactiServersEditor()
 		$smod = $tplm->generateSubmodule('List', 'CactiConfigEditorRow', $mod);
 		//printOpFormIntro ('upd', array ('id' => $server['id']));
 		//echo '<tr><td>';
-		if ($server['num_graphs'])
-			$smod->addOutput('NumGraphs', true);
+		//if ($server['num_graphs'])
+			//$smod->addOutput('NumGraphs', true);
 			//printImageHREF ('nodestroy', 'cannot delete, graphs exist');
-		else
-			$smod->addOutput('NumGraphs', false);
-		
+		//else
+			//$smod->addOutput('NumGraphs', false);
+		$smod->addOutput('NumGraphs', $server['num_graphs']);
 		$smod->addOutput('BaseUrl', htmlspecialchars ($server['base_url'], ENT_QUOTES, 'UTF-8'));
 		$smod->addOutput('Username', htmlspecialchars ($server['username'], ENT_QUOTES, 'UTF-8'));
 		$smod->addOutput('Password', htmlspecialchars ($server['password'], ENT_QUOTES, 'UTF-8'));
