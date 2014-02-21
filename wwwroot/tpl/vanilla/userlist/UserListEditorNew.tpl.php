@@ -5,8 +5,7 @@
 		<tr><th>&nbsp;</th><th>&nbsp;</th><th>Assign tags</th></tr>
 		<tr><th class=tdright>Username</th><td class=tdleft><input type=text size=64 name=username tabindex=100></td>
 		<td rowspan=4>
-		<?php $this->RenderedNewEntityTags ?> 
-		<?php } ?>
+		<?php $this->RenderedNewEntityTags; ?> 
 		</td></tr>
 		<tr><th class=tdright>Real name</th><td class=tdleft><input type=text size=64 name=realname tabindex=101></td></tr>
 		<tr><th class=tdright>Password</th><td class=tdleft><input type=password size=64 name=password tabindex=102></td></tr>

@@ -15,6 +15,7 @@
 			<td><input type=text size=24 name=username value="<?php $this->Username; ?>"></td>
 			<td><input type=password size=24 name=password value="<?php $this->Password; ?>"></td>
 			<td class=tdright><?php $this->NumGraphs; ?></td>
+			<td><input class="icon" type="image" border="0" title="update this server" src="?module=chrome&uri=pix/tango-document-save-16x16.png" name="submit"></input></td>
 			<td></td>
 		</tr>
 	</form>
