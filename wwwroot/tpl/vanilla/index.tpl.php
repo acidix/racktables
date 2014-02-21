@@ -26,6 +26,7 @@
 			</form>
 			<?php $this->getH('Form', 'settemplate'); ?>
 				<?php $this->getH('TplSelect') ;?>	
+				<input class="icon" type="image" border="0" title="set template" src="?module=chrome&uri=pix/tango-document-save-16x16.png" name="submit"></input>
 			</form>
 		</div>
 		<?php $this->Path; ?>
