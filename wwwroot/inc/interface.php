@@ -9581,55 +9581,88 @@ function renderEditUCSForm()
 function renderCactiConfig()
 {
 	$servers = getCactiServers();
-	startPortlet ('Cacti servers (' . count ($servers) . ')');
-	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-	echo '<tr><th>base URL</th><th>username</th><th>graph(s)</th></tr>';
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	$mod = $tplm->generateSubmodule("Payload", "CactiConfig");
+	$mod->setNamespace("cacti",true);
+	$mod->setLock();
+	
+	$mod->addOutput("Count", count($servers));
+	
+	//startPortlet ('Cacti servers (' . count ($servers) . ')');
+	//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	//echo '<tr><th>base URL</th><th>username</th><th>graph(s)</th></tr>';
 	foreach ($servers as $server)
 	{
-		echo '<tr align=left valign=top><td>' . niftyString ($server['base_url']) . '</td>';
-		echo "<td>${server['username']}</td><td class=tdright>${server['num_graphs']}</td></tr>";
+		$smod = $tplm->generateSubmodule("CactiList", "CactiConfigRow", $mod);
+		$smod->addOutput("BaseUrl", $server['base_url']);
+		$smod->addOutput("Username", $server['username']);
+		$smod->addOutput("NumGraphs", $server['num_graphs']);
+		//echo '<tr align=left valign=top><td>' . niftyString ($server['base_url']) . '</td>';
+		//echo "<td>${server['username']}</td><td class=tdright>${server['num_graphs']}</td></tr>";
 	}
-	echo '</table>';
-	finishPortlet();
+	//echo '</table>';
+	//finishPortlet();
 }
 
 function renderCactiServersEditor()
 {
-	function printNewItemTR ()
+	function printNewItemTR ($parent, $plc)
 	{
-		printOpFormIntro ('add');
-		echo '<tr>';
-		echo '<td>' . getImageHREF ('create', 'add a new server', TRUE, 112) . '</td>';
-		echo '<td><input type=text size=48 name=base_url tabindex=101></td>';
-		echo '<td><input type=text size=24 name=username tabindex=102></td>';
-		echo '<td><input type=password size=24 name=password tabindex=103></td>';
-		echo '<td>&nbsp;</td>';
-		echo '<td>' . getImageHREF ('create', 'add a new server', TRUE, 111) . '</td>';
-		echo '</tr></form>';
+		$tplm = TemplateManager::getInstance();
+		$smod2 = $tplm->generateSubmodule($plc, 'CactiConfigEditorNew', $parent);
+		$smod2->setNamespace('cacti');
+		$smod2->setLock(true);
+		
+		//printOpFormIntro ('add');
+		//echo '<tr>';
+		//echo '<td>' . getImageHREF ('create', 'add a new server', TRUE, 112) . '</td>';
+		//echo '<td><input type=text size=48 name=base_url tabindex=101></td>';
+		//echo '<td><input type=text size=24 name=username tabindex=102></td>';
+		//echo '<td><input type=password size=24 name=password tabindex=103></td>';
+		//echo '<td>&nbsp;</td>';
+		//echo '<td>' . getImageHREF ('create', 'add a new server', TRUE, 111) . '</td>';
+		//echo '</tr></form>';
 	}
-	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-	echo '<tr><th>&nbsp;</th><th>base URL</th><th>username</th><th>password</th><th>graph(s)</th><th>&nbsp;</th></tr>';
+	//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	//echo '<tr><th>&nbsp;</th><th>base URL</th><th>username</th><th>password</th><th>graph(s)</th><th>&nbsp;</th></tr>';
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'CactiConfigEditor');
+	$mod->setNamespace('cacti',true);
+	$mod->setLock();
+	
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR();
+		printNewItemTR($mod,'AddNewTop');
 	foreach (getCactiServers() as $server)
 	{
-		printOpFormIntro ('upd', array ('id' => $server['id']));
-		echo '<tr><td>';
+		$smod = $tplm->generateSubmodule('List', 'CactiConfigEditorRow', $mod);
+		//printOpFormIntro ('upd', array ('id' => $server['id']));
+		//echo '<tr><td>';
 		if ($server['num_graphs'])
-			printImageHREF ('nodestroy', 'cannot delete, graphs exist');
+			$smod->addOutput('NumGraphs', true);
+			//printImageHREF ('nodestroy', 'cannot delete, graphs exist');
 		else
-			echo getOpLink (array ('op' => 'del', 'id' => $server['id']), '', 'destroy', 'delete this server');
-		echo '</td>';
-		echo '<td><input type=text size=48 name=base_url value="' . htmlspecialchars ($server['base_url'], ENT_QUOTES, 'UTF-8') . '"></td>';
-		echo '<td><input type=text size=24 name=username value="' . htmlspecialchars ($server['username'], ENT_QUOTES, 'UTF-8') . '"></td>';
-		echo '<td><input type=password size=24 name=password value="' . htmlspecialchars ($server['password'], ENT_QUOTES, 'UTF-8') . '"></td>';
-		echo "<td class=tdright>${server['num_graphs']}</td>";
-		echo '<td>' . getImageHREF ('save', 'update this server', TRUE) . '</td>';
-		echo '</tr></form>';
+			$smod->addOutput('NumGraphs', false);
+		
+		$smod->addOutput('BaseUrl', htmlspecialchars ($server['base_url'], ENT_QUOTES, 'UTF-8'));
+		$smod->addOutput('Username', htmlspecialchars ($server['username'], ENT_QUOTES, 'UTF-8'));
+		$smod->addOutput('Password', htmlspecialchars ($server['password'], ENT_QUOTES, 'UTF-8'));
+		//echo '<td><input type=text size=48 name=base_url value="' . htmlspecialchars ($server['base_url'], ENT_QUOTES, 'UTF-8') . '"></td>';
+		//echo '<td><input type=text size=24 name=username value="' . htmlspecialchars ($server['username'], ENT_QUOTES, 'UTF-8') . '"></td>';
+		//echo '<td><input type=password size=24 name=password value="' . htmlspecialchars ($server['password'], ENT_QUOTES, 'UTF-8') . '"></td>';
+		//echo "<td class=tdright>${server['num_graphs']}</td>";
+		//echo '<td>' . getImageHREF ('save', 'update this server', TRUE) . '</td>';
+		//echo '</tr></form>';
 	}
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR();
-	echo '</table>';
+		printNewItemTR($mod,'AddNewBottom');
+	//echo '</table>';
 }
 
 function renderMuninConfig()
