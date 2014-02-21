@@ -16,8 +16,14 @@ function formatVSPort ($port, $plain_text = FALSE)
 	$proto = strtolower ($port['proto']);
 	$name = $port['vport'] . '/' . $proto;
 	$srv = getservbyport ($port['vport'], $proto);
-	if (!$plain_text && FALSE !== $srv)
-		return '<span title="' . $name . '">' . $srv . '</span>';
+
+	if (!$plain_text && FALSE !== $srv){
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");
+		$mod = $tplm->generateModule("formatVSPortInMemory",  true, array("name" => $name, "srv" => $srv));
+		return $mod->run();
+	}
+//		return '<span title="' . $name . '">' . $srv . '</span>';
 	else
 		return $name;
 }
@@ -27,8 +33,14 @@ function formatVSIP ($vip, $plain_text = FALSE)
 	$fmt_ip = ip_format ($vip['vip']);
 	if ($plain_text)
 		return $fmt_ip;
-	$ret = '<a href="' . makeHref (array ('page' => 'ipaddress', 'ip' => $fmt_ip)) . '">' . $fmt_ip . '</a>';
-	return $ret;
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	
+	$mod = $tplm->generateModule("FormatVSIPInMemory", true, array("href" => makeHref (array ('page' => 'ipaddress', 'ip' => $fmt_ip)), 
+		   "fmt_ip" => $fmt_ip));
+	
+//	$ret = '<a href="' . makeHref (array ('page' => 'ipaddress', 'ip' => $fmt_ip)) . '">' . $fmt_ip . '</a>';
+	return $mod->run();
 }
 
 function renderVS ($vsid)
@@ -76,29 +88,59 @@ function renderTripletForm ($bypass_id)
 }
 
 // either $port of $vip argument should be NULL
-function renderPopupTripletForm ($triplet, $port, $vip, $row)
+function renderPopupTripletForm ($triplet, $port, $vip, $row, TemplateModule $parent = null)
 {
-	printOpFormIntro (isset ($port) ? 'updPort' : 'updIp');
-	echo '<input type=hidden name=object_id value="' . htmlspecialchars ($triplet['object_id'], ENT_QUOTES) . '">';
-	echo '<input type=hidden name=vs_id value="' . htmlspecialchars ($triplet['vs_id'], ENT_QUOTES) . '">';
-	echo '<input type=hidden name=rspool_id value="' . htmlspecialchars ($triplet['rspool_id'], ENT_QUOTES) . '">';
-	echo '<p><label><input type=checkbox name=enabled' . (is_array ($row) ? ' checked' : '') . '> ' . (isset ($port) ? 'Enable port' : 'Enable IP') . '</label>';
+	//Port to template engine
+	$tplm = TemplateManager::getInstance();
+	if($parent==null)
+		$tplm->setTemplate("vanilla");
+
+	if($parent==null)	
+		$mod = $tplm->generateModule("RenderPopupTripletForm",  false);
+	else
+		$mod = $tplm->generateSubmodule("RenderedPopupTripletForm", "RenderPopupTripletForm", $parent);
+	$mod->setNamespace("slb2_interface");
+
+	$mod->setOutput("opFormIntroPara", (isset ($port) ? 'updPort' : 'updIp'));
+	$mod->setOutput("object_id", htmlspecialchars ($triplet['object_id'], ENT_QUOTES));
+	$mod->setOutput("vs_id", htmlspecialchars ($triplet['vs_id'], ENT_QUOTES));
+	$mod->setOutput("rspool_id", htmlspecialchars ($triplet['rspool_id'], ENT_QUOTES));
+	$mod->setOutput("isArray", (is_array ($row) ? ' checked' : ''));
+	$mod->setOutput("issetPortTxt", (isset ($port) ? 'Enable port' : 'Enable IP'));
+		 
+//	printOpFormIntro (isset ($port) ? 'updPort' : 'updIp');
+//	echo '<input type=hidden name=object_id value="' . htmlspecialchars ($triplet['object_id'], ENT_QUOTES) . '">';
+//	echo '<input type=hidden name=vs_id value="' . htmlspecialchars ($triplet['vs_id'], ENT_QUOTES) . '">';
+//	echo '<input type=hidden name=rspool_id value="' . htmlspecialchars ($triplet['rspool_id'], ENT_QUOTES) . '">';
+//	echo '<p><label><input type=checkbox name=enabled' . (is_array ($row) ? ' checked' : '') . '> ' . (isset ($port) ? 'Enable port' : 'Enable IP') . '</label>';
+
 	if (isset ($port))
 	{
-		echo '<input type=hidden name=proto value="' . htmlspecialchars ($port['proto'], ENT_QUOTES) . '">';
-		echo '<input type=hidden name=port value="'  . htmlspecialchars ($port['vport'], ENT_QUOTES) . '">';
+		$mod->setOutput("issetPort", true);
+		$mod->setOutput("prot", htmlspecialchars ($port['proto'], ENT_QUOTES));
+		$mod->setOutput("prot", htmlspecialchars ($port['vport'], ENT_QUOTES));	 	 	 
+//		echo '<input type=hidden name=proto value="' . htmlspecialchars ($port['proto'], ENT_QUOTES) . '">';
+//		echo '<input type=hidden name=port value="'  . htmlspecialchars ($port['vport'], ENT_QUOTES) . '">';
 	}
 	else
 	{
-		echo '<input type=hidden name=vip value="'  . htmlspecialchars (ip_format ($vip['vip']), ENT_QUOTES) . '">';
-		echo '<p><label>Priority:<br><input type=text name=prio value="'  . htmlspecialchars (is_array ($row) ? $row['prio'] : '', ENT_QUOTES) . '"></label>';
+		$mod->setOutput("vip",  htmlspecialchars (ip_format ($vip['vip']), ENT_QUOTES));
+		$mod->setOutput("prio",  htmlspecialchars (is_array ($row) ? $row['prio'] : '', ENT_QUOTES));
+//		echo '<input type=hidden name=vip value="'  . htmlspecialchars (ip_format ($vip['vip']), ENT_QUOTES) . '">';
+//		echo '<p><label>Priority:<br><input type=text name=prio value="'  . htmlspecialchars (is_array ($row) ? $row['prio'] : '', ENT_QUOTES) . '"></label>';
 	}
-	echo '<p><label>VS config:<br>';
-	echo '<textarea name=vsconfig rows=3 cols=80>' . htmlspecialchars (is_array ($row) ? $row['vsconfig'] : '') . '</textarea></label>';
-	echo '<p><label>RS config:<br>';
-	echo '<textarea name=rsconfig rows=3 cols=80>' . htmlspecialchars (is_array ($row) ? $row['rsconfig'] : '') . '</textarea></label>';
-	echo '<p align=center>' . getImageHREF ('SAVE', 'Save changes', TRUE);
-	echo '</form>';
+
+//	echo '<p><label>VS config:<br>';
+	$mod->setOutput("vsconfig", htmlspecialchars (is_array ($row) ? $row['vsconfig'] : ''));
+//	echo '<textarea name=vsconfig rows=3 cols=80>' . htmlspecialchars (is_array ($row) ? $row['vsconfig'] : '') . '</textarea></label>';
+//	echo '<p><label>RS config:<br>';
+	$mod->setOutput("rsconfig", htmlspecialchars (is_array ($row) ? $row['rsconfig'] : ''));
+//	echo '<textarea name=rsconfig rows=3 cols=80>' . htmlspecialchars (is_array ($row) ? $row['rsconfig'] : '') . '</textarea></label>';
+//	echo '<p align=center>' . getImageHREF ('SAVE', 'Save changes', TRUE);
+	//Ends form created bys FormIntro
+//	echo '</form>';
+	if($parent == null)
+		return $mod->run();
 }
 
 function renderPopupVSPortForm ($port, $used = 0)
@@ -273,8 +315,17 @@ function groupTriplets ($tr_list)
 }
 
 // supports object, ipvs, ipv4rspool cell types
-function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL)
+function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateModule $parent = null )
 {
+	$tplm = TemplateManager::getInstance();
+	if($parent==null)
+		$tplm->setTemplate("vanilla");
+
+	if($parent==null)	
+		$mod = $tplm->generateModule("RenderSLBTriplets2",  false);
+	else
+		$mod = $tplm->generateSubmodule("RenderedSLBTriplets2", "RenderSLBTriplets2", $parent);
+
 	list ($realm1, $realm2) = array_values (array_diff (array ('object', 'ipvs', 'ipv4rspool'), array ($cell['realm'])));
 	if ($editable && getConfigVar ('ADDNEW_AT_TOP') == 'yes')
 		callHook ('renderNewTripletForm', $realm1, $realm2);
@@ -313,20 +364,26 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL)
 	$headers = $new_headers;
 
 	// render table header
+
 	if (count ($triplets))
 	{
-		startPortlet ('VS group instances (' . count ($triplets) . ')');
-		echo "<table cellspacing=0 cellpadding=5 align=center class=widetable><tr><th></th>";
+		$mod->setOutput("showTriplets", true);
+		$headersArray = array();
+		$mod->setOutput("countTriplets", count($triplets));
+//		startPortlet ('VS group instances (' . count ($triplets) . ')');
+//		echo "<table cellspacing=0 cellpadding=5 align=center class=widetable><tr><th></th>";
 		foreach ($headers as $realm => $header)
 			if ($realm != $cell['realm'])
-				echo "<th>$header</th>";
-		echo '<th>Ports</th>';
-		echo '<th>VIPs</th>';
-		echo "</tr>";
+				$headersArray[] = array("header" => $header);
+//				echo "<th>$header</th>";
+//		echo '<th>Ports</th>';
+//		echo '<th>VIPs</th>';
+//		echo "</tr>";
+		$mod->setOutput("headersArray", $headersArray);
 	}
 
-	addJS ('js/slb_editor.js');
-	addJS ('js/jquery.thumbhover.js');
+//	addJS ('js/slb_editor.js');
+//	addJS ('js/jquery.thumbhover.js');
 
 	$class = 'slb-checks';
 	if ($editable)
@@ -336,12 +393,21 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL)
 	global $nextorder;
 	$order = 'odd';
 	$span = array();
+
+	$allTripletOutArray = array();
+	
 	foreach ($triplets as $slb)
 	{
+
 		$vs_cell = spotEntity ('ipvs', $slb['vs_id']);
 		amplifyCell ($vs_cell);
-		echo "<tr valign=top class='row_${order} triplet-row'>";
-		echo '<td><a href="#" onclick="' . "slb_config_preview(event, ${slb['object_id']}, ${slb['vs_id']}, ${slb['rspool_id']}); return false" . '">' . getImageHREF ('Zoom', 'config preview') . '</a></td>';
+		
+		$tripletArray = array("order" => $order, "slb_object_id" => $slb['object_id'], "slb_vs_id" => $slb['vs_id'], "slb_rspool_id" => $slb['rspool_id']);
+
+//		echo "<tr valign=top class='row_${order} triplet-row'>";
+//		echo '<td><a href="#" onclick="' . "slb_config_preview(event, ${slb['object_id']}, ${slb['vs_id']}, ${slb['rspool_id']}); return false" . '">' . getImageHREF ('Zoom', 'config preview') . '</a></td>';
+		
+		$cellOutputArray = array();
 		foreach (array_keys ($headers) as $realm)
 		{
 			if ($realm == $cell['realm'])
@@ -359,70 +425,105 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL)
 					$span[$realm] = $slb['span'][$realm] - 1;
 					$span_html = sprintf ("rowspan=%d", $slb['span'][$realm]);
 				}
-				echo "<td $span_html class=tdleft>";
+
+//				echo "<td $span_html class=tdleft>";
 				$slb_cell = spotEntity ($realm, $slb[$fields[$realm]]);
-				renderSLBEntityCell ($slb_cell);
-				echo "</td>";
+				$cellOutputArray[] = array("span_html" => $span_html, "slb_cell" => renderSLBEntityCell ($slb_cell));
+//				renderSLBEntityCell ($slb_cell);
+//				echo "</td>";
 			}
 		}
+		$tripletArray["cellOutputArray"] = $cellOutputArray;
+
 		// render ports
-		echo "<td class=tdleft><ul class='$class'>";
+		$tripletArray["class"] = $class;
+//		echo "<td class=tdleft><ul class='$class'>";
+		$portOutputArray = array();
 		foreach ($vs_cell['ports'] as $port)
 		{
-			echo '<li class="' . (($row = isPortEnabled ($port, $slb['ports'])) ? 'enabled' : 'disabled') . '">';
-			echo formatVSPort ($port) . getPopupSLBConfig ($row);
+			$portOutputArray[] = array("row_Class" => ((($row = isPortEnabled ($port, $slb['ports'])) ? 'enabled' : 'disabled')));
+
+//			echo '<li class="' . (($row = isPortEnabled ($port, $slb['ports'])) ? 'enabled' : 'disabled') . '">';
+//			echo formatVSPort ($port) . getPopupSLBConfig ($row);
+			$portOutputArray["formatedVSPort"] = formatVSPort ($port);
+			$portOutputArray["popupSLBConfig"] = getPopupSLBConfig ($row);
+			
 			if ($editable)
-				renderPopupTripletForm ($slb, $port, NULL, $row);
-			echo '</li>';
+//				renderPopupTripletForm ($slb, $port, NULL, $row);
+				$portOutputArray["tripletForm"] = renderPopupTripletForm ($slb, $port, NULL, $row);
+//			echo '</li>';
 		}
-		echo '</ul></td>';
+		$tripletArray["portOutputArray"] = $portOutputArray;		
+//		echo '</ul></td>';
 
 		// render VIPs
-		echo "<td class=tdleft><ul class='$class'>";
+//		echo "<td class=tdleft><ul class='$class'>";
+		$vipAllOutput = array();
 		foreach ($vs_cell['vips'] as $vip)
 		{
+			$vipOutput = array();
 			$row = isVIPEnabled ($vip, $slb['vips']);
 			$li_class = $row ? 'enabled' : 'disabled';
 			if ($vip['vip'] === $hl_ip && $li_class == 'enabled')
 				$li_class .= ' highlight';
-			echo "<li class='$li_class'>";
-			echo formatVSIP ($vip);
+
+			$vipOutput["li_class"] = $li_class;
+//			echo "<li class='$li_class'>";
+//			echo formatVSIP ($vip);
+			$vipOutput["formated_VISP"] = formatVSIP ($vip);
+
 			if (is_array ($row) && !empty ($row['prio']))
 			{
+				$vipOutput["rowIsTrue"] = true;
 				$prio_class = 'slb-prio slb-prio-' . preg_replace ('/\s.*/', '', $row['prio']);
-				echo '<span class="' . htmlspecialchars ($prio_class, ENT_QUOTES) . '">' . htmlspecialchars($row['prio']) . '</span>';
+				$vipOutput["prioClass"] = htmlspecialchars ($prio_class, ENT_QUOTES);
+				$vipOutput["rowPrio"] = htmlspecialchars($row['prio']);
+//				echo '<span class="' . htmlspecialchars ($prio_class, ENT_QUOTES) . '">' . htmlspecialchars($row['prio']) . '</span>';
 			}
-			echo getPopupSLBConfig ($row);
+			$vipOutput["popupSLBConfig"] = getPopupSLBConfig ($row);
+//			echo getPopupSLBConfig ($row);
 			if ($editable)
-				renderPopupTripletForm ($slb, NULL, $vip, $row);
-			echo '</li>';
+				$vipOutput["tripletForm"] = renderPopupTripletForm ($slb, NULL, $vip, $row);
+//			echo '</li>';
+			$vipAllOutput[] = $vipOutput;
 		}
-		echo '<ul></td>';
+		$tripletArray["vipAllOutput"] = $vipAllOutput;
+//		echo '<ul></td>';
 
 		if ($editable)
 		{
-			echo '<td valign=middle>';
-			printOpFormIntro ('del', array (
+			$tripletArray["editable"] = true;
+			$tripletArray["formIntroPara"] = array('del', array (
 				'object_id' => $slb['object_id'],
 				'vs_id' => $slb['vs_id'],
 				'rspool_id' => $slb['rspool_id'],
 			));
-			printImageHREF ('DELETE', 'Remove triplet', TRUE);
-			echo '</form></td>';
+//			echo '<td valign=middle>';
+//			printOpFormIntro ('del', array (
+//				'object_id' => $slb['object_id'],
+//				'vs_id' => $slb['vs_id'],
+//				'rspool_id' => $slb['rspool_id'],
+//			));
+//			printImageHREF ('DELETE', 'Remove triplet', TRUE);
+//			echo '</form></td>';
 		}
 
-		echo "</tr>\n";
+//		echo "</tr>\n";
 		$order = $nextorder[$order];
+		$allTripletOutArray[] = $tripletArray;
 	}
-	if (count ($triplets))
-	{
-		echo "</table>\n";
-		finishPortlet();
-	}
+
+	$mod->setOutput("allTripletOutArray", $allTripletOutArray);
+//	if (count ($triplets))
+//	{
+//		echo "</table>\n";
+//		finishPortlet();
+//	}
 
 	if ($editable && getConfigVar ('ADDNEW_AT_TOP') != 'yes')
 		callHook ('renderNewTripletForm', $realm1, $realm2);
-
+	if($parent == null)
+		return $mod->run();
 }
 
 function renderSLBFormAJAX()
@@ -552,42 +653,60 @@ function renderNewTripletForm ($realm1, $realm2)
 	finishPortlet();
 }
 
-function getPopupSLBConfig ($row)
+function getPopupSLBConfig ($row, TemplateModule $parent = null)
 {
 	$do_vs = (isset ($row) && isset ($row['vsconfig']) && strlen ($row['vsconfig']));
 	$do_rs = (isset ($row) && isset ($row['rsconfig']) && strlen ($row['rsconfig']));
 	if (!$do_vs && !$do_rs)
 		return;
+	
+	$tplm = TemplateManager::getInstance();
+	if($parent==null)
+		$tplm->setTemplate("vanilla");
 
-	$ret = '';
-	$ret .= '<div class="slbconf-btn">…</div>';
-	$ret .= '<div class="slbconf popup-box">';
+	if($parent==null)	
+		$mod = $tplm->generateModule("getPopupSLBConfig",  false);
+	else
+		$mod = $tplm->generateSubmodule("GetPopupSLBConfig", "getPopupSLBConfig", $parent);
+
+	$mod->setNamespace("slb2_interface");
+
+//	$ret = '';
+//	$ret .= '<div class="slbconf-btn">…</div>';
+//	$ret .= '<div class="slbconf popup-box">';
 	if ($do_vs)
 	{
-		$ret .= '<h1>VS config:</h1>';
-		$ret .= $row['vsconfig'];
+		$mod->setOutput("do_vs", true);
+		$mod->setOutput("row_vsconfig", $row['vsconfig']);
+//		$ret .= '<h1>VS config:</h1>';
+//		$ret .= $row['vsconfig'];
 	}
 	if ($do_rs)
 	{
-		$ret .= '<h1>RS config:</h1>';
-		$ret .= $row['rsconfig'];
+		$mod->setOutput("do_rs", true);
+		$mod->setOutput("row_rsconfig", $row['rsconfig']);
+//		$ret .= '<h1>RS config:</h1>';
+//		$ret .= $row['rsconfig'];
 	}
-	$ret .= '</div>';
+//	$ret .= '</div>';
 
 	static $js_added = FALSE;
 	if (! $js_added)
 	{
-		addJS ('js/jquery.thumbhover.js');
-		addJS (<<<END
-$(document).ready (function () {
-	$('.slbconf-btn').each (function () {
-		$(this).thumbPopup($(this).siblings('.slbconf.popup-box'), { showFreezeHint: false });
-	});
-});
-END
-		, TRUE);
+		$mod->setOutput("loadjs", true);
+//		addJS ('js/jquery.thumbhover.js');
+//		addJS (<<<END
+//	$(document).ready (function () {
+//	$('.slbconf-btn').each (function () {
+//		$(this).thumbPopup($(this).siblings('.slbconf.popup-box'), { showFreezeHint: false });
+//	});
+//});
+//END
+///		, TRUE);
 	}
-	return $ret;
+	if($parent == null)
+		return $mod->run();
+//	return $ret;
 }
 
 function trigger_ipvs_convert ()

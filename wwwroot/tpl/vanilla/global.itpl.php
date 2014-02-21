@@ -137,6 +137,34 @@ $this->setInMemoryTemplate("RenderNetVLAN","<div class='vlan'><strong><small>{{n
 $this->setInMemoryTemplate("MkAInMemory","<a href='{{link}}'>{{text}}</a>");
 
 
+/**
+*	formatVSPort: 
+*	Usage: slb2-interface.php
+*
+**/
+$this->setInMemoryTemplate("formatVSPortInMemory"," <span title={{name}}> {{srv}} </span>");
+
+/**
+*	FormatVSIP: 
+*	Usage:  slb2-interface.php
+*
+**/
+$this->setInMemoryTemplate("FormatVSIPInMem","<a href='{{href}}'>{{fmt_ip}}</a>");
+
+/**
+*	GetSelect: 
+*	Usage:  slb-interface.php
+*
+**/
+$this->setInMemoryTemplate("GetSelectInLine","<input type=hidden name={{selectName}} id={{selectName}} value={{keyValue}}>{{value}}");
+
+/**
+*	RenderNewEntityTags: 
+*	Usage:  interface.php
+*
+**/
+$this->setInMemoryTemplate("RenderNewEntityTags_empty"," No tags defined");
+$this->setInMemoryTemplate("RenderNewEntityTags",'<div class=tagselector><table border=0 align=center cellspacing=0 class="tagtree">{{checkbox}}</table></div>');
 
 
 ?>

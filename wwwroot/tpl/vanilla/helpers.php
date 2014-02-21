@@ -226,4 +226,186 @@ class TemplateHelperNiftyString extends TemplateHelperAbstract
 	}
 }
 
+class TemplateHelperSerializeTags extends TemplateHelperAbstract
+
+{
+	protected function generate($params)
+	{
+		//($chain, $baseurl = '')
+		//Initalize paramters 
+		if(count($params) < 1)
+			return "";
+		$chain = $params[0];
+		$baseurl = '';
+
+		if(count($params) > 1)
+			$baseurl = $params[1];
+
+		$tmp = array();
+		usort ($chain, 'cmpTags');
+		foreach ($chain as $taginfo)
+		{
+			$title = '';
+			if (isset ($taginfo['user']) and isset ($taginfo['time']))
+				$title = 'title="' . htmlspecialchars ($taginfo['user'] . ', ' . formatAge ($taginfo['time']), ENT_QUOTES) . '"';
+
+			$class = '';
+			if (isset ($taginfo['id']))
+				$class = 'class="' . getTagClassName ($taginfo['id']) . '"';
+
+			$href = '';
+			if ($baseurl == '')
+				$tag = 'span';
+			else
+			{
+				$tag = 'a';
+				$href = "href='${baseurl}cft[]=${taginfo['id']}'";
+			}
+			$tmp[] = "<$tag $href $title $class>" . $taginfo['tag'] . "</$tag>";
+		}
+		return implode (', ', $tmp);
+	}
+}
+
+class TemplateHelperPrintTagTRs extends TemplateHelperAbstract
+{
+	protected function generate($params)
+	{
+		//($chain, $baseurl = '')
+		//Initalize paramters 
+		if(count($params) < 1)
+			return "";
+		
+		$chain = $params[0];
+		$baseurl = '';
+
+		if(count($params) > 1)
+			$baseurl = $params[1];
+
+		if (getConfigVar ('SHOW_EXPLICIT_TAGS') == 'yes' and count ($cell['etags']))
+		{
+			echo "<tr><th width='50%' class=tagchain>Explicit tags:</th><td class=tagchain>";
+			echo serializeTags ($cell['etags'], $baseurl) . "</td></tr>\n";
+		}
+		if (getConfigVar ('SHOW_IMPLICIT_TAGS') == 'yes' and count ($cell['itags']))
+		{
+			echo "<tr><th width='50%' class=tagchain>Implicit tags:</th><td class=tagchain>";
+			echo serializeTags ($cell['itags'], $baseurl) . "</td></tr>\n";
+		}
+		if (getConfigVar ('SHOW_AUTOMATIC_TAGS') == 'yes' and count ($cell['atags']))
+		{
+			echo "<tr><th width='50%' class=tagchain>Automatic tags:</th><td class=tagchain>";
+			echo serializeTags ($cell['atags']) . "</td></tr>\n";
+		}
+	}
+}
+
+class TemplateHelperPrintOpFormIntro extends TemplateHelperAbstract
+{
+	protected function generate($params){
+		//Initalise standard parameters
+		if(count($params) < 1)
+			return "";
+		$opname = $params[0];
+		$extra = array();
+		$upload = FALSE;
+
+		if(count($params) > 1)
+			$extra = $params[1];
+		if(count($params) > 2)
+			$upload = $params[2];
+
+		global $pageno, $tabno, $page;
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");
+		
+		$mod = $tplm->generateModule("PrintOpFormIntro",  false, array("opname" => $opname, "pageno" => $pageno, "tabno" => $tabno));
+
+	//	echo "<form method=post id=${opname} name=${opname} action='?module=redirect&page=${pageno}&tab=${tabno}&op=${opname}'";
+		if ($upload)
+			 $mod->setOutput("isUpload", true);	 
+	//		echo " enctype='multipart/form-data'";
+
+	//	echo ">";
+		fillBypassValues ($pageno, $extra);
+		$loopArray = array();
+		foreach ($extra as $inputname => $inputvalue)
+			$loopArray[] = array("name" => htmlspecialchars ($inputname, ENT_QUOTES), "val" => htmlspecialchars ($inputvalue, ENT_QUOTES));
+	//		printf ('<input type=hidden name="%s" value="%s">', htmlspecialchars ($inputname, ENT_QUOTES), htmlspecialchars ($inputvalue, ENT_QUOTES));
+		$mod->setOutput("loopArray", $loopArray);
+		$mod->run();
+	}
+
+}
+
+class TemplateHelperGetOpLink extends TemplateHelperAbstract
+{
+	protected function generate($params){
+	//	($params, $title,  $img_name = '', $comment = '', $class = '')	
+		//Initalise standard parameters
+		if(count($params) < 2)
+			return "";
+		$stdparams = $params[0];
+		$title = $params[1];
+		$img_name = '';
+		$comment = '';
+		$class = '';
+
+		if(count($params) > 2)
+			$img_name = $params[2];
+		if(count($params) > 3)
+			$comment = $params[3];
+		if(count($params) > 4)
+			$class = $params[4];
+
+		//Initiate TemplateManager
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");
+		$mod = $tplm->generateModule("GetOpLink", false);
+		
+		if (isset ($stdparams)){
+			$mod->setOutput("issetParams", true);
+			$mod->setOutput("href", makeHrefProcess ($stdparams));
+	//		$ret = '<a href="' . makeHrefProcess ($params) . '"';
+		}
+		else
+		{
+	//		$ret = '<a href="#" onclick="return false;"';
+			$class .= ' noclick';
+		}
+
+		if (! empty ($comment)){
+			$mod->setOutput("showComment", true);
+			$mod->setOutput("htmlComment", htmlspecialchars ($comment, ENT_QUOTES));	
+		}
+	//		$ret .= ' title="' . htmlspecialchars ($comment, ENT_QUOTES) . '"';
+		$class = trim ($class);
+		
+		if (! empty ($class)){
+			$mod->setOutput("showClass", true);
+			$mod->setOutput("htmlClass", htmlspecialchars ($class, ENT_QUOTES));		 
+		}
+	//		$ret .= ' class="' . htmlspecialchars ($class, ENT_QUOTES) . '"';
+	//	if (! empty ($comment))
+	//		$ret .= 'title="' . htmlspecialchars($comment, ENT_QUOTES) . '"';
+	//	$ret .= '>';
+		if (! empty ($img_name))
+		{
+			$mod->setOutput("loadImage", true);
+			$mod->setOutput("imgName", $imgName);
+			$mod->setOutput("comment", $comment);			 
+	//		$ret .= getImageHREF ($img_name, $comment);
+	//		if (! empty ($title))
+	//			$ret .= ' ';
+		}
+		if (FALSE !== strpos ($class, 'need-confirmation'))
+			$mod->setOutput("loadJs", true);			 
+	//		addJS ('js/racktables.js');
+		$mod->setOutput("title", $title);
+	//	$ret .= $title . '</a>';
+	//	return $ret;
+		return $mod->run();
+	}
+} 
+
 ?>

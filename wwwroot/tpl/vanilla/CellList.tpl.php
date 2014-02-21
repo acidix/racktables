@@ -21,7 +21,7 @@
 			</td>
 			<td class=pcright>
 				<?php $this->CellFilterPortlet; ?>
-			</td>
+			</td> 
 		</tr>
 	</table>
 <?php } else { ?>

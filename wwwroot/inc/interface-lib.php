@@ -289,28 +289,48 @@ function printSelect ($optionList, $select_attrs = array(), $selected_id = NULL)
 // Input array keys are OPTION VALUEs and input array values are OPTION text.
 function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $treat_single_special = TRUE)
 {
-	$ret = '';
+
+	
+	//$ret = '';
 	if (!array_key_exists ('name', $select_attrs))
 		return '';
 	// handle two corner cases in a specific way
 	if (count ($optionList) == 0)
 		return '(none)';
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+
 	if (count ($optionList) == 1 && $treat_single_special)
 	{
 		foreach ($optionList as $key => $value)
 			break;
-		return "<input type=hidden name=${select_attrs['name']} id=${select_attrs['name']} value=${key}>" . $value;
+
+		$mod = $tplm->generateModule("GetSelectInLine",  true, array("selectName" => $select_attrs['name'], "keyValue" => $key, "value" => $value ));	
+
+//		return "<input type=hidden name=${select_attrs['name']} id=${select_attrs['name']} value=${key}>" . $value;
+		return $mod->run();
 	}
+
+	$mod = $tplm->generateModule("GetSelect",  false);
 	if (!array_key_exists ('id', $select_attrs))
 		$select_attrs['id'] = $select_attrs['name'];
-	$ret .= '<select';
+//	$ret .= '<select';
+	$selectedOutArray = array();
 	foreach ($select_attrs as $attr_name => $attr_value)
-		$ret .= " ${attr_name}=${attr_value}";
-	$ret .= '>';
+		$selectedOutArray[] = array('attr_name' =>  $attr_name, "attr_val" => $attr_name );
+//		$ret .= " ${attr_name}=${attr_value}";
+	$mod->setOutput("selectedList", $selectedOutArray);
+//	$ret .= '>';
+	$allOpitonsArray = array();
 	foreach ($optionList as $dict_key => $dict_value)
-		$ret .= "<option value='${dict_key}'" . ($dict_key == $selected_id ? ' selected' : '') . ">${dict_value}</option>";
-	$ret .= '</select>';
-	return $ret;
+		$allOpitonsArray[] = array("dict_key" => $dict_key, "isSelected" =>  ($dict_key == $selected_id ? ' selected' : ''), "dict_val" => $dict_value );
+//		$ret .= "<option value='${dict_key}'" . ($dict_key == $selected_id ? ' selected' : '') . ">${dict_value}</option>";
+	$mod->setOutput("allOptions", $allOpitonsArray);
+//	$ret .= '</select>';
+//	return $ret;
+	return $mod->run();
+
 }
 
 function printNiftySelect ($groupList, $select_attrs = array(), $selected_id = NULL, $autocomplete = false)
@@ -659,13 +679,14 @@ function getRenderedIPv4NetCapacity ($range)
 		$title = implode (', ', $title_items);
 		$title2 = implode (', ', $title2_items);
 	
-		$text = $tplm->generateModule("RenderedIPv4NetCapacityAddrc", true)->run();
-		$text->setOutput("px1", $px1);
-		$text->setOutput("px2", $px2);
-		$text->setOutput("px3", $px3);		
-		$text->setOutput("width", $width);
-		$text->setOutput("title", $title);
-		$text->setOutput("title2", $title2);
+		$modtext = $tplm->generateModule("RenderedIPv4NetCapacityAddrc", true);
+		$modtext->setOutput("px1", $px1);
+		$modtext->setOutput("px2", $px2);
+		$modtext->setOutput("px3", $px3);		
+		$modtext->setOutput("width", $width);
+		$modtext->setOutput("title", $title);
+		$modtext->setOutput("title2", $title2);
+		$text = $modtext->run();
 	//	$text = "<img width='$width' height=10 border=0 title='$title2' src='?module=progressbar4&px1=$px1&px2=$px2&px3=$px3'>" .
 	//		" <small class='title'>$title</small>";
 	}
@@ -895,20 +916,35 @@ function modifyEntitySummary ($cell, $summary)
 // 'tags' key has a special meaning: instead of value, the result of printTagTRs call is appended to output
 // if the value is a single-element array, its value rendered as-is instead of <tr> tag and all its contents.
 // if the value is an array, its first 2 items are treated as left and right contents of row, no colon is appended. Used to enable non-unique titles
-function renderEntitySummary ($cell, $title, $values = array())
+function renderEntitySummary ($cell, $title, $values = array(), $parent = null, $placeholder = "")
 {
 	global $page_by_realm;
 	// allow plugins to override summary table
 	$values = callHook ('modifyEntitySummary', $cell, $values);
+	
+	//Initalize TemplateManager
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	if($parent == null)
+		$mod = $tplm->generateModule("RenderEntitySummary");
+	else
+		$mod = $tplm->generateSubmodule($placeholder, "RenderEntitySummary", $parent);
 
-	startPortlet ($title);
-	echo "<table border=0 cellspacing=0 cellpadding=3 width='100%'>\n";
+	//startPortlet ($title);
+	$mod->setOutput("title", $title);
+	//echo "<table border=0 cellspacing=0 cellpadding=3 width='100%'>\n";
+
+	$loopArray = array();
 	foreach ($values as $name => $value)
 	{
+		$lineArray = array();
 		if (is_array ($value) and count ($value) == 1)
 		{
 			$value = array_shift ($value);
-			echo $value;
+			$lineArray["val"] = $value;
+			$lineArray["singleVal"] = true;
+			$loopArray[] = $lineArray;
+			//echo $value;
 			continue;
 		}
 		if (is_array ($value))
@@ -925,47 +961,86 @@ function renderEntitySummary ($cell, $title, $values = array())
 			$class .= ' ' . $m[1];
 			$name = $m[2];
 		}
+
+		$lineArray["class"] = $class;
+		$lineArray["name"] = $name;
+ 		$lineArray["val"] = $value;
+
 		if ($name == 'tags:')
 		{
+			$lineArray["showTags"] = true; 
+	
 			$baseurl = '';
 			if (isset ($page_by_realm[$cell['realm']]))
 				$baseurl =  makeHref(array('page'=>$page_by_realm[$cell['realm']], 'tab'=>'default'))."&";
-			printTagTRs ($cell, $baseurl);
+			
+
+			$lineArray["cell"] = $cell;
+			$lineArray["baseurl"] = $baseurl;
+	//		printTagTRs ($cell, $baseurl);
 		}
-		else
-			echo "<tr><th width='50%' class='$class'>$name</th><td class=tdleft>$value</td></tr>";
+	//	else
+	//		echo "<tr><th width='50%' class='$class'>$name</th><td class=tdleft>$value</td></tr>";
+		$loopArray[] = $lineArray;
 	}
-	echo "</table>\n";
-	finishPortlet();
+	$mod->setOutput("loopArray", $loopArray);
+	
+	if($parent == null)
+		return $mod->run();
+	//echo "</table>\n";
+	//finishPortlet();
 }
 
 function getOpLink ($params, $title,  $img_name = '', $comment = '', $class = '')
 {
+	//Initiate TemplateManager
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$mod = $tplm->generateModule("GetOpLink", false);
+	
 	if (isset ($params))
-		$ret = '<a href="' . makeHrefProcess ($params) . '"';
+	{
+		$mod->setOutput("issetParams", true);
+		$mod->setOutput("href", makeHrefProcess ($params));
+//		$ret = '<a href="' . makeHrefProcess ($params) . '"';
+	}
 	else
 	{
-		$ret = '<a href="#" onclick="return false;"';
+//		$ret = '<a href="#" onclick="return false;"';
 		$class .= ' noclick';
 	}
-	if (! empty ($comment))
-		$ret .= ' title="' . htmlspecialchars ($comment, ENT_QUOTES) . '"';
+
+	if (! empty ($comment)){
+		$mod->setOutput("showComment", true);
+		$mod->setOutput("htmlComment", htmlspecialchars ($comment, ENT_QUOTES));	
+	}
+//		$ret .= ' title="' . htmlspecialchars ($comment, ENT_QUOTES) . '"';
 	$class = trim ($class);
-	if (! empty ($class))
-		$ret .= ' class="' . htmlspecialchars ($class, ENT_QUOTES) . '"';
-	if (! empty ($comment))
-		$ret .= 'title="' . htmlspecialchars($comment, ENT_QUOTES) . '"';
-	$ret .= '>';
+	
+	if (! empty ($class)){
+		$mod->setOutput("showClass", true);
+		$mod->setOutput("htmlClass", htmlspecialchars ($class, ENT_QUOTES));		 
+	}
+//		$ret .= ' class="' . htmlspecialchars ($class, ENT_QUOTES) . '"';
+//	if (! empty ($comment))
+//		$ret .= 'title="' . htmlspecialchars($comment, ENT_QUOTES) . '"';
+//	$ret .= '>';
 	if (! empty ($img_name))
 	{
-		$ret .= getImageHREF ($img_name, $comment);
-		if (! empty ($title))
-			$ret .= ' ';
+		$mod->setOutput("loadImage", true);
+		$mod->setOutput("imgName", $imgName);
+		$mod->setOutput("comment", $comment);			 
+//		$ret .= getImageHREF ($img_name, $comment);
+//		if (! empty ($title))
+//			$ret .= ' ';
 	}
 	if (FALSE !== strpos ($class, 'need-confirmation'))
-		addJS ('js/racktables.js');
-	$ret .= $title . '</a>';
-	return $ret;
+		$mod->setOutput("loadJs", true);			 
+//		addJS ('js/racktables.js');
+	$mod->setOutput("title", $title);
+//	$ret .= $title . '</a>';
+//	return $ret;
+	return $mod->run();
 }
 
 function renderProgressBar ($percentage = 0, $theme = '', $inline = FALSE)
@@ -1028,14 +1103,24 @@ function getRenderedIPPortPair ($ip, $port = NULL)
 function printOpFormIntro ($opname, $extra = array(), $upload = FALSE)
 {
 	global $pageno, $tabno, $page;
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	
+	$mod = $tplm->generateModule("PrintOpFormIntro",  false, array("opname" => $opname, "pageno" => $pageno, "tabno" => $tabno));
 
-	echo "<form method=post id=${opname} name=${opname} action='?module=redirect&page=${pageno}&tab=${tabno}&op=${opname}'";
+//	echo "<form method=post id=${opname} name=${opname} action='?module=redirect&page=${pageno}&tab=${tabno}&op=${opname}'";
 	if ($upload)
-		echo " enctype='multipart/form-data'";
-	echo ">";
+		 $mod->setOutput("isUpload", true);	 
+//		echo " enctype='multipart/form-data'";
+
+//	echo ">";
 	fillBypassValues ($pageno, $extra);
+	$loopArray = array();
 	foreach ($extra as $inputname => $inputvalue)
-		printf ('<input type=hidden name="%s" value="%s">', htmlspecialchars ($inputname, ENT_QUOTES), htmlspecialchars ($inputvalue, ENT_QUOTES));
+		$loopArray[] = array("name" => htmlspecialchars ($inputname, ENT_QUOTES), "val" => htmlspecialchars ($inputvalue, ENT_QUOTES));
+//		printf ('<input type=hidden name="%s" value="%s">', htmlspecialchars ($inputname, ENT_QUOTES), htmlspecialchars ($inputvalue, ENT_QUOTES));
+	$mod->setOutput("loopArray", $loopArray);
+	return $mod->run();
 }
 
 
