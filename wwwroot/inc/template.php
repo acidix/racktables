@@ -1,6 +1,6 @@
 <?php
 //Use this to test wether a template was called within the main module or without it.
-define("TPL_DEBUG",true);
+//define("TPL_DEBUG",true);
 define("RS_TPL",true);
 
 /**
@@ -44,10 +44,16 @@ class TemplateManager
 	public static function intializeTemplate()
 	{
 		$tpl_to_use = '';
+
+		$template_list = self::getOrderedTemplateList();
+		$flipped = array_flip($template_list);
+
+		
+
 		if (!array_key_exists('RacktablesTemplate', $_COOKIE))
 		{
-			setcookie('RacktablesTemplate',getConfigVar('default_template'));
-			$tpl_to_use = getConfigVar('default_template');
+			setcookie('RacktablesTemplate',$flipped['vanilla']);
+			$tpl_to_use = $flipped['vanilla'];
 			//$_COOKIE['RacktablesTemplate'] = getConfigVar('default_template');
 		}
 		else
@@ -55,13 +61,11 @@ class TemplateManager
 			$tpl_to_use = $_COOKIE['RacktablesTemplate'];
 		}
 		
-		$template_list = self::getOrderedTemplateList();
-		$flipped = array_flip($template_list);
 		if (!array_key_exists($_COOKIE['RacktablesTemplate'], $template_list))
 		{
 			if (!array_search('vanilla', $template_list))
 			{
-				throw new TemplateException('TplErr: Vanilla template is not installed, can\'t fall back to another template.');
+				throw new TemplateException('TplErr: Vanilla template is not installed, can\'t fall back to another template.' . $template_list);
 			}
 			else 
 			{
@@ -76,12 +80,14 @@ class TemplateManager
 		//@XXX escape string!!
 		$inst->setTemplate($template_list[$tpl_to_use]);
 		$inst->createMainModule('index');
+
+		//$inst->getMainModule()->addOutput('Payload',$template_list[$tpl_to_use] . '<br />');
 		
 	}
 	
 	public static function changeStaticDir()
 	{
-		$inst = SELF::getInstance();
+		$inst = self::getInstance();
 		
 		global $local_staticdir ;
 		
@@ -94,7 +100,8 @@ class TemplateManager
 	 */
 	public static function getOrderedTemplateList()
 	{
-		$arr = glob('./tpl/*' , GLOB_ONLYDIR);
+		$arr = array('vanilla');
+		//$arr = glob('../tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
 		sort($arr);
 		return $arr;
 	}
