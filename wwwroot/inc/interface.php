@@ -5364,9 +5364,16 @@ function renderAutoPortsForm ($object_id)
 	echo "</table></form>";
 }
 
-function renderTagRowForViewer ($taginfo, $level = 0)
+function renderTagRowForViewer ($taginfo, $level = 0, $parent, $placeholder = 'Taglist')
 {
 	$self = __FUNCTION__;
+	
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule("Taglist", "TagtreeElement");
+	$mod->setNamespace("tagtree",true);
+	$mod->setLock();
+	
 	$statsdecoder = array
 	(
 		'total' => ' total records linked',
@@ -5384,18 +5391,35 @@ function renderTagRowForViewer ($taginfo, $level = 0)
 		$level++; // Shift instead of placing a spacer. This won't impact any nested nodes.
 	$refc = $taginfo['refcnt']['total'];
 	$trclass = $taginfo['is_assignable'] == 'yes' ? '' : ($taginfo['kidc'] ? ' class=trnull' : ' class=trwarning');
-	echo "<tr${trclass}><td align=left style='padding-left: " . ($level * 16) . "px;'>";
-	if (count ($taginfo['kids']))
-		printImageHREF ('node-expanded-static');
+	
+	if ($taginfo['is_assignable'] == 'yes')
+		$mod->addOutput('assignable', true);
+	else 
+		$mod->addOutput('assignable', false);
+	
+	if ($taginfo['kidc'])
+		$mod->addOutput('hasChildren', true);
+	else
+		$mod->addOutput('hasChildren', false);
+	
+	
+	//echo "<tr${trclass}><td align=left style='padding-left: " . ($level * 16) . "px;'>";
+	//if (count ($taginfo['kids']))
+		//printImageHREF ('node-expanded-static');
 	$stats = array ("tag ID = ${taginfo['id']}");
 	if ($taginfo['refcnt']['total'])
 		foreach ($taginfo['refcnt'] as $article => $count)
 			if (array_key_exists ($article, $statsdecoder))
 				$stats[] = $count . $statsdecoder[$article];
-	echo '<span title="' . implode (', ', $stats) . '" class="' . getTagClassName ($taginfo['id']) . '">' . $taginfo['tag'];
-	echo ($refc ? " <i>(${refc})</i>" : '') . '</span></td></tr>';
+	$mod->addOutput('Stats', implode(', ', $stats));
+	$mod->addOutput('Spanclass', getTagClassName($taginfo['id']));
+	$mod->addOutput('Tag', $taginfo['tag']);
+	$mod->addOutput('Refc', $refc ? $refc : '');
+
+	//echo '<span title="' . implode (', ', $stats) . '" class="' . getTagClassName ($taginfo['id']) . '">' . $taginfo['tag'];
+	//echo ($refc ? " <i>(${refc})</i>" : '') . '</span></td></tr>';
 	foreach ($taginfo['kids'] as $kid)
-		$self ($kid, $level + 1);
+		$self ($kid, $level + 1, $mod);
 }
 
 function renderTagRowForEditor ($taginfo, $level = 0)
@@ -5438,10 +5462,19 @@ function renderTagRowForEditor ($taginfo, $level = 0)
 function renderTagTree ()
 {
 	global $tagtree;
-	echo '<center><table>';
+	//echo '<center><table>';
+	$tplm = TemplateManager::getInstance();
+	
+	//@TODO Remove after global initialization is finished
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'TagtreeConfig');
+	$mod->setNamespace('tagtree',true);
+	
 	foreach ($tagtree as $taginfo)
-		renderTagRowForViewer ($taginfo);
-	echo '</table></center>';
+		renderTagRowForViewer ($taginfo, 0, $mod);
+	//echo '</table></center>';
 }
 
 function renderTagTreeEditor ()

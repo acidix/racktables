@@ -4,7 +4,7 @@
 		<a class="toggleTreeMode" style="display:none" href="#"></a>
 		<table border=0 cellspacing=0 cellpadding=3 align=center class="tagtree">
 		<?php $this->getH("PrintOpFormIntro", array('saveTags')); ?> 
-		<?php $this->get("TagCheckbox")?>
+		<?php $this->get("TagCheckbox"); ?>
 		<tr><td class=tdleft>
 		<?php $this->getH("PrintImageHREF", array('SAVE', 'Save changes', TRUE)); ?> 
 		</form></td><td class=tdright>
