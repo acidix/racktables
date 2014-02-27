@@ -44,6 +44,8 @@ $indexlayout = array
 
 $page['index']['title'] = 'Main page';
 $page['index']['handler'] = 'renderIndex';
+$tabhandler['index']['settemplate'] = 'renderTemplateUpdate';
+$ophandler['index']['settemplate'] = 'updateCurrentTemplate';
 
 $page['rackspace']['title'] = 'Rackspace';
 $page['rackspace']['parent'] = 'index';

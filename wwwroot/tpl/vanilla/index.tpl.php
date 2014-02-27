@@ -24,7 +24,7 @@
 					<input type=text name=q size=20 tabindex=1000 value='<?php $this->SearchValue; ?>'>
 				</label>
 			</form>
-			<?php $this->getH('Form', 'settemplate'); ?>
+			<form method=post id=TplSelect name=TplSelect action='?module=redirect&page=index&tab=index&op='>
 				<?php $this->getH('TplSelect') ;?>	
 				<input class="icon" type="image" border="0" title="set template" src="?module=chrome&uri=pix/tango-document-save-16x16.png" name="submit"></input>
 			</form>

@@ -3292,7 +3292,7 @@ function clearVlan()
 }
 
 //Sets the currently used template for only one session. Perm-Template is set via config.
-function setTemporaryTemplate()
+function updateCurrentTemplate()
 {
 	assertUintArg('tplid',true);
 	$id = $_REQUEST['tplid'];
