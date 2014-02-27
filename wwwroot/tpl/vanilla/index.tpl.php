@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <!-- Template taken from: interface.php:94 -->
-<head><title><?php $this->get("page_title"); //echo getTitle ($pageno); ?></title>
+<head><title><?php $this->get("PageTitle"); //echo getTitle ($pageno); ?></title>
 	<link rel="stylesheet" type="text/css" href="?module=chrome&amp;uri=css/pi.css">
 	<?php $this->get("Header"); //printPageHeaders(); ?>
 </head>
@@ -10,7 +10,7 @@
  		<div class="mainheader">
   			<div style="float: right" class=greeting><a href='index.php?page=myaccount&tab=default'><?php global $remote_displayname; echo $remote_displayname ?></a> [ <a href='?logout'>logout</a> ]</div>
  			<?php $this->get("Enterprise"); //echo getConfigVar ('enterprise') ?> RackTables <a href="http://racktables.org" title="Visit RackTables site"><?php echo CODE_VERSION ?></a>
- 			<?php $this->get("Quicklinks_Table") ?>  
+ 			<?php $this->get("Quicklinks_Table"); ?>  
 
 
  		</div>
@@ -23,6 +23,10 @@
 				<label>Search:
 					<input type=text name=q size=20 tabindex=1000 value='<?php $this->SearchValue; ?>'>
 				</label>
+			</form>
+			<?php $this->getH('Form', 'settemplate'); ?>
+				<?php $this->getH('TplSelect') ;?>	
+				<input class="icon" type="image" border="0" title="set template" src="?module=chrome&uri=pix/tango-document-save-16x16.png" name="submit"></input>
 			</form>
 		</div>
 		<?php $this->Path; ?>

@@ -15,7 +15,7 @@
 	<?php if ($this->is("showFiles",true)) { ?>
 		<div class=portlet>
 			<h2>Link existing (<?php $this->countFiles ?>)</h2>
-			<?php $this->getH("PrintOpFormIntro", array('linkFile'); ?> 
+			<?php $this->getH("PrintOpFormIntro", array('linkFile')); ?> 
 			<table border=0 cellspacing=0 cellpadding='5' align='center'>
 			<tr><td class=tdleft>
 			<?php $this->printedSelect ?> 

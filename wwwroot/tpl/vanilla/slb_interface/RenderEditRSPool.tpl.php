@@ -13,7 +13,7 @@
 	</p>
 	<p class="centered">
 	<?php if ($this->is("isPoolinfoRefcnt",true)) { ?>
-		<?php $this->getH("GetOpLink", array(NULL, 'Delete RS pool', 'nodestroy', "Could not delete: there are ${this->poolinfoRefncnt} LB links")); ?> 
+		<?php $this->getH("GetOpLink", array(NULL, 'Delete RS pool', 'nodestroy', "Could not delete: there are " . $this->get("poolinfoRefncnt",true) . "LB links")); ?> 
 	<?php } else {?> 
 		<?php $this->getH("GetOpLink", array(array	('op' => 'del', 'id' => $this->poolinfoID), 'Delete RS pool', 'destroy')); ?> 	
 	<?php } ?>
