@@ -20,21 +20,22 @@
 	<?php $this->endLoop(); ?> 
 	<tr><td class=submit colspan=5><input type=submit name=got_fast_data value='Go!'></td></tr>
 	</form></table>
-	</div>
-	<div class=portlet>
-		<h2>Same type, same tags</h2>
-		<?php $this->formIntroLotOfObjects ?>
-		<table border=0 align=center><tr><th>names</th><th>type</th></tr>
-		<tr><td rowspan=3><textarea name=namelist cols=40 rows=25>
-		</textarea></td><td valign=top>
-		<?php $this->niftySelect ?> 
-		</td></tr>
-		<tr><th>Tags</th></tr>
-		<tr><td valign=top>
-		<?php $this->renderedEnityTag ?> 
-		</td></tr>
-		<tr><td colspan=2><input type=submit name=got_very_fast_data value='Go!'></td></tr></table>
-		</form>
+</div>
+
+<div class=portlet>
+	<h2>Same type, same tags</h2>
+	<?php $this->formIntroLotOfObjects ?>
+	<table border=0 align=center><tr><th>names</th><th>type</th></tr>
+	<tr><td rowspan=3><textarea name=namelist cols=40 rows=25>
+	</textarea></td><td valign=top>
+	<?php $this->sameTypeSameTagSelect ?> 
+	</td></tr>
+	<tr><th>Tags</th></tr>
+	<tr><td valign=top>
+	<?php $this->renderedEnityTag ?> 
+	</td></tr>
+	<tr><td colspan=2><input type=submit name=got_very_fast_data value='Go!'></td></tr></table>
+	</form>
 	</div>	
 </div>
 

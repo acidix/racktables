@@ -1,11 +1,13 @@
 <?php if (defined("RS_TPL")) {?>
-			<?php $this->addRequirement("Header","HeaderJsInline",array("code"=>"tag_cb.enableSubmitOnClick()")); ?>
 			<tr class='<?php $this->get("TrClass"); ?>'>
 				<td class='<?php $this->get("TdClass"); ?>' style='padding-left: <?php $this->get("LevelPx"); ?>px;'>
 					<label>
-						<input type=checkbox class='<?php $this->get("InputClass"); ?>' name='<?php $this->get("InputName"); ?>[]' value='<?php $this->get("InputValue"); ?>' <?php $this->get("ExtraAttrs"); ?>>
+						<input type=checkbox class='<?php $this->get("InputClass"); ?>[]' name='<?php $this->get("InputName"); ?>[]' value='<?php $this->get("InputValue"); ?>' <?php $this->get("ExtraAttrs"); ?>>
 						<span class="<?php $this->TagClass; ?>"> <?php $this->get("TagName"); ?></span>
-						<?php $this->get("RefCnt"); ?>
+						<?php if (!($this->is($this->RefCnt,""))) { ?>
+							<i>(<?php $this->get("RefCnt"); ?>)</i>
+						<?php } ?> 
+						
 					</label>
 				</td>
 			</tr>

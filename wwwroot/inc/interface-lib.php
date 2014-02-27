@@ -333,15 +333,18 @@ function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $
 
 }
 
-function printNiftySelect ($groupList, $select_attrs = array(), $selected_id = NULL, $autocomplete = false)
+function printNiftySelect ($groupList, $select_attrs = array(), $selected_id = NULL, $autocomplete = false, $parent = null, $placeholder = "niftySelect")
 {
-	echo getNiftySelect ($groupList, $select_attrs, $selected_id);
+	if($parent == null)
+		return getNiftySelect ($groupList, $select_attrs, $selected_id);
+	else
+		getNiftySelect ($groupList, $select_attrs, $selected_id, $parent, $placeholder);
 }
 
 // Input is a cooked list of OPTGROUPs, each with own sub-list of OPTIONs in the same
 // format as printSelect() expects.
 // If tree is true, hierarchical drop-boxes are used, otherwise optgroups are used.
-function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree = false)
+function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree = false, $parent = null, $placeholder = "niftySelect")
 {
 	// special treatment for ungrouped data
 	if (count ($groupList) == 1 and isset ($groupList['other']))
@@ -350,43 +353,107 @@ function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree =
 		return '';
 	if (!array_key_exists ('id', $select_attrs))
 		$select_attrs['id'] = $select_attrs['name'];
-	if ($tree)
-	{
-		# it is safe to call many times for the same file
-		addJS ('js/jquery.optionTree.js');
-		$ret  = "<input type=hidden name=${select_attrs['name']}>\n";
-		$ret .= "<script type='text/javascript'>\n";
-		$ret .= "\$(function() {\n";
-		$ret .= "    var option_tree = {\n";
-		foreach ($groupList as $groupname => $groupdata)
+
+	if($parent == null){	
+		if ($tree)
 		{
-			$ret .= "        '${groupname}': {";
-			foreach ($groupdata as $dict_key => $dict_value)
-				$ret .= "\"${dict_value}\":'${dict_key}', ";
-			$ret .= "},\n";
+			# it is safe to call many times for the same file
+			addJS ('js/jquery.optionTree.js');
+			$ret  = "<input type=hidden name=${select_attrs['name']}>\n";
+			$ret .= "<script type='text/javascript'>\n";
+			$ret .= "\$(function() {\n";
+			$ret .= "    var option_tree = {\n";
+			foreach ($groupList as $groupname => $groupdata)
+			{
+				$ret .= "        '${groupname}': {";
+				foreach ($groupdata as $dict_key => $dict_value)
+					$ret .= "\"${dict_value}\":'${dict_key}', ";
+				$ret .= "},\n";
+			}
+			$ret .= "    };\n";
+			$ret .= "    var options = {empty_value: '', choose: 'select...'};\n";
+			$ret .= "    \$('input[name=${select_attrs['name']}]').optionTree(option_tree, options);\n";
+			$ret .= "});\n";
+			$ret .= "</script>\n";
 		}
-		$ret .= "    };\n";
-		$ret .= "    var options = {empty_value: '', choose: 'select...'};\n";
-		$ret .= "    \$('input[name=${select_attrs['name']}]').optionTree(option_tree, options);\n";
-		$ret .= "});\n";
-		$ret .= "</script>\n";
-	}
-	else
-	{
-		$ret = '<select';
-		foreach ($select_attrs as $attr_name => $attr_value)
-			$ret .= " ${attr_name}=${attr_value}";
-		$ret .= ">\n";
-		foreach ($groupList as $groupname => $groupdata)
+		else
 		{
-			$ret .= "<optgroup label='${groupname}'>\n";
-			foreach ($groupdata as $dict_key => $dict_value)
-				$ret .= "<option value='${dict_key}'" . ($dict_key == $selected_id ? ' selected' : '') . ">${dict_value}</option>\n";
-			$ret .= "</optgroup>\n";
-		}
-		$ret .= "</select>\n";
+			$ret = '<select';
+			foreach ($select_attrs as $attr_name => $attr_value)
+				$ret .= " ${attr_name}=${attr_value}";
+			$ret .= ">\n";
+			foreach ($groupList as $groupname => $groupdata)
+			{
+				$ret .= "<optgroup label='${groupname}'>\n";
+				foreach ($groupdata as $dict_key => $dict_value)
+					$ret .= "<option value='${dict_key}'" . ($dict_key == $selected_id ? ' selected' : '') . ">${dict_value}</option>\n";
+				$ret .= "</optgroup>\n";
+			}
+			$ret .= "</select>\n";
+		}	
+		return $ret;
 	}
-	return $ret;
+	else{
+		
+		$tplm = TemplateManager::getInstance();
+		if($parent==null)
+			$tplm->setTemplate("vanilla");
+		
+		if($parent==null)	
+			$mod = $tplm->generateModule("GetNiftySelect");
+		else
+			$mod = $tplm->generateSubmodule($placeholder, "GetNiftySelect", $parent);
+		
+		$mod->setNamespace("", true);
+
+		if($tree){
+			$mod->setOutput("isTree", true);
+	//		$script .= "<script type='text/javascript'>\n";
+			$script .= "\$(function() {\n";
+			$ret .= "    var option_tree = {\n";
+			foreach ($groupList as $groupname => $groupdata)
+			{
+				$script .= "        '${groupname}': {";
+				foreach ($groupdata as $dict_key => $dict_value)
+					$script .= "\"${dict_value}\":'${dict_key}', ";
+				$script .= "},\n";
+			}
+			$script .= "    };\n";
+			$script .= "    var options = {empty_value: '', choose: 'select...'};\n";
+			$script .= "    \$('input[name=${select_attrs['name']}]').optionTree(option_tree, options);\n";
+			$script .= "});\n";
+	//		$script .= "</script>\n";	
+			$mod->setOutput("jsScript", $script);
+		
+		}else{
+
+			$mod->setOutput("isTree", false);
+			$selectAttrArr = array();
+			foreach ($select_attrs as $attr_name => $attr_value)
+				$selectAttrArr[] = array("attrName" => $attr_name,"attrVal" => $attr_value);
+			$mod->setOutput("selectAttrs", $selectAttrArr);
+				 
+
+			$groupListArr = array();
+			foreach ($groupList as $groupname => $groupdata){
+				$groupListArr = array("groupName" => $groupname);
+				
+				$optListArr = array();
+				foreach ($groupdata as $dict_key => $dict_value)
+					$optListArr[] = array("dictKey" => $dict_key, "dictVal" => $dict_value, "selected" => ($dict_key == $selected_id ? ' selected' : ''));
+
+				$optList = generateModule("GetNiftySelect_optList");
+				$optList->setOutput("optListArray", $optListArr);
+
+				$groupListArr['optionList'] = $optList->run();
+			}
+			$mod->setOutput("groupListArr", $groupListArr);
+		
+		}
+
+		if($parent==null)
+			return $mod->run();
+	}
 }
 
 function getOptionTree ($tree_name, $tree_options, $tree_config = array())

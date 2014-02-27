@@ -163,8 +163,8 @@ $this->setInMemoryTemplate("GetSelectInLine","<input type=hidden name={{selectNa
 *	Usage:  interface.php
 *
 **/
-$this->setInMemoryTemplate("RenderNewEntityTags_empty"," No tags defined");
-$this->setInMemoryTemplate("RenderNewEntityTags",'<div class=tagselector><table border=0 align=center cellspacing=0 class="tagtree">{{checkbox}}</table></div>');
+$this->setInMemoryTemplate("RenderNewEntityTags_empty","No tags defined");
+$this->setInMemoryTemplate("RenderNewEntityTags","<div class=tagselector><table border=0 align=center cellspacing=0 class='tagtree'>\n{{checkbox}}\n</table></div>\n");
 
 
 ?>
