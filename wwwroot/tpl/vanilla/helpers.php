@@ -323,7 +323,7 @@ class TemplateHelperPrintOpFormIntro extends TemplateHelperAbstract
 
 	//	echo "<form method=post id=${opname} name=${opname} action='?module=redirect&page=${pageno}&tab=${tabno}&op=${opname}'";
 		if ($upload)
-			 $mod->setOutput("isUpload", true);	 
+			$mod->setOutput("isUpload", true);	 
 	//		echo " enctype='multipart/form-data'";
 
 	//	echo ">";

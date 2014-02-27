@@ -3542,7 +3542,7 @@ function renderAddMultipleObjectsForm ()
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule();
 
-	$mod = $tplm->generateModule("Payload","AddMultipleObjects");
+	$mod = $tplm->generateSubmodule("Payload","AddMultipleObjects");
 	$mod->setNamespace("depot");
 
 	// exclude location-related object types
@@ -3576,6 +3576,7 @@ function renderAddMultipleObjectsForm ()
 		{
 			$singleEntry['max'] = $max;
 			$singleEntry['renderedEnityTags'] = renderNewEntityTags ('object');
+
 		//	echo "<td valign=top rowspan=${max}>";
 		//	renderNewEntityTags ('object');
 		//	echo "</td>\n";
@@ -3584,7 +3585,7 @@ function renderAddMultipleObjectsForm ()
 		$tabindex++;
 		$objectListOutput[] = $singleEntry;
 	}
-	$mod->setOutput("objectListData", $objectListData);
+	$mod->setOutput("objectListData", $objectListOutput);
 		 
 //	echo "<tr><td class=submit colspan=5><input type=submit name=got_fast_data value='Go!'></td></tr>\n";
 //	echo "</form></table>\n";
@@ -3596,12 +3597,16 @@ function renderAddMultipleObjectsForm ()
 //	echo "<table border=0 align=center><tr><th>names</th><th>type</th></tr>";
 //	echo "<tr><td rowspan=3><textarea name=namelist cols=40 rows=25>\n";
 //	echo "</textarea></td><td valign=top>";
-	$mod->setOutput("niftySelect", printNiftySelect ($typelist, array ('name' => 'global_type_id'), getConfigVar ('DEFAULT_OBJECT_TYPE')));	 
+	printNiftySelect ($typelist, array ('name' => 'global_type_id'), getConfigVar ('DEFAULT_OBJECT_TYPE'), false, $mod, "sameTypeSameTagSelect");
+
 //	printNiftySelect ($typelist, array ('name' => 'global_type_id'), getConfigVar ('DEFAULT_OBJECT_TYPE'));
 //	echo "</td></tr>";
 //	echo "<tr><th>Tags</th></tr>";
 //	echo "<tr><td valign=top>";
+
 	$mod->setOutput("renderedEnityTag",renderNewEntityTags ('object'));	 
+//	renderNewEntityTags('object', $mod, 'renderedEnityTag');
+
 //	renderNewEntityTags ('object');
 //	echo "</td></tr>";
 //	echo "<tr><td colspan=2><input type=submit name=got_very_fast_data value='Go!'></td></tr></table>\n";
@@ -4201,7 +4206,7 @@ function renderUserListEditor ()
 		//echo '<tr><th>&nbsp;</th><th>&nbsp;</th><th>Assign tags</th></tr>';
 		//echo '<tr><th class=tdright>Username</th><td class=tdleft><input type=text size=64 name=username tabindex=100></td>';
 		//echo '<td rowspan=4>';
-		renderNewEntityTags ('user',$smod2);
+		renderNewEntityTags ('user', $smod2, "RenderedNewEntityTags");
 		//echo '</td></tr>';
 		//echo '<tr><th class=tdright>Real name</th><td class=tdleft><input type=text size=64 name=realname tabindex=101></td></tr>';
 		//echo '<tr><th class=tdright>Password</th><td class=tdleft><input type=password size=64 name=password tabindex=102></td></tr>';
@@ -5548,7 +5553,7 @@ function buildTagCheckboxRows ($inputname, $preselect, $neg_preselect, $taginfo,
 }
 
 # generate HTML from the data produced by the above function
-function printTagCheckboxTable ($input_name, $preselect, $neg_preselect, $taglist, $realm = '', TemplateModule $addto = null)
+function printTagCheckboxTable ($input_name, $preselect, $neg_preselect, $taglist, $realm = '', TemplateModule $addto = null, $placeholder = "")
 {
 	$tplm = TemplateManager::getInstance();
 	foreach ($taglist as $taginfo)
@@ -5557,73 +5562,75 @@ function printTagCheckboxTable ($input_name, $preselect, $neg_preselect, $taglis
 			
 			$tag_class = isset ($taginfo['id']) && isset ($taginfo['refcnt']) ? getTagClassName ($row['input_value']) : '';
 			
-			if ($addto == null){
-			//	$main = $tplm->createMainModule();
-				$tagobj = $tplm->generateModule("TagTreeCell");
-			}
-			else
-				$tagobj = $tplm->generateSubmodule("checkbox", "TagTreeCell", $addto);
-			$tagobj->setNamespace("",true);
-			$tagobj->setLock();
-			$tagobj->setOutput("TrClass", 		$row['tr_class']);
-			$tagobj->setOutput("TdClass", 		$row['td_class']);
-			$tagobj->setOutput("LevelPx", 		$row['level'] * 16);
-			$tagobj->setOutput("InputClass",	$row['input_class']);
-			$tagobj->setOutput("InputName",		$row['input_name']);
-			$tagobj->setOutput("InputValue",	$row['input_value']);
-			if (array_key_exists ('input_extraattrs', $row))
-			{
-				$tagobj->setOutput("ExtraAttrs",$row['input_extraattrs']);
-			}
-			else
-			{
-				$tagobj->setOutput("ExtraAttrs","");
-			}
-			$tagobj->setOutput("TagClass",		$tag_class);
-			$tagobj->setOutput("TagName", 		$row['text_tagname']);
-			if (array_key_exists ('text_refcnt', $row))
-			{
-				$tagobj->setOutput("RefCnt", 	$row['text_refcnt']);
-			}
-			else
-			{
-				$tagobj->setOutput("RefCnt", 	"");
-			}
-		
-			if($addto == null)
-				$tagobj->run();
-			/*	
-				$tag_class = isset ($taginfo['id']) && isset ($taginfo['refcnt']) ? getTagClassName ($row['input_value']) : '';
-				echo "<tr class='${row['tr_class']}'><td class='${row['td_class']}' style='padding-left: " . ($row['level'] * 16) . "px;'>";
-				echo "<label><input type=checkbox class='${row['input_class']}' name='${row['input_name']}[]' value='${row['input_value']}'";
+				if ($addto != null){
+					if($placeholder == "")
+						$tagobj = $tplm->generateSubmodule("checkbox", "TagTreeCell", $addto);
+					else
+						$tagobj = $tplm->generateSubmodule($placeholder, "TagTreeCell", $addto);	
+				}else{
+					$tagobj = $tplm->generateModule("TagTreeCell");
+				}
+				$tagobj->setNamespace("",true);
+				$tagobj->setLock();
+				$tagobj->setOutput("TrClass", 		$row['tr_class']);
+				$tagobj->setOutput("TdClass", 		$row['td_class']);
+				$tagobj->setOutput("LevelPx", 		$row['level'] * 16);
+				$tagobj->setOutput("InputClass",	$row['input_class']);
+				$tagobj->setOutput("InputName",		$row['input_name']);
+				$tagobj->setOutput("InputValue",	$row['input_value']);
 				if (array_key_exists ('input_extraattrs', $row))
-					echo ' ' . $row['input_extraattrs'];
-				echo '> <span class="' . $tag_class . '">' . $row['text_tagname'] . '</span>';
+				{
+					$tagobj->setOutput("ExtraAttrs", ' ' . $row['input_extraattrs']);
+				}
+				else
+				{
+					$tagobj->setOutput("ExtraAttrs","");
+				}
+				$tagobj->setOutput("TagClass",		$tag_class);
+				$tagobj->setOutput("TagName", 		$row['text_tagname']);
 				if (array_key_exists ('text_refcnt', $row))
-					echo " <i>(${row['text_refcnt']})</i>";
-				echo '</label></td></tr>';
-			)*/
-		}
+				{
+					$tagobj->setOutput("RefCnt", 	$row['text_refcnt']);
+				}
+				else
+				{
+					$tagobj->setOutput("RefCnt", 	"");
+				}
+
+				}
+				if($addto == null){
+					$tagobj->run();
+				}
+				//	$tag_class = isset ($taginfo['id']) && isset ($taginfo['refcnt']) ? getTagClassName ($row['input_value']) : '';
+				/*	echo "<tr class='${row['tr_class']}'><td class='${row['td_class']}' style='padding-left: " . ($row['level'] * 16) . "px;'>";
+					echo "<label><input type=checkbox class='${row['input_class']}' name='${row['input_name']}[]' value='${row['input_value']}'";
+					if (array_key_exists ('input_extraattrs', $row))
+						echo ' ' . $row['input_extraattrs'];
+					echo '> <span class="' . $tag_class . '">' . $row['text_tagname'] . '</span>';
+					if (array_key_exists ('text_refcnt', $row))
+						echo " <i>(${row['text_refcnt']})</i>";
+					echo '</label></td></tr>'; */
+	
 }
 
-function renderEntityTagsPortlet ($title, $tags, $preselect, $realm, TemplateModule $parent = null)
+function renderEntityTagsPortlet ($title, $tags, $preselect, $realm, TemplateModule $parent = null, $placeholder = "RenderedEntityTagsPortlet")
 {
 	$tplm = TemplateManager::getInstance();
 	if($parent==null)
 		$tplm->setTemplate("vanilla");
 
 	if($parent==null)	
-		$mod = $tplm->generateModule("RenderEntityTagsPortlet",  false);
+		$mod = $tplm->generateModule("RenderEntityTagsPortlet");
 	else
-		$mod = $tplm->generateSubmodule("RenderedEnityTags", "RenderEntityTagsPortlet", $parent);
-
+		$mod = $tplm->generateSubmodule($placeholder, "RenderedEntityTagsPortlet", $parent);
+ 
 	$mod->setOutput("title", $title);		 
 //	startPortlet ($title);
 //	echo  '<a class="toggleTreeMode" style="display:none" href="#"></a>';
 //	echo '<table border=0 cellspacing=0 cellpadding=3 align=center class="tagtree">';
 //	printOpFormIntro ('saveTags');
 //	printTagCheckboxTable ('taglist', $preselect, array(), $tags, $realm);
-	printTagCheckboxTable('taglist', $preselect, array(), $tags, $realm, $mod);
+	printTagCheckboxTable('taglist', $preselect, array(), $tags, $realm,"TagCheckbox", $mod);
 //	echo '<tr><td class=tdleft>';
 //	printImageHREF ('SAVE', 'Save changes', TRUE);
 //	echo "</form></td><td class=tdright>";
@@ -5681,7 +5688,7 @@ function renderEntityTags ($entity_id)
 	//echo '<td class=pcright>';
 	//renderEntityTagsPortlet ('Tag tree', $tagtree, $target_given_tags, $etype_by_pageno[$pageno], $mod);
 	//echo '</td>';
-
+	renderEntityTagsPortlet ('Tag tree', $tagtree, $target_given_tags, $etype_by_pageno[$pageno], $mod, "RenderedEnityTags");
 	//echo '</tr></table>';
 }
 
@@ -5770,7 +5777,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		else
 		{
 			$enable_apply = TRUE;
-			printTagCheckboxTable ('cft', buildTagChainFromIds ($preselect['tagidlist']), $negated_chain, $objectivetags, $realm, $mod);
+			printTagCheckboxTable ('cft', buildTagChainFromIds ($preselect['tagidlist']), $negated_chain, $objectivetags, $realm, $mod, "TableContent");
 		}
 
 		//if (getConfigVar('SHRINK_TAG_TREE_ON_CLICK') == 'yes')
@@ -5805,7 +5812,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 			$myPreselect = array();
 			foreach ($preselect['pnamelist'] as $pname)
 				$myPreselect[] = array ('id' => $pname);
-			printTagCheckboxTable ('cfp', $myPreselect, $negated_chain, $myPredicates, '', $mod);
+			printTagCheckboxTable ('cfp', $myPreselect, $negated_chain, $myPredicates, '',  $mod, "TableContent");
 		}
 	}
 	// extra code
@@ -5930,22 +5937,28 @@ function renderNewEntityTags ($for_realm = '', $parent = null , $placeholder = "
 			$mod = $tplm->generateSubmodule($placeholder, "RenderNewEntityTags_empty", $parent,  true);
 		else{
 			$mod = $tplm->generateModule("RenderNewEntityTags_empty",  true);
+
 			return $mod->run();
 		}
-
 		return;
 	}
-	//echo '<div class=tagselector><table border=0 align=center cellspacing=0 class="tagtree">';
-	if($parent != null)
-		$mod = $tplm->generateSubmodule($placeholder, "RenderNewEntityTags", $parent,  true);
-	else
-		$mod = $tplm->generateModule("RenderNewEntityTags",  true);
+	
 
-	$mod->setOutput("checkbox", printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm, $parent));
+//	echo '<div class=tagselector><table border=0 align=center cellspacing=0 class="tagtree">';
+	if($parent == null){
+		$mod = $tplm->generateModule("RenderNewEntityTags");	
+	}
+	else
+		$mod = $tplm->generateSubmodule($placeholder, "RenderNewEntityTags", $parent);
+		
+	
+//	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm);
+// 	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm, $mod, "checkbox");
+
+//	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm);
+//	echo '</table></div>';
 	if($parent == null)
-		return $mod->run();		 	
-	//printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm, $parent);
-	//echo '</table></div>';
+		return $mod->run();
 }
 
 function renderTagRollerForRow ($row_id)
@@ -8866,22 +8879,42 @@ function renderDeployQueue()
 	$order = 'odd';
 	$dqcode = getBypassValue();
 	$allq = get8021QDeployQueues();
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+		
+	
 	foreach ($allq as $qcode => $data)
 		if ($dqcode == $qcode)
 		{
-			echo "<h2 align=center>Queue '" . $dqtitle[$qcode] . "' (" . count ($data) . ")</h2>";
-			if (! count ($data))
+			$mod = $tplm->generateModule("Payload","DeployQueue");
+			$mod->setNamespace("", true);
+
+		//	echo "<h2 align=center>Queue '" . $dqtitle[$qcode] . "' (" . count ($data) . ")</h2>";
+			$mod->setOutput("dqTitle",$dqtitle[$qcode]);
+			$mod->setOutput("countData", count ($data));
+
+			if (! count ($data)){
+				$mod->setOutput("continue", true);
 				continue;
-			echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-			echo '<tr><th>switch</th><th>changed</th><th>';
+			}
+			$mod->setOutput("continue", false);
+		//	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+		//	echo '<tr><th>switch</th><th>changed</th><th>';
+			$dataArr =array();
 			foreach ($data as $item)
 			{
-				echo "<tr class=row_${order}><td>";
-				renderCell (spotEntity ('object', $item['object_id']));
-				echo "</td><td>" . formatAge ($item['last_change']) . "</td></tr>";
+			//	echo "<tr class=row_${order}><td>";
+			//	renderCell (spotEntity ('object', $item['object_id']));
+			//	echo "</td><td>" . formatAge ($item['last_change']) . "</td></tr>";
+				$dataArr[] = array("order" => $order, "renderedCell" => renderCell (spotEntity ('object', $item['object_id'])), 
+					"formatedAge" => formatAge ($item['last_change']));
+
 				$order = $nextorder[$order];
 			}
-			echo '</table>';
+			$mod->setOutput("dataArr", $dataArr);
+		//	echo '</table>';
 		}
 }
 
@@ -9333,113 +9366,162 @@ function renderGlobalLogEditor()
 function renderVirtualResourcesSummary ()
 {
 	global $pageno, $nextorder;
-
-	echo "<table border=0 class=objectview>\n";
-	echo "<tr><td class=pcleft>";
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderVirtualResourcesSummary");
+	$mod->setNamespace("", true);
+		
+	//echo "<table border=0 class=objectview>\n";
+	//echo "<tr><td class=pcleft>";
 
 	$clusters = getVMClusterSummary ();
-	startPortlet ('Clusters (' . count ($clusters) . ')');
+	//startPortlet ('Clusters (' . count ($clusters) . ')');
+	$mod->setOutput("countClusters", count($clusters));
+		 
 	if (count($clusters) > 0)
 	{
+		$mod->setOutput("areClusters", true);
+			 
 		echo "<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
 		echo "<tr><th>Cluster</th><th>Hypervisors</th><th>Resource Pools</th><th>Cluster VMs</th><th>RP VMs</th><th>Total VMs</th></tr>\n";
 		$order = 'odd';
+		$clustersArr = array();
 		foreach ($clusters as $cluster)
 		{
 			$total_vms = $cluster['cluster_vms'] + $cluster['resource_pool_vms'];
-			echo "<tr class=row_${order} valign=top>";
-			echo '<td class="tdleft">' . mkA ("<strong>${cluster['name']}</strong>", 'object', $cluster['id']) . '</td>';
-			echo "<td class='tdleft'>${cluster['hypervisors']}</td>";
-			echo "<td class='tdleft'>${cluster['resource_pools']}</td>";
-			echo "<td class='tdleft'>${cluster['cluster_vms']}</td>";
-			echo "<td class='tdleft'>${cluster['resource_pool_vms']}</td>";
-			echo "<td class='tdleft'>$total_vms</td>";
-			echo "</tr>\n";
+		//	echo "<tr class=row_${order} valign=top>";
+		//	echo '<td class="tdleft">' . mkA ("<strong>${cluster['name']}</strong>", 'object', $cluster['id']) . '</td>';
+		//	echo "<td class='tdleft'>${cluster['hypervisors']}</td>";
+		//	echo "<td class='tdleft'>${cluster['resource_pools']}</td>";
+		//	echo "<td class='tdleft'>${cluster['cluster_vms']}</td>";
+		//	echo "<td class='tdleft'>${cluster['resource_pool_vms']}</td>";
+		//	echo "<td class='tdleft'>$total_vms</td>";
+		//	echo "</tr>\n";
+			
+			$clustersArr[] = array("order" => $order, "mka" => mkA ("<strong>${cluster['name']}</strong>", 'object', $cluster['id']),
+								   "clusterHypervisors" => $cluster['hypervisors'], "clusterResPools" => $cluster['resource_pools'],
+								   "clusterVM" => $cluster['cluster_vms'], "clusterResPoolVMs" => $cluster['resource_pool_vms'], 
+								   "totalVMs" => $total_vms);
 			$order = $nextorder[$order];
 		}
-		echo "</table>\n";
+		$mod->setOutput("clusterArray", $clustersArr);
+			 
+	//	echo "</table>\n";
 	}
-	else
-		echo '<b>No clusters exist</b>';
-	finishPortlet();
+	//else
+	//	echo '<b>No clusters exist</b>';
+	//finishPortlet();
 
-	echo "</td><td class=pcright>";
+//	echo "</td><td class=pcright>";
 
 	$pools = getVMResourcePoolSummary ();
-	startPortlet ('Resource Pools (' . count ($pools) . ')');
+	//startPortlet ('Resource Pools (' . count ($pools) . ')');
+	$mod->setOutput("countResPools", count($pools));
+		 
 	if (count($pools) > 0)
 	{
-		echo "<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
-		echo "<tr><th>Pool</th><th>Cluster</th><th>VMs</th></tr>\n";
+		$mod->setOutput("areResPools", true);
+			 
+	//	echo "<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
+	//	echo "<tr><th>Pool</th><th>Cluster</th><th>VMs</th></tr>\n";
 		$order = 'odd';
+		$poolsArr = array();
 		foreach ($pools as $pool)
 		{
-			echo "<tr class=row_${order} valign=top>";
-			echo '<td class="tdleft">' . mkA ("<strong>${pool['name']}</strong>", 'object', $pool['id']) . '</td>';
-			echo '<td class="tdleft">';
+			$singPool = array("order" => $order, "mka" => mkA ("<strong>${pool['name']}</strong>", 'object', $pool['id']),
+						  "poolVMs" => $pool['VMs']);
+			//echo "<tr class=row_${order} valign=top>";
+			//echo '<td class="tdleft">' . mkA ("<strong>${pool['name']}</strong>", 'object', $pool['id']) . '</td>';
+			//echo '<td class="tdleft">';
 			if ($pool['cluster_id'])
-				echo mkA ("<strong>${pool['cluster_name']}</strong>", 'object', $pool['cluster_id']);
-			echo '</td>';
-			echo "<td class='tdleft'>${pool['VMs']}</td>";
-			echo "</tr>\n";
+				$singPool['clusterID'] = mkA ("<strong>${pool['cluster_name']}</strong>", 'object', $pool['cluster_id']);
+			//	echo mkA ("<strong>${pool['cluster_name']}</strong>", 'object', $pool['cluster_id']);
+			//echo '</td>';
+			//echo "<td class='tdleft'>${pool['VMs']}</td>";
+			//echo "</tr>\n";
+			$poolsArr[] = $singPool;
 			$order = $nextorder[$order];
-		}
-		echo "</table>\n";
-	}
-	else
-		echo '<b>No pools exist</b>';
-	finishPortlet();
 
-	echo "</td></tr><tr><td class=pcleft>";
+		}
+		$mod->setOutput("poolsArray", $poolsArr);
+			 
+	//	echo "</table>\n";
+	}
+//	else
+//		echo '<b>No pools exist</b>';
+//	finishPortlet();
+
+	//echo "</td></tr><tr><td class=pcleft>";
 
 	$hypervisors = getVMHypervisorSummary ();
-	startPortlet ('Hypervisors (' . count ($hypervisors) . ')');
+//	startPortlet ('Hypervisors (' . count ($hypervisors) . ')');
+	$mod->setOutput("hypervisorCount", count($hypervisors));
+		 
 	if (count($hypervisors) > 0)
 	{
-		echo "<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
-		echo "<tr><th>Hypervisor</th><th>Cluster</th><th>VMs</th></tr>\n";
+		$mod->setOutput("areHypervisors", true);
+			 
+	//	echo "<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
+	//	echo "<tr><th>Hypervisor</th><th>Cluster</th><th>VMs</th></tr>\n";
 		$order = 'odd';
+		$hypersArr = array();
 		foreach ($hypervisors as $hypervisor)
 		{
-			echo "<tr class=row_${order} valign=top>";
-			echo '<td class="tdleft">' . mkA ("<strong>${hypervisor['name']}</strong>", 'object', $hypervisor['id']) . '</td>';
-			echo '<td class="tdleft">';
+			$singHyper = array("order" => $order, "mka" => mkA ("<strong>${hypervisor['name']}</strong>", 'object', $hypervisor['id']),
+						  "hyperVMs" => $hypervisor['VMs']);
+		//	echo "<tr class=row_${order} valign=top>";
+		//	echo '<td class="tdleft">' . mkA ("<strong>${hypervisor['name']}</strong>", 'object', $hypervisor['id']) . '</td>';
+		//	echo '<td class="tdleft">';
 			if ($hypervisor['cluster_id'])
-				echo mkA ("<strong>${hypervisor['cluster_name']}</strong>", 'object', $hypervisor['cluster_id']);
-			echo '</td>';
-			echo "<td class='tdleft'>${hypervisor['VMs']}</td>";
-			echo "</tr>\n";
+				$singHyper['hyperID'] = mkA ("<strong>${hypervisor['cluster_name']}</strong>", 'object', $hypervisor['cluster_id']);
+		//		echo mkA ("<strong>${hypervisor['cluster_name']}</strong>", 'object', $hypervisor['cluster_id']);
+		//	echo '</td>';
+		//	echo "<td class='tdleft'>${hypervisor['VMs']}</td>";
+		//	echo "</tr>\n";
+			$hypersArr[] = $singHyper;
 			$order = $nextorder[$order];
 		}
-		echo "</table>\n";
+		$mod->setOutput("hypersArray", $hypersArr);
+			 
+	//	echo "</table>\n";
 	}
-	else
-		echo '<b>No hypervisors exist</b>';
-	finishPortlet();
+//	else
+//		echo '<b>No hypervisors exist</b>';
+//	finishPortlet();
 
-	echo "</td><td class=pcright>";
+	//echo "</td><td class=pcright>";
 
 	$switches = getVMSwitchSummary ();
-	startPortlet ('Virtual Switches (' . count ($switches) . ')');
+//	startPortlet ('Virtual Switches (' . count ($switches) . ')');
+	$mod->setOutput("countSwitches", count($switches));
+		 
 	if (count($switches) > 0)
 	{
-		echo "<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
-		echo "<tr><th>Name</th></tr>\n";
+		$mod->setOutput("areSwitches", true);
+			 
+	//	echo "<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
+	//	echo "<tr><th>Name</th></tr>\n";
 		$order = 'odd';
+		$switchesArr = array();
 		foreach ($switches as $switch)
 		{
-			echo "<tr class=row_${order} valign=top>";
-			echo '<td class="tdleft">' . mkA ("<strong>${switch['name']}</strong>", 'object', $switch['id']) . '</td>';
-			echo "</tr>\n";
+		//	echo "<tr class=row_${order} valign=top>";
+		//	echo '<td class="tdleft">' . mkA ("<strong>${switch['name']}</strong>", 'object', $switch['id']) . '</td>';
+		//	echo "</tr>\n";
+			$switchesArr[] = array("order" => $order, "mka" => mkA ("<strong>${switch['name']}</strong>", 'object', $switch['id']));
 			$order = $nextorder[$order];
 		}
-		echo "</table>\n";
+		$mod->setOutput("switchesArray", $switchesArr);
+			 
+	//	echo "</table>\n";
 	}
-	else
-		echo '<b>No virtual switches exist</b>';
-	finishPortlet();
+//	else
+//		echo '<b>No virtual switches exist</b>';
+//	finishPortlet();
 
-	echo "</td></tr></table>\n";
+//	echo "</td></tr></table>\n";
 }
 
 function switchportInfoJS($object_id)
