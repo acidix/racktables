@@ -1,5 +1,5 @@
 <?php if (defined("RS_TPL")) {?>
-	<?php if ($this->is("loadJS", Val)) { ?>
+	<?php if ($this->is("loadJS", true)) { ?>
 		<?php $this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/racktables.js")); ?>
 	<?php } ?> 
 

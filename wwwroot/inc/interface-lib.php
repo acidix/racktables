@@ -287,7 +287,7 @@ function printSelect ($optionList, $select_attrs = array(), $selected_id = NULL)
 }
 
 // Input array keys are OPTION VALUEs and input array values are OPTION text.
-function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $treat_single_special = TRUE)
+function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $treat_single_special = TRUE, $parent = null, $placeholder = "getSelect")
 {
 
 	
@@ -311,8 +311,11 @@ function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $
 //		return "<input type=hidden name=${select_attrs['name']} id=${select_attrs['name']} value=${key}>" . $value;
 		return $mod->run();
 	}
+	if($parent == null)
+		$mod = $tplm->generateModule("GetSelect",  false);
+	else
+		$mod = $tplm->generateSubmodule($placeholder, "GetSelect", $parent);
 
-	$mod = $tplm->generateModule("GetSelect",  false);
 	if (!array_key_exists ('id', $select_attrs))
 		$select_attrs['id'] = $select_attrs['name'];
 //	$ret .= '<select';
@@ -329,7 +332,8 @@ function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $
 	$mod->setOutput("allOptions", $allOpitonsArray);
 //	$ret .= '</select>';
 //	return $ret;
-	return $mod->run();
+	if($parent == null)
+		return $mod->run();
 
 }
 
@@ -338,7 +342,7 @@ function printNiftySelect ($groupList, $select_attrs = array(), $selected_id = N
 	if($parent == null)
 		return getNiftySelect ($groupList, $select_attrs, $selected_id);
 	else
-		getNiftySelect ($groupList, $select_attrs, $selected_id, $parent, $placeholder);
+		getNiftySelect ($groupList, $select_attrs, $selected_id, false, $parent, $placeholder);
 }
 
 // Input is a cooked list of OPTGROUPs, each with own sub-list of OPTIONs in the same
@@ -346,9 +350,15 @@ function printNiftySelect ($groupList, $select_attrs = array(), $selected_id = N
 // If tree is true, hierarchical drop-boxes are used, otherwise optgroups are used.
 function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree = false, $parent = null, $placeholder = "niftySelect")
 {
+
 	// special treatment for ungrouped data
-	if (count ($groupList) == 1 and isset ($groupList['other']))
-		return getSelect ($groupList['other'], $select_attrs, $selected_id);
+	if (count ($groupList) == 1 and isset ($groupList['other'])){
+		if($parent == null)
+			return getSelect ($groupList['other'], $select_attrs, $selected_id);
+		else
+			getSelect ($groupList['other'], $select_attrs, $selected_id, TRUE, $parent, $placeholder);
+			return;
+	}
 	if (!array_key_exists ('name', $select_attrs))
 		return '';
 	if (!array_key_exists ('id', $select_attrs))
@@ -396,16 +406,15 @@ function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree =
 	else{
 		
 		$tplm = TemplateManager::getInstance();
-		if($parent==null)
-			$tplm->setTemplate("vanilla");
 		
-		if($parent==null)	
+		
+		if($parent == null)	
 			$mod = $tplm->generateModule("GetNiftySelect");
 		else
 			$mod = $tplm->generateSubmodule($placeholder, "GetNiftySelect", $parent);
 		
 		$mod->setNamespace("", true);
-
+	
 		if($tree){
 			$mod->setOutput("isTree", true);
 	//		$script .= "<script type='text/javascript'>\n";
@@ -431,28 +440,25 @@ function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree =
 			$selectAttrArr = array();
 			foreach ($select_attrs as $attr_name => $attr_value)
 				$selectAttrArr[] = array("attrName" => $attr_name,"attrVal" => $attr_value);
-			$mod->setOutput("selectAttrs", $selectAttrArr);
-				 
+			$mod->setOutput("selectAttrs", $selectAttrArr);	 
 
 			$groupListArr = array();
 			foreach ($groupList as $groupname => $groupdata){
-				$groupListArr = array("groupName" => $groupname);
-				
 				$optListArr = array();
 				foreach ($groupdata as $dict_key => $dict_value)
 					$optListArr[] = array("dictKey" => $dict_key, "dictVal" => $dict_value, "selected" => ($dict_key == $selected_id ? ' selected' : ''));
 
-				$optList = generateModule("GetNiftySelect_optList");
+				$optList = $tplm->generateModule("GetNiftySelect_optList");
 				$optList->setOutput("optListArray", $optListArr);
 
-				$groupListArr['optionList'] = $optList->run();
+				$groupListArr[] = array('groupName' => $groupname, 'optionList' => $optList);
 			}
 			$mod->setOutput("groupListArr", $groupListArr);
-		
 		}
 
 		if($parent==null)
 			return $mod->run();
+		
 	}
 }
 
@@ -1063,7 +1069,7 @@ function getOpLink ($params, $title,  $img_name = '', $comment = '', $class = ''
 	//Initiate TemplateManager
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");
-	$mod = $tplm->generateModule("GetOpLink", false);
+	$mod = $tplm->generateModule("GetOpLink");
 	
 	if (isset ($params))
 	{
@@ -1095,7 +1101,7 @@ function getOpLink ($params, $title,  $img_name = '', $comment = '', $class = ''
 	if (! empty ($img_name))
 	{
 		$mod->setOutput("loadImage", true);
-		$mod->setOutput("imgName", $imgName);
+		$mod->setOutput("imgName", $img_name);
 		$mod->setOutput("comment", $comment);			 
 //		$ret .= getImageHREF ($img_name, $comment);
 //		if (! empty ($title))

@@ -4,7 +4,7 @@
 					<label>
 						<input type=checkbox class='<?php $this->get("InputClass"); ?>[]' name='<?php $this->get("InputName"); ?>[]' value='<?php $this->get("InputValue"); ?>' <?php $this->get("ExtraAttrs"); ?>>
 						<span class="<?php $this->TagClass; ?>"> <?php $this->get("TagName"); ?></span>
-						<?php if (!($this->is($this->RefCnt,""))) { ?>
+						<?php if ($this->is("isRefCnt", true)) { ?>
 							<i>(<?php $this->get("RefCnt"); ?>)</i>
 						<?php } ?> 
 						
