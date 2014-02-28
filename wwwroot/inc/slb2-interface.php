@@ -769,7 +769,7 @@ function renderNewVSGForm ()
 	echo '<tr valign=top><td><input type=text name=name><p>';
 	printImageHREF ('CREATE', 'create virtual service', TRUE);
 	echo '</p></td><td>';
-	renderNewEntityTags ('ipvs');
+	echo renderNewEntityTags ('ipvs');
 	echo '</td></tr></table></form>';
 	finishPortlet();
 }

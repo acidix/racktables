@@ -12,11 +12,9 @@
 		<td><input type=text size=30 name=<?php $this->i ?>_object_name tabindex=<?php $this->tabindex ?> ></td>
 		<td><input type=text size=30 name=<?php $this->i ?>_object_label tabindex=<?php $this->tabindex ?> ></td>
 		<td><input type=text size=20 name=<?php $this->i ?>_object_asset_no tabindex=<?php $this->tabindex ?> ></td>
-		<?php if ($this->is("i", 0)) { ?>
-			<td valign=top rowspan=<?php $this->max ?> >
-			<?php $this->renderedEnityTags ?> 
-			</td>
-		<?php } ?> 
+		<td valign=top rowspan=<?php $this->max ?> >
+		<?php $this->renderedEnityTags ?> 
+		</td>
 	<?php $this->endLoop(); ?> 
 	<tr><td class=submit colspan=5><input type=submit name=got_fast_data value='Go!'></td></tr>
 	</form></table>
@@ -28,7 +26,8 @@
 	<table border=0 align=center><tr><th>names</th><th>type</th></tr>
 	<tr><td rowspan=3><textarea name=namelist cols=40 rows=25>
 	</textarea></td><td valign=top>
-	<?php $this->sameTypeSameTagSelect ?> 
+	<?php $this->test ?> 
+	<?php $this->get("sameTypeSameTagSelect"); ?> 
 	</td></tr>
 	<tr><th>Tags</th></tr>
 	<tr><td valign=top>

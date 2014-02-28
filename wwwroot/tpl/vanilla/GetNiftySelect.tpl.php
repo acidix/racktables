@@ -9,7 +9,7 @@
 		 <?php $this->endLoop(); ?>  
 		>
 		<?php $this->startLoop("groupListArr"); ?>	
-			<optgroup label='<?php $this->groupName ?> '>
+			<optgroup label='<?php $this->groupName ?>'>
 			<?php $this->optionList ?> 
 			</optgroup>
 		<?php $this->endLoop(); ?></select>

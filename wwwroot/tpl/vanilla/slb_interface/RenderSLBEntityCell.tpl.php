@@ -36,7 +36,7 @@
 		<?php $this->getH("PrintImageHref","RS pool");?>
 
 		<?php if ($this->is("showRSCount",true)) { ?>
-			<small><?php $this->get("cellRSCount") ?> </small>
+			<small>(<?php $this->get("cellRSCount") ?>)</small>
  		<?php } ?>
  		</td></tr>
 	<?php } ?>

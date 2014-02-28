@@ -1107,7 +1107,7 @@ function renderNewRackForm ($row_id)
 	echo '<table border=0 align=center>';
 	echo "<tr><th class=tdright>Name (required):</th><td class=tdleft><input type=text name=name tabindex=1></td>";
 	echo "<td rowspan=4>Assign tags:<br>";
-	renderNewEntityTags ('rack');
+	echo renderNewEntityTags ('rack');
 	echo "</td></tr>\n";
 	echo "<tr><th class=tdright>Height in units (required):</th><td class=tdleft><input type=text name=height1 tabindex=2 value='${default_height}'></td></tr>\n";
 	echo "<tr><th class=tdright>Asset tag:</th><td class=tdleft><input type=text name=asset_no tabindex=4></td></tr>\n";
@@ -1121,7 +1121,7 @@ function renderNewRackForm ($row_id)
 	echo '<table border=0 align=center>';
 	echo "<tr><th class=tdright>Height in units (*):</th><td class=tdleft><input type=text name=height2 value='${default_height}'></td>";
 	echo "<td rowspan=3 valign=top>Assign tags:<br>";
-	renderNewEntityTags ('rack');
+	echo renderNewEntityTags ('rack');
 	echo "</td></tr>\n";
 	echo "<tr><th class=tdright>Rack names (required):</th><td class=tdleft><textarea name=names cols=40 rows=25></textarea></td></tr>\n";
 	echo "<tr><td class=submit colspan=2>";
@@ -2777,7 +2777,7 @@ END
 	printOpFormIntro ('add');
 	// tags column
 	echo '<tr><td rowspan=5><h3>assign tags</h3>';
-	renderNewEntityTags ($realm);
+	echo renderNewEntityTags ($realm);
 	echo '</td>';
 	// inputs column
 	$prefix_value = empty ($_REQUEST['set-prefix']) ? '' : $_REQUEST['set-prefix'];
@@ -3576,11 +3576,13 @@ function renderAddMultipleObjectsForm ()
 		{
 			$singleEntry['max'] = $max;
 			$singleEntry['renderedEnityTags'] = renderNewEntityTags ('object');
-
 		//	echo "<td valign=top rowspan=${max}>";
 		//	renderNewEntityTags ('object');
 		//	echo "</td>\n";
 		}
+		else
+			$singleEntry['renderedEnityTags'] = "";
+		
 		//echo "</tr>\n";
 		$tabindex++;
 		$objectListOutput[] = $singleEntry;
@@ -3597,14 +3599,14 @@ function renderAddMultipleObjectsForm ()
 //	echo "<table border=0 align=center><tr><th>names</th><th>type</th></tr>";
 //	echo "<tr><td rowspan=3><textarea name=namelist cols=40 rows=25>\n";
 //	echo "</textarea></td><td valign=top>";
-	printNiftySelect ($typelist, array ('name' => 'global_type_id'), getConfigVar ('DEFAULT_OBJECT_TYPE'), false, $mod, "sameTypeSameTagSelect");
 
+	printNiftySelect ($typelist, array ('name' => 'global_type_id'), getConfigVar ('DEFAULT_OBJECT_TYPE'), false, $mod, "sameTypeSameTagSelect");
 //	printNiftySelect ($typelist, array ('name' => 'global_type_id'), getConfigVar ('DEFAULT_OBJECT_TYPE'));
 //	echo "</td></tr>";
 //	echo "<tr><th>Tags</th></tr>";
 //	echo "<tr><td valign=top>";
-
-	$mod->setOutput("renderedEnityTag",renderNewEntityTags ('object'));	 
+		 
+	$mod->setOutput("renderedEnityTag", renderNewEntityTags ('object'));	 
 //	renderNewEntityTags('object', $mod, 'renderedEnityTag');
 
 //	renderNewEntityTags ('object');
@@ -5567,39 +5569,37 @@ function printTagCheckboxTable ($input_name, $preselect, $neg_preselect, $taglis
 						$tagobj = $tplm->generateSubmodule("checkbox", "TagTreeCell", $addto);
 					else
 						$tagobj = $tplm->generateSubmodule($placeholder, "TagTreeCell", $addto);	
-				}else{
-					$tagobj = $tplm->generateModule("TagTreeCell");
+					}else{
+						$tagobj = $tplm->generateModule("TagTreeCell");
+					}
+					$tagobj->setNamespace("",true);
+					$tagobj->setLock();
+					$tagobj->setOutput("TrClass", 		$row['tr_class']);
+					$tagobj->setOutput("TdClass", 		$row['td_class']);
+					$tagobj->setOutput("LevelPx", 		$row['level'] * 16);
+					$tagobj->setOutput("InputClass",	$row['input_class']);
+					$tagobj->setOutput("InputName",		$row['input_name']);
+					$tagobj->setOutput("InputValue",	$row['input_value']);
+					if (array_key_exists ('input_extraattrs', $row))
+					{
+						$tagobj->setOutput("ExtraAttrs", ' ' . $row['input_extraattrs']);
+					}
+					else
+					{
+						$tagobj->setOutput("ExtraAttrs","");
+					}
+					$tagobj->setOutput("TagClass",		$tag_class);
+					$tagobj->setOutput("TagName", 		$row['text_tagname']);
+					
+					if (array_key_exists ('text_refcnt', $row))
+					{
+						$tagobj->setOutput("isRefCnt", 	true);
+						$tagobj->setOutput("RefCnt", 	$row['text_refcnt']);
+					}
 				}
-				$tagobj->setNamespace("",true);
-				$tagobj->setLock();
-				$tagobj->setOutput("TrClass", 		$row['tr_class']);
-				$tagobj->setOutput("TdClass", 		$row['td_class']);
-				$tagobj->setOutput("LevelPx", 		$row['level'] * 16);
-				$tagobj->setOutput("InputClass",	$row['input_class']);
-				$tagobj->setOutput("InputName",		$row['input_name']);
-				$tagobj->setOutput("InputValue",	$row['input_value']);
-				if (array_key_exists ('input_extraattrs', $row))
-				{
-					$tagobj->setOutput("ExtraAttrs", ' ' . $row['input_extraattrs']);
-				}
-				else
-				{
-					$tagobj->setOutput("ExtraAttrs","");
-				}
-				$tagobj->setOutput("TagClass",		$tag_class);
-				$tagobj->setOutput("TagName", 		$row['text_tagname']);
-				if (array_key_exists ('text_refcnt', $row))
-				{
-					$tagobj->setOutput("RefCnt", 	$row['text_refcnt']);
-				}
-				else
-				{
-					$tagobj->setOutput("RefCnt", 	"");
-				}
-
-				}
+				
 				if($addto == null){
-					$tagobj->run();
+					return $tagobj->run();
 				}
 				//	$tag_class = isset ($taginfo['id']) && isset ($taginfo['refcnt']) ? getTagClassName ($row['input_value']) : '';
 				/*	echo "<tr class='${row['tr_class']}'><td class='${row['td_class']}' style='padding-left: " . ($row['level'] * 16) . "px;'>";
@@ -5950,13 +5950,11 @@ function renderNewEntityTags ($for_realm = '', $parent = null , $placeholder = "
 	}
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderNewEntityTags", $parent);
-		
-	
-//	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm);
-// 	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm, $mod, "checkbox");
 
+ 	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm, $mod, "checkbox");
 //	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm);
 //	echo '</table></div>';
+	
 	if($parent == null)
 		return $mod->run();
 }
@@ -5972,7 +5970,7 @@ function renderTagRollerForRow ($row_id)
 	echo "rack row.<br>The tag(s) selected below will be ";
 	echo "appended to already assigned tag(s) of each particular entity. </td></tr>";
 	echo "<tr><th>Tags</th><td>";
-	renderNewEntityTags();
+	echo renderNewEntityTags();
 	echo "</td></tr>";
 	echo "<tr><th>Control question: the sum of ${a} and ${b}</th><td><input type=text name=sum></td></tr>";
 	echo "<tr><td colspan=2 align=center><input type=submit value='Go!'></td></tr>";
@@ -6287,7 +6285,7 @@ function renderFileManager ()
 		echo '<tr><th colspan=2>Comment</th><th>Assign tags</th></tr>';
 		echo '<tr><td valign=top colspan=2><textarea tabindex=101 name=comment rows=10 cols=80></textarea></td>';
 		echo '<td rowspan=2>';
-		renderNewEntityTags ('file');
+		echo renderNewEntityTags ('file');
 		echo '</td></tr>';
 		echo "<tr><td class=tdleft><label>File: <input type='file' size='10' name='file' tabindex=100></label></td><td class=tdcenter>";
 		printImageHREF ('CREATE', 'Upload file', TRUE, 102);

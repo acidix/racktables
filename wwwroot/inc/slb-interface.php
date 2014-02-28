@@ -659,7 +659,7 @@ function renderNewRSPoolForm ()
 	echo "</td><th>Assign tags</th></tr>";
 	echo "<tr><th class=tdright>VS config</th><td colspan=2><textarea name=vsconfig rows=10 cols=80 tabindex=102></textarea></td>";
 	echo "<td rowspan=2>";
-	renderNewEntityTags ('ipv4rspool');
+	echo renderNewEntityTags ('ipv4rspool');
 	echo "</td></tr>";
 	echo "<tr><th class=tdright>RS config</th><td colspan=2><textarea name=rsconfig rows=10 cols=80 tabindex=103></textarea></td></tr>";
 	echo "</table></form>";
@@ -716,7 +716,7 @@ function renderNewVSForm ()
 	echo '</td><td><input type=text name=name tabindex=104></td><td>';
 	printImageHREF ('CREATE', 'create virtual service', TRUE, 105);
 	echo "</td><td rowspan=3>";
-	renderNewEntityTags ('ipv4vs');
+	echo renderNewEntityTags ('ipv4vs');
 	echo "</td></tr><tr><th>VS configuration</th><td colspan=5 class=tdleft><textarea name=vsconfig rows=10 cols=80></textarea></td>";
 	echo "<tr><th>RS configuration</th><td colspan=5 class=tdleft><textarea name=rsconfig rows=10 cols=80></textarea></td></tr>";
 	echo '</table></form>';
