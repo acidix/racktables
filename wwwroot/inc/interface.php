@@ -5415,6 +5415,7 @@ function renderTagRowForViewer ($taginfo, $level = 0, $parent, $placeholder = 'T
 	$mod->addOutput('Spanclass', getTagClassName($taginfo['id']));
 	$mod->addOutput('Tag', $taginfo['tag']);
 	$mod->addOutput('Refc', $refc ? $refc : '');
+	$mod->addOutput('Level', $level * 16);
 
 	//echo '<span title="' . implode (', ', $stats) . '" class="' . getTagClassName ($taginfo['id']) . '">' . $taginfo['tag'];
 	//echo ($refc ? " <i>(${refc})</i>" : '') . '</span></td></tr>';

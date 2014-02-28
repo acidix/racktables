@@ -48,10 +48,20 @@ try {
 		$tplm = TemplateManager::getInstance();
 		if ($tplm->getMainModule() != null)
 		{
-			showPathAndSearch($pageno,$tabno,true);
-			showTabs($pageno, $tabno, true);
-			showMessageOrError(true);
-			renderQuickLinks();
+			//All calls below use the template engine to output their content
+			showPathAndSearch($pageno,$tabno,true); //generate PathaAndSearch
+			showTabs($pageno, $tabno, true); //generate TabList
+			showMessageOrError(true); //show all Messages
+			renderQuickLinks(); //show QuickLinks
+			
+			$mod = $tplm->getMainModule();
+			
+			//Set needed vars for the main mod
+			global $remote_displayname; 
+			$mod->setOutput('RemoteDisplayname', $remote_displayname);
+			$mod->setOutput('Enterprise', getConfigVar ('enterprise'));
+			$mod->setOutput('Title', getTitle ($pageno));
+			
 			$tplm->run(true,"vanilla");
 
 		}
