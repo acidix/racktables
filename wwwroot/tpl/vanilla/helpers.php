@@ -411,10 +411,10 @@ class TemplateHelperGetOpLink extends TemplateHelperAbstract
 class TemplateHelperTplSelect extends TemplateHelperAbstract
 {
 	protected function generate($params){
-		$code = '<select name="template">';
+		$code = '<select name="tplid">';
 		$list = TemplateManager::getOrderedTemplateList();
-		foreach ($list as $template) {
-			$code .= '<option>' . $template . '</option>';
+		foreach ($list as $key=>$template) {
+			$code .= '<option value=' . $key . '>' . $template . '</option>';
 		}
 		$code .= '</select>';
 		echo $code;

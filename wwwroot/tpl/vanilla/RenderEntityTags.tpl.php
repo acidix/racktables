@@ -4,7 +4,7 @@
 		<?php $this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/tag-cb.js")); ?>
 		<?php $this->addRequirement("Header","HeaderJsInline",array("code"=>$this->jsCode)); ?>
 		<td class=pcright>
-		<?php $this->RenderedEnityTags ?> 
+		<?php $this->RenderedEnityTags; ?> 
 		</td>
 		</tr></table>
 		
