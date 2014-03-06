@@ -819,25 +819,43 @@ function renderRow ($row_id)
 	$cellfilter = getCellFilter();
 	$rackList = filterCellList (listCells ('rack', $row_id), $cellfilter['expression']);
 	// Main layout starts.
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'Row');
+	$mod->setNamespace('row',true);
+	
+	$mod->addOutput('RowName', $rowInfo['name']);
+	
+	
 	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
 
 	// Left portlet with row information.
-	echo "<tr><td class=pcleft>";
-	startPortlet ($rowInfo['name']);
-	echo "<table border=0 cellspacing=0 cellpadding=3 width='100%'>\n";
+	//echo "<tr><td class=pcleft>";
+	//startPortlet ($rowInfo['name']);
+	//echo "<table border=0 cellspacing=0 cellpadding=3 width='100%'>\n";
 	if ($rowInfo['location_id'])
-		echo "<tr><th width='50%' class=tdright>Location:</th><td class=tdleft>".mkA ($rowInfo['location'], 'location', $rowInfo['location_id'])."</td></tr>\n";
-	echo "<tr><th width='50%' class=tdright>Racks:</th><td class=tdleft>${rowInfo['count']}</td></tr>\n";
-	echo "<tr><th width='50%' class=tdright>Units:</th><td class=tdleft>${rowInfo['sum']}</td></tr>\n";
-	echo "<tr><th width='50%' class=tdright>% used:</th><td class=tdleft>";
-	renderProgressBar (getRSUforRow ($rackList));
-	echo "</td></tr>\n";
-	echo "</table><br>\n";
-	finishPortlet();
-	renderCellFilterPortlet ($cellfilter, 'rack', $rackList, array ('row_id' => $row_id));
+	{
+		$mod->addOutput('HasLocation', true);
+		$mod->addOutput('LocationLink', mkA ($rowInfo['location'], 'location', $rowInfo['location_id']));
+	}
+		//echo "<tr><th width='50%' class=tdright>Location:</th><td class=tdleft>".mkA ($rowInfo['location'], 'location', $rowInfo['location_id'])."</td></tr>\n";
+	$mod->addOutput('RackCount', $rowInfo['count']);
+	$mod->addOutput('RowSum', $rowInfo['sum']);
+	
+	//echo "<tr><th width='50%' class=tdright>Racks:</th><td class=tdleft>${rowInfo['count']}</td></tr>\n";
+	//echo "<tr><th width='50%' class=tdright>Units:</th><td class=tdleft>${rowInfo['sum']}</td></tr>\n";
+	//echo "<tr><th width='50%' class=tdright>% used:</th><td class=tdleft>";
+	$mod->addOutput('ProgressBar', getProgressBar(getRSUforRow ($rackList)));
+	//echo "</td></tr>\n";
+	//echo "</table><br>\n";
+	//finishPortlet();
+	renderCellFilterPortlet ($cellfilter, 'rack', $rackList, array ('row_id' => $row_id), $mod);
 
-	renderFilesPortlet ('row',$row_id);
-	echo "</td><td class=pcright>";
+	$mod->addOutput('FilesPortlet', renderFilesPortlet('row',$row_id));
+	//echo "</td><td class=pcright>";
 
 	global $nextorder;
 	$rackwidth = getRackImageWidth() * getConfigVar ('ROW_SCALE');
@@ -845,28 +863,39 @@ function renderRow ($row_id)
 	$maxPerRow = max (floor (getConfigVar ('RACKS_PER_ROW') / getConfigVar ('ROW_SCALE')), 1);
 	$rackListIdx = 0;
 	$order = 'odd';
-	startPortlet ('Racks');
-	echo "<table border=0 cellspacing=5 align='center'><tr>";
+	//startPortlet ('Racks');
+	//echo "<table border=0 cellspacing=5 align='center'><tr>";
 	foreach ($rackList as $rack)
 	{
+		$smod = $tplm->generateSubmodule('Racks', 'RowRack', $mod);
 		if ($rackListIdx % $maxPerRow == 0)
 		{
 			if ($rackListIdx > 0)
-				echo '</tr>';
-			echo '<tr>';
+				$smod->addOutput('EndOfLine', true);
+				//echo '</tr>';
+			$smod->addOutput('NewLine', true);
+			//echo '<tr>';
 		}
 		$class = ($rack['has_problems'] == 'yes') ? 'error' : $order;
-		echo "<td align=center valign=bottom class=row_${class}><a href='".makeHref(array('page'=>'rack', 'rack_id'=>$rack['id']))."'>";
-		echo "<img border=0 width=${rackwidth} height=" . (getRackImageHeight ($rack['height']) * getConfigVar ('ROW_SCALE'));
-		echo " title='${rack['height']} units'";
-		echo "src='?module=image&img=midirack&rack_id=${rack['id']}&scale=" . getConfigVar ('ROW_SCALE') . "'>";
-		echo "<br>${rack['name']}</a></td>";
+		
+		$smod->addOutput('Class', $class);
+		$smod->addOutput('Link', makeHref(array('page'=>'rack', 'rack_id'=>$rack['id'])));
+		$smod->addOutput('ImgWidth',$rackwidth);
+		$smod->addOutput('ImgHeight', getRackImageHeight ($rack['height']) * getConfigVar ('ROW_SCALE'));
+		$smod->addOutput('Id', $rack['id']);
+		$smod->addOutput('Name', $rack['name']);
+		
+		//echo "<td align=center valign=bottom class=row_${class}><a href='".makeHref(array('page'=>'rack', 'rack_id'=>$rack['id']))."'>";
+		//echo "<img border=0 width=${rackwidth} height=" . (getRackImageHeight ($rack['height']) * getConfigVar ('ROW_SCALE'));
+		///echo " title='${rack['height']} units'";
+		//echo "src='?module=image&img=midirack&rack_id=${rack['id']}&scale=" . getConfigVar ('ROW_SCALE') . "'>";
+		//echo "<br>${rack['name']}</a></td>";
 		$order = $nextorder[$order];
 		$rackListIdx++;
 	}
-	echo "</tr></table>\n";
-	finishPortlet();
-	echo "</td></tr></table>";
+	//echo "</tr></table>\n";
+	//finishPortlet();
+	//echo "</td></tr></table>";
 }
 
 // Used by renderRack()
@@ -6093,9 +6122,14 @@ function renderUser ($user_id)
 	$summary['Account name'] = $userinfo['user_name'];
 	$summary['Real name'] = $userinfo['user_realname'];
 	$summary['tags'] = '';
-	renderEntitySummary ($userinfo, 'summary', $summary);
+	
+	$tplm = TemplateManager::getInstance();
+	
+	
+	
+	renderEntitySummary ($userinfo, 'summary', $summary, $tplm->getMainModule(), 'Payload');
 
-	renderFilesPortlet ('user', $user_id);
+	$tplm->getMainModule()->addOutput('Payload', renderFilesPortlet('user', $user_id));
 }
 
 function renderMyPasswordEditor ()

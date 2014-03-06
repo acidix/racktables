@@ -57,10 +57,9 @@ try {
 			$mod = $tplm->getMainModule();
 			
 			//Set needed vars for the main mod
-			global $remote_displayname; 
 			$mod->setOutput('RemoteDisplayname', $remote_displayname);
 			$mod->setOutput('Enterprise', getConfigVar ('enterprise'));
-			$mod->setOutput('Title', getTitle ($pageno));
+			$mod->setOutput('PageTitle', getTitle ($pageno));
 			
 			$tplm->run(true,"vanilla");
 

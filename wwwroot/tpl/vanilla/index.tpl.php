@@ -11,16 +11,8 @@
   			<div style="float: right" class=greeting><a href='index.php?page=myaccount&tab=default'><?php $this->RemoteDisplayname; ?></a> [ <a href='?logout'>logout</a> ]</div>
  			<?php $this->Enterprise; //echo getConfigVar ('enterprise') ?> RackTables <a href="http://racktables.org" title="Visit RackTables site"><?php echo CODE_VERSION ?></a>
  			<?php $this->Quicklinks_Table; ?>  
-
-
  		</div>
  	<div class="menubar">
- 		<div style='float: right'>
-			<form method=post id=TplSelect name=TplSelect action='?module=redirect&page=index&tab=index&op=settemplate'>
-				<?php $this->getH('TplSelect') ;?>	
-				<input class="icon" type="image" border="0" title="set template" src="?module=chrome&uri=pix/tango-document-save-16x16.png" name="submit"></input>
-			</form>
-		</div>
  		<div class='searchbox' style='float:right'>
 			<form name=search method=get>
 				<input type=hidden name=page value=search>
@@ -29,6 +21,12 @@
 				<label>Search:
 					<input type=text name=q size=20 tabindex=1000 value='<?php $this->SearchValue; ?>'>
 				</label>
+			</form>
+		</div>
+ 		<div style='float: right'>
+			<form method=post id=TplSelect name=TplSelect action='?module=redirect&page=index&tab=index&op=settemplate'>
+				<?php $this->getH('TplSelect') ;?>	
+				<input class="icon" type="image" border="0" title="set template" src="?module=chrome&uri=pix/tango-document-save-16x16.png" name="submit"></input>
 			</form>
 		</div>
 		<?php $this->Path; ?>
