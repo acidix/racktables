@@ -4588,25 +4588,39 @@ function renderDictionary ()
 
 function renderChapter ($tgt_chapter_no)
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	$mod = $tplm->generateSubmodule('Payload', 'chapter');
+	$mod->setNamespace('chapter', true);
 	global $nextorder;
 	$words = readChapter ($tgt_chapter_no, 'a');
 	$wc = count ($words);
-	if (!$wc)
-	{
-		echo "<center><h2>(no records)</h2></center>";
-		return;
-	}
+	$mod->addOutput('recordCount', $wc);  
+	
+	
+	//if (!$wc)
+	//{
+	//	echo "<center><h2>(no records)</h2></center>";
+	//	return;
+	//}
 	$refcnt = getChapterRefc ($tgt_chapter_no, array_keys ($words));
 	$attrs = getChapterAttributes($tgt_chapter_no);
-	echo "<br><table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>\n";
-	echo "<tr><th colspan=4>${wc} record(s)</th></tr>\n";
-	echo "<tr><th>Origin</th><th>Key</th><th>Refcnt</th><th>Word</th></tr>\n";
+	//echo "<br><table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>\n";
+	//echo "<tr><th colspan=4>${wc} record(s)</th></tr>\n";
+	//echo "<tr><th>Origin</th><th>Key</th><th>Refcnt</th><th>Word</th></tr>\n";
 	$order = 'odd';
 	foreach ($words as $key => $value)
 	{
-		echo "<tr class=row_${order}><td>";
-		printImageHREF ($key < 50000 ? 'computer' : 'favorite');
-		echo "</td><td>${key}</td><td>";
+		$submod = $tplm->generateSubmodule('tableContent', 'chapterRow', $mod);
+		$submod->addOutput('order', $order);
+		//echo "<tr class=row_${order}><td>";
+		
+		//getImageHREF ($key < 50000 ? 'computer' : 'favorite');
+		$submod->addOutput('ImageType', $key < 50000 ? 'computer' : 'favorite');
+		//echo "</td><td>${key}</td><td>";
+		$submod->addOutput('key', $key);
+		$submod->addOutput('refcnt', $refcnt[$key]);
 		if ($refcnt[$key])
 		{
 			$cfe = '';
@@ -4614,6 +4628,7 @@ function renderChapter ($tgt_chapter_no)
 			{
 				if (! empty($cfe))
 					$cfe .= ' or ';
+					
 				$cfe .= '{$attr_' . $attr_id . '_' . $key . '}';
 			}
 
@@ -4629,64 +4644,90 @@ function renderChapter ($tgt_chapter_no)
 						'cfe' => $cfe
 					)
 				);
-				echo '<a href="' . $href . '">' . $refcnt[$key] . '</a>';
+				
+				$submod->setOutput('cfe', true);
+				$submod->addOutput('href', $href);
+				
+				//echo '<a href="' . $href . '">' . $refcnt[$key] . '</a>';
 			}
-			else
-				echo $refcnt[$key];
+		
+				//echo $refcnt[$key];
 		}
-		echo "</td><td>${value}</td></tr>\n";
+		//echo "</td><td>${value}</td></tr>\n";
 		$order = $nextorder[$order];
 	}
-	echo "</table>\n<br>";
+	//echo "</table>\n<br>";
 }
 
 function renderChapterEditor ($tgt_chapter_no)
 {
 	global $nextorder;
-	function printNewItemTR ()
+	function printNewItemTR ($parent, $placeholder)
 	{
-		printOpFormIntro ('add');
-		echo '<tr><td>&nbsp;</td><td>&nbsp;</td><td>';
-		printImageHREF ('add', 'Add new', TRUE);
-		echo "</td>";
-		echo "<td class=tdleft><input type=text name=dict_value size=64 tabindex=100></td><td>";
-		printImageHREF ('add', 'Add new', TRUE, 101);
-		echo '</td></tr></form>';
+		$tplm = TemplateManager::getInstance();
+		$mod = $tplm->generateSubmodule($placeholder, 'printNewItem', $parent);
+		$mod->addOutput('OpForm', printOpFormIntro ('add'));
+		
+		//printOpFormIntro ('add');
+		//echo '<tr><td>&nbsp;</td><td>&nbsp;</td><td>';
+		
+		//printImageHREF ('add', 'Add new', TRUE);
+		//echo "</td>";
+		//echo "<td class=tdleft><input type=text name=dict_value size=64 tabindex=100></td><td>";
+		//printImageHREF ('add', 'Add new', TRUE, 101);
+		//echo '</td></tr></form>';
 	}
-	echo "<br><table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>\n";
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	$mod = $tplm->generateSubmodule('Payload', 'ChapterEditor');
+	$mod->setNamespace('Chapter', true);
+	
+	
+	
+	//echo "<br><table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>\n";
 	$words = readChapter ($tgt_chapter_no);
 	$refcnt = getChapterRefc ($tgt_chapter_no, array_keys ($words));
 	$order = 'odd';
-	echo "<tr><th>Origin</th><th>Key</th><th>&nbsp;</th><th>Word</th><th>&nbsp;</th></tr>\n";
+	//echo "<tr><th>Origin</th><th>Key</th><th>&nbsp;</th><th>Word</th><th>&nbsp;</th></tr>\n";
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR();
+		printNewItemTR($mod,"NewTop");
 	foreach ($words as $key => $value)
 	{
-		echo "<tr class=row_${order}><td>";
+			$submod = $tplm->generateSubmodule('merge', 'CreateChapterRow', $mod);
+		//echo "<tr class=row_${order}><td>";
 		$order = $nextorder[$order];
+		$submod->addOutput('order', $order);
+		$submod->addOutput('key', $key);
+		$submod->addOutput('value', $value);
+		$submod->addOutput('refcnt', $refcnt[$key]);
 		// Show plain row for stock records, render a form for user's ones.
 		if ($key < 50000)
 		{
-			printImageHREF ('computer');
-			echo "</td><td>${key}</td><td>&nbsp;</td><td>${value}</td><td>&nbsp;</td></tr>";
+			$submod->addOutput('lowkey', true);
+		//	printImageHREF ('computer');
+		//	echo "</td><td>${key}</td><td>&nbsp;</td><td>${value}</td><td>&nbsp;</td></tr>";
 			continue;
 		}
-		printOpFormIntro ('upd', array ('dict_key' => $key));
-		printImageHREF ('favorite');
-		echo "</td><td>${key}</td><td>";
+		//printOpFormIntro ('upd', array ('dict_key' => $key));
+		//printImageHREF ('favorite');
+		//echo "</td><td>${key}</td><td>";
 		// Prevent deleting words currently used somewhere.
-		if ($refcnt[$key])
-			printImageHREF ('nodelete', 'referenced ' . $refcnt[$key] . ' time(s)');
-		else
-			echo getOpLink (array('op'=>'del', 'dict_key'=>$key), '', 'delete', 'Delete word');
-		echo '</td>';
-		echo "<td class=tdleft><input type=text name=dict_value size=64 value='${value}'></td><td>";
-		printImageHREF ('save', 'Save changes', TRUE);
-		echo "</td></tr></form>";
+		//if ($refcnt[$key])
+		//	printImageHREF ('nodelete', 'referenced ' . $refcnt[$key] . ' time(s)');
+		//else
+		//	echo getOpLink (array('op'=>'del', 'dict_key'=>$key), '', 'delete', 'Delete word');
+		//echo '</td>';
+		//echo "<td class=tdleft><input type=text name=dict_value size=64 value='${value}'></td><td>";
+		//printImageHREF ('save', 'Save changes', TRUE);
+		//echo "</td></tr></form>";
+		
+		
 	}
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR();
-	echo "</table>\n";
+		printNewItemTR($mod, "NewBottom");
+	//echo "</table>\n";
 }
 
 // We don't allow to rename/delete a sticky chapter and we don't allow
