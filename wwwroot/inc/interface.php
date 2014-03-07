@@ -4591,7 +4591,7 @@ function renderChapter ($tgt_chapter_no)
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
 	$tplm->createMainModule();
-	$mod = $tplm->generateSubmodule('Payload', 'chapter');
+	$mod = $tplm->generateSubmodule('Payload', 'Chapter');
 	$mod->setNamespace('chapter', true);
 	global $nextorder;
 	$words = readChapter ($tgt_chapter_no, 'a');
@@ -4612,7 +4612,7 @@ function renderChapter ($tgt_chapter_no)
 	$order = 'odd';
 	foreach ($words as $key => $value)
 	{
-		$submod = $tplm->generateSubmodule('tableContent', 'chapterRow', $mod);
+		$submod = $tplm->generateSubmodule('tableContent', 'ChapterRow', $mod);
 		$submod->addOutput('order', $order);
 		//echo "<tr class=row_${order}><td>";
 		
@@ -4665,7 +4665,7 @@ function renderChapterEditor ($tgt_chapter_no)
 	function printNewItemTR ($parent, $placeholder)
 	{
 		$tplm = TemplateManager::getInstance();
-		$mod = $tplm->generateSubmodule($placeholder, 'printNewItem', $parent);
+		$mod = $tplm->generateSubmodule($placeholder, 'PrintNewItem', $parent);
 		$mod->addOutput('OpForm', printOpFormIntro ('add'));
 		
 		//printOpFormIntro ('add');
@@ -8890,24 +8890,33 @@ function renderVSTRules ($rules, $title = NULL)
 
 function renderVST ($vst_id)
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	$mod = $tplm->generateSubmodule('Payload', 'vst');
+	$mod->setNamespace('vst', true);
 	$vst = spotEntity ('vst', $vst_id);
 	amplifyCell ($vst);
-	echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
-	echo '<tr><td colspan=2 align=center><h1>' . niftyString ($vst['description'], 0) . '</h1><h2>';
-	echo "<tr><td class=pcleft width='50%'>";
+	$mod->addOutput('Vst', $vst);
+	$mod->addOutput('Nextorder', global $nextorder);
+	$mod->addOutput('Switches', $vst['switches']);
+	$mod->addOutput('Order', 'odd');
+	//echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
+	//echo '<tr><td colspan=2 align=center><h1>' . niftyString ($vst['description'], 0) . '</h1><h2>';
+	//echo "<tr><td class=pcleft width='50%'>";
 
 	renderEntitySummary ($vst, 'summary', array ('tags' => ''));
 
 	renderVSTRules ($vst['rules']);
-	echo '</td><td class=pcright>';
-	if (!count ($vst['switches']))
-		startPortlet ('no orders');
-	else
-	{
-		global $nextorder;
-		startPortlet ('orders (' . count ($vst['switches']) . ')');
-		echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-		$order = 'odd';
+	//echo '</td><td class=pcright>';
+	//if (!count ($vst['switches']))
+	//	startPortlet ('no orders');
+	//else
+	//{
+	//		global $nextorder;
+	//	startPortlet ('orders (' . count ($vst['switches']) . ')');
+	//	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	//$order = 'odd';
 		foreach (array_keys ($vst['switches']) as $object_id)
 		{
 			echo "<tr class=row_${order}><td>";
