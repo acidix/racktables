@@ -4682,7 +4682,7 @@ function renderChapterEditor ($tgt_chapter_no)
 	$tplm->setTemplate('vanilla');
 	$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'ChapterEditor');
-	$mod->setNamespace('Chapter', true);
+	$mod->setNamespace('chapter', true);
 	
 	
 	
