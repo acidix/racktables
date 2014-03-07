@@ -8888,7 +8888,7 @@ function renderVSTRules ($rules, $title = NULL)
 	finishPortlet();
 }
 
-function renderVST ($vst_id)
+/** function renderVST ($vst_id)
 {
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
@@ -8928,7 +8928,7 @@ function renderVST ($vst_id)
 	}
 	finishPortlet();
 	echo '</td></tr></table>';
-}
+} */
 
 function renderVSTRulesEditor ($vst_id)
 {
