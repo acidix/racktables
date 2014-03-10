@@ -420,4 +420,20 @@ class TemplateHelperTplSelect extends TemplateHelperAbstract
 		echo $code;
 	}	
 }
+
+/**
+ * TemplateHelper for select lists (behaves similar to the old getSelect function)
+ *
+ * Params:
+ * [0] = Content
+ * @author Alexander Kastius
+ *
+ */
+class TemplateHelperSelect extends TemplateHelperAbstract
+{
+	protected function generate($params)
+	{
+		
+	}
+}
 ?>

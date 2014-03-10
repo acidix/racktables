@@ -17,7 +17,7 @@ $js = <<<JSTXT
 	);
 JSTXT;
 
-$this->addRequirement("Header","HeaderJsInline",array("code"=>$js)); ?>
+$this->addJs($js,true); ?>
 
 <div class=portlet>
 	<h2>Racks</h2>
