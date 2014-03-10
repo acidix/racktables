@@ -4698,7 +4698,7 @@ function renderChapterEditor ($tgt_chapter_no)
 	{
 		$tplm = TemplateManager::getInstance();
 		$mod = $tplm->generateSubmodule($placeholder, 'PrintNewItem', $parent);
-		$mod->addOutput('OpForm', printOpFormIntro ('add'));
+		//$mod->addOutput('OpForm', $this->getH('PrintOpFormIntro', 'add'));
 		
 		//printOpFormIntro ('add');
 		//echo '<tr><td>&nbsp;</td><td>&nbsp;</td><td>';
@@ -4716,11 +4716,15 @@ function renderChapterEditor ($tgt_chapter_no)
 	$mod = $tplm->generateSubmodule('Payload', 'ChapterEditor');
 	$mod->setNamespace('chapter', true);
 	
+	echo 'adfskljdalskjdklsajdlkasjkl';
 	
 	
 	//echo "<br><table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>\n";
 	$words = readChapter ($tgt_chapter_no);
+	
+	echo 'dsfnfkjdhnsj';
 	$refcnt = getChapterRefc ($tgt_chapter_no, array_keys ($words));
+	echo 'dsabjkbdsfj';
 	$order = 'odd';
 	//echo "<tr><th>Origin</th><th>Key</th><th>&nbsp;</th><th>Word</th><th>&nbsp;</th></tr>\n";
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
@@ -4728,7 +4732,8 @@ function renderChapterEditor ($tgt_chapter_no)
 	foreach ($words as $key => $value)
 	{
 			$submod = $tplm->generateSubmodule('merge', 'CreateChapterRow', $mod);
-		//echo "<tr class=row_${order}><td>";
+		echo $key;
+			//echo "<tr class=row_${order}><td>";
 		$order = $nextorder[$order];
 		$submod->addOutput('order', $order);
 		$submod->addOutput('key', $key);

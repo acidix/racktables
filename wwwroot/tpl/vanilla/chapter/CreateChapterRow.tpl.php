@@ -5,7 +5,7 @@
 $this->getH('PrintImageHref', 'computer');?>
 
 </td><td><?php $this->key ?></td><td>&nbsp;</td><td><?php $this->value ?></td><td>&nbsp;</td></tr>
-<?php } ?>
+<?php } else{?>
 
 <?php $this->getH('OpFormIntro', array('upd', array ('dict_key' => $this->_key))); 
 
@@ -20,7 +20,7 @@ $this->getH('PrintImageHref', 'computer');?>
 	<?php $this->getH('printImageHref', array('save', 'Save changes', TRUE)) ?>
 	</td></tr></form>
 
-<?php } else { ?>
+<?php } } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />
 Return to the index. <br />

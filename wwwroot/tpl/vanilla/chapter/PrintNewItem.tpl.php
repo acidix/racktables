@@ -1,5 +1,5 @@
 <?php if (defined("RS_TPL")) {?>
-
+<?php $this->getH('PrintOpFormIntro', 'add'); ?>
 <tr><td>&nbsp;</td><td>&nbsp;</td><td>
 <?php $this->getH('PrintImageHref', array('add', 'Add new', TRUE)); ?>
 </td>
