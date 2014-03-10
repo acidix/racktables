@@ -90,7 +90,7 @@ function renderQuickLinks()
 
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->createMainModule("index");
+	//$tplm->createMainModule("index");
 	$mod = $tplm->generateSubmodule("Quicklinks_Table", "Quicklinks");
 //	$mod = $tplm->getMainModule(); 
 	//if($mod == null)
@@ -1115,15 +1115,21 @@ function renderRackSortForm ($row_id)
 	);
 JSTXT;
 	addJS($js, true);
+	
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'RowRackSortForm');
+	$mod->setNamespace('row',true);
 
-	startPortlet ('Racks');
-	echo "<table border=0 cellspacing=0 cellpadding=5 align=center class=widetable>\n";
-	echo "<tr><th>Drag to change order</th></tr>\n";
-	echo "<tr><td><ul class='uflist' id='sortRacks'>\n";
+	//startPortlet ('Racks');
+	//echo "<table border=0 cellspacing=0 cellpadding=5 align=center class=widetable>\n";
+	//echo "<tr><th>Drag to change order</th></tr>\n";
+	//echo "<tr><td><ul class='uflist' id='sortRacks'>\n";
 	foreach (getRacks($row_id) as $rack_id => $rackInfo)
-		echo "<li id=racks_${rack_id}>${rackInfo['name']}</li>\n";
-	echo "</ul></td></tr></table>\n";
-	finishPortlet();
+		$mod->addOutput('racklist', array('RackId'=>$rack_id,'RackName'=>$rackInfo['name']));
+		//echo "<li id=racks_${rack_id}>${rackInfo['name']}</li>\n";
+	//echo "</ul></td></tr></table>\n";
+	//finishPortlet();
 }
 
 function renderNewRackForm ($row_id)
@@ -1131,6 +1137,20 @@ function renderNewRackForm ($row_id)
 	$default_height = getConfigVar ('DEFAULT_RACK_HEIGHT');
 	if ($default_height == 0)
 		$default_height = '';
+	
+	$tplm = TemplateManager::getInstance();
+	
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'NewRackForm');
+	$mod->setNamespace('row',true);
+	
+	$mod->addOutput('DefaultHeight', $default_height);
+	
+	renderNewEntityTags ('rack',$mod,'Tags');
+	
+	/**
 	startPortlet ('Add one');
 	printOpFormIntro ('addRack', array ('got_data' => 'TRUE'));
 	echo '<table border=0 align=center>';
@@ -1156,7 +1176,7 @@ function renderNewRackForm ($row_id)
 	echo "<tr><td class=submit colspan=2>";
 	printImageHREF ('CREATE', 'Add', TRUE);
 	echo '</form></table>';
-	finishPortlet();
+	finishPortlet(); */
 }
 
 function renderEditObjectForm()
@@ -4580,10 +4600,22 @@ function renderRackPage ($rack_id)
 
 function renderDictionary ()
 {
-	echo '<ul>';
+	$tplm = TemplateManager::getInstance();
+	
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'DictList');
+	
+	$mod->setNamespace('dict');
+	
+
+	//echo '<ul>';
 	foreach (getChapterList() as $chapter_no => $chapter)
-		echo '<li>' . mkA ($chapter['name'], 'chapter', $chapter_no) . " (${chapter['wordc']} records)</li>";
-	echo '</ul>';
+		$mod->addOutput('Dictlist', array('Link'=>mkA($chapter['name'], 'chapter', $chapter_no),'Records'=>$chapter['wordc']));
+	
+		//echo '<li>' . mkA ($chapter['name'], 'chapter', $chapter_no) . " (${chapter['wordc']} records)</li>";
+	//echo '</ul>';
 }
 
 function renderChapter ($tgt_chapter_no)
@@ -6068,7 +6100,20 @@ function renderTagRollerForRow ($row_id)
 	$a = rand (1, 20);
 	$b = rand (1, 20);
 	$sum = $a + $b;
-	printOpFormIntro ('rollTags', array ('realsum' => $sum));
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'TagRoller');
+	$mod->setNamespace('row',true);
+	$mod->addOutput('a', $a);
+	$mod->addOutput('b', $b);
+	$mod->addOutput('sum', $sum);
+	
+	renderNewEntityTags('',$mod,'Tags');
+
+/**	printOpFormIntro ('rollTags', array ('realsum' => $sum));
 	echo "<table border=1 align=center>";
 	echo "<tr><td colspan=2>This special tool allows assigning tags to physical contents (racks <strong>and all contained objects</strong>) of the current ";
 	echo "rack row.<br>The tag(s) selected below will be ";
@@ -6078,7 +6123,7 @@ function renderTagRollerForRow ($row_id)
 	echo "</td></tr>";
 	echo "<tr><th>Control question: the sum of ${a} and ${b}</th><td><input type=text name=sum></td></tr>";
 	echo "<tr><td colspan=2 align=center><input type=submit value='Go!'></td></tr>";
-	echo "</table></form>";
+	echo "</table></form>"; */
 }
 
 function renderRackCodeViewer ()
