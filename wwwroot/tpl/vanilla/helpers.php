@@ -412,7 +412,7 @@ class TemplateHelperTplSelect extends TemplateHelperAbstract
 {
 	protected function generate($params){
 		$code = '<select name="tplid">';
-		$list = TemplateManager::getOrderedTemplateList();
+		$list =  str_replace('./tpl/', '', TemplateManager::getOrderedTemplateList()); //Make shure the shown names don't contain ./tpl/
 		foreach ($list as $key=>$template) {
 			$code .= '<option value=' . $key . '>' . $template . '</option>';
 		}

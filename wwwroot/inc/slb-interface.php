@@ -326,20 +326,20 @@ function renderSLBTripletsEdit ($cell)
 			$tripletOut['prio'] = htmlspecialchars ($slb->slb['prio']);
 
 			//printOpFormIntro ('updLB', $ids);
-			echo "<tr valign=top class=row_${order}><td rowspan=2 class=tdright valign=middle>";
-			echo getOpLink ($del_params, '', 'DELETE', 'Unconfigure');
-			echo "</td><td class=tdleft valign=bottom>";
-			renderSLBEntityCell ($cells[0]);
-			echo "</td><td>VS config &darr;<br><textarea name=vsconfig rows=5 cols=70>" . htmlspecialchars ($slb->slb['vsconfig']) . "</textarea></td>";
-			echo '<td class=tdleft rowspan=2 valign=middle>';
-			printImageHREF ('SAVE', 'Save changes', TRUE);
-			echo "</td>";
-			echo "</tr><tr class=row_${order}><td class=tdleft valign=top>";
-			renderSLBEntityCell ($cells[1]);
-			echo '</td><td>';
-			echo "<textarea name=rsconfig rows=5 cols=70>" . htmlspecialchars ($slb->slb['rsconfig']) . "</textarea><br>RS config &uarr;";
-			echo "<div style='float:left; margin-top:10px'><label><input name=prio type=text size=10 value=\"" . htmlspecialchars ($slb->slb['prio']) . "\"> &larr; Priority</label></div>";
-			echo '</td></tr></form>';
+			//echo "<tr valign=top class=row_${order}><td rowspan=2 class=tdright valign=middle>";
+			//echo getOpLink ($del_params, '', 'DELETE', 'Unconfigure');
+			//echo "</td><td class=tdleft valign=bottom>";
+			//renderSLBEntityCell ($cells[0]);
+			//echo "</td><td>VS config &darr;<br><textarea name=vsconfig rows=5 cols=70>" . htmlspecialchars ($slb->slb['vsconfig']) . "</textarea></td>";
+			//echo '<td class=tdleft rowspan=2 valign=middle>';
+			//printImageHREF ('SAVE', 'Save changes', TRUE);
+			//echo "</td>";
+			//echo "</tr><tr class=row_${order}><td class=tdleft valign=top>";
+			//renderSLBEntityCell ($cells[1]);
+			//echo '</td><td>';
+			//echo "<textarea name=rsconfig rows=5 cols=70>" . htmlspecialchars ($slb->slb['rsconfig']) . "</textarea><br>RS config &uarr;";
+			//echo "<div style='float:left; margin-top:10px'><label><input name=prio type=text size=10 value=\"" . htmlspecialchars ($slb->slb['prio']) . "\"> &larr; Priority</label></div>";
+			//echo '</td></tr></form>';
 			$order = $nextorder[$order];
 			$allTripletsOutArray[] = $tripletOut;
 		}
@@ -668,13 +668,22 @@ function renderNewRSPoolForm ()
 
 function renderVirtualService ($vsid)
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	$mod = $tplm->generateSubmodule('Payload', 'RenderVirtualServices');
+	$mod->setNamespace('ipv4vs', true);
+	
+	
 	$vsinfo = spotEntity ('ipv4vs', $vsid);
-	echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
-	if (strlen ($vsinfo['name']))
-		echo "<tr><td colspan=2 align=center><h1>${vsinfo['name']}</h1></td></tr>\n";
-	echo '<tr>';
+	
+	$mod->addOutput('Name', $vsinfo['name']); 
+	//echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
+	//if (strlen ($vsinfo['name']))
+	//	echo "<tr><td colspan=2 align=center><h1>${vsinfo['name']}</h1></td></tr>\n";
+	//echo '<tr>';
 
-	echo '<td class=pcleft>';
+	//echo '<td class=pcleft>';
 	$summary = array();
 	$summary['Name'] = $vsinfo['name'];
 	$summary['Protocol'] = $vsinfo['proto'];
@@ -683,14 +692,14 @@ function renderVirtualService ($vsid)
 	$summary['tags'] = '';
 	$summary['VS configuration'] = '<div class="dashed slbconf">' . $vsinfo['vsconfig'] . '</div>';
 	$summary['RS configuration'] = '<div class="dashed slbconf">' . $vsinfo['rsconfig'] . '</div>';
-	renderEntitySummary ($vsinfo, 'Summary', $summary);
-	echo '</td>';
+	$mod->addOutput('Summary', renderEntitySummary ($vsinfo, 'Summary', $summary));
+	//echo '</td>';
 
-	echo '<td class=pcright>';
-	renderSLBTriplets ($vsinfo);
-	echo '</td></tr><tr><td colspan=2>';
-	renderFilesPortlet ('ipv4vs', $vsid);
-	echo '</tr><table>';
+	//echo '<td class=pcright>';
+	$mod->addOutput('Slb', renderSLBTriplets ($vsinfo));
+	//echo '</td></tr><tr><td colspan=2>';
+	$mod->addOutput('Files', renderFilesPortlet ('ipv4vs', $vsid));
+	//echo '</tr><table>';
 }
 
 function renderVSList ()
@@ -768,29 +777,48 @@ function renderEditRSPool ($pool_id)
 
 function renderEditVService ($vsid)
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule("Payload", "RenderEditVService");
+	$mod->setNamespace("ipv4vs", true);
+	
 	$vsinfo = spotEntity ('ipv4vs', $vsid);
-	printOpFormIntro ('updIPv4VS');
-	echo '<table border=0 align=center>';
-	echo "<tr><th class=tdright>VIP:</th><td class=tdleft><input tabindex=1 type=text name=vip value='${vsinfo['vip']}'></td></tr>\n";
-	echo "<tr><th class=tdright>port:</th><td class=tdleft><input tabindex=2 type=text name=vport value='${vsinfo['vport']}'></td></tr>\n";
-	echo "<tr><th class=tdright>proto:</th><td class=tdleft>";
+	$mod->addOutput('Vip', $vsinfo['vip']);
+	$mod->addOutput('Vport', $vsinfo['vport']);
+	$mod->addOutput('Name', $vsinfo['name']);
+	$mod->addOutput('Vsconfig', $vsinfo['vsconfig']);
+	$mod->addOutput('Rsconfig', $vsinfo['rsconfig']);			
+	//printOpFormIntro ('updIPv4VS');
+	//echo '<table border=0 align=center>';
+	
+	
+	//echo "<tr><th class=tdright>VIP:</th><td class=tdleft><input tabindex=1 type=text name=vip value='${vsinfo['vip']}'></td></tr>\n";
+	//echo "<tr><th class=tdright>port:</th><td class=tdleft><input tabindex=2 type=text name=vport value='${vsinfo['vport']}'></td></tr>\n";
+	//echo "<tr><th class=tdright>proto:</th><td class=tdleft>";
 	global $vs_proto;
-	printSelect ($vs_proto, array ('name' => 'proto'), $vsinfo['proto']);
-	echo "</td></tr>\n";
-	echo "<tr><th class=tdright>name:</th><td class=tdleft><input tabindex=4 type=text name=name value='${vsinfo['name']}'></td></tr>\n";
-	echo "<tr><th class=tdright>VS config:</th><td class=tdleft><textarea tabindex=5 name=vsconfig rows=20 cols=80>${vsinfo['vsconfig']}</textarea></td></tr>\n";
-	echo "<tr><th class=tdright>RS config:</th><td class=tdleft><textarea tabindex=6 name=rsconfig rows=20 cols=80>${vsinfo['rsconfig']}</textarea></td></tr>\n";
-	echo "<tr><th class=submit colspan=2>";
-	printImageHREF ('SAVE', 'Save changes', TRUE, 7);
-	echo "</td></tr>\n";
-	echo "</table></form>\n";
+	
+	$mod->addOutput('Getselect', getSelect ($vs_proto, array ('name' => 'proto'), $vsinfo['proto']));
+	//printSelect ($vs_proto, array ('name' => 'proto'), $vsinfo['proto']);
+	//echo "</td></tr>\n";
+	//echo "<tr><th class=tdright>name:</th><td class=tdleft><input tabindex=4 type=text name=name value='${vsinfo['name']}'></td></tr>\n";
+	//echo "<tr><th class=tdright>VS config:</th><td class=tdleft><textarea tabindex=5 name=vsconfig rows=20 cols=80>${vsinfo['vsconfig']}</textarea></td></tr>\n";
+	//echo "<tr><th class=tdright>RS config:</th><td class=tdleft><textarea tabindex=6 name=rsconfig rows=20 cols=80>${vsinfo['rsconfig']}</textarea></td></tr>\n";
+	//echo "<tr><th class=submit colspan=2>";
+	//printImageHREF ('SAVE', 'Save changes', TRUE, 7);
+	//echo "</td></tr>\n";
+	//echo "</table></form>\n";
 
 	// delete link
-	echo '<p class="centered">';
-	if ($vsinfo['refcnt'] > 0)
-		echo getOpLink (NULL, 'Delete virtual service', 'nodestroy', "Could not delete: there are ${vsinfo['refcnt']} LB links");
-	else
-		echo getOpLink (array	('op' => 'del', 'id' => $vsinfo['id']), 'Delete virtual service', 'destroy');
+	//echo '<p class="centered">';
+	
+	$mod->addOutput('Refcnt', $vsinfo['refcnt']);
+	$mod->addOutput('Id', $vsinfo['id']);
+	//if ($vsinfo['refcnt'] > 0)
+	//	echo getOpLink (NULL, 'Delete virtual service', 'nodestroy', "Could not delete: there are ${vsinfo['refcnt']} LB links");
+	//else
+	//	echo getOpLink (array	('op' => 'del', 'id' => $vsinfo['id']), 'Delete virtual service', 'destroy');
 }
 
 function renderLVSConfig ($object_id)

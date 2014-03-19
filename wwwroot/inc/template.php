@@ -775,7 +775,14 @@ class TemplateModule
 	 */
 	public function __get($name)
 	{
-		$this->get($name);
+		if (substr($name,0,1) == '_') {
+			return $this->get(substr($name,1),true);
+		}
+		else
+		{
+			$this->get($name);
+			return '';
+		}
 	}
 	
 	/**
