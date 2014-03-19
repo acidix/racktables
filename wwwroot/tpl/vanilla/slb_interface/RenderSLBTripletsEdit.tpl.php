@@ -1,6 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
 	<div class=portlet>
-		<h2> Manage existing ( <?php $this->tripletsCount ?> ) </h2>
+		<h2>Manage existing (<?php $this->tripletsCount ?>)</h2>
 		<table cellspacing=0 cellpadding=5 align=center class=cooltable>
 		<?php $this->startLoop("allTripletsOutput"); ?>	
 

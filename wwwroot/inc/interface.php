@@ -5742,6 +5742,9 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 
 	$tplm = TemplateManager::getInstance();
 
+	if($parent == null)
+		$tplm->createMainModule();
+
 	$mod = $tplm->generateSubmodule($parentplaceholder, "CellFilterPortlet", $parent);
 	//startPortlet ($title);
 	$mod->setNamespace("");

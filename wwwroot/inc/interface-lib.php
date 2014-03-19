@@ -700,8 +700,8 @@ function getRenderedIPv4NetCapacity ($range)
 {
 	//Use TemplateEngine 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");	
+	$tplm->setTemplate('vanilla');
+//	$tplm->createMainModule();
 
 	$class = 'net-usage';
 	if (isset ($range['addrc']))
@@ -1069,7 +1069,9 @@ function getOpLink ($params, $title,  $img_name = '', $comment = '', $class = ''
 	//Initiate TemplateManager
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");
+	
 	$mod = $tplm->generateModule("GetOpLink");
+	$mod->setNamespace("");
 	
 	if (isset ($params))
 	{
