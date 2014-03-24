@@ -1,6 +1,10 @@
-<?php if (defined("RS_TPL")) {?>
-	<tr class='tdleft $tr_class'>
-		<td><a class='$history_class' $title name='ip-$dottedquad' href='<?php $this->Link; ?>'><?php $this->IP; ?></a></td>
+<?php if (defined("RS_TPL")) {
+	if ($this->is('UserHasEditPerm')) { 
+		$this->addJS('js/inplace-edit.js');	
+	}
+?>
+	<tr class='tdleft <?php $this->RowClass; ?>'>
+		<td><a class='<?php $this->Class; ?>' title='<?php $this->Title; ?>' name='ip-<?php $this->DottedQuad; ?>' href='<?php $this->Link; ?>'><?php $this->IP; ?></a></td>
 		<td><span class='rsvtext <?php $this->Editable; ?> id-<?php $this->QuadIP; ?> op-upd-ip-name'><?php $this->Name; ?></span></td>
 		<td><span class='rsvtext <?php $this->Editable; ?> id-<?php $this->QuadIP; ?> op-upd-ip-comment'><?php $this->Comment; ?></span></td>
 		<td>
@@ -11,14 +15,26 @@
 				<?php $this->startLoop('Allocs'); ?>
 				<a href='<?php $this->Link; ?>'>
 					<?php $this->Name; ?>
-				</a>
+				</a> ;
 				<?php $this->endLoop(); ?>
 			<?php } ?>
-			<br />
 			<?php if ($this->is('VSList')) { ?>
+				<br />
 				<?php $this->startLoop('VSList'); ?>
-				
-				<?php $this->endLoop('VSList'); ?>
+					<?php $this->Link; ?> &rarr; <br />
+				<?php $this->endLoop(); ?>
+			<?php } ?>
+			<?php if ($this->is('VSGList')) { ?>
+				<br />
+				<?php $this->startLoop('VSGList'); ?>
+					<?php $this->Link; ?> &rarr; <br />
+				<?php $this->endLoop(); ?>
+			<?php } ?>
+			<?php if ($this->is('RSPList')) { ?>
+				<br />
+				<?php $this->startLoop('RSPList'); ?>
+					&rarr; <?php $this->Link; ?> <br />
+				<?php $this->endLoop(); ?>
 			<?php } ?>
 		</td>
 	</tr>
