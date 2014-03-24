@@ -508,7 +508,7 @@ function getOptionTree ($tree_name, $tree_options, $tree_config = array())
 
 function printImageHREF ($tag, $title = '', $do_input = FALSE, $tabindex = 0)
 {
-	echo getImageHREF ($tag, $title, $do_input, $tabindex);
+	return getImageHREF ($tag, $title, $do_input, $tabindex);
 }
 
 // this would be better called mkIMG(), make "IMG" HTML element

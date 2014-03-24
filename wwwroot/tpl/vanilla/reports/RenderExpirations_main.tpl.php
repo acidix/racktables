@@ -1,4 +1,4 @@
-Re<?php if (defined("RS_TPL")) {?>
+<?php if (defined("RS_TPL")) {?>
 	<div class=portlet>
 		<h2><?php $this->attr_id ?> </h2>
 		<?php $this->startLoop("allSects"); ?>	
@@ -7,7 +7,7 @@ Re<?php if (defined("RS_TPL")) {?>
 			<?php if ($this->is("count",false)) { ?>
 				<tr><td colspan=4>(none)</td></tr></table><br>
 			<?php } ?> 
-			<?php $this->results ?> 
+			<?php $this->resOut ?> 
 			</table><br>
 		<?php $this->endLoop(); ?>
 	</div>

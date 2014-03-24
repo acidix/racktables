@@ -392,7 +392,7 @@ class TemplateHelperGetOpLink extends TemplateHelperAbstract
 		if (! empty ($img_name))
 		{
 			$mod->setOutput("loadImage", true);
-			$mod->setOutput("imgName", $imgName);
+			$mod->setOutput("imgName", $img_name);
 			$mod->setOutput("comment", $comment);			 
 	//		$ret .= getImageHREF ($img_name, $comment);
 	//		if (! empty ($title))

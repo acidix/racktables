@@ -196,11 +196,24 @@ $this->setInMemoryTemplate("GetProgressBar","<img width=100 height=10 border=0 t
 $this->setInMemoryTemplate("NoVLANConfig","<center><h3>(no VLAN configuration exists)</h3></center>");
 
 /**
+*	StdCenterTableCell: 
+*	Usage: interface.php
+*
+**/
+$this->setInMemoryTemplate("StdCenterTableCell","<td class=tdcenter>{{cont}}</td>");
+
+/**
 *	StdTableCell: 
 *	Usage: interface.php
 *
 **/
-$this->setInMemoryTemplate("StdTableCell","<td class=tdcenter>{{cont}}</td>");
+$this->setInMemoryTemplate("StdTableCell","<td>{{cont}}</td>");
 
+/**
+*	RenderTagStatsALink: 
+*	Usage:  Usage
+*
+**/
+$this->setInMemoryTemplate("RenderTagStatsALink","<a href='index.php?page={{pagerealm}}&cft[]={{taginfoID}}>{{taginfo}}</a>");
 
 ?>

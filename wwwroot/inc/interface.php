@@ -5081,16 +5081,18 @@ function renderPortsReport ()
 function render8021QReport ()
 {
 
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
 	if (!count ($domains = getVLANDomainOptions()))
-	{
-		$tplm = TemplateManager::getInstance();
-		$tplm->setTemplate("vanilla");
-		$tplm->createMainModule("index");
-		
+	{	
 		$mod = $tplm->generateSubmodule("Payload","NoVLANConfig", true);
 	//	echo '<center><h3>(no VLAN configuration exists)</h3></center>';
 		return;
 	}
+	$mod = $tplm->generateSubmodule("Payload","Render8021QReport");
+	$mod->setNamespace("reports");
 
 	$vlanstats = array();
 	for ($i = VLAN_MIN_ID; $i <= VLAN_MAX_ID; $i++)
@@ -5134,6 +5136,9 @@ function render8021QReport ()
 			//echo $header;
 			$header_delay = 25;
 		}
+		else
+			$singleElemOut['header'] = '';
+
 		$singleElemOut['countStats'] = (count ($vlanstats[$vlan_id]) ? 'T' : 'F');
 		$singleElemOut['vlan_id'] = $vlan_id;
 	//	echo '<tr class="state_' . (count ($vlanstats[$vlan_id]) ? 'T' : 'F');
@@ -5142,7 +5147,7 @@ function render8021QReport ()
 		foreach (array_keys ($domains) as $domain_id)
 		{
 				
-			$singleCell = $tplm->generateModule("StdTableCell", true);
+			$singleCell = $tplm->generateModule("StdCenterTableCell", true);
 			//echo '<td class=tdcenter>';
 			if (array_key_exists ($domain_id, $vlanstats[$vlan_id]))
 				$singleCell->setOutput("cont", mkA ('&exist;', 'vlan', "${domain_id}-${vlan_id}"));
@@ -5151,6 +5156,7 @@ function render8021QReport ()
 				$singleCell->setOutput("cont", '&nbsp;');
 			//	echo '&nbsp;';
 			//echo '</td>';
+			$singleElemOut['domains'] = '';
 			$singleElemOut['domains'] = $singleElemOut['domains'] + $singleCell->run();
 		}
 	//	echo '</tr>';
@@ -5182,7 +5188,7 @@ function renderReports ($what)
 	foreach ($what as $item)
 	{
 		$singleItemArr = array('title' => $item['title'], 'cont' => "");
-
+		$singleItemArr['cont'] = '';
 	//	echo "<tr><th colspan=2><h3>${item['title']}</h3></th></tr>\n";
 		switch ($item['type'])
 		{
@@ -5195,7 +5201,7 @@ function renderReports ($what)
 					$singleMod = $tplm->generateModule("ReportsCounter", true);
 					$singleMod->setOutput("header", $header);
 					$singleMod->setOutput("data", $data);
-					$singleItemArr['cont'] = $singleItemArr['cont'] + $singleMod->run();
+					$singleItemArr['cont'] .= $singleMod->run();
 	//				echo "<tr><td class=tdright>${header}:</td><td class=tdleft>${data}</td></tr>\n";
 				}
 				break;
@@ -5204,12 +5210,14 @@ function renderReports ($what)
 					$data = $item['func'] ($item['args']);
 				else
 					$data = $item['func'] ();
+
 				foreach ($data as $msg){
 					$singleMod = $tplm->generateModule("ReportsMesseges", true);
 					$singleMod->setOutput("class", $msg['class']);
 					$singleMod->setOutput("header", $msg['header']);
 					$singleMod->setOutput("text", $msg['text']);
-					$singleItemArr['cont'] = $singleItemArr['cont'] + $singleMod->run();
+					
+					$singleItemArr['cont'] .= $singleMod->run();
 	//				echo "<tr class='msg_${msg['class']}'><td class=tdright>${msg['header']}:</td><td class=tdleft>${msg['text']}</td></tr>\n";
 				}
 				break;
@@ -5222,20 +5230,20 @@ function renderReports ($what)
 				{
 					$singleMod = $tplm->generateModule("ReportsMeters", true);
 					$singleMod->setOutput("title", $meter['title']);
-					$singleMod->setOutput("progessBar", renderProgressBar ($meter['max'] ? $meter['current'] / $meter['max'] : 0));
+					$singleMod->setOutput("progressBar", renderProgressBar ($meter['max'] ? $meter['current'] / $meter['max'] : 0));
 					$singleMod->setOutput("isMax", ($meter['max'] ? $meter['current'] . '/' . $meter['max'] : '0'));
-					$singleItemArr['cont'] = $singleItemArr['cont'] + $singleMod->run();
+					$singleItemArr['cont'] .= $singleMod->run();
 	//				echo "<tr><td class=tdright>${meter['title']}:</td><td class=tdcenter>";
 	//				renderProgressBar ($meter['max'] ? $meter['current'] / $meter['max'] : 0);
 	//				echo '<br><small>' . ($meter['max'] ? $meter['current'] . '/' . $meter['max'] : '0') . '</small></td></tr>';
 				}
 				break;
 			case 'custom':
-				$singleMod = $tplm->generateModule("ReportsMesseges", true);
-				$singleMod->setOutput("itemCont", $item['func']());
-				$singleItemArr['cont'] = $singleItemArr['cont'] + $singleMod->run();
+				$singleMod = $tplm->generateModule("ReportsCustom", true);
+				$singleMod->setOutput("itemCont", (string) $item['func']());
+				$singleItemArr['cont'] .= $singleMod->run();
 			//	echo "<tr><td colspan=2>";
-			//	$item['func'] ();
+			//	$item['func']();
 			//	echo "</td></tr>\n";
 				break;
 			default:
@@ -5251,9 +5259,13 @@ function renderReports ($what)
 
 function renderTagStats ()
 {
+
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateModule("RenderTagStats");
+	
 	global $taglist;
-	echo '<table border=1><tr><th>tag</th><th>total</th><th>objects</th><th>IPv4 nets</th><th>IPv6 nets</th>';
-	echo '<th>racks</th><th>IPv4 VS</th><th>IPv4 RS pools</th><th>users</th><th>files</th></tr>';
+	//echo '<table border=1><tr><th>tag</th><th>total</th><th>objects</th><th>IPv4 nets</th><th>IPv6 nets</th>';
+	//echo '<th>racks</th><th>IPv4 VS</th><th>IPv4 RS pools</th><th>users</th><th>files</th></tr>';
 	$pagebyrealm = array
 	(
 		'file' => 'files&tab=default',
@@ -5265,24 +5277,38 @@ function renderTagStats ()
 		'rack' => 'rackspace&tab=default',
 		'user' => 'userlist&tab=default'
 	);
+	$allTagsOut = array();
 	foreach (getTagChart (getConfigVar ('TAGS_TOPLIST_SIZE')) as $taginfo)
 	{
-		echo "<tr><td>${taginfo['tag']}</td><td>" . $taginfo['refcnt']['total'] . "</td>";
+		$singleTag = array('taginfo' => $taginfo['tag'], 'taginfoRefcnt' => $taginfo['refcnt']['total']);
+		//echo "<tr><td>${taginfo['tag']}</td><td>" . $taginfo['refcnt']['total'] . "</td>";
+		$singleTag['realms'] = '';
 		foreach (array ('object', 'ipv4net', 'ipv6net', 'rack', 'ipv4vs', 'ipv4rspool', 'user', 'file') as $realm)
-		{
-			echo '<td>';
+		{			
+			$realmMod = $tplm->generateModule('StdTableCell', true);
+			//echo '<td>';
+
 			if (!isset ($taginfo['refcnt'][$realm]))
-				echo '&nbsp;';
+				$realmMod->addOutput('cont', '&nbsp;');
+			//	echo '&nbsp;';
 			else
 			{
-				echo "<a href='index.php?page=" . $pagebyrealm[$realm] . "&cft[]=${taginfo['id']}'>";
-				echo $taginfo['refcnt'][$realm] . '</a>';
+				$realmLinkMod = $tplm->generateModule('RenderTagStatsALink', true, array('pagerealm' => $pagebyrealm[$realm], 
+					'taginfoID' => $taginfo['id'], 'taginfo'=> $taginfo['refcnt'][$realm]));
+				$realmMod->addOutput('cont', $realmLinkMod->run());
+				//echo "<a href='index.php?page=" . $pagebyrealm[$realm] . "&cft[]=${taginfo['id']}'>";
+				//echo $taginfo['refcnt'][$realm] . '</a>';
 			}
-			echo '</td>';
+			$singleTag['realms'] .= $realmMod->run();
+			//echo '</td>';
 		}
-		echo '</tr>';
+		//echo '</tr>';
+		$allTagsOut[] = $singleTag;
 	}
-	echo '</table>';
+	$mod->setOutput("allTags", $allTagsOut);
+
+	return $mod->run();		 
+	//echo '</table>';
 }
 
 function dragon ()
@@ -7826,116 +7852,195 @@ function render8021QOrderForm ($some_id)
 
 function render8021QStatus ()
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","Render8021QStatus");
+	$mod->setNamespace("8021q");
+		
+
 	global $dqtitle;
-	echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
-	echo '<tr valign=top><td class=pcleft width="40%">';
+	//echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
+	//echo '<tr valign=top><td class=pcleft width="40%">';
 	if (!count ($vdlist = getVLANDomainStats()))
-		startPortlet ('no VLAN domains');
+		$mod->setOutput("areVLANDomains", true);		 
+	//	startPortlet ('no VLAN domains');
 	else
 	{
-		startPortlet ('VLAN domains (' . count ($vdlist) . ')');
-		echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-		echo '<tr><th>description</th><th>VLANs</th><th>switches</th><th>';
-		echo getImageHREF ('net') . '</th><th>ports</th></tr>';
+		$mod->setOutput("countVDList", count ($vdlist));	 
+	//	startPortlet ('VLAN domains (' . count ($vdlist) . ')');
+	//	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	//	echo '<tr><th>description</th><th>VLANs</th><th>switches</th><th>';
+	//	echo getImageHREF ('net') . '</th><th>ports</th></tr>';
 		$stats = array();
 		$columns = array ('vlanc', 'switchc', 'ipv4netc', 'portc');
 		foreach ($columns as $cname)
 			$stats[$cname] = 0;
+
+		$allVDListOut = array();
 		foreach ($vdlist as $vdom_id => $dominfo)
 		{
+			$singleDomInfo = array();
 			foreach ($columns as $cname)
 				$stats[$cname] += $dominfo[$cname];
-			echo '<tr align=left><td>' . mkA (niftyString ($dominfo['description']), 'vlandomain', $vdom_id) . '</td>';
-			foreach ($columns as $cname)
-				echo '<td>' . $dominfo[$cname] . '</td>';
-			echo '</tr>';
+			$singleDomInfo['mkA'] = mkA (niftyString ($dominfo['description']), 'vlandomain', $vdom_id);
+		//	echo '<tr align=left><td>' . mkA (niftyString ($dominfo['description']), 'vlandomain', $vdom_id) . '</td>';
+			$singleDomInfo['columnOut'] = ''; 
+			foreach ($columns as $cname){
+				$columnMod = $tplm->generateModule("StdTableCell", true, array('cont' => $dominfo[$cname]));
+				$singleDomInfo['columnOut'] .= $columnMod->run(); 
+			}
+			$allVDListOut[] = $singleDomInfo;
+		//		echo '<td>' . $dominfo[$cname] . '</td>';
+		//	echo '</tr>';
 		}
+		$mod->setOutput("vdListOut", $allVDListOut);
+			 
 		if (count ($vdlist) > 1)
 		{
-			echo '<tr align=left><td>total:</td>';
+			$mod->setOutput("isVDList", true);				 
+			//echo '<tr align=left><td>total:</td>';
+			$allColumsOut = array();
 			foreach ($columns as $cname)
-				echo '<td>' . $stats[$cname] . '</td>';
-			echo '</tr>';
+				$allColumsOut[] = array('cName' => $stats[$cname]);
+			//	echo '<td>' . $stats[$cname] . '</td>';
+			//echo '</tr>';
 		}
-		echo '</table>';
+		$mod->setOutput("vdListOut", $allVDListOut);
+	//	echo '</table>';
 	}
-	finishPortlet();
+//	finishPortlet();
 
-	echo '</td><td class=pcleft width="40%">';
+//	echo '</td><td class=pcleft width="40%">';
 
 	if (!count ($vstlist = listCells ('vst')))
-		startPortlet ('no switch templates');
+		$mod->setOutput("areVSTCells", true);		 
+	//	startPortlet ('no switch templates');
 	else
-	{
-		startPortlet ('switch templates (' . count ($vstlist) . ')');
-		echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-		echo '<tr><th>description</th><th>rules</th><th>switches</th></tr>';
+	{	
+		$mod->setOutput("countVSTList", count ($vstlist));	 
+		//startPortlet ('switch templates (' . count ($vstlist) . ')');
+		//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+		//echo '<tr><th>description</th><th>rules</th><th>switches</th></tr>';
+		$vstlistOut = array();
 		foreach ($vstlist as $vst_id => $vst_info)
 		{
-			echo '<tr align=left valign=top><td>';
-			echo mkA (niftyString ($vst_info['description']), 'vst', $vst_id);
-			if (count ($vst_info['etags']))
-				echo '<br><small>' . serializeTags ($vst_info['etags']) . '</small>';
-			echo '</td>';
-			echo "<td>${vst_info['rulec']}</td><td>${vst_info['switchc']}</td></tr>";
+			$singleVST_ID = array('mkA' =>  mkA (niftyString ($vst_info['description']), 'vst', $vst_id), 'areTags' => count ($vst_info['etags']));
+			//echo '<tr align=left valign=top><td>';
+			//echo mkA (niftyString ($vst_info['description']), 'vst', $vst_id);
+			if (count ($vst_info['etags'])){
+				$singleVST_ID['serializedTags'] = serializeTags ($vst_info['etags']);
+			}
+			//	echo '<br><small>' . serializeTags ($vst_info['etags']) . '</small>';
+			//echo '</td>';
+			$singleVST_ID['rulec'] = $vst_info['rulec'];
+			$singleVST_ID['switch'] = $vst_info['switchc'];
+			//echo "<td>${vst_info['rulec']}</td><td>${vst_info['switchc']}</td></tr>";
+			$vstlistOut[] = $singleVST_ID;
 		}
-		echo '</table>';
+		$mod->setOutput("vstListOut", $vstlistOut);		 
+		//echo '</table>';
 	}
-	finishPortlet();
+	//finishPortlet();
 
-	echo '</td><td class=pcright>';
+	//echo '</td><td class=pcright>';
 
-	startPortlet ('deploy queues');
+	//startPortlet ('deploy queues');
 	$total = 0;
-	echo '<table border=0 cellspacing=0 cellpadding=3 width="100%">';
+	//echo '<table border=0 cellspacing=0 cellpadding=3 width="100%">';
+	
+	$allDeployQueuesOut = array();
 	foreach (get8021QDeployQueues() as $qcode => $qitems)
 	{
-		echo '<tr><th width="50%" class=tdright>' . mkA ($dqtitle[$qcode], 'dqueue', $qcode) . ':</th>';
-		echo '<td class=tdleft>' . count ($qitems) . '</td></tr>';
+		$allDeployQueuesOut[] = array('mkA' => mkA ($dqtitle[$qcode], 'dqueue', $qcode), 'countItems' => count ($qitems));
+	//	echo '<tr><th width="50%" class=tdright><' . mkA ($dqtitle[$qcode], 'dqueue', $qcode) . ':</th>';
+	//	echo '<td class=tdleft>' . count ($qitems) . '</td></tr>';
 
 		$total += count ($qitems);
 	}
-	echo '<tr><th width="50%" class=tdright>Total:</th>';
-	echo '<td class=tdleft>' . $total . '</td></tr>';
-	echo '</table>';
-	finishPortlet();
-	echo '</td></tr></table>';
+	$mod->setOutput("allDeployQueues", $allDeployQueuesOut);
+		 
+	//echo '<tr><th width="50%" class=tdright>Total:</th>';
+	//echo '<td class=tdleft>' . $total . '</td></tr>';
+	$mod->setOutput("total", $total);
+		 
+	//echo '</table>';
+	//finishPortlet();
+	//echo '</td></tr></table>';
 }
 
 function renderVLANDomainListEditor ()
 {
 	function printNewItemTR ()
 	{
-		printOpFormIntro ('add');
-		echo '<tr><td>';
-		printImageHREF ('create', 'create domain', TRUE, 104);
-		echo '</td><td>';
-		echo '<input type=text size=48 name=vdom_descr tabindex=102>';
-		echo '</td><td>';
-		printImageHREF ('create', 'create domain', TRUE, 103);
-		echo '</td></tr></form>';
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");
+		
+		$mod = $tplm->generateModule("RenderVLANDomainListEditor_printNewItemTR");
+		$mod->setNamespace("8021q");
+		return $mod->run();
+		//printOpFormIntro ('add');
+		//echo '<tr><td>';
+		//printImageHREF ('create', 'create domain', TRUE, 104);
+		//echo '</td><td>';
+		//echo '<input type=text size=48 name=vdom_descr tabindex=102>';
+		//echo '</td><td>';
+		//printImageHREF ('create', 'create domain', TRUE, 103);
+		//echo '</td></tr></form>';
 	}
-	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-	echo '<tr><th>&nbsp;</th><th>description</th><th>&nbsp</th></tr>';
-	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR();
+	
+	//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	//echo '<tr><th>&nbsp;</th><th>description</th><th>&nbsp</th></tr>';
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderVLANDomainListEditor");
+	$mod->setNamespace("8021q");
+		
+	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes'){
+		$mod->addOutput("isAddNew", true);
+		$mod->addOutput("printNewItem", printNewItemTR());
+	}
+	//	printNewItemTR();
+	$allDomainStatsOut = array();
 	foreach (getVLANDomainStats() as $vdom_id => $dominfo)
 	{
-		printOpFormIntro ('upd', array ('vdom_id' => $vdom_id));
-		echo '<tr><td>';
-		if ($dominfo['switchc'] or $dominfo['vlanc'] > 1)
-			printImageHREF ('nodestroy', 'domain used elsewhere');
-		else
-			echo getOpLink (array ('op' => 'del', 'vdom_id' => $vdom_id), '', 'destroy', 'delete domain');
-		echo '</td><td><input name=vdom_descr type=text size=48 value="';
-		echo niftyString ($dominfo['description'], 0) . '">';
-		echo '</td><td>';
-		printImageHREF ('save', 'update description', TRUE);
-		echo '</td></tr></form>';
+		$singleDomainStat = array('formIntro' => printOpFormIntro ('upd', array ('vdom_id' => $vdom_id)));
+		//printOpFormIntro ('upd', array ('vdom_id' => $vdom_id));
+		//echo '<tr><td>';
+		if ($dominfo['switchc'] or $dominfo['vlanc'] > 1){
+			$singleDomainStat['isSwtchOrVlan'] = true;
+			$singleDomainStat['imageNoDestroy'] = printImageHREF ('nodestroy', 'domain used elsewhere');
+		//	printImageHREF ('nodestroy', 'domain used elsewhere');
+		}
+		else{
+			$singleDomainStat['isSwtchOrVlan'] = false;
+			$singleDomainStat['linkDestroy'] = getOpLink (array ('op' => 'del', 'vdom_id' => $vdom_id), '', 'destroy', 'delete domain');
+			//	echo getOpLink (array ('op' => 'del', 'vdom_id' => $vdom_id), '', 'destroy', 'delete domain');
+		}
+	
+		//echo '</td><td><input name=vdom_descr type=text size=48 value="';
+		$singleDomainStat['niftyStr'] = niftyString ($dominfo['description'], 0);
+		//echo niftyString ($dominfo['description'], 0) . '">';
+		//echo '</td><td>';
+		$singleDomainStat['imageUpdate'] = printImageHREF ('save', 'update description', TRUE);
+		//printImageHREF ('save', 'update description', TRUE);
+		//echo '</td></tr></form>';
+		$allDomainStatsOut[] = $singleDomainStat;
 	}
-	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR();
-	echo '</table>';
+
+	$mod->addOutput("allDomainStats", $allDomainStatsOut);
+
+	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes'){
+		$mod->addOutput("isAddNew", true);
+		$mod->addOutput("printNewItem", printNewItemTR());
+	}
+	
+		 
+	//	printNewItemTR();
+	//echo '</table>';
 }
 
 function renderVLANDomain ($vdom_id)
@@ -8992,7 +9097,7 @@ function renderObject8021QSyncPorts ($object, $D)
 
 function renderVSTListEditor()
 {
-	$tplm = TemplateManager::getInstance();
+	$tplm  =TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
 	$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'RenderVSTListEditor');
@@ -9000,7 +9105,9 @@ function renderVSTListEditor()
 	
 	function printNewItemTR ($placeholder, $parent)
 	{
-			
+		$tplm  =TemplateManager::getInstance();
+		$tplm->setTemplate('vanilla');
+		$tplm->createMainModule();	
 		$submod = $tplm->generateSubmodule($placeholder, 'PrintNewItem', $parent);
 		
 		//printOpFormIntro ('add');
@@ -9013,9 +9120,8 @@ function renderVSTListEditor()
 	//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
 	//echo '<tr><th>&nbsp;</th><th>description</th><th>&nbsp</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItem('NewTop', $mod);
+		printNewItemTR('NewTop', $mod);
 		//printNewItemTR();
-	foreach (listCells ('vst') as $vst_id => $vst_info)
 	{	
 		$submod = $tplm->generateSubmodule('Merge', 'CreateRow', $mod);
 		$submod->setOutput('Vst_id', $vst_id);
@@ -10109,6 +10215,7 @@ function renderExpirations ()
 	foreach ($breakdown as $attr_id => $sections)
 	{	
 		$mod = $tplm->generateSubmodule("Payload","RenderExpirations_main");
+		$mod->setNamespace("reports");
 		$mod->setOutput('attr_id', $attrmap[$attr_id]['name']);
 		//startPortlet ($attrmap[$attr_id]['name']);
 		$allSectsOut = array();
@@ -10131,9 +10238,11 @@ function renderExpirations ()
 			}
 			//echo '<tr valign=top><th align=center>Count</th><th align=center>Name</th>';
 			//echo "<th align=center>Asset Tag</th><th align=center>OEM S/N 1</th><th align=center>Date Warranty <br> Expires</th></tr>\n";
+			$singleSectOut['resOut'] = '';
 			foreach ($result as $row)
 			{
-				$res = $tplm->generateSubmodule("results","RenderExpirations_result", $mod);
+				$res = $tplm->generateSubmodule("RenderExpirations_result");
+				$res->setNamespace("result");
 
 				$date_value = datetimestrFromTimestamp ($row['uint_value']);
 
@@ -10153,9 +10262,14 @@ function renderExpirations ()
 			//	echo "<td>${oem_sn_1}</td>";
 			//	echo "<td>${date_value}</td>";
 			//	echo "</tr>\n";
+				
+				$singleSectOut['resOut'] += $res->run();
 				$order = $nextorder[$order];
 				$count++;
+
+
 			}
+			$allSectsOut[] = $singleSectOut;
 			//echo "</table><br>\n";
 		}
 		$mod->setOutput("allSects", $allSectsOut); 
