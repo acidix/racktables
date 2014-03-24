@@ -283,7 +283,8 @@ $page_by_realm['user'] = 'userlist';
 
 function printSelect ($optionList, $select_attrs = array(), $selected_id = NULL)
 {
-	echo getSelect ($optionList, $select_attrs, $selected_id);
+	//echo getSelect ($optionList, $select_attrs, $selected_id);
+	return getSelect ($optionList, $select_attrs, $selected_id);
 }
 
 // Input array keys are OPTION VALUEs and input array values are OPTION text.

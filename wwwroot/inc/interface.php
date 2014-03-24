@@ -4331,6 +4331,10 @@ function renderOIFCompatEditor()
 
 	function printNewitemTR($placeholder)
 	{
+		$tplm = TemplateManager::getInstance();
+	
+		$tplm->setTemplate("vanilla");
+		$tplm->createMainModule();
 		$submod = $tplm->generateSubmodule($placeholder, 'PrintNewItem', $mod);
 		// printOpFormIntro ('add');
 		// echo '<tr><th class=tdleft>';
@@ -4498,6 +4502,7 @@ function renderObjectParentCompatEditor()
 // but use some proper abstract function later.
 function renderConfigMainpage ()
 {
+	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule();
 	
@@ -4506,15 +4511,15 @@ function renderConfigMainpage ()
 
 	global $pageno, $page;
 	// echo '<ul>';
+	$allPagesOut = array();
 	foreach ($page as $cpageno => $cpage)
-		$mod->addOutput('Looparray', array(	'Parent' => $cpage['parent'],
-											'Pageno' => $pageno, 
-											'Permitted' => permitted ($cpageno),
-											'Cpageno' => $cpageno, 
-											'Title' => $cpage['title']));
-		// if (isset ($cpage['parent']) and $cpage['parent'] == $pageno  && permitted($cpageno))
+	{
+		if (isset ($cpage['parent']) and $cpage['parent'] == $pageno  && permitted($cpageno))
+			$allPagesOut[] = array(	'Cpageno' => $cpageno, 
+									'Title' => $cpage['title']);
 		// 	echo "<li><a href='index.php?page=${cpageno}'>" . $cpage['title'] . "</li>\n";
-	
+	}
+	$mod->addOutput("allPages", $allPagesOut);	 
 	// echo '</ul>';
 }
 
@@ -7808,10 +7813,18 @@ function dynamic_title_decoder ($path_position)
 function renderIIFOIFCompat()
 {
 	global $nextorder;
-	echo '<br><table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>';
-	echo '<tr><th class=tdleft>inner interface</th><th></th><th class=tdleft>outer interface</th><th></th></tr>';
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderIIFOIFCompat");
+	$mod->setNamespace("portifcompat");
+		
+	//echo '<br><table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>';
+	//echo '<tr><th class=tdleft>inner interface</th><th></th><th class=tdleft>outer interface</th><th></th></tr>';
 	$last_iif_id = 0;
 	$order = 'even';
+	$allRecordsOut = array();
 	foreach (getPortInterfaceCompat() as $record)
 	{
 		if ($last_iif_id != $record['iif_id'])
@@ -7819,54 +7832,91 @@ function renderIIFOIFCompat()
 			$order = $nextorder[$order];
 			$last_iif_id = $record['iif_id'];
 		}
-		echo "<tr class=row_${order}><td class=tdleft>${record['iif_name']}</td><td>${record['iif_id']}</td><td class=tdleft>${record['oif_name']}</td><td>${record['oif_id']}</td></tr>";
+		$singleRecord = array('order' => $order, 'iif_name' => $record['iif_name'], 'iif_id' => $record['iif_id'],
+						'oif_name' => $record['oif_name'], 'oif_id' => $record['oif_id']);
+		//echo "<tr class=row_${order}><td class=tdleft>${record['iif_name']}</td><td>${record['iif_id']}</td><td class=tdleft>${record['oif_name']}</td><td>${record['oif_id']}</td></tr>";
+		$allRecordsOut[] = $singleRecord;
 	}
-	echo '</table>';
+	$mod->addOutput("allRecords", $allRecordsOut);
+		 
+	//echo '</table>';
 }
 
 function renderIIFOIFCompatEditor()
 {
 	function printNewitemTR()
 	{
-		printOpFormIntro ('add');
-		echo '<tr><th class=tdleft>';
-		printImageHREF ('add', 'add pair', TRUE);
-		echo '</th><th class=tdleft>';
-		printSelect (getPortIIFOptions(), array ('name' => 'iif_id'));
-		echo '</th><th class=tdleft>';
-		printSelect (readChapter (CHAP_PORTTYPE), array ('name' => 'oif_id'));
-		echo '</th></tr></form>';
+		$tplm = TemplateManager::getInstance();
+		if($parent==null)
+			$tplm->setTemplate("vanilla");
+		
+		$mod = $tplm->generateModule("PrintNewItemTR");
+		
+		$mod->setNamespace("portifcompat");
+		
+		$mod->addOutput("iffOptions", printSelect (getPortIIFOptions(), array ('name' => 'iif_id')));
+		$mod->addOutput("chapter", readChapter (CHAP_PORTTYPE), array ('name' => 'oif_id'));	 
+		return $mod->run();
+		//printOpFormIntro ('add');
+		//echo '<tr><th class=tdleft>';
+		//printImageHREF ('add', 'add pair', TRUE);
+		//echo '</th><th class=tdleft>';
+		//printSelect (getPortIIFOptions(), array ('name' => 'iif_id'));
+		//echo '</th><th class=tdleft>';
+		//printSelect (readChapter (CHAP_PORTTYPE), array ('name' => 'oif_id'));
+		//echo '</th></tr></form>';
 	}
-
-	startPortlet ('WDM standard by interface');
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderIIFOIFCompatEditor");
+	$mod->setNamespace("portifcompat");
+		
+	//startPortlet ('WDM standard by interface');
 	$iif = getPortIIFOptions();
 	global $nextorder, $wdm_packs;
 	$order = 'odd';
-	echo '<table border=0 align=center cellspacing=0 cellpadding=5>';
+	//echo '<table border=0 align=center cellspacing=0 cellpadding=5>';
+	$allWDM_PacksOut = array();
 	foreach ($wdm_packs as $codename => $packinfo)
 	{
-		echo "<tr><th>&nbsp;</th><th colspan=2>${packinfo['title']}</th></tr>";
+		$singlePack = array('packinfo' => $packinfo['title']);
+		//echo "<tr><th>&nbsp;</th><th colspan=2>${packinfo['title']}</th></tr>";
+		$singlePack['iff_ids'] = '';
 		foreach ($packinfo['iif_ids'] as $iif_id)
 		{
-			echo "<tr class=row_${order}><th class=tdleft>" . $iif[$iif_id] . '</th><td>';
-			echo getOpLink (array ('op' => 'addPack', 'standard' => $codename, 'iif_id' => $iif_id), '', 'add');
-			echo '</td><td>';
-			echo getOpLink (array ('op' => 'delPack', 'standard' => $codename, 'iif_id' => $iif_id), '', 'delete');
-			echo '</td></tr>';
+			$iif_id_mod = $tplm->generateModule("RenderIIFOIFCompatEditor_Iif_id");
+			$iif_id_mod->setNamespace("portifcompat");
+			$iif_id_mod->addOutput('order', $order);
+			$iif_id_mod->addOutput('iif_iif_id', $iff[$iff_id]);
+			$iif_id_mod->addOutput('codename', $codename);
+			$iif_id_mod->addOutput('iif_id', $iif_id);
+			//echo "<tr class=row_${order}><th class=tdleft>" . $iif[$iif_id] . '</th><td>';
+			//echo getOpLink (array ('op' => 'addPack', 'standard' => $codename, 'iif_id' => $iif_id), '', 'add');
+			//echo '</td><td>';
+			//echo getOpLink (array ('op' => 'delPack', 'standard' => $codename, 'iif_id' => $iif_id), '', 'delete');
+			//echo '</td></tr>';
 			$order = $nextorder[$order];
+			$singlePack['iff_ids'] .= $iif_id_mod->run();
 		}
+		$allWDM_PacksOut[] = $singlePack;
 	}
-	echo '</table>';
-	finishPortlet();
+	$mod->addOutput("allWDM_Packs", $allWDM_PacksOut);
+		 
+	//echo '</table>';
+	//finishPortlet();
 
-	startPortlet ('interface by interface');
+	//startPortlet ('interface by interface');
 	global $nextorder;
 	$last_iif_id = 0;
 	$order = 'even';
-	echo '<br><table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>';
-	echo '<tr><th>&nbsp;</th><th class=tdleft>inner interface</th><th class=tdleft>outer interface</th></tr>';
+	//echo '<br><table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>';
+	//echo '<tr><th>&nbsp;</th><th class=tdleft>inner interface</th><th class=tdleft>outer interface</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewitemTR();
+	//	printNewitemTR();
+		$mod->addOutput("isAddNewItemTop", printNewitemTR());
+	$allInterfacesOut = array();
 	foreach (getPortInterfaceCompat() as $record)
 	{
 		if ($last_iif_id != $record['iif_id'])
@@ -7874,14 +7924,21 @@ function renderIIFOIFCompatEditor()
 			$order = $nextorder[$order];
 			$last_iif_id = $record['iif_id'];
 		}
-		echo "<tr class=row_${order}><td>";
-		echo getOpLink (array ('op' => 'del', 'iif_id' => $record['iif_id'], 'oif_id' => $record['oif_id']), '', 'delete', 'remove pair');
-		echo "</td><td class=tdleft>${record['iif_name']}</td><td class=tdleft>${record['oif_name']}</td></tr>";
+		$singleInterface = array('order' => $order);
+		//echo "<tr class=row_${order}><td>";
+		$singleInterface['opLink'] = getOpLink (array ('op' => 'del', 'iif_id' => $record['iif_id'], 'oif_id' => $record['oif_id']), '', 'delete', 'remove pair');
+		//echo getOpLink (array ('op' => 'del', 'iif_id' => $record['iif_id'], 'oif_id' => $record['oif_id']), '', 'delete', 'remove pair');
+		$singleInterface['iif_name'] = $record['iif_name'];
+		$singleInterface['oif_name'] = $record['oif_name'];
+		//echo "</td><td class=tdleft>${record['iif_name']}</td><td class=tdleft>${record['oif_name']}</td></tr>";
+		$allInterfacesOut[] = $singleInterface;
 	}
+	$mod->addOutput("allInterfaces", $allInterfacesOut);	 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewitemTR();
-	echo '</table>';
-	finishPortlet();
+		$mod->addOutput("isntAddNewItemTop", printNewitemTR());
+	//	printNewitemTR();
+	//echo '</table>';
+	//finishPortlet();
 }
 
 function render8021QOrderForm ($some_id)
