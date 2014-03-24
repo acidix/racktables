@@ -219,6 +219,8 @@ $this->setInMemoryTemplate("StdTableCell","<td>{{cont}}</td>");
 *
 **/
 $this->setInMemoryTemplate("RenderTagStatsALink","<a href='index.php?page={{pagerealm}}&cft[]={{taginfoID}}>{{taginfo}}</a>");
+
+/**
  * FileSummaryComment
  * Usage: as above
  */
