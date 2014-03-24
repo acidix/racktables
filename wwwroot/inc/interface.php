@@ -4266,7 +4266,6 @@ function renderUserListEditor ()
 	foreach ($accounts as $account)
 	{
 		$smod = $tplm->generateSubmodule("Users", "UserListEditorRow", $mod);
-		$smod->setNamespace("userlist");
 		$smod->setLock();
 		$smod->addOutput("UserId", $account['user_id']);
 		$smod->addOutput("Name", $account['user_name']);
@@ -4289,61 +4288,89 @@ function renderUserListEditor ()
 
 function renderOIFCompatViewer()
 {
+	$tplm = TemplateManager::getInstance();
+	
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule("Payload", "RenderOIFCompatViewer");
+	$mod->setNamespace("portmap",true);
+
 	global $nextorder;
 	$order = 'odd';
 	$last_left_oif_id = NULL;
-	echo '<br><table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>';
-	echo '<tr><th>From interface</th><th>To interface</th></tr>';
+	// echo '<br><table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>';
+	// echo '<tr><th>From interface</th><th>To interface</th></tr>';
 	foreach (getPortOIFCompat() as $pair)
 	{
+		$mod->addOutput('Looparray', array(
+											'Order' => $order,
+											'Type1' => $pair['type1name'],
+											'Type2' => $pair['type2name']));
+
 		if ($last_left_oif_id != $pair['type1'])
 		{
 			$order = $nextorder[$order];
 			$last_left_oif_id = $pair['type1'];
 		}
-		echo "<tr class=row_${order}><td>${pair['type1name']}</td><td>${pair['type2name']}</td></tr>";
+		// echo "<tr class=row_${order}><td>${pair['type1name']}</td><td>${pair['type2name']}</td></tr>";
 	}
-	echo '</table>';
+	// echo '</table>';
 }
 
 function renderOIFCompatEditor()
 {
-	function printNewitemTR()
+	$tplm = TemplateManager::getInstance();
+	
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule("Payload", "RenderOIFCompatEditor");
+	$mod->setNamespace("portmap",true);
+
+
+	function printNewitemTR($placeholder)
 	{
-		printOpFormIntro ('add');
-		echo '<tr><th class=tdleft>';
-		printImageHREF ('add', 'add pair', TRUE);
-		echo '</th><th class=tdleft>';
-		printSelect (readChapter (CHAP_PORTTYPE), array ('name' => 'type1'));
-		echo '</th><th class=tdleft>';
-		printSelect (readChapter (CHAP_PORTTYPE), array ('name' => 'type2'));
-		echo '</th></tr></form>';
+		$submod = $tplm->generateSubmodule($placeholder, 'PrintNewItem', $mod);
+		// printOpFormIntro ('add');
+		// echo '<tr><th class=tdleft>';
+		// printImageHREF ('add', 'add pair', TRUE);
+		// echo '</th><th class=tdleft>';
+		$submod->addOutput('Type1', getSelect (readChapter (CHAP_PORTTYPE), array ('name' => 'type1')));
+		$submod->addOutput('Type2', getSelect (readChapter (CHAP_PORTTYPE), array ('name' => 'type2')));
+		// echo '</th><th class=tdleft>';
+		// printSelect (readChapter (CHAP_PORTTYPE), array ('name' => 'type2'));
+		// echo '</th></tr></form>';
 	}
 
 	global $nextorder, $wdm_packs;
 
-	startPortlet ('WDM wideband receivers');
-	echo '<table border=0 align=center cellspacing=0 cellpadding=5>';
-	echo '<tr><th>&nbsp;</th><th>enable</th><th>disable</th></tr>';
+	// startPortlet ('WDM wideband receivers');
+	// echo '<table border=0 align=center cellspacing=0 cellpadding=5>';
+	// echo '<tr><th>&nbsp;</th><th>enable</th><th>disable</th></tr>';
 	$order = 'odd';
 	foreach ($wdm_packs as $codename => $packinfo)
 	{
-		echo "<tr class=row_${order}><td class=tdleft>" . $packinfo['title'] . '</td><td>';
-		echo getOpLink (array ('op' => 'addPack', 'standard' => $codename), '', 'add');
-		echo '</td><td>';
-		echo getOpLink (array ('op' => 'delPack', 'standard' => $codename), '', 'delete');
-		echo '</td></tr>';
+		$mod->addOutput('Looparray', array(
+											'Order' => $order,
+											'Title' => $packinfo['title'],
+											'Codename' => $codename));
+		// echo "<tr class=row_${order}><td class=tdleft>" . $packinfo['title'] . '</td><td>';
+		// echo getOpLink (array ('op' => 'addPack', 'standard' => $codename), '', 'add');
+		// echo '</td><td>';
+		// echo getOpLink (array ('op' => 'delPack', 'standard' => $codename), '', 'delete');
+		// echo '</td></tr>';
 		$order = $nextorder[$order];
 	}
-	echo '</table>';
-	finishPortlet();
+	// echo '</table>';
+	// finishPortlet();
 
 	startPortlet ('interface by interface');
 	$last_left_oif_id = NULL;
-	echo '<br><table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>';
-	echo '<tr><th>&nbsp;</th><th>From Interface</th><th>To Interface</th></tr>';
+	// echo '<br><table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>';
+	// echo '<tr><th>&nbsp;</th><th>From Interface</th><th>To Interface</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewitemTR();
+		printNewitemTR('Newtop');
 	foreach (getPortOIFCompat() as $pair)
 	{
 		if ($last_left_oif_id != $pair['type1'])
@@ -4351,23 +4378,37 @@ function renderOIFCompatEditor()
 			$order = $nextorder[$order];
 			$last_left_oif_id = $pair['type1'];
 		}
-		echo "<tr class=row_${order}><td>";
-		echo getOpLink (array ('op' => 'del', 'type1' => $pair['type1'], 'type2' => $pair['type2']), '', 'delete', 'remove pair');
-		echo "</td><td class=tdleft>${pair['type1name']}</td><td class=tdleft>${pair['type2name']}</td></tr>";
+		$mod->addOutput('Looparray2', array(
+											'Order' => $order,
+											'Type1' => $pair['type1'],
+											'Type2' => $pair['type2'],
+											'Type1name' => $pair['type1name'],
+											'Type2name' => $pair['type2name']));
+
+		// echo "<tr class=row_${order}><td>";
+		// echo getOpLink (array ('op' => 'del', 'type1' => $pair['type1'], 'type2' => $pair['type2']), '', 'delete', 'remove pair');
+		// echo "</td><td class=tdleft>${pair['type1name']}</td><td class=tdleft>${pair['type2name']}</td></tr>";
 	}
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewitemTR();
-	echo '</table>';
-	finishPortlet();
+		printNewitemTR('Newbottom');
+	// echo '</table>';
+	// finishPortlet();
 }
 
 function renderObjectParentCompatViewer()
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule("Payload", "RenderObjectParentCompatViewer");
+	$mod->setNamespace("parentmap",true);
+
 	global $nextorder;
 	$order = 'odd';
 	$last_left_parent_id = NULL;
-	echo '<br><table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>';
-	echo '<tr><th>Parent</th><th>Child</th></tr>';
+	// echo '<br><table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>';
+	// echo '<tr><th>Parent</th><th>Child</th></tr>';
 	foreach (getObjectParentCompat() as $pair)
 	{
 		if ($last_left_parent_id != $pair['parent_objtype_id'])
@@ -4375,35 +4416,52 @@ function renderObjectParentCompatViewer()
 			$order = $nextorder[$order];
 			$last_left_parent_id = $pair['parent_objtype_id'];
 		}
-		echo "<tr class=row_${order}><td>${pair['parent_name']}</td><td>${pair['child_name']}</td></tr>\n";
+
+		$mod->addOutput('Looparray', array(
+											'Order' => $order,
+											'Parentname' => $pair['parent_name'],
+											'Childname' => $pair['child_name']));
+		// echo "<tr class=row_${order}><td>${pair['parent_name']}</td><td>${pair['child_name']}</td></tr>\n";
 	}
-	echo '</table>';
+	// echo '</table>';
 }
 
 function renderObjectParentCompatEditor()
 {
-	function printNewitemTR()
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule("Payload", "RenderObjectParentCompatEditor");
+	$mod->setNamespace("parentmap",true);
+
+	function printNewitemTR($placeholder)
 	{
-		printOpFormIntro ('add');
-		echo '<tr><th class=tdleft>';
-		printImageHREF ('add', 'add pair', TRUE);
-		echo '</th><th class=tdleft>';
+		$submod = $tplm->generateSubmodule($placeholder, 'PrintNewItem', $mod);
+
+		// printOpFormIntro ('add');
+		// echo '<tr><th class=tdleft>';
+		// printImageHREF ('add', 'add pair', TRUE);
+		// echo '</th><th class=tdleft>';
 		$chapter = readChapter (CHAP_OBJTYPE);
 		// remove rack, row, location
 		unset ($chapter['1560'], $chapter['1561'], $chapter['1562']);
-		printSelect ($chapter, array ('name' => 'parent_objtype_id'));
-		echo '</th><th class=tdleft>';
-		printSelect ($chapter, array ('name' => 'child_objtype_id'));
-		echo "</th></tr></form>\n";
+		$submod->setOutput('Parent', getSelect ($chapter,array ('name' => 'parent_objtype_id'), NULL));
+		$submod->setOutput('Child', getSelect ($chapter,array ('name' => 'child_objtype_id'), NULL));
+
+		// printSelect ($chapter, array ('name' => 'parent_objtype_id'));
+		// echo '</th><th class=tdleft>';
+		// printSelect ($chapter, array ('name' => 'child_objtype_id'));
+		// echo "</th></tr></form>\n";
 	}
 
 	global $nextorder;
 	$last_left_parent_id = NULL;
 	$order = 'odd';
-	echo '<br><table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>';
-	echo '<tr><th>&nbsp;</th><th>Parent</th><th>Child</th></tr>';
+	// echo '<br><table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>';
+	// echo '<tr><th>&nbsp;</th><th>Parent</th><th>Child</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewitemTR();
+		printNewitemTR('Newtop');
 	foreach (getObjectParentCompat() as $pair)
 	{
 		if ($last_left_parent_id != $pair['parent_objtype_id'])
@@ -4411,16 +4469,25 @@ function renderObjectParentCompatEditor()
 			$order = $nextorder[$order];
 			$last_left_parent_id = $pair['parent_objtype_id'];
 		}
-		echo "<tr class=row_${order}><td>";
-		if ($pair['count'] > 0)
-			printImageHREF ('nodelete', $pair['count'] . ' relationship(s) stored');
-		else
-			echo getOpLink (array ('op' => 'del', 'parent_objtype_id' => $pair['parent_objtype_id'], 'child_objtype_id' => $pair['child_objtype_id']), '', 'delete', 'remove pair');
-		echo "</td><td class=tdleft>${pair['parent_name']}</td><td class=tdleft>${pair['child_name']}</td></tr>\n";
+		$mod->addOutput('Looparray', array(
+											'Order' => $order,
+											'Parentname' => $pair['parent_name'],
+											'Childname' => $pair['child_name'],
+											'Image' => ($pair['count'] > 0 ? getImageHREF ('nodelete', $pair['count'] . ' relationship(s) stored'): getOpLink (array ('op' => 'del', 'parent_objtype_id' => $pair['parent_objtype_id'], 'child_objtype_id' => $pair['child_objtype_id']), '', 'delete', 'remove pair')));
+		// echo "<tr class=row_${order}><td>";
+		
+		// TODO: generate Submodule for this Loop instead of an Looparray (Template_Engine_Issue) 
+
+
+		// if ($pair['count'] > 0)
+		// 	printImageHREF ('nodelete', $pair['count'] . ' relationship(s) stored');
+		// else
+		// 	echo getOpLink (array ('op' => 'del', 'parent_objtype_id' => $pair['parent_objtype_id'], 'child_objtype_id' => $pair['child_objtype_id']), '', 'delete', 'remove pair');
+		// echo "</td><td class=tdleft>${pair['parent_name']}</td><td class=tdleft>${pair['child_name']}</td></tr>\n";
 	}
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewitemTR();
-	echo '</table>';
+		printNewitemTR('Newbottom');
+	// echo '</table>';
 }
 
 // Find direct sub-pages and dump as a list.
@@ -4428,12 +4495,24 @@ function renderObjectParentCompatEditor()
 // but use some proper abstract function later.
 function renderConfigMainpage ()
 {
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule("Payload", "RenderConfigMainPage");
+	$mod->setNamespace("config",true);
+
 	global $pageno, $page;
-	echo '<ul>';
+	// echo '<ul>';
 	foreach ($page as $cpageno => $cpage)
-		if (isset ($cpage['parent']) and $cpage['parent'] == $pageno  && permitted($cpageno))
-			echo "<li><a href='index.php?page=${cpageno}'>" . $cpage['title'] . "</li>\n";
-	echo '</ul>';
+		$mod->addOutput('Looparray', array(	'Parent' => $cpage['parent'],
+											'Pageno' => $pageno, 
+											'Permitted' => permitted ($cpageno),
+											'Cpageno' => $cpageno, 
+											'Title' => $cpage['title']));
+		// if (isset ($cpage['parent']) and $cpage['parent'] == $pageno  && permitted($cpageno))
+		// 	echo "<li><a href='index.php?page=${cpageno}'>" . $cpage['title'] . "</li>\n";
+	
+	// echo '</ul>';
 }
 
 function renderLocationPage ($location_id)
