@@ -1,4 +1,16 @@
-<?php if (defined("RS_TPL")) {?>
+<?php if (defined("RS_TPL")) {
+	if ($this->is('AutoScroll')) {
+		$id = $this->_AutoScroll ;
+		$this->addJS (<<<END
+$(document).ready(function() {
+	var anchor = document.getElementsByName('ip-$id')[0];
+	if (anchor)
+		anchor.scrollIntoView(false);
+});
+END
+		, TRUE);
+	}
+	?>
 	<?php if ($this->is('HasPagination')) { ?>
 		<h3><?php $this->StartIP; ?> ~ <?php $this->EndIP; ?></h3>
 	<?php } ?>

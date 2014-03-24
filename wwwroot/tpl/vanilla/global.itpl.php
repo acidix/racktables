@@ -171,8 +171,54 @@ $this->setInMemoryTemplate("RenderNewEntityTags","<div class=tagselector><table 
  * Usage: interface.php - renderFileSummary() to display the download link.
  */
 $this->setInMemoryTemplate('FileSummaryDownloadLink',"<a href='?module=download&file_id={{Id}}' src=?module=chrome&uri=pix/download.png title='Download' height=16 width=16 ><img ></a>&nbsp;");
+/**
+*	ReportsCounters: 
+*	ReportsMesseges: 
+*	ReportsCustom:
+*	ReportsMeters: 
+*	Usage: interface.php
+*
+**/
+$this->setInMemoryTemplate("ReportsCounter","<tr><td class=tdright>{{header}}:</td><td class=tdleft>{{data}}</td></tr>");
+$this->setInMemoryTemplate("ReportsMesseges","<tr class='msg_{{class}}><td class=tdright>{{header}}:</td><td class=tdleft>{{text}}</td></tr>");
+$this->setInMemoryTemplate("ReportsCustom","<tr><td colspan=2>\n{{itemCont}}\n</td></tr>");
+$this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{title}:</td><td class=tdcenter>\n{{progressBar}}\n<br><small>{{isMax}}</small></td></tr>");
 
 /**
+*	GetProgressBar: 
+*	Usage: interface-lib-php
+*
+**/
+$this->setInMemoryTemplate("GetProgressBar","<img width=100 height=10 border=0 title='{{done}}%' src='{{src}}'>");
+
+
+/**
+*	NoVLANConfig: 
+*	Usage:  interface.php
+*
+**/
+$this->setInMemoryTemplate("NoVLANConfig","<center><h3>(no VLAN configuration exists)</h3></center>");
+
+/**
+*	StdCenterTableCell: 
+*	Usage: interface.php
+*
+**/
+$this->setInMemoryTemplate("StdCenterTableCell","<td class=tdcenter>{{cont}}</td>");
+
+/**
+*	StdTableCell: 
+*	Usage: interface.php
+*
+**/
+$this->setInMemoryTemplate("StdTableCell","<td>{{cont}}</td>");
+
+/**
+*	RenderTagStatsALink: 
+*	Usage:  Usage
+*
+**/
+$this->setInMemoryTemplate("RenderTagStatsALink","<a href='index.php?page={{pagerealm}}&cft[]={{taginfoID}}>{{taginfo}}</a>");
  * FileSummaryComment
  * Usage: as above
  */
@@ -207,5 +253,4 @@ $this->setInMemoryTemplate('SerializedTag','<span class="{{Class}} title="{{Titl
  * FileSummaryComment
  * Usage: as above
  */
-$this->setInMemoryTemplate('IPNetBacktraceLink','<a href="{{Link}}" title="View IP tree with this net as root">{{Title}}</a>');
-?>
+$this->setInMemoryTemplate('IPNetBacktraceLink','<a href="{{Link}}" title="View IP tree with this net as root">{{Title}}</a>');?>

@@ -15,9 +15,9 @@
 	</td></tr></form>
 
 	<?php $this->startLoop("rs_outTable"); ?>	
-		<?php $this->getH("PrintOpFormIntro", array( 'updRS', array('rs_id' => $this->rs_id))); ?> 
+		<?php $this->getH("PrintOpFormIntro", array( 'updRS', array('rs_id' => $this->_rs_id))); ?> 
 		<tr valign=top class=row_<?php $this->order ?> ><td>
-		<?php $this->getH("GetOpLink", array( array('op'=>'delRS', 'id'=>$this->rs_id), '', 'delete', 'Delete this real server')); ?> 
+		<?php $this->getH("GetOpLink", array( array('op'=>'delRS', 'id'=>$this->_rs_id), '', 'delete', 'Delete this real server')); ?> 
 		</td><td><input type=text name=rsip value='<?php $this->rs_rsip ?> '></td>
 		<td><input type=text name=rsport size=5 value='<?php $this->rs_rsport ?>'></td>
 		<td><input type=text name=comment size=15 value='<?php $this->rs_comment ?>'></td>

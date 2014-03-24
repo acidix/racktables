@@ -9,13 +9,13 @@
 	</td></tr>
 	</table></form>
 	<p class="centered">
-		<?php $this->getH("GetOpLink", array(array	('op' => 'cloneIPv4RSP', 'pool_id' => $this->poolinfoID), 'Clone RS pool', 'copy')); ?> 
+		<?php $this->getH("GetOpLink", array(array	('op' => 'cloneIPv4RSP', 'pool_id' => $this->_poolinfoID), 'Clone RS pool', 'copy')); ?> 
 	</p>
 	<p class="centered">
 	<?php if ($this->is("isPoolinfoRefcnt",true)) { ?>
 		<?php $this->getH("GetOpLink", array(NULL, 'Delete RS pool', 'nodestroy', "Could not delete: there are " . $this->get("poolinfoRefncnt",true) . "LB links")); ?> 
 	<?php } else {?> 
-		<?php $this->getH("GetOpLink", array(array	('op' => 'del', 'id' => $this->poolinfoID), 'Delete RS pool', 'destroy')); ?> 	
+		<?php $this->getH("GetOpLink", array(array	('op' => 'del', 'id' => $this->_poolinfoID), 'Delete RS pool', 'destroy')); ?> 	
 	<?php } ?>
 	</p>
 	

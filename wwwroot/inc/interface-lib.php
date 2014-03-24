@@ -508,7 +508,7 @@ function getOptionTree ($tree_name, $tree_options, $tree_config = array())
 
 function printImageHREF ($tag, $title = '', $do_input = FALSE, $tabindex = 0)
 {
-	echo getImageHREF ($tag, $title, $do_input, $tabindex);
+	return getImageHREF ($tag, $title, $do_input, $tabindex);
 }
 
 // this would be better called mkIMG(), make "IMG" HTML element
@@ -700,8 +700,8 @@ function getRenderedIPv4NetCapacity ($range)
 {
 	//Use TemplateEngine 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");	
+	$tplm->setTemplate('vanilla');
+//	$tplm->createMainModule();
 
 	$class = 'net-usage';
 	if (isset ($range['addrc']))
@@ -1092,7 +1092,9 @@ function getOpLink ($params, $title,  $img_name = '', $comment = '', $class = ''
 	//Initiate TemplateManager
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");
+	
 	$mod = $tplm->generateModule("GetOpLink");
+	$mod->setNamespace("");
 	
 	if (isset ($params))
 	{
@@ -1144,7 +1146,7 @@ function renderProgressBar ($percentage = 0, $theme = '', $inline = FALSE)
 	echo getProgressBar ($percentage, $theme, $inline);
 }
 
-function getProgressBar ($percentage = 0, $theme = '', $inline = FALSE)
+function getProgressBar ($percentage = 0, $theme = '', $inline = FALSE, $parent = null, $placeholder = "renderedProgressBar")
 {
 	$done = ((int) ($percentage * 100));
 	if (! $inline)
@@ -1157,8 +1159,24 @@ function getProgressBar ($percentage = 0, $theme = '', $inline = FALSE)
 		$_REQUEST = $bk_request;
 		header ('Content-type: text/html');
 	}
-	$ret = "<img width=100 height=10 border=0 title='${done}%' src='$src'>";
-	return $ret;
+
+
+	$tplm = TemplateManager::getInstance();
+	if($parent==null)
+		$tplm->setTemplate("vanilla");
+		
+	if($parent==null)	
+		$mod = $tplm->generateModule("GetProgressBar", true);
+	else
+		$mod = $tplm->generateSubmodule($placeholder, "GetProgressBar", $parent, true);
+
+	$mod->setOutput("done", $done);
+	$mod->setOutput("src", $src);		 	 		 
+
+	if($parent == null)
+		return $mod->run();	
+//	$ret = "<img width=100 height=10 border=0 title='${done}%' src='$src'>";
+//	return $ret;
 }
 
 function renderNetVLAN ($cell)
