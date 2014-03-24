@@ -21,7 +21,7 @@ function renderSLBDefConfig()
 	finishPortlet();
 }
 
-function renderSLBEntityCell ($cell, $highlighted = FALSE, TemplateModule $parent = null)
+function renderSLBEntityCell ($cell, $highlighted = FALSE, TemplateModule $parent = null, $placheolder = 'RenderedSLBEntityCell')
 {
 	$tplm = TemplateManager::getInstance();
 	//TODO Remove after change to config
@@ -30,7 +30,7 @@ function renderSLBEntityCell ($cell, $highlighted = FALSE, TemplateModule $paren
 		$mod = $tplm->generateModule("RenderSLBEntityCell",  false);
 	}
 	else
-		$mod = $tplm->generateSubmodule("RenderedSLBEntityCell", "RenderSLBEntityCell", $parent);
+		$mod = $tplm->generateSubmodule($placeholder, "RenderSLBEntityCell", $parent);
 
 
 	$mod->setNamespace("slb_interface");
@@ -182,7 +182,7 @@ function renderNewSLBItemForm ($realm1, $realm2)
 }
 
 // supports object, ipv4vs, ipv4rspool, ipaddress cell types
-function renderSLBTriplets ($cell, TemplateModule $parent = null)
+function renderSLBTriplets ($cell, TemplateModule $parent = null, $placeholder = "RenderedSLBTriplets")
 {
 	$is_cell_ip = (isset ($cell['ip_bin']) && isset ($cell['vslist']));
 	$additional_js_params = $is_cell_ip ? '' : ", {'" . $cell['realm'] . "': " . $cell['id'] . '}';
@@ -196,7 +196,7 @@ function renderSLBTriplets ($cell, TemplateModule $parent = null)
 		if($parent==null)	
 			$mod = $tplm->generateModule("RenderSLBTriplets",  false);
 		else
-			$mod = $tplm->generateSubmodule("RenderedSLBTriplets", "RenderSLBTriplets", $parent);
+			$mod = $tplm->generateSubmodule($placeholder, "RenderSLBTriplets", $parent);
 		$mod->setNamespace("slb-interface");
 
 		$cells = array();

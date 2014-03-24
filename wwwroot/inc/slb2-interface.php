@@ -315,7 +315,7 @@ function groupTriplets ($tr_list)
 }
 
 // supports object, ipvs, ipv4rspool cell types
-function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateModule $parent = null )
+function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateModule $parent = null , $placeholder = "RenderedSLBTriplets2")
 {
 	$tplm = TemplateManager::getInstance();
 	if($parent==null)
@@ -324,7 +324,7 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 	if($parent==null)	
 		$mod = $tplm->generateModule("RenderSLBTriplets2",  false);
 	else
-		$mod = $tplm->generateSubmodule("RenderedSLBTriplets2", "RenderSLBTriplets2", $parent);
+		$mod = $tplm->generateSubmodule($placeholder, "RenderSLBTriplets2", $parent);
 
 	list ($realm1, $realm2) = array_values (array_diff (array ('object', 'ipvs', 'ipv4rspool'), array ($cell['realm'])));
 	if ($editable && getConfigVar ('ADDNEW_AT_TOP') == 'yes')
