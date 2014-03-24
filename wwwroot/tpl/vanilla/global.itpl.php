@@ -166,5 +166,46 @@ $this->setInMemoryTemplate("GetSelectInLine","<input type=hidden name={{selectNa
 $this->setInMemoryTemplate("RenderNewEntityTags_empty","No tags defined");
 $this->setInMemoryTemplate("RenderNewEntityTags","<div class=tagselector><table border=0 align=center cellspacing=0 class='tagtree'>\n{{checkbox}}\n</table></div>\n");
 
+/**
+ * FileSummaryDownloadLink
+ * Usage: interface.php - renderFileSummary() to display the download link.
+ */
+$this->setInMemoryTemplate('FileSummaryDownloadLink',"<a href='?module=download&file_id={{Id}}' src=?module=chrome&uri=pix/download.png title='Download' height=16 width=16 ><img ></a>&nbsp;");
 
+/**
+ * FileSummaryComment
+ * Usage: as above
+ */
+$this->setInMemoryTemplate('FileSummaryComment','<div class="dashed commentblock">{{Comment}}</div>');
+
+/**
+ * FileSummaryComment
+ * Usage: as above
+ */
+$this->setInMemoryTemplate('FileLinksDefLink','<tr><td class=tdleft>{{Content}}</td></tr>');
+
+/**
+ * FileSummaryComment
+ * Usage: as above
+ */
+$this->setInMemoryTemplate('FileLinksObjLink','<tr><td class=tdleft>{{Name}} : {{Link}} </td></tr>');
+
+/**
+ * FileSummaryComment
+ * Usage: as above
+ */
+$this->setInMemoryTemplate('CellLink','<a href="{{Link}}">{{Title}}</a>');
+
+/**
+ * Serialized Tag
+ * Usage: serializeTags (interface-lib.php)
+ */
+$this->setInMemoryTemplate('SerializedTagLink','<a href="{{BaseUrl}}cft[]={{ID}}" class="{{Class}} title="{{Title}}">{{Tag}}</a> {{Delimiter}}');
+$this->setInMemoryTemplate('SerializedTag','<span class="{{Class}} title="{{Title}}">{{Tag}}</span> {{Delimiter}}');
+
+/**
+ * FileSummaryComment
+ * Usage: as above
+ */
+$this->setInMemoryTemplate('IPNetBacktraceLink','<a href="{{Link}}" title="View IP tree with this net as root">{{Title}}</a>');
 ?>

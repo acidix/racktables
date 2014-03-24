@@ -972,6 +972,7 @@ class TemplateModule
 					}
 					$ret = str_replace("{{".$name."}}", $value, $ret);
 				}
+				$ret = preg_replace("(\{\{[^\}]*\}\})", '', $ret); //Remove all unreplaced Placeholders
 				echo $ret;
 			}
 			TemplateManager::log("Loop-i = " . count($this->output[$this->loopplaceholder]));
@@ -1158,6 +1159,8 @@ class TemplateInMemory extends TemplateModule
 			}
 			$code = str_replace("{{".$name."}}", $value, $code);
 		}
+		
+		$code = preg_replace('(\{\{[^\}]*\}\})', '', $code);
 		
 		return $code ;
 	}

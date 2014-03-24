@@ -2931,6 +2931,8 @@ function getRenderedIPNetBacktrace ($range)
 	$backtrace = array();
 	$backtrace['&rarr;'] = $range;
 	$key = '';
+	
+	$tplm = TemplateManager::getInstance();
 	while (NULL !== ($upperid = getIPAddressNetworkId ($range['ip_bin'], $clen)))
 	{
 		$upperinfo = spotEntity ($range['realm'], $upperid);
@@ -2940,15 +2942,17 @@ function getRenderedIPNetBacktrace ($range)
 	}
 	foreach (array_reverse ($backtrace) as $arrow => $ainfo)
 	{
-		$link = '<a href="' . makeHref (array (
+		$mod = $tplm->generateModule('IPNetBacktraceLink',true,array('Title'=>$arrow));
+		//$link = '<a href="' . 
+		$mod->addOutput('Link', makeHref(array (
 			'page' => $space,
 			'tab' => 'default',
 			'clear-cf' => '',
 			'cfe' => '{' . $tag . $ainfo['id'] . '}',
 			'hl_net' => 1,
-			'eid' => $range['id'],
-		)) . '" title="View IP tree with this net as root">' . $arrow . '</a>';
-		$ret[] = array ($link, getOutputOf ('renderCell', $ainfo));
+			'eid' => $range['id'])));
+		//)) //. '" title="View IP tree with this net as root">' . $arrow . '</a>';
+		$ret[] = array ($mod->run(), getOutputOf ('renderCell', $ainfo));
 	}
 	return $ret;
 }
@@ -2986,7 +2990,7 @@ function renderIPNetwork ($id)
 	{
 		$summary['Routed by'] = '';
 		foreach ($routers as $rtr)
-			$summary['Routed by'] .= getOutputOf ('renderRouterCell', $rtr['ip_bin'], $rtr['iface'], spotEntity ('object', $rtr['id']));
+			$summary['Routed by'] .= renderRouterCell( $rtr['ip_bin'], $rtr['iface'], spotEntity ('object', $rtr['id']));
 	}
 	$summary['tags'] = '';
 	renderEntitySummary ($range, 'summary', $summary);
@@ -3338,12 +3342,19 @@ function renderIPNetworkProperties ($id)
 
 function renderIPAddress ($ip_bin)
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'IPAddress');
+	$mod->setNamespace('ipaddress',true);
+	
 	global $aat, $nextorder;
 	$address = getIPAddress ($ip_bin);
-	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
-	echo "<tr><td colspan=2 align=center><h1>${address['ip']}</h1></td></tr>\n";
+	//echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
+	//echo "<tr><td colspan=2 align=center><h1>${address['ip']}</h1></td></tr>\n";
 
-	echo "<tr><td class=pcleft>";
+	//echo "<tr><td class=pcleft>";
 
 	$summary = array();
 	if (strlen ($address['name']))
@@ -3356,97 +3367,122 @@ function renderIPAddress ($ip_bin)
 		$summary['Originated NAT connections'] = count ($address['outpf']);
 	if (isset ($address['inpf']))
 		$summary['Arriving NAT connections'] = count ($address['inpf']);
-	renderEntitySummary ($address, 'summary', $summary);
+	renderEntitySummary ($address, 'summary', $summary, $mod, 'EntitySummary');
 
 	// render SLB portlet
 	if (! empty ($address['vslist']) or ! empty ($address['vsglist']) or ! empty ($address['rsplist']))
 	{
-		startPortlet ("");
+		//startPortlet ("");
 		if (! empty ($address['vsglist']))
 		{
-			printf ("<h2>virtual service groups (%d):</h2>", count ($address['vsglist']));
+			//printf ("<h2>virtual service groups (%d):</h2>", count ($address['vsglist']));
 			foreach ($address['vsglist'] as $vsg_id)
-				renderSLBEntityCell (spotEntity ('ipvs', $vsg_id));
+				renderSLBEntityCell (spotEntity ('ipvs', $vsg_id),$mod,'SLBPortlet1');
 		}
 
 		if (! empty ($address['vslist']))
 		{
-			printf ("<h2>virtual services (%d):</h2>", count ($address['vslist']));
+			//printf ("<h2>virtual services (%d):</h2>", count ($address['vslist']));
 			foreach ($address['vslist'] as $vs_id)
-				renderSLBEntityCell (spotEntity ('ipv4vs', $vs_id));
+				renderSLBEntityCell (spotEntity ('ipv4vs', $vs_id),$mod,'SLBPortlet2');
 		}
 
 		if (! empty ($address['rsplist']))
 		{
-			printf ("<h2>RS pools (%d):</h2>", count ($address['rsplist']));
+			//printf ("<h2>RS pools (%d):</h2>", count ($address['rsplist']));
 			foreach ($address['rsplist'] as $rsp_id)
-				renderSLBEntityCell (spotEntity ('ipv4rspool', $rsp_id));
+				renderSLBEntityCell (spotEntity ('ipv4rspool', $rsp_id),'SLBPortlet3');
 		}
-		finishPortlet();
+		//finishPortlet();
 	}
-	echo "</td>\n";
+	//echo "</td>\n";
 
-	echo "<td class=pcright>";
+	//echo "<td class=pcright>";
 	if (isset ($address['class']) and ! empty ($address['allocs']))
 	{
-		startPortlet ('allocations');
-		echo "<table class='widetable' cellpadding=5 cellspacing=0 border=0 align='center' width='100%'>\n";
-		echo "<tr><th>object</th><th>OS interface</th><th>allocation type</th></tr>\n";
+		//startPortlet ('allocations');
+		//echo "<table class='widetable' cellpadding=5 cellspacing=0 border=0 align='center' width='100%'>\n";
+		//echo "<tr><th>object</th><th>OS interface</th><th>allocation type</th></tr>\n";
 		// render all allocation records for this address the same way
+		$out = array();
 		foreach ($address['allocs'] as $bond)
 		{
-			$tr_class = "${address['class']} tdleft";
-			if (isset ($_REQUEST['hl_object_id']) and $_REQUEST['hl_object_id'] == $bond['object_id'])
-				$tr_class .= ' highlight';
-			echo "<tr class='$tr_class'>" .
-				"<td><a href='" . makeHref (array ('page' => 'object', 'object_id' => $bond['object_id'], 'tab' => 'default', 'hl_ip' => $address['ip'])) . "'>${bond['object_name']}</td>" .
-				"<td>${bond['name']}</td>" .
-				"<td><strong>" . $aat[$bond['type']] . "</strong></td>" .
-				"</tr>\n";
+			$out[] = array(
+					'AddrClass'=>$address['class'],
+					'Highlight'=>((($_REQUEST['hl_object_id']) and $_REQUEST['hl_object_id'] == $bond['object_id']) ? 'hightlight' : ''),
+					'Link'=>makeHref(array ('page' => 'object', 'object_id' => $bond['object_id'], 'tab' => 'default', 'hl_ip' => $address['ip'])),
+					'ObjName'=>$bond['object_name'],
+					'Name'=>$bond['name'],
+					'Type'=>$aat[$bond['type']]
+			);
+			//$tr_class = "${address['class']} tdleft";
+			//if (isset ($_REQUEST['hl_object_id']) and $_REQUEST['hl_object_id'] == $bond['object_id'])
+			//	$tr_class .= ' highlight';
+			//echo "<tr class='$tr_class'>" .
+			//	"<td><a href='" . makeHref (array ('page' => 'object', 'object_id' => $bond['object_id'], 'tab' => 'default', 'hl_ip' => $address['ip'])) . "'>${bond['object_name']}</td>" .
+			//	"<td>${bond['name']}</td>" .
+			//	"<td><strong>" . $aat[$bond['type']] . "</strong></td>" .
+			//	"</tr>\n";
 		}
-		echo "</table><br><br>";
-		finishPortlet();
+		$mod->addOutput('Allocations',$out);
+		//echo "</table><br><br>";
+		//finishPortlet();
 	}
 
 	if (! empty ($address['rsplist']))
 	{
-		startPortlet ("RS pools:");
+		//startPortlet ("RS pools:");
+		$out = array();
 		foreach ($address['rsplist'] as $rsp_id)
 		{
-			renderSLBEntityCell (spotEntity ('ipv4rspool', $rsp_id));
-			echo '<br>';
+			$out[] = array('Pool'=>renderSLBEntityCell (spotEntity ('ipv4rspool', $rsp_id)));
+			//renderSLBEntityCell (spotEntity ('ipv4rspool', $rsp_id),$mod,'RSPools');
+			//echo '<br>';
 		}
-		finishPortlet();
+		$mod->addOutput('RSPools', $out);
+		//finishPortlet();
 	}
 
 	if (! empty ($address['vsglist']))
 		foreach ($address['vsglist'] as $vsg_id)
-			renderSLBTriplets2 (spotEntity ('ipvs', $vsg_id), FALSE, $ip_bin);
+			renderSLBTriplets2 (spotEntity ('ipvs', $vsg_id), FALSE, $ip_bin, $mod, 'VSGList');
 
 	if (! empty ($address['vslist']))
-		renderSLBTriplets ($address);
+		renderSLBTriplets ($address, $mod, 'VSList');
 
 	foreach (array ('outpf' => 'departing NAT rules', 'inpf' => 'arriving NAT rules') as $key => $title)
 		if (! empty ($address[$key]))
 		{
-			startPortlet ($title);
-			echo "<table class='widetable' cellpadding=5 cellspacing=0 border=0 align='center' width='100%'>\n";
-			echo "<tr><th>proto</th><th>from</th><th>to</th><th>comment</th></tr>\n";
+			$placeholder = ($key == 'outpf' ? 'NATDeparting' : 'NATArriving');
+			//startPortlet ($title);
+			//cho "<table class='widetable' cellpadding=5 cellspacing=0 border=0 align='center' width='100%'>\n";
+			//echo "<tr><th>proto</th><th>from</th><th>to</th><th>comment</th></tr>\n";
 			foreach ($address[$key] as $rule)
 			{
+				$smod = $tplm->generateSubmodule($placeholder, 'IPAddressNATRule', $mod);
+				$smod->addOutput('Proto', $rule['proto']);
+				$smod->addOutput('FromIp', $rule['localip']);
+				$smod->addOutput('FromPort', $rule['localport']);
+				$smod->addOutput('FromLink', makeHref (array ('page' => 'ipaddress',  'tab'=>'default', 'ip' => $rule['localip'])));
+				$smod->addOutput('ToIp', $rule['remoteip']);
+				$smod->addOutput('ToPort', $rule['remoteport']);
+				$smod->addOutput('ToLink', makeHref (array ('page' => 'ipaddress',  'tab'=>'default', 'ip' => $rule['remoteip'])));
+				$smod->addOutput('Description', $rule['description']);
+				
+				/** if ($rule['localport'])
 				echo "<tr>";
 				echo "<td>" . $rule['proto'] . "</td>";
 				echo "<td>" . getRenderedIPPortPair ($rule['localip'], $rule['localport']) . "</td>";
 				echo "<td>" . getRenderedIPPortPair ($rule['remoteip'], $rule['remoteport']) . "</td>";
 				echo "<td>" . $rule['description'] . "</td></tr>";
-				echo "</tr>";
+				echo "</tr>"; */
 			}
-			echo "</table>";
-			finishPortlet();
+			//echo "</table>";
+			//finishPortlet();
 		}
 
-	echo "</td></tr>";
-	echo "</table>\n";
+	//echo "</td></tr>";
+	//echo "</table>\n";
 }
 
 function renderIPAddressProperties ($ip_bin)
@@ -6459,16 +6495,19 @@ function renderMyQuickLinks ()
 	finishPortlet();
 }
 
-function renderFileSummary ($file)
+function renderFileSummary ($file, $parent = null, $placeholder = 'FileSummary')
 {
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateModule('FileSummaryDownloadLink',true);
+	$mod->addOutput('Id', $file['id']);
+	
 	$summary = array();
 	$summary['Type'] = $file['type'];
 	$summary['Size'] =
 	(
 		isolatedPermission ('file', 'download', $file) ?
 		(
-			"<a href='?module=download&file_id=${file['id']}'>" .
-			getImageHREF ('download', 'Download file') . '</a>&nbsp;'
+			$mod->run()
 		) : ''
 	) . formatFileSize ($file['size']);
 	$summary['Created'] = $file['ctime'];
@@ -6476,18 +6515,29 @@ function renderFileSummary ($file)
 	$summary['Accessed'] = $file['atime'];
 	$summary['tags'] = '';
 	if (strlen ($file['comment']))
-		$summary['Comment'] = '<div class="dashed commentblock">' . string_insert_hrefs (htmlspecialchars ($file['comment'])) . '</div>';
-	renderEntitySummary ($file, 'summary', $summary);
+	{
+		$mod = $tplm->generateModule('FileSummaryComment',true);
+		$mod->addOutput('Comment', string_insert_hrefs (htmlspecialchars ($file['comment'])));
+		$summary['Comment'] = $mod->run();
+	}
+	renderEntitySummary ($file, 'summary', $summary, $parent, $placeholder);
 }
 
-function renderFileLinks ($links)
+function renderFileLinks ($links,$parent,$placeholder)
 {
-	startPortlet ('Links (' . count ($links) . ')');
-	echo "<table cellspacing=0 cellpadding='5' align='center' class='widetable'>\n";
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateSubmodule($placeholder, 'FileLinks', $parent);
+	$mod->setNamespace('file');
+	
+	//startPortlet ('Links (' . count ($links) . ')');
+	//echo "<table cellspacing=0 cellpadding='5' align='center' class='widetable'>\n";
+	
+	//$outarr = array();
+	
 	foreach ($links as $link)
 	{
 		$cell = spotEntity ($link['entity_type'], $link['entity_id']);
-		echo '<tr><td class=tdleft>';
+		//echo '<tr><td class=tdleft>';
 		switch ($link['entity_type'])
 		{
 			case 'user':
@@ -6497,16 +6547,18 @@ function renderFileLinks ($links)
 			case 'ipv4vs':
 			case 'ipv4rspool':
 			case 'object':
-				renderCell ($cell);
+				$tplm->generateSubmodule('Links','FileLinksDefLink',$mod,true,array('Content'=>renderCell ($cell)));
 				break;
 			default:
-				echo formatRealmName ($link['entity_type']) . ': ' . mkCellA ($cell);
+				$tplm->generateSubmodule('Links', 'FileLinksObjLink', $mod, true, array('Name'=>formatRealmName ($link['entity_type']),'Link'=>mkCellA ($cell)));
+				//$outarr[] = array('Content'=> formatRealmName ($link['entity_type']) . ': ' . mkCellA ($cell)); //@TODO Check mkCellA usage
 				break;
 		}
-		echo '</td></tr>';
+		//echo '</td></tr>';
 	}
-	echo "</table><br>\n";
-	finishPortlet();
+	//$mod->addOutput('Links', $outarr);
+	//echo "</table><br>\n";
+	//finishPortlet();
 }
 
 function renderFilePreview ($pcode)
@@ -6521,49 +6573,79 @@ function renderFile ($file_id)
 {
 	global $nextorder, $aac;
 	$file = spotEntity ('file', $file_id);
-	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
-	echo "<tr><td colspan=2 align=center><h1>" . htmlspecialchars ($file['name']) . "</h1></td></tr>\n";
-	echo "<tr><td class=pcleft>";
+	
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'File');
+	$mod->setNamespace('file',true);
+	
+	$mod->addOutput('Name', htmlspecialchars ($file['name']));
+	
+	//echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
+	//echo "<tr><td colspan=2 align=center><h1>" . htmlspecialchars ($file['name']) . "</h1></td></tr>\n";
+	//echo "<tr><td class=pcleft>";
 
-	callHook ('renderFileSummary', $file);
+	callHook ('renderFileSummary', $file, $mod, 'FileSummary');
 
 	$links = getFileLinks ($file_id);
 	if (count ($links))
-		callHook ('renderFileLinks', $links);
+		callHook ('renderFileLinks', $links, $mod, 'FileLinks');
 
 	echo "</td>";
 
-	if (isolatedPermission ('file', 'download', $file) and '' != ($pcode = getFilePreviewCode ($file)))
+	if (isolatedPermission ('file', 'download', $file)) //and '' != ($pcode = getFilePreviewCode ($file)))
 	{
-		echo "<td class=pcright>";
-		callHook ('renderFilePreview', $pcode);
-		echo "</td>";
+		getFilePreviewCode ($file,$mod,'FilePreview');
+		//echo "<td class=pcright>";
+		//callHook ('renderFilePreview', $pcode);
+		//echo "</td>";
 	}
 
-	echo "</tr></table>\n";
+	//echo "</tr></table>\n";
 }
 
 function renderFileReuploader ()
 {
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateSubmodule('Payload', 'FileReuploader');
+	$mod->setNamespace('file');
+	
+	/**
 	startPortlet ('Replace existing contents');
 	printOpFormIntro ('replaceFile', array (), TRUE);
 	echo "<input type=file size=10 name=file tabindex=100>&nbsp;\n";
-	printImageHREF ('save', 'Save changes', TRUE, 101);
+	printImageHREF ('srenderFileBrowserave', 'Save changes', TRUE, 101);
 	echo "</form>\n";
-	finishPortlet();
+	finishPortlet();*/
 }
 
 function renderFileDownloader ($file_id)
 {
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateSubmodule('Payload', 'FileDownloader');
+	$mod->setNamespace('file');
+	$mod->addOutput('Id', $file_id);
+	
+	/**
 	echo "<br><center><a target='_blank' href='?module=download&file_id=${file_id}&asattach=1'>";
 	printImageHREF ('DOWNLOAD');
-	echo '</a></center>';
+	echo '</a></center>';*/
 }
 
 function renderFileProperties ($file_id)
 {
 	$file = spotEntity ('file', $file_id);
-	echo '<table border=0 align=center>';
+	
+	$tplm = TemplateManageR::getInstance();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'FileProperties');
+	$mod->setNamespace('file');
+	
+	$mod->addOutput('Type', htmlspecialchars ($file['type']));
+	$mod->addOutput('Name', htmlspecialchars ($file['name']));
+	$mod->addOutput('Comment', htmlspecialchars ($file['comment']));
+	$mod->addOutput('Id', $file_id);
+	/** echo '<table border=0 align=center>';
 	printOpFormIntro ('updateFile');
 	echo "<tr><th class=tdright>MIME-type:</th><td class=tdleft><input tabindex=101 type=text name=file_type value='";
 	echo htmlspecialchars ($file['type']) . "'></td></tr>";
@@ -6576,66 +6658,86 @@ function renderFileProperties ($file_id)
 	echo '</td></tr>';
 	echo "<tr><th class=submit colspan=2>";
 	printImageHREF ('SAVE', 'Save changes', TRUE, 102);
-	echo '</th></tr></form></table>';
+	echo '</th></tr></form></table>'; */
 }
 
 function renderFileBrowser ()
 {
-	renderCellList ('file', 'Files', TRUE);
+	renderCellList ('file', 'Files', TRUE, NULL, NULL, 'Payload');
 }
 
 // Like renderFileBrowser(), but with the option to delete files
 function renderFileManager ()
 {
 	// Used for uploading a parentless file
-	function printNewItemTR ()
+	function printNewItemTR ($parent, $placeholder)
 	{
-		startPortlet ('Upload new');
+		$tplm = TemplateManager::getInstance();
+		
+		$mod = $tplm->generateSubmodule($placeholder, 'FileManagerNew', $parent);
+		renderNewEntityTags ('file',$mod,'Tags');
+		
+		/** startPortlet ('Upload new');
 		printOpFormIntro ('addFile', array (), TRUE);
 		echo "<table border=0 cellspacing=0 cellpadding='5' align='center'>";
 		echo '<tr><th colspan=2>Comment</th><th>Assign tags</th></tr>';
 		echo '<tr><td valign=top colspan=2><textarea tabindex=101 name=comment rows=10 cols=80></textarea></td>';
-		echo '<td rowspan=2>';
-		echo renderNewEntityTags ('file');
-		echo '</td></tr>';
+		echo '<td rowspan=2>'; */
+		/** echo '</td></tr>';
 		echo "<tr><td class=tdleft><label>File: <input type='file' size='10' name='file' tabindex=100></label></td><td class=tdcenter>";
 		printImageHREF ('CREATE', 'Upload file', TRUE, 102);
 		echo '</td></tr>';
 		echo "</table></form><br>";
-		finishPortlet();
+		finishPortlet(); */
 	}
-
+	
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'FileManager');
+	$mod->setNamespace('files');
+	
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR();
+		printNewItemTR($mod,'NewTop');
+	else
+		printNewItemTR($mod,'NewBottom');
+	
 	if (count ($files = listCells ('file')))
 	{
-		startPortlet ('Manage existing (' . count ($files) . ')');
+		$mod->addOutput('Count', count($files));
+		//startPortlet ('Manage existing (' . count ($files) . ')');
 		global $nextorder;
 		$order = 'odd';
-		echo '<table cellpadding=5 cellspacing=0 align=center class=cooltable>';
-		echo '<tr><th>File</th><th>Unlink</th><th>Destroy</th></tr>';
+		//echo '<table cellpadding=5 cellspacing=0 align=center class=cooltable>';
+		//echo '<tr><th>File</th><th>Unlink</th><th>Destroy</th></tr>';
 		foreach ($files as $file)
 		{
-			printf("<tr class=row_%s valign=top><td class=tdleft>", $order);
-			renderCell ($file);
+			$smod = $tplm->generateSubmodule('Content', 'FileManagerRow', $mod);
+			$smod->addOutput('Count',count ($file['links']));
+			//printf("<tr class=row_%s valign=top><td class=tdleft>", $order);
+			renderCell ($file, $smod, 'Cell');
 			// Don't load links data earlier to enable special processing.
 			amplifyCell ($file);
-			echo '</td><td class=tdleft>';
-			echo serializeFileLinks ($file['links'], TRUE);
-			echo '</td><td class=tdcenter valign=middle>';
-			if (count ($file['links']))
-				printImageHREF ('NODESTROY', 'References (' . count ($file['links']) . ')');
+			//echo '</td><td class=tdleft>';
+			$smod->addOutput('Links', serializeFileLinks ($file['links'], TRUE));
+			$smod->addOutput('Count',count ($file['links']));
+			$smod->addOutput('Id', $file['id']);
+			
+			//echo serializeFileLinks ($file['links'], TRUE);
+			//echo '</td><td class=tdcenter valign=middle>';
+			if (!count ($file['links']))
+				$smod->addOutput('Deletable', true);
+			/**	printImageHREF ('NODESTROY', 'References (' . count ($file['links']) . ')');
 			else
 				echo getOpLink (array('op'=>'deleteFile', 'file_id'=>$file['id']), '', 'DESTROY', 'Delete file', 'need-confirmation');
-			echo "</td></tr>";
+			echo "</td></tr>";*/
 			$order = $nextorder[$order];
 		}
-		echo '</table>';
-		finishPortlet();
+		//echo '</table>';
+		//finishPortlet();
 	}
 
-	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR();
+	//if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
+		//printNewItemTR();
 }
 
 function renderFilesPortlet ($entity_type = NULL, $entity_id = 0)
@@ -7039,9 +7141,32 @@ function renderCell ($cell)
 	return $mod->run();
 }
 
-function renderRouterCell ($ip_bin, $ifname, $cell)
+function renderRouterCell ($ip_bin, $ifname, $cell, $parent = null, $placeholder = '')
 {
 	$dottedquad = ip_format ($ip_bin);
+	
+	$tplm = TemplateManager::getInstance();
+	
+	if ($parent === null)
+		$mod = $tplm->generateModule('RouterCell');
+	else
+		$mod = $tplm->generateSubmodule($placeholder, 'RouterCell', $parent);
+	
+	$mod->setNamespace('ipnetwork');
+	$mod->setLock();
+	
+	$mod->addOutput('IP', $dottedquad);
+	
+	if (strlen( $ifname))
+		$mod->addOutput('ifname', '@' . $ifname);
+	
+	$mod->addOutput('Name', $cell['dname']);
+	$mod->addOutput('Id', $cell['id']);
+	
+	if (count($cell['etags']))
+		serializeTags ($cell['etags'], '', $mod, 'Tags');
+	
+	/**
 	echo "<table class=slbcell><tr><td rowspan=3>${dottedquad}";
 	if (strlen ($ifname))
 		echo '@' . $ifname;
@@ -7052,13 +7177,17 @@ function renderRouterCell ($ip_bin, $ifname, $cell)
 	echo "</td></tr><tr><td>";
 	if (count ($cell['etags']))
 		echo '<small>' . serializeTags ($cell['etags']) . '</small>';
-	echo "</td></tr></table>";
+	echo "</td></tr></table>";*/
+	
+	if ($parent === null) { return $mod->run(); }
 }
 
 // Return HTML code necessary to show a preview of the file give. Return an empty string,
 // if a preview cannot be shown
-function getFilePreviewCode ($file)
+function getFilePreviewCode ($file, $parent, $mod)
 {
+	$tplm = TemplateManager::getInstance();
+	
 	$ret = '';
 	switch ($file['type'])
 	{
@@ -7070,6 +7199,8 @@ function getFilePreviewCode ($file)
 			$image = imagecreatefromstring ($file['contents']);
 			$width = imagesx ($image);
 			$height = imagesy ($image);
+			
+			
 			if ($width < getConfigVar ('PREVIEW_IMAGE_MAXPXS') and $height < getConfigVar ('PREVIEW_IMAGE_MAXPXS'))
 				$resampled = FALSE;
 			else
@@ -7079,20 +7210,37 @@ function getFilePreviewCode ($file)
 				$height = $height * $ratio;
 				$resampled = TRUE;
 			}
+			
+
+			$mod = $tplm->generateSubmodule($placeholder, 'FilePreviewImage', $parent);
+			$mod->addOutput('Height', $height);
+			$mod->addOutput('Width', $width);
+			$mod->addOutput('Id', $file['id']);
+			$mod->addOutput('Resampled', $resampled);
+			
+			/**
 			if ($resampled)
 				$ret .= "<a href='?module=download&file_id=${file['id']}&asattach=no'>";
 			$ret .= "<img width=${width} height=${height} src='?module=image&img=preview&file_id=${file['id']}'>";
 			if ($resampled)
-				$ret .= '</a><br>(click to zoom)';
+				$ret .= '</a><br>(click to zoom)';*/
 			break;
 		case 'text/plain':
 			if ($file['size'] < getConfigVar ('PREVIEW_TEXT_MAXCHARS'))
 			{
 				$file = getFile ($file['id']);
+				
+				$mod = $tplm->generateSubmodule($placeholder, 'FilePreviewText', $parent);
+				$mod->addOutput('Rows', getConfigVar ('PREVIEW_TEXT_ROWS'));
+				$mod->addOutput('Cols', getConfigVar ('PREVIEW_TEXT_COLS'));
+				$mod->addOutput('Content', $file['contents']);
+				
+				/**
 				$ret .= '<textarea readonly rows=' . getConfigVar ('PREVIEW_TEXT_ROWS');
 				$ret .= ' cols=' . getConfigVar ('PREVIEW_TEXT_COLS') . '>';
 				$ret .= htmlspecialchars ($file['contents']);
 				$ret .= '</textarea>';
+				*/
 			}
 			break;
 		default:
@@ -7105,18 +7253,26 @@ function renderTextEditor ($file_id)
 {
 	global $CodePressMap;
 	$fullInfo = getFile ($file_id);
-	printOpFormIntro ('updateFileText', array ('mtime_copy' => $fullInfo['mtime']));
+	//printOpFormIntro ('updateFileText', array ('mtime_copy' => $fullInfo['mtime']));
 	preg_match('/.+\.([^.]*)$/', $fullInfo['name'], $matches); # get file extension
 	if (isset ($matches[1]) && isset ($CodePressMap[$matches[1]]))
 		$syntax = $CodePressMap[$matches[1]];
 	else
 		$syntax = "text";
-	echo '<table border=0 align=center>';
+	
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'TextEditor');
+	$mod->addOutput('MTime', $fullInfo['mtime']);
+	$mod->addOutput('Content', htmlspecialchars ($fullInfo['contents']));
+	$mod->addOutput('Syntax', $syntax);
+	
+	/**echo '<table border=0 align=center>';
 	addJS ('js/codepress/codepress.js');
 	echo "<tr><td><textarea rows=45 cols=180 id=file_text name=file_text tabindex=101 class='codepress " . $syntax . "'>\n";
 	echo htmlspecialchars ($fullInfo['contents']) . '</textarea></td></tr>';
 	echo "<tr><td class=submit><input type=submit value='Save' onclick='$(file_text).toggleEditor();'>";
-	echo "</td></tr>\n</table></form>\n";
+	echo "</td></tr>\n</table></form>\n";*/
 }
 
 function showPathAndSearch ($pageno, $tabno, $tpl = false)
