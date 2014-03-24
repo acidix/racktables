@@ -4473,7 +4473,10 @@ function renderObjectParentCompatEditor()
 											'Order' => $order,
 											'Parentname' => $pair['parent_name'],
 											'Childname' => $pair['child_name'],
-											'Image' => ($pair['count'] > 0 ? getImageHREF ('nodelete', $pair['count'] . ' relationship(s) stored'): getOpLink (array ('op' => 'del', 'parent_objtype_id' => $pair['parent_objtype_id'], 'child_objtype_id' => $pair['child_objtype_id']), '', 'delete', 'remove pair')));
+											'Image' => ($pair['count'] > 0 ? 
+												getImageHREF ('nodelete', $pair['count'] . ' relationship(s) stored'): 
+												getOpLink (array ('op' => 'del', 'parent_objtype_id' => $pair['parent_objtype_id'], 
+												'child_objtype_id' => $pair['child_objtype_id']), '', 'delete', 'remove pair'))));
 		// echo "<tr class=row_${order}><td>";
 		
 		// TODO: generate Submodule for this Loop instead of an Looparray (Template_Engine_Issue) 
