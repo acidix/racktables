@@ -5080,11 +5080,18 @@ function renderPortsReport ()
 
 function render8021QReport ()
 {
+
 	if (!count ($domains = getVLANDomainOptions()))
 	{
-		echo '<center><h3>(no VLAN configuration exists)</h3></center>';
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");
+		$tplm->createMainModule("index");
+		
+		$mod = $tplm->generateSubmodule("Payload","NoVLANConfig", true);
+	//	echo '<center><h3>(no VLAN configuration exists)</h3></center>';
 		return;
 	}
+
 	$vlanstats = array();
 	for ($i = VLAN_MIN_ID; $i <= VLAN_MAX_ID; $i++)
 		$vlanstats[$i] = array();
@@ -5115,42 +5122,68 @@ function render8021QReport ()
 	}
 	ksort ($output, SORT_NUMERIC);
 	$header_delay = 0;
-	startPortlet ('VLAN existence per domain');
-	echo '<table border=1 cellspacing=0 cellpadding=5 align=center class=rackspace>';
+//	startPortlet ('VLAN existence per domain');
+//	echo '<table border=1 cellspacing=0 cellpadding=5 align=center class=rackspace>';
+	$outputArray = array();
 	foreach ($output as $vlan_id => $tbc)
 	{
+		$singleElemOut = array();
 		if (--$header_delay <= 0)
 		{
-			echo $header;
+			$singleElemOut['header'] = $header;
+			//echo $header;
 			$header_delay = 25;
 		}
-		echo '<tr class="state_' . (count ($vlanstats[$vlan_id]) ? 'T' : 'F');
-		echo '"><th class=tdright>' . $vlan_id . '</th>';
+		$singleElemOut['countStats'] = (count ($vlanstats[$vlan_id]) ? 'T' : 'F');
+		$singleElemOut['vlan_id'] = $vlan_id;
+	//	echo '<tr class="state_' . (count ($vlanstats[$vlan_id]) ? 'T' : 'F');
+	//	echo '"><th class=tdright>' . $vlan_id . '</th>';
+
 		foreach (array_keys ($domains) as $domain_id)
 		{
-			echo '<td class=tdcenter>';
+				
+			$singleCell = $tplm->generateModule("StdTableCell", true);
+			//echo '<td class=tdcenter>';
 			if (array_key_exists ($domain_id, $vlanstats[$vlan_id]))
-				echo mkA ('&exist;', 'vlan', "${domain_id}-${vlan_id}");
+				$singleCell->setOutput("cont", mkA ('&exist;', 'vlan', "${domain_id}-${vlan_id}"));
+			//	echo mkA ('&exist;', 'vlan', "${domain_id}-${vlan_id}");
 			else
-				echo '&nbsp;';
-			echo '</td>';
+				$singleCell->setOutput("cont", '&nbsp;');
+			//	echo '&nbsp;';
+			//echo '</td>';
+			$singleElemOut['domains'] = $singleElemOut['domains'] + $singleCell->run();
 		}
-		echo '</tr>';
-		if ($tbc)
-			echo '<tr class="state_A"><th>...</th><td colspan=' . count ($domains) . '>&nbsp;</td></tr>';
+	//	echo '</tr>';
+		if ($tbc){
+			$singleElemOut['countDom'] = count($domains);
+			$singleElemOut['tbc'] = true;
+		//	echo '<tr class="state_A"><th>...</th><td colspan=' . count ($domains) . '>&nbsp;</td></tr>';
+		}
+		$outputArray[] = $singleElemOut;
 	}
-	echo '</table>';
-	finishPortlet();
+	$mod->setOutput("OutputArr", $outputArray); 
+//	echo '</table>';
+//	finishPortlet();
 }
 
 function renderReports ($what)
 {
 	if (!count ($what))
 		return;
-	echo "<table align=center>\n";
+	//echo "<table align=center>\n";
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderReports");
+	$mod->setNamespace("reports", true);
+	
+	$itemContArr = array();
 	foreach ($what as $item)
 	{
-		echo "<tr><th colspan=2><h3>${item['title']}</h3></th></tr>\n";
+		$singleItemArr = array('title' => $item['title'], 'cont' => "");
+
+	//	echo "<tr><th colspan=2><h3>${item['title']}</h3></th></tr>\n";
 		switch ($item['type'])
 		{
 			case 'counters':
@@ -5158,16 +5191,27 @@ function renderReports ($what)
 					$data = $item['func'] ($item['args']);
 				else
 					$data = $item['func'] ();
-				foreach ($data as $header => $data)
-					echo "<tr><td class=tdright>${header}:</td><td class=tdleft>${data}</td></tr>\n";
+				foreach ($data as $header => $data){
+					$singleMod = $tplm->generateModule("ReportsCounter", true);
+					$singleMod->setOutput("header", $header);
+					$singleMod->setOutput("data", $data);
+					$singleItemArr['cont'] = $singleItemArr['cont'] + $singleMod->run();
+	//				echo "<tr><td class=tdright>${header}:</td><td class=tdleft>${data}</td></tr>\n";
+				}
 				break;
 			case 'messages':
 				if (array_key_exists ('args', $item))
 					$data = $item['func'] ($item['args']);
 				else
 					$data = $item['func'] ();
-				foreach ($data as $msg)
-					echo "<tr class='msg_${msg['class']}'><td class=tdright>${msg['header']}:</td><td class=tdleft>${msg['text']}</td></tr>\n";
+				foreach ($data as $msg){
+					$singleMod = $tplm->generateModule("ReportsMesseges", true);
+					$singleMod->setOutput("class", $msg['class']);
+					$singleMod->setOutput("header", $msg['header']);
+					$singleMod->setOutput("text", $msg['text']);
+					$singleItemArr['cont'] = $singleItemArr['cont'] + $singleMod->run();
+	//				echo "<tr class='msg_${msg['class']}'><td class=tdright>${msg['header']}:</td><td class=tdleft>${msg['text']}</td></tr>\n";
+				}
 				break;
 			case 'meters':
 				if (array_key_exists ('args', $item))
@@ -5176,22 +5220,33 @@ function renderReports ($what)
 					$data = $item['func'] ();
 				foreach ($data as $meter)
 				{
-					echo "<tr><td class=tdright>${meter['title']}:</td><td class=tdcenter>";
-					renderProgressBar ($meter['max'] ? $meter['current'] / $meter['max'] : 0);
-					echo '<br><small>' . ($meter['max'] ? $meter['current'] . '/' . $meter['max'] : '0') . '</small></td></tr>';
+					$singleMod = $tplm->generateModule("ReportsMeters", true);
+					$singleMod->setOutput("title", $meter['title']);
+					$singleMod->setOutput("progessBar", renderProgressBar ($meter['max'] ? $meter['current'] / $meter['max'] : 0));
+					$singleMod->setOutput("isMax", ($meter['max'] ? $meter['current'] . '/' . $meter['max'] : '0'));
+					$singleItemArr['cont'] = $singleItemArr['cont'] + $singleMod->run();
+	//				echo "<tr><td class=tdright>${meter['title']}:</td><td class=tdcenter>";
+	//				renderProgressBar ($meter['max'] ? $meter['current'] / $meter['max'] : 0);
+	//				echo '<br><small>' . ($meter['max'] ? $meter['current'] . '/' . $meter['max'] : '0') . '</small></td></tr>';
 				}
 				break;
 			case 'custom':
-				echo "<tr><td colspan=2>";
-				$item['func'] ();
-				echo "</td></tr>\n";
+				$singleMod = $tplm->generateModule("ReportsMesseges", true);
+				$singleMod->setOutput("itemCont", $item['func']());
+				$singleItemArr['cont'] = $singleItemArr['cont'] + $singleMod->run();
+			//	echo "<tr><td colspan=2>";
+			//	$item['func'] ();
+			//	echo "</td></tr>\n";
 				break;
 			default:
 				throw new InvalidArgException ('type', $item['type']);
 		}
-		echo "<tr><td colspan=2><hr></td></tr>\n";
+		$itemContArr[] = $singleItemArr;
+		//echo "<tr><td colspan=2><hr></td></tr>\n";
 	}
-	echo "</table>\n";
+	$mod->setOutput("ItemContent", $itemContArr);
+		 
+	//echo "</table>\n";
 }
 
 function renderTagStats ()
@@ -10046,45 +10101,65 @@ function renderExpirations ()
 	$breakdown[22] = $breakdown[21];
 	$breakdown[24] = $breakdown[21];
 	$attrmap = getAttrMap();
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+			
 	foreach ($breakdown as $attr_id => $sections)
-	{
-		startPortlet ($attrmap[$attr_id]['name']);
+	{	
+		$mod = $tplm->generateSubmodule("Payload","RenderExpirations_main");
+		$mod->setOutput('attr_id', $attrmap[$attr_id]['name']);
+		//startPortlet ($attrmap[$attr_id]['name']);
+		$allSectsOut = array();
 		foreach ($sections as $section)
 		{
+			$singleSectOut = array();
 			$count = 1;
 			$order = 'odd';
 			$result = scanAttrRelativeDays ($attr_id, $section['from'], $section['to']);
 
-			echo '<table align=center width=60% border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
-			echo "<caption>${section['title']}</caption>\n";
+		//	echo '<table align=center width=60% border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+		//	echo "<caption>${section['title']}</caption>\n";
+			$singleSectOut['title'] = $section['title'];
 
 			if (! count ($result))
 			{
-				echo "<tr><td colspan=4>(none)</td></tr></table><br>\n";
+				$singleSectOut['count'] = false;
+			//	echo "<tr><td colspan=4>(none)</td></tr></table><br>\n";
 				continue;
 			}
-			echo '<tr valign=top><th align=center>Count</th><th align=center>Name</th>';
-			echo "<th align=center>Asset Tag</th><th align=center>OEM S/N 1</th><th align=center>Date Warranty <br> Expires</th></tr>\n";
+			//echo '<tr valign=top><th align=center>Count</th><th align=center>Name</th>';
+			//echo "<th align=center>Asset Tag</th><th align=center>OEM S/N 1</th><th align=center>Date Warranty <br> Expires</th></tr>\n";
 			foreach ($result as $row)
 			{
+				$res = $tplm->generateSubmodule("results","RenderExpirations_result", $mod);
+
 				$date_value = datetimestrFromTimestamp ($row['uint_value']);
 
 				$object = spotEntity ('object', $row['object_id']);
 				$attributes = getAttrValues ($object['id']);
 				$oem_sn_1 = array_key_exists (1, $attributes) ? $attributes[1]['a_value'] : '&nbsp;';
-				echo '<tr class=' . $section['class'] . $order . ' valign=top>';
-				echo "<td>${count}</td>";
-				echo '<td>' . mkA ($object['dname'], 'object', $object['id']) . '</td>';
-				echo "<td>${object['asset_no']}</td>";
-				echo "<td>${oem_sn_1}</td>";
-				echo "<td>${date_value}</td>";
-				echo "</tr>\n";
+				$res->setOutput("classOrder", $section['class'] . $order );
+				$res->setOutput("count", $count );	
+				$res->setOutput("mkA", mkA ($object['dname'], 'object', $object['id']) );	 
+				$res->setOutput("asset_no", $object['asset_no'] );
+				$res->setOutput("oem_sn_1", $oem_sn_1 );
+				$res->setOutput("date_value", $date_value );
+			//	echo '<tr class=' . $section['class'] . $order . ' valign=top>';
+			//	echo "<td>${count}</td>";
+			//	echo '<td>' . mkA ($object['dname'], 'object', $object['id']) . '</td>';
+			//	echo "<td>${object['asset_no']}</td>";
+			//	echo "<td>${oem_sn_1}</td>";
+			//	echo "<td>${date_value}</td>";
+			//	echo "</tr>\n";
 				$order = $nextorder[$order];
 				$count++;
 			}
-			echo "</table><br>\n";
+			//echo "</table><br>\n";
 		}
-		finishPortlet ();
+		$mod->setOutput("allSects", $allSectsOut); 
+		//finishPortlet ();
 	}
 }
 
@@ -10273,6 +10348,15 @@ function renderDataIntegrityReport ()
 	global $nextorder;
 	$violations = FALSE;
 
+	$tplm = TemplateManager::getInstance();
+	if($parent==null)
+		$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+
+	$mod = $tplm->generateSubmodule("Payload", "RenderDataIntegrityReport");
+	
+	$mod->setNamespace("reports");
+
 	// check 1: EntityLink rows referencing not-existent relatives
 	// check 1.1: children 
 	$realms = array
@@ -10296,26 +10380,41 @@ function renderDataIntegrityReport ()
 		unset ($result);
 		$orphans = array_merge ($orphans, $rows);
 	}
+
 	if (count ($orphans))
 	{
+		$mod->setOutput("ChildrenViolation", true);
+		$mod->setOutput("ChildrenCount", count ($orphans));
+			 
+			 
 		$violations = TRUE;
-		startPortlet ('EntityLink: Missing Children (' . count ($orphans) . ')');
-		echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
-		echo "<tr><th>Parent</th><th>Child Type</th><th>Child ID</th></tr>\n";
+		//startPortlet ('EntityLink: Missing Children (' . count ($orphans) . ')');
+		//echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
+		//echo "<tr><th>Parent</th><th>Child Type</th><th>Child ID</th></tr>\n";
 		$order = 'odd';
+		$allChildrenOrphansOut = array();
 		foreach ($orphans as $orphan)
-		{
+		{	
+			$singleOrphanOut = array('order' => $order, 'realm_name' => $realm_name);
+
 			$realm_name = formatRealmName ($orphan['parent_entity_type']);
 			$parent = spotEntity ($orphan['parent_entity_type'], $orphan['parent_entity_id']);
-			echo "<tr class=row_${order}>";
-			echo "<td>${realm_name}: ${parent['name']}</td>";
-			echo "<td>${orphan['child_entity_type']}</td>";
-			echo "<td>${orphan['child_entity_id']}</td>";
-			echo "</tr>\n";
+		//	echo "<tr class=row_${order}>";
+		//	echo "<td>${realm_name}: ${parent['name']}</td>";
+		//	echo "<td>${orphan['child_entity_type']}</td>";
+		//	echo "<td>${orphan['child_entity_id']}</td>";
+		//	echo "</tr>\n";
+			$singleOrphanOut['elemName'] = $parent['name'];
+			$singleOrphanOut['entity_type'] = $orphan['child_entity_type'];
+			$singleOrphanOut['entity_id'] = $orphan['child_entity_id'];
+			
 			$order = $nextorder[$order];
+			$allChildrenOrphansOut[] = $singleOrphanOut;
 		}
-		echo "</table>\n";
-		finishPortLet ();
+		$mod->setOutput("ChildrenOrphans", $allChildrenOrphansOut);
+			 
+		//echo "</table>\n";
+		//finishPortLet ();
 	}
 
 	// check 1.2: parents 
@@ -10335,24 +10434,38 @@ function renderDataIntegrityReport ()
 	}
 	if (count ($orphans))
 	{
+		$mod->setOutput("ParentsViolation", true);
+		$mod->setOutput("ParentsCount", count ($orphans));
+
 		$violations = TRUE;
-		startPortlet ('EntityLink: Missing Parents (' . count ($orphans) . ')');
-		echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
-		echo "<tr><th>Child</th><th>Parent Type</th><th>Parent ID</th></tr>\n";
+//		startPortlet ('EntityLink: Missing Parents (' . count ($orphans) . ')');
+//		echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
+//		echo "<tr><th>Child</th><th>Parent Type</th><th>Parent ID</th></tr>\n";
 		$order = 'odd';
+		$allParentsOrphansOut = array();
 		foreach ($orphans as $orphan)
 		{
+			$singleOrphanOut = array('order' => $order, 'realm_name' => $realm_name);
+
 			$realm_name = formatRealmName ($orphan['child_entity_type']);
 			$child = spotEntity ($orphan['child_entity_type'], $orphan['child_entity_id']);
-			echo "<tr class=row_${order}>";
-			echo "<td>${realm_name}: ${child['name']}</td>";
-			echo "<td>${orphan['parent_entity_type']}</td>";
-			echo "<td>${orphan['parent_entity_id']}</td>";
-			echo "</tr>\n";
+//			echo "<tr class=row_${order}>";
+//			echo "<td>${realm_name}: ${child['name']}</td>";
+//			echo "<td>${orphan['parent_entity_type']}</td>";
+//			echo "<td>${orphan['parent_entity_id']}</td>";
+//			echo "</tr>\n";
+
+			$singleOrphanOut['elemName'] = $child['name'];
+			$singleOrphanOut['entity_type'] = $orphan['parent_entity_type'];
+			$singleOrphanOut['entity_id'] = $orphan['parent_entity_id'];
+			
 			$order = $nextorder[$order];
+			$allParentsOrphansOut[] = $singleOrphanOut;
 		}
-		echo "</table>\n";
-		finishPortLet ();
+//		echo "</table>\n";
+
+//		finishPortLet ();
+		$mod->setOutput("ParentOrphans", $allParentsOrphansOut);
 	}
 
 	// check 3: multiple tables referencing non-existent dictionary entries
@@ -10369,24 +10482,35 @@ function renderDataIntegrityReport ()
 	);
 	$orphans = $result->fetchAll (PDO::FETCH_ASSOC);
 	unset ($result);
+
 	if (count ($orphans))
 	{
+		$mod->setOutput("AttrMapViolation", true);
+		$mod->setOutput("AttrMapCount", count ($orphans));
+
 		$violations = TRUE;
-		startPortlet ('AttributeMap: Invalid Mappings (' . count ($orphans) . ')');
-		echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
-		echo "<tr><th>Attribute</th><th>Chapter</th><th>Object TypeID</th></tr>\n";
+	//	startPortlet ('AttributeMap: Invalid Mappings (' . count ($orphans) . ')');
+	//	echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
+	//	echo "<tr><th>Attribute</th><th>Chapter</th><th>Object TypeID</th></tr>\n";
 		$order = 'odd';
+		$allAttrMapOrphansOut = array();
 		foreach ($orphans as $orphan)
 		{
-			echo "<tr class=row_${order}>";
-			echo "<td>${orphan['attr_name']}</td>";
-			echo "<td>${orphan['chapter_name']}</td>";
-			echo "<td>${orphan['objtype_id']}</td>";
-			echo "</tr>\n";
+			$singleOrphanOut = array('order' => $order);
+		//	echo "<tr class=row_${order}>";
+		//	echo "<td>${orphan['attr_name']}</td>";
+		//	echo "<td>${orphan['chapter_name']}</td>";
+		//	echo "<td>${orphan['objtype_id']}</td>";
+		//	echo "</tr>\n";
+			$singleOrphanOut['attr_name'] = $orphan['attr_name'];
+			$singleOrphanOut['chapter_name'] = $orphan['chapter_name'];
+			$singleOrphanOut['objtype_id'] = $orphan['objtype_id'];
+			$allAttrMapOrphansOut[] = $singleOrphanOut;
 			$order = $nextorder[$order];
 		}
-		echo "</table>\n";
-		finishPortLet ();
+	//	echo "</table>\n";
+	//	finishPortLet ();
+		$mod->setOutput("AttrMapOrphans", $allAttrMapOrphansOut);
 	}
 
 	// check 3.2: Object
@@ -10399,24 +10523,35 @@ function renderDataIntegrityReport ()
 	);
 	$orphans = $result->fetchAll (PDO::FETCH_ASSOC);
 	unset ($result);
+	
 	if (count ($orphans))
 	{
+		$mod->setOutput("ObjectViolation", true);
+		$mod->setOutput("ObjectCount", count ($orphans));
+
 		$violations = TRUE;
-		startPortlet ('Object: Invalid Types (' . count ($orphans) . ')');
-		echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
-		echo "<tr><th>ID</th><th>Name</th><th>Type ID</th></tr>\n";
+	//	startPortlet ('Object: Invalid Types (' . count ($orphans) . ')');
+	//	echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
+	//	echo "<tr><th>ID</th><th>Name</th><th>Type ID</th></tr>\n";
 		$order = 'odd';
+		$allObjectsOut = array();
 		foreach ($orphans as $orphan)
 		{
-			echo "<tr class=row_${order}>";
-			echo "<td>${orphan['id']}</td>";
-			echo "<td>${orphan['name']}</td>";
-			echo "<td>${orphan['objtype_id']}</td>";
-			echo "</tr>\n";
+			$singleOrphanOut = array('order' => $order);
+			$singleOrphanOut['id'] = $orphan['id'];
+			$singleOrphanOut['name'] = $orphan['name'];
+			$singleOrphanOut['objtype_id'] = $orphan['objtype_id'];
+			$allObjectsOut[] = $singleOrphanOut;
+	//		echo "<tr class=row_${order}>";
+	//		echo "<td>${orphan['id']}</td>";
+	//		echo "<td>${orphan['name']}</td>";
+	//		echo "<td>${orphan['objtype_id']}</td>";
+	//		echo "</tr>\n";
 			$order = $nextorder[$order];
 		}
-		echo "</table>\n";
-		finishPortLet ();
+	//	echo "</table>\n";
+	//	finishPortLet ();
+		$mod->setOutput("AllObjectsOrphans", $allObjectsOut);
 	}
 
 	// check 3.3: ObjectHistory
@@ -10431,23 +10566,34 @@ function renderDataIntegrityReport ()
 	unset ($result);
 	if (count ($orphans))
 	{
+		$mod->setOutput("ObjectHistViolation", true);
+		$mod->setOutput("ObjectHistCount", count ($orphans));	
+		
 		$violations = TRUE;
-		startPortlet ('ObjectHistory: Invalid Types (' . count ($orphans) . ')');
-		echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
-		echo "<tr><th>ID</th><th>Name</th><th>Type ID</th></tr>\n";
+	//	startPortlet ('ObjectHistory: Invalid Types (' . count ($orphans) . ')');
+	//	echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
+	//	echo "<tr><th>ID</th><th>Name</th><th>Type ID</th></tr>\n";
 		$order = 'odd';
+		$allObjectHistsOut = array();
 		foreach ($orphans as $orphan)
 		{
-			echo "<tr class=row_${order}>";
-			echo "<td>${orphan['id']}</td>";
-			echo "<td>${orphan['name']}</td>";
-			echo "<td>${orphan['objtype_id']}</td>";
-			echo "</tr>\n";
+			$singleOrphanOut = array('order' => $order);
+			$singleOrphanOut['id'] = $orphan['id'];
+			$singleOrphanOut['name'] = $orphan['name'];
+			$singleOrphanOut['objtype_id'] = $orphan['objtype_id'];
+			$allObjectHistsOut[] = $singleOrphanOut;
+		//	echo "<tr class=row_${order}>";
+		//	echo "<td>${orphan['id']}</td>";
+		//	echo "<td>${orphan['name']}</td>";
+		//	echo "<td>${orphan['objtype_id']}</td>";
+		//	echo "</tr>\n";
 			$order = $nextorder[$order];
 		}
-		echo "</table>\n";
-		finishPortLet ();
+	//	echo "</table>\n";
+	//	finishPortLet ();
+		$mod->setOutput("AllObjectHistsOrphans", $allObjectHistsOut);
 	}
+	
 
 	// check 3.4: ObjectParentCompat
 	$orphans = array ();
@@ -10463,23 +10609,34 @@ function renderDataIntegrityReport ()
 	unset ($result);
 	if (count ($orphans))
 	{
+		$mod->setOutput("ObjectParViolation", true);
+		$mod->setOutput("ObjectParCount", count ($orphans));	
+
 		$violations = TRUE;
-		startPortlet ('Object Container Compatibility rules: Invalid Parent or Child Type (' . count ($orphans) . ')');
-		echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
-		echo "<tr><th>Parent</th><th>Parent Type ID</th><th>Child</th><th>Child Type ID</th></tr>\n";
+	//	startPortlet ('Object Container Compatibility rules: Invalid Parent or Child Type (' . count ($orphans) . ')');
+	//	echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
+	//	echo "<tr><th>Parent</th><th>Parent Type ID</th><th>Child</th><th>Child Type ID</th></tr>\n";
 		$order = 'odd';
+		$allObjectParsOut = array();
 		foreach ($orphans as $orphan)
 		{
-			echo "<tr class=row_${order}>";
-			echo "<td>${orphan['parent_name']}</td>";
-			echo "<td>${orphan['parent_objtype_id']}</td>";
-			echo "<td>${orphan['child_name']}</td>";
-			echo "<td>${orphan['child_objtype_id']}</td>";
-			echo "</tr>\n";
+			$singleOrphanOut = array('order' => $order);
+			$singleOrphanOut['parent_name'] = $orphan['parent_name'];
+			$singleOrphanOut['parent_objtype_id'] = $orphan['parent_objtype_id'];
+			$singleOrphanOut['child_name'] = $orphan['child_name'];
+			$singleOrphanOut['child_objtype_id'] = $orphan['child_objtype_id'];
+			$allObjectParsOut[] = $singleOrphanOut;
+		//	echo "<tr class=row_${order}>";
+		//	echo "<td>${orphan['parent_name']}</td>";
+		//	echo "<td>${orphan['parent_objtype_id']}</td>";
+		//	echo "<td>${orphan['child_name']}</td>";
+		//	echo "<td>${orphan['child_objtype_id']}</td>";
+		//	echo "</tr>\n";
 			$order = $nextorder[$order];
 		}
-		echo "</table>\n";
-		finishPortLet ();
+	//	echo "</table>\n";
+	//	finishPortLet ();#
+		$mod->setOutput("AllObjectParsOrphans", $allObjectParsOut);
 	}
 
 	// check 3.5: PortCompat
@@ -10496,23 +10653,34 @@ function renderDataIntegrityReport ()
 	unset ($result);
 	if (count ($orphans))
 	{
+		$mod->setOutput("PortCompatViolation", true);
+		$mod->setOutput("PortCompatCount", count ($orphans));	
+
 		$violations = TRUE;
-		startPortlet ('Port Compatibility rules: Invalid From or To Type (' . count ($orphans) . ')');
-		echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
-		echo "<tr><th>From</th><th>From Type ID</th><th>To</th><th>To Type ID</th></tr>\n";
+	//	startPortlet ('Port Compatibility rules: Invalid From or To Type (' . count ($orphans) . ')');
+	//	echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
+	//	echo "<tr><th>From</th><th>From Type ID</th><th>To</th><th>To Type ID</th></tr>\n";
 		$order = 'odd';
+		$allPortCompsOut = array();
 		foreach ($orphans as $orphan)
 		{
-			echo "<tr class=row_${order}>";
-			echo "<td>${orphan['type1_name']}</td>";
-			echo "<td>${orphan['type1']}</td>";
-			echo "<td>${orphan['type2_name']}</td>";
-			echo "<td>${orphan['type2']}</td>";
-			echo "</tr>\n";
+			$singleOrphanOut = array('order' => $order);
+			$singleOrphanOut['type1_name'] = $orphan['type1_name'];
+			$singleOrphanOut['type1'] = $orphan['type1'];
+			$singleOrphanOut['type2_name'] = $orphan['type2_name'];
+			$singleOrphanOut['type2'] = $orphan['type2'];
+			$allPortCompsOut[] = $singleOrphanOut;
+		//	echo "<tr class=row_${order}>";
+		//	echo "<td>${orphan['type1_name']}</td>";
+		//	echo "<td>${orphan['type1']}</td>";
+		//	echo "<td>${orphan['type2_name']}</td>";
+		//	echo "<td>${orphan['type2']}</td>";
+		//	echo "</tr>\n";
 			$order = $nextorder[$order];
 		}
-		echo "</table>\n";
-		finishPortLet ();
+	//	echo "</table>\n";
+	//	finishPortLet ();
+		$mod->setOutput("AllPortCompsOrphans", $allallPortCompsOutsOut);
 	}
 
 	// check 3.6: PortInterfaceCompat
@@ -10529,21 +10697,30 @@ function renderDataIntegrityReport ()
 	unset ($result);
 	if (count ($orphans))
 	{
+		$mod->setOutput("PortInterViolation", true);
+		$mod->setOutput("PortInterCount", count ($orphans));	
+
 		$violations = TRUE;
-		startPortlet ('Enabled Port Types: Invalid Outer Interface (' . count ($orphans) . ')');
-		echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
-		echo "<tr><th>Inner Interface</th><th>Outer Interface ID</th></tr>\n";
+	//	startPortlet ('Enabled Port Types: Invalid Outer Interface (' . count ($orphans) . ')');
+	//	echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
+	//	echo "<tr><th>Inner Interface</th><th>Outer Interface ID</th></tr>\n";
 		$order = 'odd';
+		$allPortIntersOut = array();
 		foreach ($orphans as $orphan)
-		{
-			echo "<tr class=row_${order}>";
-			echo "<td>${orphan['iif_name']}</td>";
-			echo "<td>${orphan['oif_id']}</td>";
-			echo "</tr>\n";
+		{	
+			$singleOrphanOut = array('order' => $order);
+			$singleOrphanOut['iif_name'] = $orphan['iif_name'];
+			$singleOrphanOut['oif_id'] = $orphan['oif_id'];
+			$allPortIntersOut[] = $singleOrphanOut;
+	//		echo "<tr class=row_${order}>";
+	//		echo "<td>${orphan['iif_name']}</td>";
+	//		echo "<td>${orphan['oif_id']}</td>";
+	//		echo "</tr>\n";
 			$order = $nextorder[$order];
 		}
-		echo "</table>\n";
-		finishPortLet ();
+	//	echo "</table>\n";
+	//	finishPortLet ();
+		$mod->setOutput("AllPortIntersOrphans", $allPortIntersOut);
 	}
 
 	// check 4: relationships that violate ObjectParentCompat Rules
@@ -10565,23 +10742,35 @@ function renderDataIntegrityReport ()
 	unset ($result);
 	if (count ($invalids))
 	{
+		$mod->setOutput("ObjectParRuleViolation", true);
+		$mod->setOutput("ObjectParRuleCount", count ($invalids));
+
 		$violations = TRUE;
-		startPortlet ('Objects: Violate Object Container Compatibility rules (' . count ($invalids) . ')');
-		echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
-		echo "<tr><th>Contained Obj Name</th><th>Contained Obj Type</th><th>Container Obj Name</th><th>Container Obj Type</th></tr>\n";
+	//	startPortlet ('Objects: Violate Object Container Compatibility rules (' . count ($invalids) . ')');
+	//	echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
+	//	echo "<tr><th>Contained Obj Name</th><th>Contained Obj Type</th><th>Container Obj Name</th><th>Container Obj Type</th></tr>\n";
 		$order = 'odd';
+		$allObjectParRulesOut = array();
 		foreach ($invalids as $invalid)
 		{
-			echo "<tr class=row_${order}>";
-			echo "<td>${invalid['child_name']}</td>";
-			echo "<td>${invalid['child_type']}</td>";
-			echo "<td>${invalid['parent_name']}</td>";
-			echo "<td>${invalid['parent_type']}</td>";
-			echo "</tr>\n";
+			$singleOrphanOut = array('order' => $order);
+			$singleOrphanOut['child_name'] = $invalid['child_name'];
+			$singleOrphanOut['child_type'] = $invalid['child_type'];
+			$singleOrphanOut['parent_name'] = $invalid['parent_name'];
+			$singleOrphanOut['parent_type'] = $invalid['parent_type'];
+			$allObjectParRulesOut[] = $singleOrphanOut;
+	//		echo "<tr class=row_${order}>";
+	//		echo "<td>${invalid['child_name']}</td>";
+	//		echo "<td>${invalid['child_type']}</td>";
+	//		echo "<td>${invalid['parent_name']}</td>";
+	//		echo "<td>${invalid['parent_type']}</td>";
+	//		echo "</tr>\n";
 			$order = $nextorder[$order];
 		}
-		echo "</table>\n";
-		finishPortLet ();
+	//	echo "</table>\n";
+	//	finishPortLet ();
+
+		$mod->setOutput("AllObjectParRulesOrphans", $allObjectParRulesOut);
 	}
 
 	// check 5: Links that violate PortCompat Rules
@@ -10604,14 +10793,27 @@ function renderDataIntegrityReport ()
 	unset ($result);
 	if (count ($invalids))
 	{
+		$mod->setOutput("PortCompatRuleViolation", true);
+		$mod->setOutput("PortCompatRuleCount", count ($invalids));
+
 		$violations = TRUE;
-		startPortlet ('Port Links: Violate Port Compatibility Rules (' . count ($invalids) . ')');
-		echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
-		echo "<tr><th>Object A</th><th>Port A Name</th><th>Port A Type</th><th>Object B</th><th>Port B Name</th><th>Port B Type</th></tr>\n";
+	//	startPortlet ('Port Links: Violate Port Compatibility Rules (' . count ($invalids) . ')');
+	//	echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
+	//	echo "<tr><th>Object A</th><th>Port A Name</th><th>Port A Type</th><th>Object B</th><th>Port B Name</th><th>Port B Type</th></tr>\n";
 		$order = 'odd';
+		$allPortCompatRulesOut = array();
 		foreach ($invalids as $invalid)
 		{
-			echo "<tr class=row_${order}>";
+			$singleOrphanOut = array('order' => $order);
+			$singleOrphanOut['obja_name'] = $invalid['obja_name'];
+			$singleOrphanOut['porta_name'] = $invalid['porta_name'];
+			$singleOrphanOut['porta_type'] = $invalid['porta_type'];
+			$singleOrphanOut['objb_name'] = $invalid['objb_name'];
+			$singleOrphanOut['portb_name'] = $invalid['portb_name'];
+			$singleOrphanOut['portb_type'] = $invalid['portb_type'];
+			
+			$allPortCompatRulesOut[] = $singleOrphanOut;
+	/*		echo "<tr class=row_${order}>";
 			echo "<td>${invalid['obja_name']}</td>";
 			echo "<td>${invalid['porta_name']}</td>";
 			echo "<td>${invalid['porta_type']}</td>";
@@ -10619,10 +10821,12 @@ function renderDataIntegrityReport ()
 			echo "<td>${invalid['portb_name']}</td>";
 			echo "<td>${invalid['portb_type']}</td>";
 			echo "</tr>\n";
-			$order = $nextorder[$order];
+	*/		$order = $nextorder[$order];
 		}
 		echo "</table>\n";
 		finishPortLet ();
+
+		$mod->setOutput("AllPortCompatRulesOrphans", $allPortCompatRulesOut);
 	}
 
 	// check 6: TagStorage rows referencing non-existent parents 
@@ -10657,23 +10861,35 @@ function renderDataIntegrityReport ()
 	}
 	if (count ($orphans))
 	{
+		$mod->setOutput("TagStorageViolation", true);
+		$mod->setOutput("TagStorageCount", count ($orphans));
+
 		$violations = TRUE;
-		startPortlet ('TagStorage: Missing Parents (' . count ($orphans) . ')');
+		/*startPortlet ('TagStorage: Missing Parents (' . count ($orphans) . ')');
 		echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
-		echo "<tr><th>Tag</th><th>Parent Type</th><th>Parent ID</th></tr>\n";
+		echo "<tr><th>Tag</th><th>Parent Type</th><th>Parent ID</th></tr>\n";*/
 		$order = 'odd';
+		$allTagStoragesOut = array();
+
 		foreach ($orphans as $orphan)
 		{
 			$realm_name = formatRealmName ($orphan['entity_realm']);
-			echo "<tr class=row_${order}>";
+			$singleOrphanOut = array('order' => $order);
+			$singleOrphanOut['realm_name'] = $realm_name;
+			$singleOrphanOut['tag'] = $orphan['tag'];
+			$singleOrphanOut['entity_id'] = $orphan['entity_id'];
+						
+			$allTagStoragesOut[] = $singleOrphanOut;
+			/*echo "<tr class=row_${order}>";
 			echo "<td>${orphan['tag']}</td>";
 			echo "<td>${realm_name}</td>";
 			echo "<td>${orphan['entity_id']}</td>";
-			echo "</tr>\n";
+			echo "</tr>\n";*/
 			$order = $nextorder[$order];
 		}
-		echo "</table>\n";
+	//	echo "</table>\n";
 		finishPortLet ();
+		$mod->setOutput("AllTagStoragesOrphans", $allTagStoragesOut);
 	}
 
 	// check 6: FileLink rows referencing non-existent parents 
@@ -10697,27 +10913,40 @@ function renderDataIntegrityReport ()
 	}
 	if (count ($orphans))
 	{
+		$mod->setOutput("FileLinkViolation", true);
+		$mod->setOutput("FileLinkCount", count ($orphans));
+
 		$violations = TRUE;
-		startPortlet ('FileLink: Missing Parents (' . count ($orphans) . ')');
-		echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
-		echo "<tr><th>File</th><th>Parent Type</th><th>Parent ID</th></tr>\n";
+		//startPortlet ('FileLink: Missing Parents (' . count ($orphans) . ')');
+		//echo "<table cellpadding=5 cellspacing=0 align=center class=cooltable>\n";
+		//echo "<tr><th>File</th><th>Parent Type</th><th>Parent ID</th></tr>\n";
 		$order = 'odd';
+		$allFileLinksOut = array();
 		foreach ($orphans as $orphan)
 		{
 			$realm_name = formatRealmName ($orphan['entity_type']);
-			echo "<tr class=row_${order}>";
-			echo "<td>${orphan['name']}</td>";
-			echo "<td>${realm_name}</td>";
-			echo "<td>${orphan['entity_id']}</td>";
-			echo "</tr>\n";
+			$singleOrphanOut = array('order' => $order);
+			$singleOrphanOut['name'] = $orphan['name'];
+			$singleOrphanOut['realm_name'] = $realm_name;
+			$singleOrphanOut['entity_id'] = $orphan['entity_id'];
+						
+			$allFileLinksOut[] = $singleOrphanOut;
+	//		echo "<tr class=row_${order}>";
+	//		echo "<td>${orphan['name']}</td>";
+	//		echo "<td>${realm_name}</td>";
+	//		echo "<td>${orphan['entity_id']}</td>";
+	//		echo "</tr>\n";
 			$order = $nextorder[$order];
 		}
-		echo "</table>\n";
-		finishPortLet ();
+	//	echo "</table>\n";
+	//	finishPortLet ();
+		$mod->setOutput("AllFileLinksOrphans", $allFileLinksOut);
 	}
 
 	if (! $violations)
-		echo '<h2>No integrity violations found</h2>';
+		$mod->setOutput("NoViolations", true);
+			 
+	//	echo '<h2>No integrity violations found</h2>';
 }
 
 ?>

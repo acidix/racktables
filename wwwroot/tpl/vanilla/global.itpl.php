@@ -167,4 +167,40 @@ $this->setInMemoryTemplate("RenderNewEntityTags_empty","No tags defined");
 $this->setInMemoryTemplate("RenderNewEntityTags","<div class=tagselector><table border=0 align=center cellspacing=0 class='tagtree'>\n{{checkbox}}\n</table></div>\n");
 
 
+/**
+*	ReportsCounters: 
+*	ReportsMesseges: 
+*	ReportsCustom:
+*	ReportsMeters: 
+*	Usage: interface.php
+*
+**/
+$this->setInMemoryTemplate("ReportsCounter","<tr><td class=tdright>{{header}}:</td><td class=tdleft>{{data}}</td></tr>");
+$this->setInMemoryTemplate("ReportsMesseges","<tr class='msg_{{class}}><td class=tdright>{{header}}:</td><td class=tdleft>{{text}}</td></tr>");
+$this->setInMemoryTemplate("ReportsCustom","<tr><td colspan=2>\n{{itemCont}}\n</td></tr>");
+$this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{title}:</td><td class=tdcenter>\n{{progressBar}}\n<br><small>{{isMax}}</small></td></tr>");
+
+/**
+*	GetProgressBar: 
+*	Usage: interface-lib-php
+*
+**/
+$this->setInMemoryTemplate("GetProgressBar","<img width=100 height=10 border=0 title='{{done}}%' src='{{src}}'>");
+
+
+/**
+*	NoVLANConfig: 
+*	Usage:  interface.php
+*
+**/
+$this->setInMemoryTemplate("NoVLANConfig","<center><h3>(no VLAN configuration exists)</h3></center>");
+
+/**
+*	StdTableCell: 
+*	Usage: interface.php
+*
+**/
+$this->setInMemoryTemplate("StdTableCell","<td class=tdcenter>{{cont}}</td>");
+
+
 ?>
