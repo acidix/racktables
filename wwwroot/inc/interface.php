@@ -6228,23 +6228,36 @@ function renderTagRollerForRow ($row_id)
 
 function renderRackCodeViewer ()
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderRackCodeViewer");
+	$mod->setNamespace("perms");
+		
 	$text = loadScript ('RackCode');
-	echo '<table width="100%" border=0>';
+	//echo '<table width="100%" border=0>';
 	$lineno = 1;
+	$allLinesOut = array();
 	foreach (explode ("\n", $text) as $line)
 	{
-		echo "<tr><td class=tdright><a name=line${lineno}>${lineno}</a></td>";
-		echo "<td class=tdleft>${line}</td></tr>";
+		$singleLine =  array('lineno' => $lineno, 'line' => $line);
+		//echo "<tr><td class=tdright><a name=line${lineno}>${lineno}</a></td>";
+		//echo "<td class=tdleft>${line}</td></tr>";
 		$lineno++;
+		$allLinesOut[] = $singleLine;
 	}
+	$mod->addOutput("allLines", $allLinesOut);
+		 
 }
 
 function renderRackCodeEditor ()
 {
-	addJS ('js/codemirror/codemirror.js');
-	addJS ('js/codemirror/rackcode.js');
-	addCSS ('js/codemirror/codemirror.css');
-	addJS (<<<ENDJAVASCRIPT
+	//addJS ('js/codemirror/codemirror.js');
+	//addJS ('js/codemirror/rackcode.js');
+	//addCSS ('js/codemirror/codemirror.css');
+	
+	/*addJS (<<<ENDJAVASCRIPT
 function verify()
 {
 	$.ajax({
@@ -6283,21 +6296,69 @@ $(document).ready(function() {
     });
 });
 ENDJAVASCRIPT
-	, TRUE);
+	, TRUE); */
+	$jsRawCode = <<<ENDJAVASCRIPT
+function verify()
+{
+	$.ajax({
+		type: "POST",
+		url: "index.php",
+		data: {'module': 'ajax', 'ac': 'verifyCode', 'code': $("#RCTA").text()},
+		success: function (data)
+		{
+			arr = data.split("\\n");
+			if (arr[0] == "ACK")
+			{
+				$("#SaveChanges")[0].disabled = "";
+				$("#ShowMessage")[0].innerHTML = "Code verification OK, don't forget to save the code";
+				$("#ShowMessage")[0].className = "msg_success";
+			}
+			else
+			{
+				$("#SaveChanges")[0].disabled = "disabled";
+				$("#ShowMessage")[0].innerHTML = arr[1];
+				$("#ShowMessage")[0].className = "msg_warning";
+			}
+		}
+	});
+}
+
+$(document).ready(function() {
+	$("#SaveChanges")[0].disabled = "disabled";
+	$("#ShowMessage")[0].innerHTML = "";
+	$("#ShowMessage")[0].className = "";
+
+	var rackCodeMirror = CodeMirror.fromTextArea(document.getElementById("RCTA"),{
+		mode:'rackcode',
+		lineNumbers:true });
+	rackCodeMirror.on("change",function(cm,cmChangeObject){
+		$("#RCTA").text(cm.getValue());
+    });
+});
+ENDJAVASCRIPT;
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderRackCodeEditor");
+	$mod->setNamespace("perms");
+	$mod->setOutput("jsRawCode", $jsRawCode);
 
 	$text = loadScript ('RackCode');
-	printOpFormIntro ('saveRackCode');
-	echo '<table style="width:100%;border:1px;" border=0 align=center>';
-	echo "<tr><td><textarea rows=40 cols=100 name=rackcode id=RCTA class='codepress rackcode'>";
-	echo $text . "</textarea></td></tr>\n";
-	echo "<tr><td align=center>";
-	echo '<div id="ShowMessage"></div>';
-	echo "<input type='button' value='Verify' onclick='verify();'>";
-	echo "<input type='submit' value='Save' disabled='disabled' id='SaveChanges' onclick='$(RCTA).toggleEditor();'>";
+	//printOpFormIntro ('saveRackCode');
+//	echo '<table style="width:100%;border:1px;" border=0 align=center>';
+//	echo "<tr><td><textarea rows=40 cols=100 name=rackcode id=RCTA class='codepress rackcode'>";
+	$mod->addOutput("text", $text);
+//	echo $text . "</textarea></td></tr>\n";
+//	echo "<tr><td align=center>";
+//	echo '<div id="ShowMessage"></div>';
+//	echo "<input type='button' value='Verify' onclick='verify();'>";
+
+//	echo "<input type='submit' value='Save' disabled='disabled' id='SaveChanges' onclick='$(RCTA).toggleEditor();'>";
 //	printImageHREF ('SAVE', 'Save changes', TRUE);
-	echo "</td></tr>";
-	echo '</table>';
-	echo "</form>";
+//	echo "</td></tr>";
+//	echo '</table>';
+//	echo "</form>";
 }
 
 function renderUser ($user_id)
@@ -8020,8 +8081,8 @@ function renderVLANDomainListEditor ()
 			$singleDomainStat['linkDestroy'] = getOpLink (array ('op' => 'del', 'vdom_id' => $vdom_id), '', 'destroy', 'delete domain');
 			//	echo getOpLink (array ('op' => 'del', 'vdom_id' => $vdom_id), '', 'destroy', 'delete domain');
 		}
-	
-		//echo '</td><td><input name=vdom_descr type=text size=48 value="';
+
+			//echo '</td><td><input name=vdom_descr type=text size=48 value="';
 		$singleDomainStat['niftyStr'] = niftyString ($dominfo['description'], 0);
 		//echo niftyString ($dominfo['description'], 0) . '">';
 		//echo '</td><td>';
