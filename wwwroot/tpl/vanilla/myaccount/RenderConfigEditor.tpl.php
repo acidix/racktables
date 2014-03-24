@@ -6,24 +6,22 @@
 	<th class=tdleft>Value</th></tr>
 	<?php $this->getH('PrintOpFormIntro', 'upd'); ?> 
 
-	<?php $this->startLoop('Looparray'); 
-		if($this->_Ishidden == 'no' || ($this->_Peruser && $this->_Isuserdefined == 'yes')) { ?>
-
+	<?php $this->startLoop('Looparray'); ?>
 		<input type=hidden name=<?php $this->Index; ?>_varname value='<?php $this->Varname; ?>'>
 		<tr><td class="tdright">
 		<?php $this->Renderconfig; ?>
 		</td>
 		<td class="tdleft"><input type=text name=<?php $this->Index; ?>_varvalue value='<?php $this->Htmlspecialchars; ?>' size=24></td>
 		<td class="tdleft">
-		<?php if($this->_Peruser && $this->_Isaltered == 'yes') { $this->getH('GetOpLink', array(array('op'=>'reset', 'varname'=>$v['varname']), 'reset')); } ?>
+		<?php $this->opLink ?> 
 		</td></tr>
-		<?php } $this->endLoop(); ?>
-		<input type=hidden name=num_vars value=<?php $this->Index; ?>>
-		<tr><td colspan=3>
-		<?php $this->getH('PrintImageHref', array('SAVE', 'Save changes', TRUE)); ?>
-		</td></tr>
-		</form>
-		</div>
+	<?php $this->endLoop(); ?>
+	<input type=hidden name=num_vars value=<?php $this->i; ?>>
+	<tr><td colspan=3>
+	<?php $this->getH('PrintImageHref', array('SAVE', 'Save changes', TRUE)); ?>
+	</td></tr>
+	</form>
+	</div>
 
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />

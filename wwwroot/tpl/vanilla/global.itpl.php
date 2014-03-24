@@ -215,7 +215,7 @@ $this->setInMemoryTemplate("StdTableCell","<td>{{cont}}</td>");
 
 /**
 *	RenderTagStatsALink: 
-*	Usage:  Usage
+*	Usage:  interface.php
 *
 **/
 $this->setInMemoryTemplate("RenderTagStatsALink","<a href='index.php?page={{pagerealm}}&cft[]={{taginfoID}}>{{taginfo}}</a>");
@@ -223,6 +223,14 @@ $this->setInMemoryTemplate("RenderTagStatsALink","<a href='index.php?page={{page
  * Usage: as above
  */
 $this->setInMemoryTemplate('FileSummaryComment','<div class="dashed commentblock">{{Comment}}</div>');
+
+
+/**
+*	RenderConfigVarName: 
+*	Usage:  interface.php
+*
+**/
+$this->setInMemoryTemplate("RenderConfigVarName",'<span class="varname">{{vname}}</span>\n<p class="vardescr">{{desAndIsDefined}}</p>');
 
 /**
  * FileSummaryComment
@@ -253,4 +261,6 @@ $this->setInMemoryTemplate('SerializedTag','<span class="{{Class}} title="{{Titl
  * FileSummaryComment
  * Usage: as above
  */
-$this->setInMemoryTemplate('IPNetBacktraceLink','<a href="{{Link}}" title="View IP tree with this net as root">{{Title}}</a>');?>
+$this->setInMemoryTemplate('IPNetBacktraceLink','<a href="{{Link}}" title="View IP tree with this net as root">{{Title}}</a>');
+
+?>
