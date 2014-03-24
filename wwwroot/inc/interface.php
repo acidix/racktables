@@ -5337,30 +5337,53 @@ function dragon ()
 // prints HTML-formatted varname and description
 function renderConfigVarName ($v)
 {
-	echo '<span class="varname">' . $v['varname'] . '</span>';
-	echo '<p class="vardescr">' . $v['description'] . ($v['is_userdefined'] == 'yes' ? '' : ' (system-wide)') . '</p>';
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	
+	$mod = $tplm->generateModule("RenderConfigVarName",   true);
+	
+	$mod->addOutput("vname", $v['varname']);
+	$mod->addOutput("desAndIsDefined",  $v['description'] . ($v['is_userdefined'] == 'yes' ? '' : ' (system-wide)'));	 
+	
+	return $mod->run();
+	//echo '<span class="varname">' . $v['varname'] . '</span>';
+	//echo '<p class="vardescr">' . $v['description'] . ($v['is_userdefined'] == 'yes' ? '' : ' (system-wide)') . '</p>';
 }
 
 function renderUIConfig ()
 {
 	global $nextorder;
-	startPortlet ('Current configuration');
-	echo '<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center width="70%">';
-	echo '<tr><th class=tdleft>Option</th><th class=tdleft>Value</th></tr>';
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	
+	$tplm->createMainModule();
+	$mod = $tplm->generateSubmodule("Payload","RenderUiConfig");
+	$mod->setNamespace("ui");
+
+	//startPortlet ('Current configuration');
+	//echo '<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center width="70%">';
+	//echo '<tr><th class=tdleft>Option</th><th class=tdleft>Value</th></tr>';
 	$order = 'odd';
+
+	$allLoadConfigCacheOut = array();
 	foreach (loadConfigCache() as $v)
 	{
 		if ($v['is_hidden'] != 'no')
 			continue;
-		echo "<tr class=row_${order}>";
-		echo "<td nowrap valign=top class=tdright>";
-		renderConfigVarName ($v);
-		echo '</td>';
-		echo "<td valign=top class=tdleft>${v['varvalue']}</td></tr>";
+		$singleCache = array('order' => $order, 'varvalue' => $v['varvalue']);
+		//echo "<tr class=row_${order}>";
+		//echo "<td nowrap valign=top class=tdright>";
+		$singleCache['renderedConfigVarName'] = renderConfigVarName ($v);
+		//renderConfigVarName ($v);
+		//echo '</td>';
+		//echo "<td valign=top class=tdleft>${v['varvalue']}</td></tr>";
 		$order = $nextorder[$order];
+		$allLoadConfigCacheOut[] = $singleCache;
 	}
-	echo "</table>\n";
-	finishPortlet();
+	$mod->addOutput("allLoadConfigCache", $allLoadConfigCacheOut);
+		 
+	//echo "</table>\n";
+	//finishPortlet();
 }
 
 function renderSNMPPortFinder ($object_id)
@@ -5443,10 +5466,16 @@ function renderSNMPPortFinder ($object_id)
 
 function renderUIResetForm()
 {
-	printOpFormIntro ('go');
-	echo "This button will reset user interface configuration to its defaults (except organization name): ";
-	echo "<input type=submit value='proceed'>";
-	echo "</form>";
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderUiResetForm");
+	$mod->setNamespace("ui");	
+//	printOpFormIntro ('go');
+//	echo "This button will reset user interface configuration to its defaults (except organization name): ";
+//	echo "<input type=submit value='proceed'>";
+//	echo "</form>";
 }
 
 function renderLivePTR ($id)
@@ -6401,6 +6430,16 @@ function renderConfigEditor ()
 	global $pageno;
 	$per_user = ($pageno == 'myaccount');
 	global $configCache;
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule("Payload", "RenderConfigEditor");
+	
+	$mod->setNamespace("myaccount");
+	
+	
 	// startPortlet ('Current configuration');
 	// echo "<table cellspacing=0 cellpadding=5 align=center class=widetable width='50%'>\n";
 	// echo "<tr><th class=tdleft>Option</th>";
@@ -6408,34 +6447,39 @@ function renderConfigEditor ()
 	// printOpFormIntro ('upd');
 
 	$i = 0;
+	$allConfigsPerUser = array();
 	foreach ($per_user ? $configCache : loadConfigCache() as $v)
 	{
-		$mod->addOutput('Looparray', array(
-											'Ishidden' => $v['is_hidden'],
-											'Isuserdefined' =>   $v['is_userdefined'], 
-											'Peruser' => $per_user,
-											'Renderconfig' => renderConfigVarName ($v),
-											'Htmlspecialchars' => htmlspecialchars ($v['varvalue'], ENT_QUOTES),
-											'Isaltered' => $v['is_altered'],
-											'Varname' => $v['varname'],
-											'Index' => $i));
+		if ($v['is_hidden'] != 'no')
+		 	continue;
+		if ($per_user && $v['is_userdefined'] != 'yes')
+			continue;
 
-		// if ($v['is_hidden'] != 'no')
-		// 	continue;
-		// if ($per_user && $v['is_userdefined'] != 'yes')
-		// 	continue;
+		$singleConfig = array(			'Ishidden' => $v['is_hidden'],
+						'Isuserdefined' =>   $v['is_userdefined'], 
+						'Renderconfig' => renderConfigVarName ($v),
+						'Htmlspecialchars' => htmlspecialchars ($v['varvalue'], ENT_QUOTES),
+						'Varname' => $v['varname'],
+						'Index' => $i);
 		// echo "<input type=hidden name=${i}_varname value='${v['varname']}'>";
 		// echo '<tr><td class="tdright">';
 		// echo renderConfigVarName ($v);
 		// echo '</td>';
 		// echo "<td class=\"tdleft\"><input type=text name=${i}_varvalue value='" . htmlspecialchars ($v['varvalue'], ENT_QUOTES) . "' size=24></td>";
 		// echo '<td class="tdleft">';
-		// if ($per_user && $v['is_altered'] == 'yes')
+		if ($per_user && $v['is_altered'] == 'yes')
+			$singleConfig['opLink'] = getOpLink (array('op'=>'reset', 'varname'=>$v['varname']), 'reset');
+		else
+			$singleConfig['opLink'] = '';
 		// 	echo getOpLink (array('op'=>'reset', 'varname'=>$v['varname']), 'reset');
 		// echo '</td>';
 		// echo "</tr>\n";
 		$i++;
+		$allConfigsPerUser[] = $singleConfig;
 	}
+	$mod->addOutput('Looparray', $allConfigsPerUser);
+	$mod->addOutput("i", $i);
+		 
 	// echo "<input type=hidden name=num_vars value=${i}>\n";
 	// echo "<tr><td colspan=3>";
 	// printImageHREF ('SAVE', 'Save changes', TRUE);

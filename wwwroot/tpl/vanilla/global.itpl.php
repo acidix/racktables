@@ -211,9 +211,16 @@ $this->setInMemoryTemplate("StdTableCell","<td>{{cont}}</td>");
 
 /**
 *	RenderTagStatsALink: 
-*	Usage:  Usage
+*	Usage:  interface.php
 *
 **/
 $this->setInMemoryTemplate("RenderTagStatsALink","<a href='index.php?page={{pagerealm}}&cft[]={{taginfoID}}>{{taginfo}}</a>");
+
+/**
+*	RenderConfigVarName: 
+*	Usage:  interface.php
+*
+**/
+$this->setInMemoryTemplate("RenderConfigVarName",'<span class="varname">{{vname}}</span>\n<p class="vardescr">{{desAndIsDefined}}</p>');
 
 ?>
