@@ -1,6 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
-	<tr class='tdleft $tr_class'>
-		<td class=tdleft><a name='ip-$dottedquad' href='<?php $this->Link; ?>'><?php $this->IP; ?></a></td>
+	<tr class='tdleft <?php $this->TrClass; ?>'>
+		<td class=tdleft><a name='ip-<?php $this->IP; ?>' href='<?php $this->Link; ?>'><?php $this->IP; ?></a></td>
 		<td><span class='rsvtext <?php $this->Editable; ?> id-<?php $this->IP; ?> op-upd-ip-name'></span></td>
 		<td><span class='rsvtext <?php $this->Editable; ?> id-<?php $this->IP; ?> op-upd-ip-comment'></span></td><td></td>
 	</tr>
