@@ -436,4 +436,30 @@ class TemplateHelperSelect extends TemplateHelperAbstract
 		
 	}
 }
+
+/**
+*	TemplateHelper for the PrintSelect function
+*
+*	Params:
+*	[0] = optionList
+*	[1] = select_attrs = array()
+*	[2] = selected_id = NULL
+*	@author Jakob Frick
+**/
+class TemplateHelperPrintSelect extends TemplateHelperAbstract
+{
+	protected function generate($params)
+	{
+		if(count($params) < 1)
+			return "";
+		$optList = $params[0];
+		$select_attrs = array();
+		$selected_id = NULL;
+		if(count($params) > 1)
+			$select_attrs = $params[1];
+		if(count($params) > 2)
+			$selected_id = $params[2];
+		return getSelect($optList, $select_attrs, $selected_id);			
+	}
+}
 ?>
