@@ -281,17 +281,18 @@ $page_by_realm['ipv4rspool'] = 'ipv4slb';
 $page_by_realm['file'] = 'files';
 $page_by_realm['user'] = 'userlist';
 
-function printSelect ($optionList, $select_attrs = array(), $selected_id = NULL)
+function printSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $parent = NULL, $placeholder = "printSelect")
 {
 	//echo getSelect ($optionList, $select_attrs, $selected_id);
-	return getSelect ($optionList, $select_attrs, $selected_id);
+	if($parent == NULL)
+		return getSelect ($optionList, $select_attrs, $selected_id);
+	else
+		getSelect ($optionList, $select_attrs, $selected_id, TRUE, $parent, $placeholder);
 }
 
 // Input array keys are OPTION VALUEs and input array values are OPTION text.
-function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $treat_single_special = TRUE, $parent = null, $placeholder = "getSelect")
+function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $treat_single_special = TRUE, $parent = NULL, $placeholder = "getSelect")
 {
-
-	
 	//$ret = '';
 	if (!array_key_exists ('name', $select_attrs))
 		return '';
@@ -313,7 +314,7 @@ function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $
 		return $mod->run();
 	}
 	if($parent == null)
-		$mod = $tplm->generateModule("GetSelect",  false);
+		$mod = $tplm->generateModule("GetSelect");
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "GetSelect", $parent);
 
@@ -1097,13 +1098,16 @@ function renderEntitySummary ($cell, $title, $values = array(), $parent = null, 
 	//finishPortlet();
 }
 
-function getOpLink ($params, $title,  $img_name = '', $comment = '', $class = '')
+function getOpLink ($params, $title,  $img_name = '', $comment = '', $class = '', $parent = null, $placeholder = '')
 {
 	//Initiate TemplateManager
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");
 	
-	$mod = $tplm->generateModule("GetOpLink");
+	if($parent == null)
+		$mod = $tplm->generateModule("GetOpLink");
+	else 
+		$mod = $tplm->generateSubmodule($parent, "GetOpLink", $placeholder);
 	$mod->setNamespace("");
 	
 	if (isset ($params))
@@ -1148,7 +1152,8 @@ function getOpLink ($params, $title,  $img_name = '', $comment = '', $class = ''
 	$mod->setOutput("title", $title);
 //	$ret .= $title . '</a>';
 //	return $ret;
-	return $mod->run();
+	if($parent == null)
+		return $mod->run();
 }
 
 function renderProgressBar ($percentage = 0, $theme = '', $inline = FALSE)

@@ -128,7 +128,7 @@ class TemplateHelperPrintImageHref extends TemplateHelperAbstract
 }
 
 /**
-*	TemplateHelper for the PrintImageHREF funktion
+*	TemplateHelper for the Mka funktion
 *
 *	Params:
 *	[0] = Object to Render
@@ -361,8 +361,10 @@ class TemplateHelperGetOpLink extends TemplateHelperAbstract
 		//Initiate TemplateManager
 		$tplm = TemplateManager::getInstance();
 		$tplm->setTemplate("vanilla");
-		$mod = $tplm->generateModule("GetOpLink", false);
+
+		$mod = $tplm->generateModule("GetOpLink");		
 		
+
 		if (isset ($stdparams)){
 			$mod->setOutput("issetParams", true);
 			$mod->setOutput("href", makeHrefProcess ($stdparams));

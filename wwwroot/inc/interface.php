@@ -8235,19 +8235,16 @@ function renderIIFOIFCompat()
 
 function renderIIFOIFCompatEditor()
 {
-	function printNewitemTR()
+	function printNewitemTR($parent, $placeholder)
 	{
 		$tplm = TemplateManager::getInstance();
-		if($parent==null)
-			$tplm->setTemplate("vanilla");
+		$tplm->setTemplate("vanilla");
 		
-		$mod = $tplm->generateModule("PrintNewItemTR");
-		
+		$mod = $tplm->generateSubmodule($placeholder,"RenderIIFOIFCompatEditor_PrintNew", $parent);
 		$mod->setNamespace("portifcompat");
 		
-		$mod->addOutput("iffOptions", printSelect (getPortIIFOptions(), array ('name' => 'iif_id')));
-		$mod->addOutput("chapter", readChapter (CHAP_PORTTYPE), array ('name' => 'oif_id'));	 
-		return $mod->run();
+		printSelect (getPortIIFOptions(), array ('name' => 'iif_id'), NULL, $mod, "iifOptions");
+		printSelect (readChapter (CHAP_PORTTYPE), array ('name' => 'oif_id'), NULL, $mod, "chapter"); 
 		//printOpFormIntro ('add');
 		//echo '<tr><th class=tdleft>';
 		//printImageHREF ('add', 'add pair', TRUE);
@@ -8263,7 +8260,7 @@ function renderIIFOIFCompatEditor()
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderIIFOIFCompatEditor");
 	$mod->setNamespace("portifcompat");
-		
+	
 	//startPortlet ('WDM standard by interface');
 	$iif = getPortIIFOptions();
 	global $nextorder, $wdm_packs;
@@ -8274,27 +8271,29 @@ function renderIIFOIFCompatEditor()
 	{
 		$singlePack = array('packinfo' => $packinfo['title']);
 		//echo "<tr><th>&nbsp;</th><th colspan=2>${packinfo['title']}</th></tr>";
-		$singlePack['iff_ids'] = '';
+		$singlePack['iif_cont'] = '';
 		foreach ($packinfo['iif_ids'] as $iif_id)
 		{
 			$iif_id_mod = $tplm->generateModule("RenderIIFOIFCompatEditor_Iif_id");
 			$iif_id_mod->setNamespace("portifcompat");
+			
 			$iif_id_mod->addOutput('order', $order);
-			$iif_id_mod->addOutput('iif_iif_id', $iff[$iff_id]);
+			$iif_id_mod->addOutput('iif_iif_id', $iif[$iif_id]);
 			$iif_id_mod->addOutput('codename', $codename);
 			$iif_id_mod->addOutput('iif_id', $iif_id);
+
 			//echo "<tr class=row_${order}><th class=tdleft>" . $iif[$iif_id] . '</th><td>';
 			//echo getOpLink (array ('op' => 'addPack', 'standard' => $codename, 'iif_id' => $iif_id), '', 'add');
 			//echo '</td><td>';
 			//echo getOpLink (array ('op' => 'delPack', 'standard' => $codename, 'iif_id' => $iif_id), '', 'delete');
 			//echo '</td></tr>';
+			$singlePack['iif_cont'] .= $iif_id_mod->run();
 			$order = $nextorder[$order];
-			$singlePack['iff_ids'] .= $iif_id_mod->run();
 		}
 		$allWDM_PacksOut[] = $singlePack;
 	}
 	$mod->addOutput("allWDM_Packs", $allWDM_PacksOut);
-		 
+			 
 	//echo '</table>';
 	//finishPortlet();
 
@@ -8306,7 +8305,7 @@ function renderIIFOIFCompatEditor()
 	//echo '<tr><th>&nbsp;</th><th class=tdleft>inner interface</th><th class=tdleft>outer interface</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
 	//	printNewitemTR();
-		$mod->addOutput("isAddNewItemTop", printNewitemTR());
+		printNewitemTR( $mod, "AddNewTop");
 	$allInterfacesOut = array();
 	foreach (getPortInterfaceCompat() as $record)
 	{
@@ -8326,7 +8325,7 @@ function renderIIFOIFCompatEditor()
 	}
 	$mod->addOutput("allInterfaces", $allInterfacesOut);	 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		$mod->addOutput("isntAddNewItemTop", printNewitemTR());
+		printNewitemTR($mod, "AddNewBottom");
 	//	printNewitemTR();
 	//echo '</table>';
 	//finishPortlet();

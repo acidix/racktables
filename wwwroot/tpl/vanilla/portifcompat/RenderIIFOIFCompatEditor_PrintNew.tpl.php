@@ -3,7 +3,7 @@
 	<tr><th class=tdleft>
 	<?php $this->getH("PrintImageHref", array('add', 'add pair', TRUE)); ?> 
 	</th><th class=tdleft>
-	<?php $this->iffOptions ?> 
+	<?php $this->iifOptions ?> 
 	</th><th class=tdleft>
 	<?php $this->chapter ?> 
 	</th></tr></form>
