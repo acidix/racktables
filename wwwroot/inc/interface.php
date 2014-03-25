@@ -7085,7 +7085,7 @@ function renderFileManager ()
 		
 		$mod = $tplm->generateSubmodule($placeholder, 'FileManagerNew', $parent);
 		$mod->setNamespace('files');
-		
+
 		renderNewEntityTags ('file',$mod,'Tags');
 		
 		/** startPortlet ('Upload new');
@@ -11279,52 +11279,93 @@ function renderCactiServersEditor()
 
 function renderMuninConfig()
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderMuninConfig");
+	$mod->setNamespace("munin");
+		
 	$servers = getMuninServers();
-	startPortlet ('Munin servers (' . count ($servers) . ')');
-	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-	echo '<tr><th>base URL</th><th>graph(s)</th></tr>';
+	//startPortlet ('Munin servers (' . count ($servers) . ')');
+	$mod->addOutput("serverCount", count ($servers));
+		 
+	//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	//echo '<tr><th>base URL</th><th>graph(s)</th></tr>';
+	$allServersOut = array();
 	foreach ($servers as $server)
 	{
-		echo '<tr align=left valign=top><td>' . niftyString ($server['base_url']) . '</td>';
-		echo "<td class=tdright>${server['num_graphs']}</td></tr>";
+		$allServersOut[] = array('niftyStr' => niftyString ($server['base_url']), 'num_graphs' => $server['num_graphs'] );
+		//echo '<tr align=left valign=top><td>' . niftyString ($server['base_url']) . '</td>';
+		//echo "<td class=tdright>${server['num_graphs']}</td></tr>";
 	}
-	echo '</table>';
-	finishPortlet();
+	$mod->addOutput("allServers", $allServersOut);
+		 
+	//echo '</table>';
+	//finishPortlet();
 }
 
 function renderMuninServersEditor()
 {
 	function printNewItemTR()
 	{
-		printOpFormIntro ('add');
-		echo '<tr>';
-		echo '<td>' . getImageHREF ('create', 'add a new server', TRUE, 112) . '</td>';
-		echo '<td><input type=text size=48 name=base_url tabindex=101></td>';
-		echo '<td>&nbsp;</td>';
-		echo '<td>' . getImageHREF ('create', 'add a new server', TRUE, 111) . '</td>';
-		echo '</tr></form>';
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");
+		
+		$mod = $tplm->generateModule("RenderMuninServersEditor_NewItem");
+		$mod->setNamespace("munin");
+		
+		return $mod->run();
+		//printOpFormIntro ('add');
+		//echo '<tr>';
+		//echo '<td>' . getImageHREF ('create', 'add a new server', TRUE, 112) . '</td>';
+		//echo '<td><input type=text size=48 name=base_url tabindex=101></td>';
+		//echo '<td>&nbsp;</td>';
+		//echo '<td>' . getImageHREF ('create', 'add a new server', TRUE, 111) . '</td>';
+		//echo '</tr></form>';
 	}
-	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-	echo '<tr><th>&nbsp;</th><th>base URL</th><th>graph(s)</th><th>&nbsp;</th></tr>';
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderMuninServersEditor");
+	$mod->setNamespace("munin");
+		
+	//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	//echo '<tr><th>&nbsp;</th><th>base URL</th><th>graph(s)</th><th>&nbsp;</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR();
+	//	printNewItemTR();
+		$mod->addOutput("AddNewTop", printNewItemTR());
+	
+	$allMuninServersOut = array();		 
 	foreach (getMuninServers() as $server)
 	{
-		printOpFormIntro ('upd', array ('id' => $server['id']));
-		echo '<tr><td>';
+		$singleServer = array('formIntro' => printOpFormIntro ('upd', array ('id' => $server['id'])),
+								'specialCharSrv' => htmlspecialchars ($server['base_url'], ENT_QUOTES, 'UTF-8'),
+								'imageSave' => getImageHREF ('save', 'update this server', TRUE),
+								'num_graphs' => $server['num_graphs']);
+
+	//	printOpFormIntro ('upd', array ('id' => $server['id']));
+	//	echo '<tr><td>';
 		if ($server['num_graphs'])
-			printImageHREF ('nodestroy', 'cannot delete, graphs exist');
+			$singleServer['destroyImg'] = printImageHREF ('nodestroy', 'cannot delete, graphs exist');
+		//	printImageHREF ('nodestroy', 'cannot delete, graphs exist');
 		else
-			echo getOpLink (array ('op' => 'del', 'id' => $server['id']), '', 'destroy', 'delete this server');
-		echo '</td>';
-		echo '<td><input type=text size=48 name=base_url value="' . htmlspecialchars ($server['base_url'], ENT_QUOTES, 'UTF-8') . '"></td>';
-		echo "<td class=tdright>${server['num_graphs']}</td>";
-		echo '<td>' . getImageHREF ('save', 'update this server', TRUE) . '</td>';
-		echo '</tr></form>';
+			$singleServer['destroyImg'] = getOpLink (array ('op' => 'del', 'id' => $server['id']), '', 'destroy', 'delete this server');
+		//	echo getOpLink (array ('op' => 'del', 'id' => $server['id']), '', 'destroy', 'delete this server');
+		//echo '</td>';
+		//echo '<td><input type=text size=48 name=base_url value="' . htmlspecialchars ($server['base_url'], ENT_QUOTES, 'UTF-8') . '"></td>';
+		//echo "<td class=tdright>${server['num_graphs']}</td>";
+		//echo '<td>' . getImageHREF ('save', 'update this server', TRUE) . '</td>';
+		//echo '</tr></form>';
+		$allMinuslinesOut[] = $singleServer;
 	}
+	$mod->addOutput("allMuninServers", $allMuninServersOut);
+		 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR();
-	echo '</table>';
+	//	printNewItemTR();
+		$mod->addOutput("AddNewBottom", printNewItemTR());
+	//echo '</table>';
 }
 
 // The validity of some data cannot be guaranteed using foreign keys.
