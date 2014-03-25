@@ -5830,7 +5830,10 @@ function mkCellA ($cell)
 			$title = formatRealmName ($cell['realm']) . ' ' . formatEntityName ($cell);
 			break;
 	}
-	return '<a href="' . makeHref (array ('page' => $cell_page, $bypass_key => $cell_key)) . '">' . $title . '</a>';
+	
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateModule('CellLink',true,array('Link'=>makeHref(array ('page' => $cell_page, $bypass_key => $cell_key)),'Title'=>$title));
+	return $mod->run();
 }
 
 // Return a simple object list w/o related information, so that the returned value

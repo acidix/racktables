@@ -90,7 +90,7 @@ function renderQuickLinks()
 
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->createMainModule("index");
+	//$tplm->createMainModule("index");
 	$mod = $tplm->generateSubmodule("Quicklinks_Table", "Quicklinks");
 //	$mod = $tplm->getMainModule(); 
 	//if($mod == null)
@@ -1115,15 +1115,21 @@ function renderRackSortForm ($row_id)
 	);
 JSTXT;
 	addJS($js, true);
+	
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'RowRackSortForm');
+	$mod->setNamespace('row',true);
 
-	startPortlet ('Racks');
-	echo "<table border=0 cellspacing=0 cellpadding=5 align=center class=widetable>\n";
-	echo "<tr><th>Drag to change order</th></tr>\n";
-	echo "<tr><td><ul class='uflist' id='sortRacks'>\n";
+	//startPortlet ('Racks');
+	//echo "<table border=0 cellspacing=0 cellpadding=5 align=center class=widetable>\n";
+	//echo "<tr><th>Drag to change order</th></tr>\n";
+	//echo "<tr><td><ul class='uflist' id='sortRacks'>\n";
 	foreach (getRacks($row_id) as $rack_id => $rackInfo)
-		echo "<li id=racks_${rack_id}>${rackInfo['name']}</li>\n";
-	echo "</ul></td></tr></table>\n";
-	finishPortlet();
+		$mod->addOutput('racklist', array('RackId'=>$rack_id,'RackName'=>$rackInfo['name']));
+		//echo "<li id=racks_${rack_id}>${rackInfo['name']}</li>\n";
+	//echo "</ul></td></tr></table>\n";
+	//finishPortlet();
 }
 
 function renderNewRackForm ($row_id)
@@ -1131,6 +1137,20 @@ function renderNewRackForm ($row_id)
 	$default_height = getConfigVar ('DEFAULT_RACK_HEIGHT');
 	if ($default_height == 0)
 		$default_height = '';
+	
+	$tplm = TemplateManager::getInstance();
+	
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'NewRackForm');
+	$mod->setNamespace('row',true);
+	
+	$mod->addOutput('DefaultHeight', $default_height);
+	
+	renderNewEntityTags ('rack',$mod,'Tags');
+	
+	/*
 	startPortlet ('Add one');
 	printOpFormIntro ('addRack', array ('got_data' => 'TRUE'));
 	echo '<table border=0 align=center>';
@@ -1156,7 +1176,7 @@ function renderNewRackForm ($row_id)
 	echo "<tr><td class=submit colspan=2>";
 	printImageHREF ('CREATE', 'Add', TRUE);
 	echo '</form></table>';
-	finishPortlet();
+	finishPortlet(); */
 }
 
 function renderEditObjectForm()
@@ -1275,30 +1295,41 @@ function renderEditObjectForm()
 
 function renderEditRackForm ($rack_id)
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'RackEditor');
+	$mod->setNamespace('rack',true);
+	
 	global $pageno;
 	$rack = spotEntity ('rack', $rack_id);
 	amplifyCell ($rack);
 
-	startPortlet ('Attributes');
-	printOpFormIntro ('updateRack');
-	echo '<table border=0 align=center>';
-	echo "<tr><td>&nbsp;</td><th class=tdright>Rack row:</th><td class=tdleft>";
+	//startPortlet ('Attributes');
+	//printOpFormIntro ('updateRack');
+	//echo '<table border=0 align=center>';
+	//echo "<tr><td>&nbsp;</td><th class=tdright>Rack row:</th><td class=tdleft>";
 	foreach (getAllRows () as $row_id => $rowInfo)
 	{
 		$trail = getLocationTrail ($rowInfo['location_id'], FALSE);
 		$rows[$row_id] = empty ($trail) ? $rowInfo['name'] : $rowInfo['name'] . ' [' . $trail . ']';
 	}
-	natcasesort ($rows);
-	printSelect ($rows, array ('name' => 'row_id'), $rack['row_id']);
-	echo "</td></tr>\n";
-	echo "<tr><td>&nbsp;</td><th class=tdright>Name (required):</th><td class=tdleft><input type=text name=name value='${rack['name']}'></td></tr>\n";
-	echo "<tr><td>&nbsp;</td><th class=tdright>Height (required):</th><td class=tdleft><input type=text name=height value='${rack['height']}'></td></tr>\n";
-	echo "<tr><td>&nbsp;</td><th class=tdright>Asset tag:</th><td class=tdleft><input type=text name=asset_no value='${rack['asset_no']}'></td></tr>\n";
+	natcasesort ($rows);	
+	getSelect ($rows, array ('name' => 'row_id'), $rack['row_id'], TRUE, $mod, 'RowSelect');
+	//echo "</td></tr>\n";
+	$mod->addOutput('Name', $rack['name']);
+	$mod->addOutput('Height', $rack['height']);
+	$mod->addOutput('AssetTag', $rack['asset_no']);
+	//echo "<tr><td>&nbsp;</td><th class=tdright>Name (required):</th><td class=tdleft><input type=text name=name value='${rack['name']}'></td></tr>\n";
+	//echo "<tr><td>&nbsp;</td><th class=tdright>Height (required):</th><td class=tdleft><input type=text name=height value='${rack['height']}'></td></tr>\n";
+	//echo "<tr><td>&nbsp;</td><th class=tdright>Asset tag:</th><td class=tdleft><input type=text name=asset_no value='${rack['asset_no']}'></td></tr>\n";
 	// optional attributes
 	$values = getAttrValues ($rack_id);
 	$num_attrs = count($values);
 	$num_attrs = $num_attrs-2; // subtract for the 'height' and 'sort_order' attributes
-	echo "<input type=hidden name=num_attrs value=${num_attrs}>\n";
+	$mod->addOutput('NumAttrs', $num_attrs);
+	//echo "<input type=hidden name=num_attrs value=${num_attrs}>\n";
 	$i = 0;
 	foreach ($values as $record)
 	{
@@ -1306,20 +1337,41 @@ function renderEditRackForm ($rack_id)
 		// Also skip the 'sort_order' attribute
 		if ($record['id'] == 27 or $record['id'] == 29)
 			continue;
-		echo "<input type=hidden name=${i}_attr_id value=${record['id']}>";
-		echo '<tr><td>';
+		//echo "<input type=hidden name=${i}_attr_id value=${record['id']}>";
+		//echo '<tr><td>';
+		
+		$smod = $tplm->generateSubmodule('ExtraAttrs', 'RackEditorAttrs', $mod);
+		$smod->addOutput('Id', $record['id']);
+		$smod->addOutput('I', $i);
+		$smod->addOutput('Value', $record['value']);
+		$smod->addOutput('Name', $record['name']);
+		
+		
+		
 		if (strlen ($record['value']))
-			echo getOpLink (array('op'=>'clearSticker', 'attr_id'=>$record['id']), '', 'clear', 'Clear value', 'need-confirmation');
-		else
-			echo '&nbsp;';
-		echo '</td>';
-		echo "<th class=sticker>${record['name']}:</th><td class=tdleft>";
+			$smod->addOutput('Deletable', true);
+			//echo getOpLink (array('op'=>'clearSticker', 'attr_id'=>$record['id']), '', 'clear', 'Clear value', 'need-confirmation');
+		//else
+		//	echo '&nbsp;';
+		//echo '</td>';
+		//echo "<th class=sticker>${record['name']}:</th><td class=tdleft>";
+		
+		if ($record['type'] == 'dict')
+		{
+			$chapter = readChapter ($record['chapter_id'], 'o');
+			$chapter[0] = '-- NOT SET --';
+			$chapter = cookOptgroups ($chapter, 1560, $record['key']);
+			printNiftySelect ($chapter, array ('name' => "${i}_value"), $record['key'], false , $mod, 'DictSelect');
+			$smod->addOutput('Type', 'dict');
+		}
+		
+		/*
 		switch ($record['type'])
 		{
 			case 'uint':
 			case 'float':
 			case 'string':
-				echo "<input type=text name=${i}_value value='${record['value']}'>";
+				//echo "<input type=text name=${i}_value value='${record['value']}'>";
 				break;
 			case 'dict':
 				$chapter = readChapter ($record['chapter_id'], 'o');
@@ -1328,33 +1380,35 @@ function renderEditRackForm ($rack_id)
 				printNiftySelect ($chapter, array ('name' => "${i}_value"), $record['key']);
 				break;
 		}
-		echo "</td></tr>\n";
+		echo "</td></tr>\n"*/
 		$i++;
 	}
-	echo "<tr><td>&nbsp;</td><th class=tdright>Has problems:</th><td class=tdleft><input type=checkbox name=has_problems";
+	//echo "<tr><td>&nbsp;</td><th class=tdright>Has problems:</th><td class=tdleft><input type=checkbox name=has_problems";
 	if ($rack['has_problems'] == 'yes')
-		echo ' checked';
-	echo "></td></tr>\n";
+		$mod->addOutput('HasProblems', 'checked');
+		//echo ' checked';
+	//echo "></td></tr>\n";
 	if ($rack['isDeletable'])
 	{
-		echo "<tr><td>&nbsp;</td><th class=tdright>Actions:</th><td class=tdleft>";
-		echo getOpLink (array ('op'=>'deleteRack'), '', 'destroy', 'Delete rack', 'need-confirmation');
-		echo "&nbsp;</td></tr>\n";
+		$mod->addOutput('Deletable', true);
+		//echo "<tr><td>&nbsp;</td><th class=tdright>Actions:</th><td class=tdleft>";
+		//echo getOpLink (array ('op'=>'deleteRack'), '', 'destroy', 'Delete rack', 'need-confirmation');
+		//echo "&nbsp;</td></tr>\n";
 	}
-	echo "<tr><td colspan=3><b>Comment:</b><br><textarea name=comment rows=10 cols=80>${rack['comment']}</textarea></td></tr>";
-	echo "<tr><td class=submit colspan=3>";
-	printImageHREF ('SAVE', 'Save changes', TRUE);
-	echo "</td></tr>\n";
-	echo '</form></table><br>';
-	finishPortlet();
+	//echo "<tr><td colspan=3><b>Comment:</b><br><textarea name=comment rows=10 cols=80>${rack['comment']}</textarea></td></tr>";
+	//echo "<tr><td class=submit colspan=3>";
+	//printImageHREF ('SAVE', 'Save changes', TRUE);
+	//echo "</td></tr>\n";
+	//echo '</form></table><br>';
+	//finishPortlet();
 
-	startPortlet ('History');
-	renderObjectHistory ($rack_id);
-	finishPortlet();
+	//startPortlet ('History');
+	renderObjectHistory ($rack_id,$mod,'History');
+	//finishPortlet();
 }
 
 // used by renderGridForm() and renderRackPage()
-function renderRackInfoPortlet ($rackData)
+function renderRackInfoPortlet ($rackData, $parent = null, $placeholder = 'Payload')
 {
 	$summary = array();
 	$summary['Rack row'] = mkA ($rackData['row_name'], 'row', $rackData['row_id']);
@@ -1374,7 +1428,17 @@ function renderRackInfoPortlet ($rackData)
 	$summary['tags'] = '';
 	if (strlen ($rackData['comment']))
 		$summary['Comment'] = $rackData['comment'];
-	renderEntitySummary ($rackData, 'summary', $summary);
+	
+	$tplm = TemplateManager::getInstance();
+	
+	if ($parent == null)
+	{
+		$tplm->setTemplate('vanilla');
+		$tplm->createMainModule();
+		$parent = $tplm->getMainModule();
+	}
+	
+	renderEntitySummary ($rackData, 'summary', $summary, $mod, $placeholder);
 }
 
 // This is a universal editor of rack design/waste.
@@ -1384,20 +1448,33 @@ function renderGridForm ($rack_id, $filter, $header, $submit, $state1, $state2)
 	$rackData = spotEntity ('rack', $rack_id);
 	amplifyCell ($rackData);
 	$filter ($rackData);
-
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'GridForm');
+	$mod->setNamespace('rack',true);
+	
+	$mod->addOutput('Header', $header);
+	$mod->addOutput('Name', $rackData['name']);
+	$mod->addOutput('Id', $rack_id);
+	$mod->addOutput('Height', $rackData['height']);
+	$mod->addOutput('Submit', $submit);
+	
 	// Render the result whatever it is.
 	// Main layout.
-	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
-	echo "<tr><td colspan=2 align=center><h1>${rackData['name']}</h1></td></tr>\n";
-
+	//echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
+	//echo "<tr><td colspan=2 align=center><h1>${rackData['name']}</h1></td></tr>\n";
+	
 	// Left column with information portlet.
-	echo "<tr><td class=pcleft height='1%' width='50%'>";
-	renderRackInfoPortlet ($rackData);
-	echo "</td>\n";
-	echo "<td class=pcright>";
+	//echo "<tr><td class=pcleft height='1%' width='50%'>";
+	renderRackInfoPortlet ($rackData,$mod,'InfoPortlet');
+	//echo "</td>\n";
+	//echo "<td class=pcright>";
 
 	// Grid form.
-	startPortlet ($header);
+	/** startPortlet ($header);
 	addJS ('js/racktables.js');
 	echo "<center>\n";
 	echo "<table class=rack border=0 cellspacing=0 cellpadding=1>\n";
@@ -1405,13 +1482,13 @@ function renderGridForm ($rack_id, $filter, $header, $submit, $state1, $state2)
 	echo "<th width='20%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('${rack_id}', '0', ${rackData['height']})\">Front</a></th>";
 	echo "<th width='50%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('${rack_id}', '1', ${rackData['height']})\">Interior</a></th>";
 	echo "<th width='20%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('${rack_id}', '2', ${rackData['height']})\">Back</a></th></tr>\n";
-	printOpFormIntro ('updateRack');
+	printOpFormIntro ('updateRack'); */
 	markupAtomGrid ($rackData, $state2);
-	renderAtomGrid ($rackData);
-	echo "</table></center>\n";
+	renderAtomGrid ($rackData, $mod, 'AtomGrid');
+	/** echo "</table></center>\n";
 	echo "<br><input type=submit name=do_update value='${submit}'></form><br><br>\n";
 	finishPortlet();
-	echo "</td></tr></table>\n";
+	echo "</td></tr></table>\n"; */
 }
 
 function renderRackDesign ($rack_id)
@@ -2511,6 +2588,7 @@ function renderEmptyResults($cellfilter, $entities_name, $count = NULL, $pmod = 
 }
 
 // History viewer for history-enabled simple dictionaries.
+/*
 function renderObjectHistory ($object_id, $parent, $placeholder)
 {
 	$tplm = TemplateManager::getInstance();
@@ -2523,13 +2601,29 @@ function renderObjectHistory ($object_id, $parent, $placeholder)
 	global $nextorder;
 	// echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
 	// echo '<tr><th>change time</th><th>author</th><th>name</th><th>visible label</th><th>asset no</th><th>has problems?</th><th>comment</th></tr>';
+*/
+function renderObjectHistory ($object_id, $parent = NULL, $placeholder = 'History')
+{
+	$tplm = TemplateManager::getInstance();
+	
+	if ($parent == null) {
+		$mod = $tplm->generateModule('ObjectHistory');
+	} else {
+		$mod = $tplm->generateSubmodule($placeholder, 'ObjectHistory', $parent);
+	}
+	$mod->defNamespace();
+	
+	$order = 'odd';
+	global $nextorder;
+	echo '';
+	echo '';
+
 	$result = usePreparedSelectBlade
 	(
 		'SELECT ctime, user_name, name, label, asset_no, has_problems, comment FROM ObjectHistory WHERE id=? ORDER BY ctime',
 		array ($object_id)
 	);
-
-	while ($row = $result->fetch (PDO::FETCH_NUM))
+/*	while ($row = $result->fetch (PDO::FETCH_NUM))
 	{
 		$submod = $tplm->generateSubmodule('Row', 'RowGenerator', $mod);
 		$submod->setOutput('Order', $order);
@@ -2544,6 +2638,23 @@ function renderObjectHistory ($object_id, $parent, $placeholder)
 		$order = $nextorder[$order];
 	}
 	// echo "</table><br>\n";
+*/	
+	$output = array();
+	while ($row = $result->fetch (PDO::FETCH_NUM))
+	{
+		$row['Order'] = $order;
+		$output[] = $row;
+		/*
+		echo "<tr class=row_${order}><td>${row[0]}</td>";
+		for ($i = 1; $i <= 6; $i++)
+			echo "<td>" . $row[$i] . "</td>";
+		echo "</tr>\n";**/
+		$order = $nextorder[$order];
+	}
+	$mod->addOutput('History', $output);
+	
+	//echo "</table><br>\n";
+
 }
 
 function renderRackspaceHistory ()
@@ -2851,6 +2962,8 @@ function getRenderedIPNetBacktrace ($range)
 	$backtrace = array();
 	$backtrace['&rarr;'] = $range;
 	$key = '';
+	
+	$tplm = TemplateManager::getInstance();
 	while (NULL !== ($upperid = getIPAddressNetworkId ($range['ip_bin'], $clen)))
 	{
 		$upperinfo = spotEntity ($range['realm'], $upperid);
@@ -2860,15 +2973,17 @@ function getRenderedIPNetBacktrace ($range)
 	}
 	foreach (array_reverse ($backtrace) as $arrow => $ainfo)
 	{
-		$link = '<a href="' . makeHref (array (
+		$mod = $tplm->generateModule('IPNetBacktraceLink',true,array('Title'=>$arrow));
+		//$link = '<a href="' . 
+		$mod->addOutput('Link', makeHref(array (
 			'page' => $space,
 			'tab' => 'default',
 			'clear-cf' => '',
 			'cfe' => '{' . $tag . $ainfo['id'] . '}',
 			'hl_net' => 1,
-			'eid' => $range['id'],
-		)) . '" title="View IP tree with this net as root">' . $arrow . '</a>';
-		$ret[] = array ($link, getOutputOf ('renderCell', $ainfo));
+			'eid' => $range['id'])));
+		//)) //. '" title="View IP tree with this net as root">' . $arrow . '</a>';
+		$ret[] = array ($mod->run(), getOutputOf ('renderCell', $ainfo));
 	}
 	return $ret;
 }
@@ -2879,6 +2994,8 @@ function renderIPNetwork ($id)
 	$realm = $pageno; // 'ipv4net', 'ipv6net'
 	$range = spotEntity ($realm, $id);
 	loadIPAddrList ($range);
+	
+
 	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
 	echo "<tr><td colspan=2 align=center><h1>${range['ip']}/${range['mask']}</h1><h2>";
 	echo htmlspecialchars ($range['name'], ENT_QUOTES, 'UTF-8') . "</h2></td></tr>\n";
@@ -2906,7 +3023,7 @@ function renderIPNetwork ($id)
 	{
 		$summary['Routed by'] = '';
 		foreach ($routers as $rtr)
-			$summary['Routed by'] .= getOutputOf ('renderRouterCell', $rtr['ip_bin'], $rtr['iface'], spotEntity ('object', $rtr['id']));
+			$summary['Routed by'] .= renderRouterCell( $rtr['ip_bin'], $rtr['iface'], spotEntity ('object', $rtr['id']));
 	}
 	$summary['tags'] = '';
 	renderEntitySummary ($range, 'summary', $summary);
@@ -2991,11 +3108,17 @@ function renderIPv4NetworkAddresses ($range)
 	global $pageno, $tabno, $aac2;
 	$startip = ip4_bin2int ($range['ip_bin']);
 	$endip = ip4_bin2int (ip_last ($range));
+	
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'IPNetworkAddresses');
+	$mod->setNamespace('ipnetwork');
 
 	if (isset ($_REQUEST['hl_ip']))
 	{
 		$hl_ip = ip4_bin2int (ip4_parse ($_REQUEST['hl_ip']));
-		addAutoScrollScript ('ip-' . $_REQUEST['hl_ip']); // scroll page to highlighted ip
+		$mod->addOutput('AutoScroll', $hl_ip);
+		//addAutoScrollScript ('ip-' . $_REQUEST['hl_ip']); // scroll page to highlighted ip
 	}
 
 	// pager
@@ -3008,12 +3131,28 @@ function renderIPv4NetworkAddresses ($range)
 		$page = isset ($_REQUEST['pg']) ? $_REQUEST['pg'] : (isset ($hl_ip) ? intval (($hl_ip - $startip) / $maxperpage) : 0);
 		if ($numpages = ceil ($address_count / $maxperpage))
 		{
-			echo '<h3>' . ip4_format (ip4_int2bin ($startip)) . ' ~ ' . ip4_format (ip4_int2bin ($endip)) . '</h3>';
+			$mod->addOutput('HasPagination', true);
+			$mod->addOutput('StartIP', ip4_format (ip4_int2bin ($startip)));
+			$mod->addOutput('EndIP', ip4_format (ip4_int2bin ($endip)));
+			//echo '<h3>' . ip4_format (ip4_int2bin ($startip)) . ' ~ ' . ip4_format (ip4_int2bin ($endip)) . '</h3>';
+			$outarr = array();
 			for ($i = 0; $i < $numpages; $i++)
 				if ($i == $page)
-					$rendered_pager .= "<b>$i</b> ";
+				{
+					$smod = $tplm->generateSubmodule('Pager', 'IPNetworkAddressesPager');
+					$smod->addOutput('B', '<b>');
+					$smod->addOutput('B', '</b>');
+					$smod->addOutput('i', $i);
+					$smod->addOutput('Link', makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $range['id'], 'pg' => $i)));
+				}
+					//$rendered_pager .= "<b>$i</b> ";
 				else
-					$rendered_pager .= "<a href='".makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $range['id'], 'pg' => $i)) . "'>$i</a> ";
+				{	
+					$smod = $tplm->generateSubmodule('Pager', 'IPNetworkAddressesPager');
+					$smod->addOutput('i', $i);
+					$smod->addOutput('Link', makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $range['id'], 'pg' => $i)));					
+				}
+					//$rendered_pager .= "<a href='".makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $range['id'], 'pg' => $i)) . "'>$i</a> ";
 		}
 		$startip = $startip + $page * $maxperpage;
 		$endip = min ($startip + $maxperpage - 1, $endip);
@@ -3258,12 +3397,19 @@ function renderIPNetworkProperties ($id)
 
 function renderIPAddress ($ip_bin)
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'IPAddress');
+	$mod->setNamespace('ipaddress',true);
+	
 	global $aat, $nextorder;
 	$address = getIPAddress ($ip_bin);
-	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
-	echo "<tr><td colspan=2 align=center><h1>${address['ip']}</h1></td></tr>\n";
+	//echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
+	//echo "<tr><td colspan=2 align=center><h1>${address['ip']}</h1></td></tr>\n";
 
-	echo "<tr><td class=pcleft>";
+	//echo "<tr><td class=pcleft>";
 
 	$summary = array();
 	if (strlen ($address['name']))
@@ -3276,105 +3422,144 @@ function renderIPAddress ($ip_bin)
 		$summary['Originated NAT connections'] = count ($address['outpf']);
 	if (isset ($address['inpf']))
 		$summary['Arriving NAT connections'] = count ($address['inpf']);
-	renderEntitySummary ($address, 'summary', $summary);
+	renderEntitySummary ($address, 'summary', $summary, $mod, 'EntitySummary');
 
 	// render SLB portlet
 	if (! empty ($address['vslist']) or ! empty ($address['vsglist']) or ! empty ($address['rsplist']))
 	{
-		startPortlet ("");
+		//startPortlet ("");
 		if (! empty ($address['vsglist']))
 		{
-			printf ("<h2>virtual service groups (%d):</h2>", count ($address['vsglist']));
+			//printf ("<h2>virtual service groups (%d):</h2>", count ($address['vsglist']));
 			foreach ($address['vsglist'] as $vsg_id)
-				renderSLBEntityCell (spotEntity ('ipvs', $vsg_id));
+				renderSLBEntityCell (spotEntity ('ipvs', $vsg_id),$mod,'SLBPortlet1');
 		}
 
 		if (! empty ($address['vslist']))
 		{
-			printf ("<h2>virtual services (%d):</h2>", count ($address['vslist']));
+			//printf ("<h2>virtual services (%d):</h2>", count ($address['vslist']));
 			foreach ($address['vslist'] as $vs_id)
-				renderSLBEntityCell (spotEntity ('ipv4vs', $vs_id));
+				renderSLBEntityCell (spotEntity ('ipv4vs', $vs_id),$mod,'SLBPortlet2');
 		}
 
 		if (! empty ($address['rsplist']))
 		{
-			printf ("<h2>RS pools (%d):</h2>", count ($address['rsplist']));
+			//printf ("<h2>RS pools (%d):</h2>", count ($address['rsplist']));
 			foreach ($address['rsplist'] as $rsp_id)
-				renderSLBEntityCell (spotEntity ('ipv4rspool', $rsp_id));
+				renderSLBEntityCell (spotEntity ('ipv4rspool', $rsp_id),'SLBPortlet3');
 		}
-		finishPortlet();
+		//finishPortlet();
 	}
-	echo "</td>\n";
+	//echo "</td>\n";
 
-	echo "<td class=pcright>";
+	//echo "<td class=pcright>";
 	if (isset ($address['class']) and ! empty ($address['allocs']))
 	{
-		startPortlet ('allocations');
-		echo "<table class='widetable' cellpadding=5 cellspacing=0 border=0 align='center' width='100%'>\n";
-		echo "<tr><th>object</th><th>OS interface</th><th>allocation type</th></tr>\n";
+		//startPortlet ('allocations');
+		//echo "<table class='widetable' cellpadding=5 cellspacing=0 border=0 align='center' width='100%'>\n";
+		//echo "<tr><th>object</th><th>OS interface</th><th>allocation type</th></tr>\n";
 		// render all allocation records for this address the same way
+		$out = array();
 		foreach ($address['allocs'] as $bond)
 		{
-			$tr_class = "${address['class']} tdleft";
-			if (isset ($_REQUEST['hl_object_id']) and $_REQUEST['hl_object_id'] == $bond['object_id'])
-				$tr_class .= ' highlight';
-			echo "<tr class='$tr_class'>" .
-				"<td><a href='" . makeHref (array ('page' => 'object', 'object_id' => $bond['object_id'], 'tab' => 'default', 'hl_ip' => $address['ip'])) . "'>${bond['object_name']}</td>" .
-				"<td>${bond['name']}</td>" .
-				"<td><strong>" . $aat[$bond['type']] . "</strong></td>" .
-				"</tr>\n";
+			$out[] = array(
+					'AddrClass'=>$address['class'],
+					'Highlight'=>((($_REQUEST['hl_object_id']) and $_REQUEST['hl_object_id'] == $bond['object_id']) ? 'hightlight' : ''),
+					'Link'=>makeHref(array ('page' => 'object', 'object_id' => $bond['object_id'], 'tab' => 'default', 'hl_ip' => $address['ip'])),
+					'ObjName'=>$bond['object_name'],
+					'Name'=>$bond['name'],
+					'Type'=>$aat[$bond['type']]
+			);
+			//$tr_class = "${address['class']} tdleft";
+			//if (isset ($_REQUEST['hl_object_id']) and $_REQUEST['hl_object_id'] == $bond['object_id'])
+			//	$tr_class .= ' highlight';
+			//echo "<tr class='$tr_class'>" .
+			//	"<td><a href='" . makeHref (array ('page' => 'object', 'object_id' => $bond['object_id'], 'tab' => 'default', 'hl_ip' => $address['ip'])) . "'>${bond['object_name']}</td>" .
+			//	"<td>${bond['name']}</td>" .
+			//	"<td><strong>" . $aat[$bond['type']] . "</strong></td>" .
+			//	"</tr>\n";
 		}
-		echo "</table><br><br>";
-		finishPortlet();
+		$mod->addOutput('Allocations',$out);
+		//echo "</table><br><br>";
+		//finishPortlet();
 	}
 
 	if (! empty ($address['rsplist']))
 	{
-		startPortlet ("RS pools:");
+		//startPortlet ("RS pools:");
+		$out = array();
 		foreach ($address['rsplist'] as $rsp_id)
 		{
-			renderSLBEntityCell (spotEntity ('ipv4rspool', $rsp_id));
-			echo '<br>';
+			$out[] = array('Pool'=>renderSLBEntityCell (spotEntity ('ipv4rspool', $rsp_id)));
+			//renderSLBEntityCell (spotEntity ('ipv4rspool', $rsp_id),$mod,'RSPools');
+			//echo '<br>';
 		}
-		finishPortlet();
+		$mod->addOutput('RSPools', $out);
+		//finishPortlet();
 	}
 
 	if (! empty ($address['vsglist']))
 		foreach ($address['vsglist'] as $vsg_id)
-			renderSLBTriplets2 (spotEntity ('ipvs', $vsg_id), FALSE, $ip_bin);
+			renderSLBTriplets2 (spotEntity ('ipvs', $vsg_id), FALSE, $ip_bin, $mod, 'VSGList');
 
 	if (! empty ($address['vslist']))
-		renderSLBTriplets ($address);
+		renderSLBTriplets ($address, $mod, 'VSList');
 
 	foreach (array ('outpf' => 'departing NAT rules', 'inpf' => 'arriving NAT rules') as $key => $title)
 		if (! empty ($address[$key]))
 		{
-			startPortlet ($title);
-			echo "<table class='widetable' cellpadding=5 cellspacing=0 border=0 align='center' width='100%'>\n";
-			echo "<tr><th>proto</th><th>from</th><th>to</th><th>comment</th></tr>\n";
+			$placeholder = ($key == 'outpf' ? 'NATDeparting' : 'NATArriving');
+			//startPortlet ($title);
+			//cho "<table class='widetable' cellpadding=5 cellspacing=0 border=0 align='center' width='100%'>\n";
+			//echo "<tr><th>proto</th><th>from</th><th>to</th><th>comment</th></tr>\n";
 			foreach ($address[$key] as $rule)
 			{
+				$smod = $tplm->generateSubmodule($placeholder, 'IPAddressNATRule', $mod);
+				$smod->addOutput('Proto', $rule['proto']);
+				$smod->addOutput('FromIp', $rule['localip']);
+				$smod->addOutput('FromPort', $rule['localport']);
+				$smod->addOutput('FromLink', makeHref (array ('page' => 'ipaddress',  'tab'=>'default', 'ip' => $rule['localip'])));
+				$smod->addOutput('ToIp', $rule['remoteip']);
+				$smod->addOutput('ToPort', $rule['remoteport']);
+				$smod->addOutput('ToLink', makeHref (array ('page' => 'ipaddress',  'tab'=>'default', 'ip' => $rule['remoteip'])));
+				$smod->addOutput('Description', $rule['description']);
+				
+				/** if ($rule['localport'])
 				echo "<tr>";
 				echo "<td>" . $rule['proto'] . "</td>";
 				echo "<td>" . getRenderedIPPortPair ($rule['localip'], $rule['localport']) . "</td>";
 				echo "<td>" . getRenderedIPPortPair ($rule['remoteip'], $rule['remoteport']) . "</td>";
 				echo "<td>" . $rule['description'] . "</td></tr>";
-				echo "</tr>";
+				echo "</tr>"; */
 			}
-			echo "</table>";
-			finishPortlet();
+			//echo "</table>";
+			//finishPortlet();
 		}
 
-	echo "</td></tr>";
-	echo "</table>\n";
+	//echo "</td></tr>";
+	//echo "</table>\n";
 }
 
 function renderIPAddressProperties ($ip_bin)
 {
 	$address = getIPAddress ($ip_bin);
-	echo "<center><h1>${address['ip']}</h1></center>\n";
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'IPAddressProperties');
+	$mod->setNamespace('ipaddress',true);
+	$mod->setLock();
+	
+	$mod->addOutput('Name', $address['name']);
+	$mod->addOutput('Comment', $address['Comment']);
+	$mod->addOutput('Checked', ($address['reserved']=='yes') ? 'checked' : '');
+	$mod->addOutput('Ip', $address['ip']);
+	
+	//echo "<center><h1>${address['ip']}</h1></center>\n";
 
-	startPortlet ('update');
+	/**startPortlet ('update');
 	echo "<table border=0 cellpadding=10 cellpadding=1 align='center'>\n";
 	printOpFormIntro ('editAddress');
 	echo '<tr><td class=tdright><label for=id_name>Name:</label></td>';
@@ -3386,24 +3571,32 @@ function renderIPAddressProperties ($ip_bin)
 	echo ($address['reserved']=='yes') ? 'checked' : '';
 	echo "></tr><tr><td class=tdleft>";
 	printImageHREF ('SAVE', 'Save changes', TRUE);
-	echo "</td></form><td class=tdright>";
+	echo "</td></form><td class=tdright>";*/
 	if (!strlen ($address['name']) and $address['reserved'] == 'no')
-		printImageHREF ('CLEAR gray');
-	else
-	{
-		printOpFormIntro ('editAddress', array ('name' => '', 'reserved' => '', 'comment' => ''));
-		printImageHREF ('CLEAR', 'Release', TRUE);
-		echo "</form>";
-	}
-	echo "</td></tr></table>\n";
-	finishPortlet();
+		$mod->addOutput('Undeletable', true);
+	//else
+	//{
+		//printOpFormIntro ('editAddress', array ('name' => '', 'reserved' => '', 'comment' => ''));
+		//printImageHREF ('CLEAR', 'Release', TRUE);
+		//echo "</form>";
+	//}
+	//echo "</td></tr></table>\n";
+	//finishPortlet();
 }
 
 function renderIPAddressAllocations ($ip_bin)
 {
-	function printNewItemTR ()
+	function printNewItemTR ($parent,$placeholder)
 	{
 		global $aat;
+		
+		$tplm = TemplateManager::getInstance();
+		
+		$mod = $tplm->generateSubmodule($placeholder, 'IPAddressAllocationNew', $parent);
+		$mod->addOutput('Select', getSelect(getNarrowObjectList ('IPV4OBJ_LISTSRC'), array ('name' => 'object_id', 'tabindex' => 100)));
+		$mod->addOutput('TypeSelect', getSelect ($aat, array ('name' => 'bond_type', 'tabindex' => 102, 'regular')));
+		
+		/*
 		printOpFormIntro ('add');
 		echo "<tr><td>";
 		printImageHREF ('add', 'allocate', TRUE);
@@ -3413,25 +3606,44 @@ function renderIPAddressAllocations ($ip_bin)
 		printSelect ($aat, array ('name' => 'bond_type', 'tabindex' => 102, 'regular'));
 		echo "</td><td>";
 		printImageHREF ('add', 'allocate', TRUE, 103);
-		echo "</td></form></tr>";
+		echo "</td></form></tr>";*/
 	}
 	global $aat;
 
 	$address = getIPAddress ($ip_bin);
-	echo "<center><h1>${address['ip']}</h1></center>\n";
-	echo "<table class='widetable' cellpadding=5 cellspacing=0 border=0 align='center'>\n";
-	echo "<tr><th>&nbsp;</th><th>object</th><th>OS interface</th><th>allocation type</th><th>&nbsp;</th></tr>\n";
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'IPAddressAllocation');
+	$mod->setNamespace('ipaddress',true);
+	$mod->setLock();
+	
+	$mod->addOutput('Ip', $address['ip']);
+	//echo "<center><h1>${address['ip']}</h1></center>\n";
+	//echo "<table class='widetable' cellpadding=5 cellspacing=0 border=0 align='center'>\n";
+	//echo "<tr><th>&nbsp;</th><th>object</th><th>OS interface</th><th>allocation type</th><th>&nbsp;</th></tr>\n";
 
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR();
+		printNewItemTR($mod,'NewTop');
 	if (isset ($address['class']))
 	{
 		$class = $address['class'];
+		$mod->addOutput('Class', $class);
 		if ($address['reserved'] == 'yes')
-			echo "<tr class='${class}'><td colspan=3>&nbsp;</td><td class=tdleft><strong>RESERVED</strong></td><td>&nbsp;</td></tr>";
+			$mod->addOutput('Reserved', true);
+			//echo "<tr class='${class}'><td colspan=3>&nbsp;</td><td class=tdleft><strong>RESERVED</strong></td><td>&nbsp;</td></tr>";
 		foreach ($address['allocs'] as $bond)
 		{
-			echo "<tr class='$class'>";
+			$smod = $tplm->generateSubmodule('List', 'IPAddressAllocationElement', $mod);
+			$smod->addOutput('Class', $class);
+			$smod->addOutput('ObjectId', $bond['object_id']);
+			$smod->addOutput('ObjectName', $bond['object_name']);
+			$smod->addOutput('BondName', $bond['name']);
+			$smod->addOutput('Link', makeHref (array ('page' => 'object', 'object_id' => $bond['object_id'], 'hl_ip' => $address['ip'])));
+			$smod->addOutput('TypeSelect', getSelect($aat, array ('name' => 'bond_type'), $bond['type']));
+			/**echo "<tr class='$class'>";
 			printOpFormIntro ('upd', array ('object_id' => $bond['object_id']));
 			echo "<td>" . getOpLink (array ('op' => 'del', 'object_id' => $bond['object_id'] ), '', 'delete', 'Unallocate address') . "</td>";
 			echo "<td><a href='" . makeHref (array ('page' => 'object', 'object_id' => $bond['object_id'], 'hl_ip' => $address['ip'])) . "'>${bond['object_name']}</td>";
@@ -3439,12 +3651,12 @@ function renderIPAddressAllocations ($ip_bin)
 			printSelect ($aat, array ('name' => 'bond_type'), $bond['type']);
 			echo "</td><td>";
 			printImageHREF ('save', 'Save changes', TRUE);
-			echo "</td></form></tr>\n";
+			echo "</td></form></tr>\n";*/
 		}
 	}
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR();
-	echo "</table><br><br>";
+		printNewItemTR($mod,'NewBottom');
+	//echo "</table><br><br>";
 }
 
 function renderNATv4ForObject ($object_id)
@@ -4143,28 +4355,41 @@ function renderSearchResults ($terms, $summary)
 // for adding rack problem:            printAtomGrid ($data, 'F', 'U')
 // for adding object problem:          printAtomGrid ($data, 'T', 'W')
 
-function renderAtomGrid ($data)
+function renderAtomGrid ($data, $parent, $placeholder)
 {
 	$rack_id = $data['id'];
-	addJS ('js/racktables.js');
+	
+	$tplm = TemplateManager::getInstance();
+	//addJS ('js/racktables.js');
 	for ($unit_no = $data['height']; $unit_no > 0; $unit_no--)
 	{
-		echo "<tr><th><a href='javascript:;' onclick=\"toggleRowOfAtoms('${rack_id}','${unit_no}')\">" . inverseRackUnit ($unit_no, $data) . "</a></th>";
+		$trow = $tplm->generateSubmodule($placeholder, 'GridRow', $parent);
+		$trow->addOutput('RackId', $rack_id);
+		$trow->addOutput('UnitNo', $unit_no);
+		
+		//echo "<tr><th><a href='javascript:;' onclick=\"toggleRowOfAtoms('${rack_id}','${unit_no}')\">" . inverseRackUnit ($unit_no, $data) . "</a></th>";
 		for ($locidx = 0; $locidx < 3; $locidx++)
 		{
 			$name = "atom_${rack_id}_${unit_no}_${locidx}";
 			$state = $data[$unit_no][$locidx]['state'];
-			echo "<td class='atom state_${state}";
+			
+			$tatom = $tplm->generateSubmodule('Atoms', 'GridElement', $trow);
+			$tatom->addOutput('State', $state);
+			$tatom->addOutput('Name', $name);
+			//echo "<td class='atom state_${state}";
 			if (isset ($data[$unit_no][$locidx]['hl']))
-				echo $data[$unit_no][$locidx]['hl'];
-			echo "'>";
+				$tatom->addOutput('Hl', $data[$unit_no][$locidx]['hl']);
+				//echo $data[$unit_no][$locidx]['hl'];
+			//echo "'>";
 			if (!($data[$unit_no][$locidx]['enabled'] === TRUE))
-				echo "<input type=checkbox id=${name} disabled>";
+				$tatom->addOutput('Disabled', true);
+				//echo "<input type=checkbox id=${name} disabled>";
 			else
-				echo "<input type=checkbox" . $data[$unit_no][$locidx]['checked'] . " name=${name} id=${name}>";
-			echo '</td>';
+				$tatom->addOutput('Checked', $data[$unit_no][$locidx]['checked']);
+				//echo "<input type=checkbox" . $data[$unit_no][$locidx]['checked'] . " name=${name} id=${name}>";
+			//echo '</td>';
 		}
-		echo "</tr>\n";
+		//echo "</tr>\n";
 	}
 }
 
@@ -4230,6 +4455,8 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 	//echo '</td><td class=pcright>';
 	renderCellFilterPortlet ($cellfilter, $realm, $celllist, array(), $mod );
 	//echo "</td></tr></table>\n"; */
+	if($parent == null)
+		return $mod->run();
 }
 
 function renderUserList ()
@@ -4314,20 +4541,22 @@ function renderOIFCompatViewer()
 	$last_left_oif_id = NULL;
 	// echo '<br><table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>';
 	// echo '<tr><th>From interface</th><th>To interface</th></tr>';
+	$allPortCompatOut = array();
 	foreach (getPortOIFCompat() as $pair)
 	{
-		$mod->addOutput('Looparray', array(
-											'Order' => $order,
-											'Type1' => $pair['type1name'],
-											'Type2' => $pair['type2name']));
-
 		if ($last_left_oif_id != $pair['type1'])
 		{
 			$order = $nextorder[$order];
 			$last_left_oif_id = $pair['type1'];
 		}
+		$allPortCompatOut[] = array(	'Order' => $order,
+										'Type1' => $pair['type1name'],
+										'Type2' => $pair['type2name']);
+
 		// echo "<tr class=row_${order}><td>${pair['type1name']}</td><td>${pair['type2name']}</td></tr>";
 	}
+	$mod->addOutput("allPortCompat", $allPortCompatOut);
+		 
 	// echo '</table>';
 }
 
@@ -4344,6 +4573,10 @@ function renderOIFCompatEditor()
 
 	function printNewitemTR($placeholder)
 	{
+		$tplm = TemplateManager::getInstance();
+	
+		$tplm->setTemplate("vanilla");
+		$tplm->createMainModule();
 		$submod = $tplm->generateSubmodule($placeholder, 'PrintNewItem', $mod);
 		// printOpFormIntro ('add');
 		// echo '<tr><th class=tdleft>';
@@ -4486,7 +4719,10 @@ function renderObjectParentCompatEditor()
 											'Order' => $order,
 											'Parentname' => $pair['parent_name'],
 											'Childname' => $pair['child_name'],
-											'Image' => ($pair['count'] > 0 ? getImageHREF ('nodelete', $pair['count'] . ' relationship(s) stored'): getOpLink (array ('op' => 'del', 'parent_objtype_id' => $pair['parent_objtype_id'], 'child_objtype_id' => $pair['child_objtype_id']), '', 'delete', 'remove pair')));
+											'Image' => ($pair['count'] > 0 ? 
+												getImageHREF ('nodelete', $pair['count'] . ' relationship(s) stored'): 
+												getOpLink (array ('op' => 'del', 'parent_objtype_id' => $pair['parent_objtype_id'], 
+												'child_objtype_id' => $pair['child_objtype_id']), '', 'delete', 'remove pair'))));
 		// echo "<tr class=row_${order}><td>";
 		
 		// TODO: generate Submodule for this Loop instead of an Looparray (Template_Engine_Issue) 
@@ -4508,6 +4744,7 @@ function renderObjectParentCompatEditor()
 // but use some proper abstract function later.
 function renderConfigMainpage ()
 {
+	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule();
 	
@@ -4516,15 +4753,15 @@ function renderConfigMainpage ()
 
 	global $pageno, $page;
 	// echo '<ul>';
+	$allPagesOut = array();
 	foreach ($page as $cpageno => $cpage)
-		$mod->addOutput('Looparray', array(	'Parent' => $cpage['parent'],
-											'Pageno' => $pageno, 
-											'Permitted' => permitted ($cpageno),
-											'Cpageno' => $cpageno, 
-											'Title' => $cpage['title']));
-		// if (isset ($cpage['parent']) and $cpage['parent'] == $pageno  && permitted($cpageno))
+	{
+		if (isset ($cpage['parent']) and $cpage['parent'] == $pageno  && permitted($cpageno))
+			$allPagesOut[] = array(	'Cpageno' => $cpageno, 
+									'Title' => $cpage['title']);
 		// 	echo "<li><a href='index.php?page=${cpageno}'>" . $cpage['title'] . "</li>\n";
-	
+	}
+	$mod->addOutput("allPages", $allPagesOut);	 
 	// echo '</ul>';
 }
 
@@ -4709,10 +4946,22 @@ function renderRackPage ($rack_id)
 
 function renderDictionary ()
 {
-	echo '<ul>';
+	$tplm = TemplateManager::getInstance();
+	
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'DictList');
+	
+	$mod->setNamespace('dict');
+	
+
+	//echo '<ul>';
 	foreach (getChapterList() as $chapter_no => $chapter)
-		echo '<li>' . mkA ($chapter['name'], 'chapter', $chapter_no) . " (${chapter['wordc']} records)</li>";
-	echo '</ul>';
+		$mod->addOutput('Dictlist', array('Link'=>mkA($chapter['name'], 'chapter', $chapter_no),'Records'=>$chapter['wordc']));
+	
+		//echo '<li>' . mkA ($chapter['name'], 'chapter', $chapter_no) . " (${chapter['wordc']} records)</li>";
+	//echo '</ul>';
 }
 
 function renderChapter ($tgt_chapter_no)
@@ -4867,14 +5116,17 @@ function renderChapterEditor ($tgt_chapter_no)
 // to delete a non-empty chapter.
 function renderChaptersEditor ()
 {
-	function printNewItemTR ()
+	function printNewItemTR ($parent,$placeholder)
 	{
-		printOpFormIntro ('add');
+		$tplm = TemplateManager::getInstance();
+		
+		$mod = $tplm->generateSubmodule($placeholder, 'DictEditorNew', $parent);
+		/**printOpFormIntro ('add');
 		echo '<tr><td>';
 		printImageHREF ('create', 'Add new', TRUE);
 		echo "</td><td><input type=text name=chapter_name tabindex=100></td><td>&nbsp;</td><td>";
 		printImageHREF ('create', 'Add new', TRUE, 101);
-		echo '</td></tr></form>';
+		echo '</td></tr></form>'; */
 	}
 	$dict = getChapterList();
 	foreach (array_keys ($dict) as $chapter_no)
@@ -4883,38 +5135,60 @@ function renderChaptersEditor ()
 		if ($attrinfo['type'] == 'dict')
 			foreach ($attrinfo['application'] as $app)
 				$dict[$app['chapter_no']]['mapped'] = TRUE;
-	echo "<table cellspacing=0 cellpadding=5 align=center class=widetable>\n";
-	echo '<tr><th>&nbsp;</th><th>Chapter name</th><th>Words</th><th>&nbsp;</th></tr>';
+		
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'DictEditor');
+	$mod->setNamespace('dict');
+	$mod->setLock();
+	
+	
+	//echo "<table cellspacing=0 cellpadding=5 align=center class=widetable>\n";
+	//echo '<tr><th>&nbsp;</th><th>Chapter name</th><th>Words</th><th>&nbsp;</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR();
+		printNewItemTR($mod,'NewTop');
 	foreach ($dict as $chapter_id => $chapter)
 	{
 		$wordcount = $chapter['wordc'];
 		$sticky = $chapter['sticky'] == 'yes';
-		printOpFormIntro ('upd', array ('chapter_no' => $chapter_id));
-		echo '<tr>';
-		echo '<td>';
+		
+		$submod = $tplm->generateSubmodule('DictList','DictEditorElement', $mod);
+		
+		//printOpFormIntro ('upd', array ('chapter_no' => $chapter_id));
+		//echo '<tr>';
+		//echo '<td>';
 		if ($sticky)
-			printImageHREF ('nodestroy', 'system chapter');
+			$submod->setOutput('NoDestroyMessage', 'system chapter');
+			//printImageHREF ('nodestroy', 'system chapter');
 		elseif ($wordcount > 0)
-			printImageHREF ('nodestroy', 'contains ' . $wordcount . ' word(s)');
+			$submod->setOutput('NoDestroyMessage', 'contains ' . $wordcount . ' word(s)');
+			//printImageHREF ('nodestroy', 'contains ' . $wordcount . ' word(s)');
 		elseif ($chapter['mapped'])
-			printImageHREF ('nodestroy', 'used in attribute map');
+			$submod->setOutput('NoDestroyMessage', 'used in attribute map');
+			//printImageHREF ('nodestroy', 'used in attribute map');
 		else
-			echo getOpLink (array('op'=>'del', 'chapter_no'=>$chapter_id), '', 'destroy', 'Remove chapter');
-		echo '</td>';
-		echo "<td><input type=text name=chapter_name value='${chapter['name']}'" . ($sticky ? ' disabled' : '') . "></td>";
-		echo "<td class=tdleft>${wordcount}</td><td>";
-		if ($sticky)
-			echo '&nbsp;';
-		else
-			printImageHREF ('save', 'Save changes', TRUE);
-		echo '</td></tr>';
-		echo '</form>';
+			$submod->setOutput('NoDestroyMessage', '');
+			//echo getOpLink (array('op'=>'del', 'chapter_no'=>$chapter_id), '', 'destroy', 'Remove chapter');
+		//echo '</td>';
+		
+		$submod->addOutput('Name', $chapter['name']);
+		$submod->addOutput('ChapterId', $chapter_id);
+		$submod->addOutput('Disabled', ($sticky ? ' disabled' : ''));
+		$submod->addOutput('Sticky', $sticky);
+		$submod->addOutput('Wordcount', $wordcount);
+		
+		//echo "<td><input type=text name=chapter_name value='${chapter['name']}'" . ($sticky ? ' disabled' : '') . "></td>";
+		//echo "<td class=tdleft>${wordcount}</td><td>";
+		//if ($sticky)
+		//	echo '&nbsp;';
+		//else
+		//	printImageHREF ('save', 'Save changes', TRUE);
+		//echo '</td></tr>';
+		//echo '</form>';
 	}
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR();
-	echo "</table>\n";
+		printNewItemTR($mod,'NewBottom');
+	//echo "</table>\n";
 }
 
 function renderAttributes ()
@@ -5466,30 +5740,53 @@ function dragon ()
 // prints HTML-formatted varname and description
 function renderConfigVarName ($v)
 {
-	echo '<span class="varname">' . $v['varname'] . '</span>';
-	echo '<p class="vardescr">' . $v['description'] . ($v['is_userdefined'] == 'yes' ? '' : ' (system-wide)') . '</p>';
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	
+	$mod = $tplm->generateModule("RenderConfigVarName",   true);
+	
+	$mod->addOutput("vname", $v['varname']);
+	$mod->addOutput("desAndIsDefined",  $v['description'] . ($v['is_userdefined'] == 'yes' ? '' : ' (system-wide)'));	 
+	
+	return $mod->run();
+	//echo '<span class="varname">' . $v['varname'] . '</span>';
+	//echo '<p class="vardescr">' . $v['description'] . ($v['is_userdefined'] == 'yes' ? '' : ' (system-wide)') . '</p>';
 }
 
 function renderUIConfig ()
 {
 	global $nextorder;
-	startPortlet ('Current configuration');
-	echo '<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center width="70%">';
-	echo '<tr><th class=tdleft>Option</th><th class=tdleft>Value</th></tr>';
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	
+	$tplm->createMainModule();
+	$mod = $tplm->generateSubmodule("Payload","RenderUiConfig");
+	$mod->setNamespace("ui");
+
+	//startPortlet ('Current configuration');
+	//echo '<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center width="70%">';
+	//echo '<tr><th class=tdleft>Option</th><th class=tdleft>Value</th></tr>';
 	$order = 'odd';
+
+	$allLoadConfigCacheOut = array();
 	foreach (loadConfigCache() as $v)
 	{
 		if ($v['is_hidden'] != 'no')
 			continue;
-		echo "<tr class=row_${order}>";
-		echo "<td nowrap valign=top class=tdright>";
-		renderConfigVarName ($v);
-		echo '</td>';
-		echo "<td valign=top class=tdleft>${v['varvalue']}</td></tr>";
+		$singleCache = array('order' => $order, 'varvalue' => $v['varvalue']);
+		//echo "<tr class=row_${order}>";
+		//echo "<td nowrap valign=top class=tdright>";
+		$singleCache['renderedConfigVarName'] = renderConfigVarName ($v);
+		//renderConfigVarName ($v);
+		//echo '</td>';
+		//echo "<td valign=top class=tdleft>${v['varvalue']}</td></tr>";
 		$order = $nextorder[$order];
+		$allLoadConfigCacheOut[] = $singleCache;
 	}
-	echo "</table>\n";
-	finishPortlet();
+	$mod->addOutput("allLoadConfigCache", $allLoadConfigCacheOut);
+		 
+	//echo "</table>\n";
+	//finishPortlet();
 }
 
 function renderSNMPPortFinder ($object_id)
@@ -5572,10 +5869,16 @@ function renderSNMPPortFinder ($object_id)
 
 function renderUIResetForm()
 {
-	printOpFormIntro ('go');
-	echo "This button will reset user interface configuration to its defaults (except organization name): ";
-	echo "<input type=submit value='proceed'>";
-	echo "</form>";
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderUiResetForm");
+	$mod->setNamespace("ui");	
+//	printOpFormIntro ('go');
+//	echo "This button will reset user interface configuration to its defaults (except organization name): ";
+//	echo "<input type=submit value='proceed'>";
+//	echo "</form>";
 }
 
 function renderLivePTR ($id)
@@ -6084,10 +6387,12 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 
 	$tplm = TemplateManager::getInstance();
 
-	if($parent == null)
+	if($parent == null){
 		$tplm->createMainModule();
-
-	$mod = $tplm->generateSubmodule($parentplaceholder, "CellFilterPortlet", $parent);
+		$mod = $tplm->generateModule("CellFilterPortlet");
+	}
+	else
+		$mod = $tplm->generateSubmodule($parentplaceholder, "CellFilterPortlet", $parent);
 	//startPortlet ($title);
 	$mod->setNamespace("");
 	$mod->setLock(true);
@@ -6111,8 +6416,9 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		if (!$rulerfirst)
 		{
 			$tplm->generateSubmodule("TableContent", "CellFilterSpacer", $mod, true);
-			$rulerfirst = false;
 		}
+		else
+			$rulerfirst = false;
 		//$hr = $ruler;
 		$andor = strlen ($preselect['andor']) ? $preselect['andor'] : getConfigVar ('FILTER_DEFAULT_ANDOR');
 		//echo '<tr>';
@@ -6145,8 +6451,9 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		if (!$rulerfirst)
 		{
 			$tplm->generateSubmodule("TableContent", "CellFilterSpacer", $mod, true);
-			$rulerfirst = false;
 		}
+		else
+			$rulerfirst = false;
 		// Show a tree of tags, pre-select according to currently requested list filter.
 		$objectivetags = getShrinkedTagTree($cell_list, $realm, $preselect);
 		if (!count ($objectivetags))
@@ -6167,12 +6474,14 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		if (count ($preselect['pnamelist']))
 			$enable_reset = TRUE;
 		//echo $hr;
+
 		//$hr = $ruler;
 		if (!$rulerfirst)
 		{
 			$tplm->generateSubmodule("TableContent", "CellFilterSpacer", $mod, true);
-			$rulerfirst = false;
 		}
+		else
+			$rulerfirst = false;
 		global $pTable;
 		$myPredicates = array();
 		$psieve = getConfigVar ('FILTER_PREDICATE_SIEVE');
@@ -6342,7 +6651,20 @@ function renderTagRollerForRow ($row_id)
 	$a = rand (1, 20);
 	$b = rand (1, 20);
 	$sum = $a + $b;
-	printOpFormIntro ('rollTags', array ('realsum' => $sum));
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'TagRoller');
+	$mod->setNamespace('row',true);
+	$mod->addOutput('a', $a);
+	$mod->addOutput('b', $b);
+	$mod->addOutput('sum', $sum);
+	
+	renderNewEntityTags('',$mod,'Tags');
+
+/**	printOpFormIntro ('rollTags', array ('realsum' => $sum));
 	echo "<table border=1 align=center>";
 	echo "<tr><td colspan=2>This special tool allows assigning tags to physical contents (racks <strong>and all contained objects</strong>) of the current ";
 	echo "rack row.<br>The tag(s) selected below will be ";
@@ -6352,7 +6674,7 @@ function renderTagRollerForRow ($row_id)
 	echo "</td></tr>";
 	echo "<tr><th>Control question: the sum of ${a} and ${b}</th><td><input type=text name=sum></td></tr>";
 	echo "<tr><td colspan=2 align=center><input type=submit value='Go!'></td></tr>";
-	echo "</table></form>";
+	echo "</table></form>"; */
 }
 
 function renderRackCodeViewer ()
@@ -6530,6 +6852,16 @@ function renderConfigEditor ()
 	global $pageno;
 	$per_user = ($pageno == 'myaccount');
 	global $configCache;
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule("Payload", "RenderConfigEditor");
+	
+	$mod->setNamespace("myaccount");
+	
+	
 	// startPortlet ('Current configuration');
 	// echo "<table cellspacing=0 cellpadding=5 align=center class=widetable width='50%'>\n";
 	// echo "<tr><th class=tdleft>Option</th>";
@@ -6539,34 +6871,39 @@ function renderConfigEditor ()
 
 
 	$i = 0;
+	$allConfigsPerUser = array();
 	foreach ($per_user ? $configCache : loadConfigCache() as $v)
 	{
-		$mod->addOutput('Looparray', array(
-											'Ishidden' => $v['is_hidden'],
-											'Isuserdefined' =>   $v['is_userdefined'], 
-											'Peruser' => $per_user,
-											'Renderconfig' => renderConfigVarName ($v),
-											'Htmlspecialchars' => htmlspecialchars ($v['varvalue'], ENT_QUOTES),
-											'Isaltered' => $v['is_altered'],
-											'Varname' => $v['varname'],
-											'Index' => $i));
+		if ($v['is_hidden'] != 'no')
+		 	continue;
+		if ($per_user && $v['is_userdefined'] != 'yes')
+			continue;
 
-		// if ($v['is_hidden'] != 'no')
-		// 	continue;
-		// if ($per_user && $v['is_userdefined'] != 'yes')
-		// 	continue;
+		$singleConfig = array(			'Ishidden' => $v['is_hidden'],
+						'Isuserdefined' =>   $v['is_userdefined'], 
+						'Renderconfig' => renderConfigVarName ($v),
+						'Htmlspecialchars' => htmlspecialchars ($v['varvalue'], ENT_QUOTES),
+						'Varname' => $v['varname'],
+						'Index' => $i);
 		// echo "<input type=hidden name=${i}_varname value='${v['varname']}'>";
 		// echo '<tr><td class="tdright">';
 		// echo renderConfigVarName ($v);
 		// echo '</td>';
 		// echo "<td class=\"tdleft\"><input type=text name=${i}_varvalue value='" . htmlspecialchars ($v['varvalue'], ENT_QUOTES) . "' size=24></td>";
 		// echo '<td class="tdleft">';
-		// if ($per_user && $v['is_altered'] == 'yes')
+		if ($per_user && $v['is_altered'] == 'yes')
+			$singleConfig['opLink'] = getOpLink (array('op'=>'reset', 'varname'=>$v['varname']), 'reset');
+		else
+			$singleConfig['opLink'] = '';
 		// 	echo getOpLink (array('op'=>'reset', 'varname'=>$v['varname']), 'reset');
 		// echo '</td>';
 		// echo "</tr>\n";
 		$i++;
+		$allConfigsPerUser[] = $singleConfig;
 	}
+	$mod->addOutput('Looparray', $allConfigsPerUser);
+	$mod->addOutput("i", $i);
+		 
 	// echo "<input type=hidden name=num_vars value=${i}>\n";
 	// echo "<tr><td colspan=3>";
 	// printImageHREF ('SAVE', 'Save changes', TRUE);
@@ -6633,16 +6970,19 @@ function renderMyQuickLinks ()
 	// finishPortlet();
 }
 
-function renderFileSummary ($file)
+function renderFileSummary ($file, $parent = null, $placeholder = 'FileSummary')
 {
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateModule('FileSummaryDownloadLink',true);
+	$mod->addOutput('Id', $file['id']);
+	
 	$summary = array();
 	$summary['Type'] = $file['type'];
 	$summary['Size'] =
 	(
 		isolatedPermission ('file', 'download', $file) ?
 		(
-			"<a href='?module=download&file_id=${file['id']}'>" .
-			getImageHREF ('download', 'Download file') . '</a>&nbsp;'
+			$mod->run()
 		) : ''
 	) . formatFileSize ($file['size']);
 	$summary['Created'] = $file['ctime'];
@@ -6650,18 +6990,29 @@ function renderFileSummary ($file)
 	$summary['Accessed'] = $file['atime'];
 	$summary['tags'] = '';
 	if (strlen ($file['comment']))
-		$summary['Comment'] = '<div class="dashed commentblock">' . string_insert_hrefs (htmlspecialchars ($file['comment'])) . '</div>';
-	renderEntitySummary ($file, 'summary', $summary);
+	{
+		$mod = $tplm->generateModule('FileSummaryComment',true);
+		$mod->addOutput('Comment', string_insert_hrefs (htmlspecialchars ($file['comment'])));
+		$summary['Comment'] = $mod->run();
+	}
+	renderEntitySummary ($file, 'summary', $summary, $parent, $placeholder);
 }
 
-function renderFileLinks ($links)
+function renderFileLinks ($links,$parent,$placeholder)
 {
-	startPortlet ('Links (' . count ($links) . ')');
-	echo "<table cellspacing=0 cellpadding='5' align='center' class='widetable'>\n";
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateSubmodule($placeholder, 'FileLinks', $parent);
+	$mod->setNamespace('file');
+	
+	//startPortlet ('Links (' . count ($links) . ')');
+	//echo "<table cellspacing=0 cellpadding='5' align='center' class='widetable'>\n";
+	
+	//$outarr = array();
+	
 	foreach ($links as $link)
 	{
 		$cell = spotEntity ($link['entity_type'], $link['entity_id']);
-		echo '<tr><td class=tdleft>';
+		//echo '<tr><td class=tdleft>';
 		switch ($link['entity_type'])
 		{
 			case 'user':
@@ -6671,16 +7022,18 @@ function renderFileLinks ($links)
 			case 'ipv4vs':
 			case 'ipv4rspool':
 			case 'object':
-				renderCell ($cell);
+				$tplm->generateSubmodule('Links','FileLinksDefLink',$mod,true,array('Content'=>renderCell ($cell)));
 				break;
 			default:
-				echo formatRealmName ($link['entity_type']) . ': ' . mkCellA ($cell);
+				$tplm->generateSubmodule('Links', 'FileLinksObjLink', $mod, true, array('Name'=>formatRealmName ($link['entity_type']),'Link'=>mkCellA ($cell)));
+				//$outarr[] = array('Content'=> formatRealmName ($link['entity_type']) . ': ' . mkCellA ($cell)); //@TODO Check mkCellA usage
 				break;
 		}
-		echo '</td></tr>';
+		//echo '</td></tr>';
 	}
-	echo "</table><br>\n";
-	finishPortlet();
+	//$mod->addOutput('Links', $outarr);
+	//echo "</table><br>\n";
+	//finishPortlet();
 }
 
 function renderFilePreview ($pcode)
@@ -6695,49 +7048,79 @@ function renderFile ($file_id)
 {
 	global $nextorder, $aac;
 	$file = spotEntity ('file', $file_id);
-	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
-	echo "<tr><td colspan=2 align=center><h1>" . htmlspecialchars ($file['name']) . "</h1></td></tr>\n";
-	echo "<tr><td class=pcleft>";
+	
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'File');
+	$mod->setNamespace('file',true);
+	
+	$mod->addOutput('Name', htmlspecialchars ($file['name']));
+	
+	//echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
+	//echo "<tr><td colspan=2 align=center><h1>" . htmlspecialchars ($file['name']) . "</h1></td></tr>\n";
+	//echo "<tr><td class=pcleft>";
 
-	callHook ('renderFileSummary', $file);
+	callHook ('renderFileSummary', $file, $mod, 'FileSummary');
 
 	$links = getFileLinks ($file_id);
 	if (count ($links))
-		callHook ('renderFileLinks', $links);
+		callHook ('renderFileLinks', $links, $mod, 'FileLinks');
 
 	echo "</td>";
 
-	if (isolatedPermission ('file', 'download', $file) and '' != ($pcode = getFilePreviewCode ($file)))
+	if (isolatedPermission ('file', 'download', $file)) //and '' != ($pcode = getFilePreviewCode ($file)))
 	{
-		echo "<td class=pcright>";
-		callHook ('renderFilePreview', $pcode);
-		echo "</td>";
+		getFilePreviewCode ($file,$mod,'FilePreview');
+		//echo "<td class=pcright>";
+		//callHook ('renderFilePreview', $pcode);
+		//echo "</td>";
 	}
 
-	echo "</tr></table>\n";
+	//echo "</tr></table>\n";
 }
 
 function renderFileReuploader ()
 {
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateSubmodule('Payload', 'FileReuploader');
+	$mod->setNamespace('file');
+	
+	/*
 	startPortlet ('Replace existing contents');
 	printOpFormIntro ('replaceFile', array (), TRUE);
 	echo "<input type=file size=10 name=file tabindex=100>&nbsp;\n";
-	printImageHREF ('save', 'Save changes', TRUE, 101);
+	printImageHREF ('srenderFileBrowserave', 'Save changes', TRUE, 101);
 	echo "</form>\n";
-	finishPortlet();
+	finishPortlet();*/
 }
 
 function renderFileDownloader ($file_id)
 {
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateSubmodule('Payload', 'FileDownloader');
+	$mod->setNamespace('file');
+	$mod->addOutput('Id', $file_id);
+	
+	/*
 	echo "<br><center><a target='_blank' href='?module=download&file_id=${file_id}&asattach=1'>";
 	printImageHREF ('DOWNLOAD');
-	echo '</a></center>';
+	echo '</a></center>';*/
 }
 
 function renderFileProperties ($file_id)
 {
 	$file = spotEntity ('file', $file_id);
-	echo '<table border=0 align=center>';
+	
+	$tplm = TemplateManageR::getInstance();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'FileProperties');
+	$mod->setNamespace('file');
+	
+	$mod->addOutput('Type', htmlspecialchars ($file['type']));
+	$mod->addOutput('Name', htmlspecialchars ($file['name']));
+	$mod->addOutput('Comment', htmlspecialchars ($file['comment']));
+	$mod->addOutput('Id', $file_id);
+	/** echo '<table border=0 align=center>';
 	printOpFormIntro ('updateFile');
 	echo "<tr><th class=tdright>MIME-type:</th><td class=tdleft><input tabindex=101 type=text name=file_type value='";
 	echo htmlspecialchars ($file['type']) . "'></td></tr>";
@@ -6750,66 +7133,90 @@ function renderFileProperties ($file_id)
 	echo '</td></tr>';
 	echo "<tr><th class=submit colspan=2>";
 	printImageHREF ('SAVE', 'Save changes', TRUE, 102);
-	echo '</th></tr></form></table>';
+	echo '</th></tr></form></table>'; */
 }
 
 function renderFileBrowser ()
 {
-	renderCellList ('file', 'Files', TRUE);
+	renderCellList ('file', 'Files', TRUE, NULL, NULL, 'Payload');
 }
 
 // Like renderFileBrowser(), but with the option to delete files
 function renderFileManager ()
 {
 	// Used for uploading a parentless file
-	function printNewItemTR ()
+	function printNewItemTR ($parent, $placeholder)
 	{
-		startPortlet ('Upload new');
+		$tplm = TemplateManager::getInstance();
+		
+		$mod = $tplm->generateSubmodule($placeholder, 'FileManagerNew', $parent);
+		$mod->setNamespace('files');
+
+		renderNewEntityTags ('file',$mod,'Tags');
+		
+		/** startPortlet ('Upload new');
 		printOpFormIntro ('addFile', array (), TRUE);
 		echo "<table border=0 cellspacing=0 cellpadding='5' align='center'>";
 		echo '<tr><th colspan=2>Comment</th><th>Assign tags</th></tr>';
 		echo '<tr><td valign=top colspan=2><textarea tabindex=101 name=comment rows=10 cols=80></textarea></td>';
-		echo '<td rowspan=2>';
-		echo renderNewEntityTags ('file');
-		echo '</td></tr>';
+		echo '<td rowspan=2>'; */
+		/** echo '</td></tr>';
 		echo "<tr><td class=tdleft><label>File: <input type='file' size='10' name='file' tabindex=100></label></td><td class=tdcenter>";
 		printImageHREF ('CREATE', 'Upload file', TRUE, 102);
 		echo '</td></tr>';
 		echo "</table></form><br>";
-		finishPortlet();
+		finishPortlet(); */
 	}
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->createMainModule();
+	$tplm->setTemplate("vanilla");
 
+	$mod = $tplm->generateSubmodule('Payload', 'FileManager');
+	$mod->setNamespace('files');
+	
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR();
+		printNewItemTR($mod,'NewTop');
+	else
+		printNewItemTR($mod,'NewBottom');
+	
 	if (count ($files = listCells ('file')))
 	{
-		startPortlet ('Manage existing (' . count ($files) . ')');
+		$mod->addOutput('Count', count($files));
+		//startPortlet ('Manage existing (' . count ($files) . ')');
 		global $nextorder;
 		$order = 'odd';
-		echo '<table cellpadding=5 cellspacing=0 align=center class=cooltable>';
-		echo '<tr><th>File</th><th>Unlink</th><th>Destroy</th></tr>';
+		//echo '<table cellpadding=5 cellspacing=0 align=center class=cooltable>';
+		//echo '<tr><th>File</th><th>Unlink</th><th>Destroy</th></tr>';
 		foreach ($files as $file)
 		{
-			printf("<tr class=row_%s valign=top><td class=tdleft>", $order);
-			renderCell ($file);
+			$smod = $tplm->generateSubmodule('Content', 'FileManagerRow', $mod);
+			$smod->addOutput('Count',count ($file['links']));
+			//printf("<tr class=row_%s valign=top><td class=tdleft>", $order);
+			renderCell ($file, $smod, 'Cell');
 			// Don't load links data earlier to enable special processing.
 			amplifyCell ($file);
-			echo '</td><td class=tdleft>';
-			echo serializeFileLinks ($file['links'], TRUE);
-			echo '</td><td class=tdcenter valign=middle>';
-			if (count ($file['links']))
-				printImageHREF ('NODESTROY', 'References (' . count ($file['links']) . ')');
+			//echo '</td><td class=tdleft>';
+			$smod->addOutput('Links', serializeFileLinks ($file['links'], TRUE));
+			$smod->addOutput('Count',count ($file['links']));
+			$smod->addOutput('Id', $file['id']);
+			
+			//echo serializeFileLinks ($file['links'], TRUE);
+			//echo '</td><td class=tdcenter valign=middle>';
+			if (!count ($file['links']))
+				$smod->addOutput('Deletable', true);
+			/**	printImageHREF ('NODESTROY', 'References (' . count ($file['links']) . ')');
 			else
 				echo getOpLink (array('op'=>'deleteFile', 'file_id'=>$file['id']), '', 'DESTROY', 'Delete file', 'need-confirmation');
-			echo "</td></tr>";
+			echo "</td></tr>";*/
 			$order = $nextorder[$order];
 		}
-		echo '</table>';
-		finishPortlet();
+		//echo '</table>';
+		//finishPortlet();
 	}
 
-	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR();
+	//if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
+		//printNewItemTR();
 }
 
 function renderFilesPortlet ($entity_type = NULL, $entity_id = 0)
@@ -7213,9 +7620,32 @@ function renderCell ($cell)
 	return $mod->run();
 }
 
-function renderRouterCell ($ip_bin, $ifname, $cell)
+function renderRouterCell ($ip_bin, $ifname, $cell, $parent = null, $placeholder = '')
 {
 	$dottedquad = ip_format ($ip_bin);
+	
+	$tplm = TemplateManager::getInstance();
+	
+	if ($parent === null)
+		$mod = $tplm->generateModule('RouterCell');
+	else
+		$mod = $tplm->generateSubmodule($placeholder, 'RouterCell', $parent);
+	
+	$mod->setNamespace('ipnetwork');
+	$mod->setLock();
+	
+	$mod->addOutput('IP', $dottedquad);
+	
+	if (strlen( $ifname))
+		$mod->addOutput('ifname', '@' . $ifname);
+	
+	$mod->addOutput('Name', $cell['dname']);
+	$mod->addOutput('Id', $cell['id']);
+	
+	if (count($cell['etags']))
+		serializeTags ($cell['etags'], '', $mod, 'Tags');
+	
+	/*
 	echo "<table class=slbcell><tr><td rowspan=3>${dottedquad}";
 	if (strlen ($ifname))
 		echo '@' . $ifname;
@@ -7226,13 +7656,17 @@ function renderRouterCell ($ip_bin, $ifname, $cell)
 	echo "</td></tr><tr><td>";
 	if (count ($cell['etags']))
 		echo '<small>' . serializeTags ($cell['etags']) . '</small>';
-	echo "</td></tr></table>";
+	echo "</td></tr></table>";*/
+	
+	if ($parent === null) { return $mod->run(); }
 }
 
 // Return HTML code necessary to show a preview of the file give. Return an empty string,
 // if a preview cannot be shown
-function getFilePreviewCode ($file)
+function getFilePreviewCode ($file, $parent, $mod)
 {
+	$tplm = TemplateManager::getInstance();
+	
 	$ret = '';
 	switch ($file['type'])
 	{
@@ -7244,6 +7678,8 @@ function getFilePreviewCode ($file)
 			$image = imagecreatefromstring ($file['contents']);
 			$width = imagesx ($image);
 			$height = imagesy ($image);
+			
+			
 			if ($width < getConfigVar ('PREVIEW_IMAGE_MAXPXS') and $height < getConfigVar ('PREVIEW_IMAGE_MAXPXS'))
 				$resampled = FALSE;
 			else
@@ -7253,20 +7689,37 @@ function getFilePreviewCode ($file)
 				$height = $height * $ratio;
 				$resampled = TRUE;
 			}
+			
+
+			$mod = $tplm->generateSubmodule($placeholder, 'FilePreviewImage', $parent);
+			$mod->addOutput('Height', $height);
+			$mod->addOutput('Width', $width);
+			$mod->addOutput('Id', $file['id']);
+			$mod->addOutput('Resampled', $resampled);
+			
+			/*
 			if ($resampled)
 				$ret .= "<a href='?module=download&file_id=${file['id']}&asattach=no'>";
 			$ret .= "<img width=${width} height=${height} src='?module=image&img=preview&file_id=${file['id']}'>";
 			if ($resampled)
-				$ret .= '</a><br>(click to zoom)';
+				$ret .= '</a><br>(click to zoom)';*/
 			break;
 		case 'text/plain':
 			if ($file['size'] < getConfigVar ('PREVIEW_TEXT_MAXCHARS'))
 			{
 				$file = getFile ($file['id']);
+				
+				$mod = $tplm->generateSubmodule($placeholder, 'FilePreviewText', $parent);
+				$mod->addOutput('Rows', getConfigVar ('PREVIEW_TEXT_ROWS'));
+				$mod->addOutput('Cols', getConfigVar ('PREVIEW_TEXT_COLS'));
+				$mod->addOutput('Content', $file['contents']);
+				
+				/*
 				$ret .= '<textarea readonly rows=' . getConfigVar ('PREVIEW_TEXT_ROWS');
 				$ret .= ' cols=' . getConfigVar ('PREVIEW_TEXT_COLS') . '>';
 				$ret .= htmlspecialchars ($file['contents']);
 				$ret .= '</textarea>';
+				*/
 			}
 			break;
 		default:
@@ -7279,18 +7732,26 @@ function renderTextEditor ($file_id)
 {
 	global $CodePressMap;
 	$fullInfo = getFile ($file_id);
-	printOpFormIntro ('updateFileText', array ('mtime_copy' => $fullInfo['mtime']));
+	//printOpFormIntro ('updateFileText', array ('mtime_copy' => $fullInfo['mtime']));
 	preg_match('/.+\.([^.]*)$/', $fullInfo['name'], $matches); # get file extension
 	if (isset ($matches[1]) && isset ($CodePressMap[$matches[1]]))
 		$syntax = $CodePressMap[$matches[1]];
 	else
 		$syntax = "text";
-	echo '<table border=0 align=center>';
+	
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'TextEditor');
+	$mod->addOutput('MTime', $fullInfo['mtime']);
+	$mod->addOutput('Content', htmlspecialchars ($fullInfo['contents']));
+	$mod->addOutput('Syntax', $syntax);
+	
+	/**echo '<table border=0 align=center>';
 	addJS ('js/codepress/codepress.js');
 	echo "<tr><td><textarea rows=45 cols=180 id=file_text name=file_text tabindex=101 class='codepress " . $syntax . "'>\n";
 	echo htmlspecialchars ($fullInfo['contents']) . '</textarea></td></tr>';
 	echo "<tr><td class=submit><input type=submit value='Save' onclick='$(file_text).toggleEditor();'>";
-	echo "</td></tr>\n</table></form>\n";
+	echo "</td></tr>\n</table></form>\n";*/
 }
 
 function showPathAndSearch ($pageno, $tabno, $tpl = false)
@@ -7809,10 +8270,18 @@ function dynamic_title_decoder ($path_position)
 function renderIIFOIFCompat()
 {
 	global $nextorder;
-	echo '<br><table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>';
-	echo '<tr><th class=tdleft>inner interface</th><th></th><th class=tdleft>outer interface</th><th></th></tr>';
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderIIFOIFCompat");
+	$mod->setNamespace("portifcompat");
+		
+	//echo '<br><table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>';
+	//echo '<tr><th class=tdleft>inner interface</th><th></th><th class=tdleft>outer interface</th><th></th></tr>';
 	$last_iif_id = 0;
 	$order = 'even';
+	$allRecordsOut = array();
 	foreach (getPortInterfaceCompat() as $record)
 	{
 		if ($last_iif_id != $record['iif_id'])
@@ -7820,54 +8289,91 @@ function renderIIFOIFCompat()
 			$order = $nextorder[$order];
 			$last_iif_id = $record['iif_id'];
 		}
-		echo "<tr class=row_${order}><td class=tdleft>${record['iif_name']}</td><td>${record['iif_id']}</td><td class=tdleft>${record['oif_name']}</td><td>${record['oif_id']}</td></tr>";
+		$singleRecord = array('order' => $order, 'iif_name' => $record['iif_name'], 'iif_id' => $record['iif_id'],
+						'oif_name' => $record['oif_name'], 'oif_id' => $record['oif_id']);
+		//echo "<tr class=row_${order}><td class=tdleft>${record['iif_name']}</td><td>${record['iif_id']}</td><td class=tdleft>${record['oif_name']}</td><td>${record['oif_id']}</td></tr>";
+		$allRecordsOut[] = $singleRecord;
 	}
-	echo '</table>';
+	$mod->addOutput("allRecords", $allRecordsOut);
+		 
+	//echo '</table>';
 }
 
 function renderIIFOIFCompatEditor()
 {
 	function printNewitemTR()
 	{
-		printOpFormIntro ('add');
-		echo '<tr><th class=tdleft>';
-		printImageHREF ('add', 'add pair', TRUE);
-		echo '</th><th class=tdleft>';
-		printSelect (getPortIIFOptions(), array ('name' => 'iif_id'));
-		echo '</th><th class=tdleft>';
-		printSelect (readChapter (CHAP_PORTTYPE), array ('name' => 'oif_id'));
-		echo '</th></tr></form>';
+		$tplm = TemplateManager::getInstance();
+		if($parent==null)
+			$tplm->setTemplate("vanilla");
+		
+		$mod = $tplm->generateModule("PrintNewItemTR");
+		
+		$mod->setNamespace("portifcompat");
+		
+		$mod->addOutput("iffOptions", printSelect (getPortIIFOptions(), array ('name' => 'iif_id')));
+		$mod->addOutput("chapter", readChapter (CHAP_PORTTYPE), array ('name' => 'oif_id'));	 
+		return $mod->run();
+		//printOpFormIntro ('add');
+		//echo '<tr><th class=tdleft>';
+		//printImageHREF ('add', 'add pair', TRUE);
+		//echo '</th><th class=tdleft>';
+		//printSelect (getPortIIFOptions(), array ('name' => 'iif_id'));
+		//echo '</th><th class=tdleft>';
+		//printSelect (readChapter (CHAP_PORTTYPE), array ('name' => 'oif_id'));
+		//echo '</th></tr></form>';
 	}
-
-	startPortlet ('WDM standard by interface');
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderIIFOIFCompatEditor");
+	$mod->setNamespace("portifcompat");
+		
+	//startPortlet ('WDM standard by interface');
 	$iif = getPortIIFOptions();
 	global $nextorder, $wdm_packs;
 	$order = 'odd';
-	echo '<table border=0 align=center cellspacing=0 cellpadding=5>';
+	//echo '<table border=0 align=center cellspacing=0 cellpadding=5>';
+	$allWDM_PacksOut = array();
 	foreach ($wdm_packs as $codename => $packinfo)
 	{
-		echo "<tr><th>&nbsp;</th><th colspan=2>${packinfo['title']}</th></tr>";
+		$singlePack = array('packinfo' => $packinfo['title']);
+		//echo "<tr><th>&nbsp;</th><th colspan=2>${packinfo['title']}</th></tr>";
+		$singlePack['iff_ids'] = '';
 		foreach ($packinfo['iif_ids'] as $iif_id)
 		{
-			echo "<tr class=row_${order}><th class=tdleft>" . $iif[$iif_id] . '</th><td>';
-			echo getOpLink (array ('op' => 'addPack', 'standard' => $codename, 'iif_id' => $iif_id), '', 'add');
-			echo '</td><td>';
-			echo getOpLink (array ('op' => 'delPack', 'standard' => $codename, 'iif_id' => $iif_id), '', 'delete');
-			echo '</td></tr>';
+			$iif_id_mod = $tplm->generateModule("RenderIIFOIFCompatEditor_Iif_id");
+			$iif_id_mod->setNamespace("portifcompat");
+			$iif_id_mod->addOutput('order', $order);
+			$iif_id_mod->addOutput('iif_iif_id', $iff[$iff_id]);
+			$iif_id_mod->addOutput('codename', $codename);
+			$iif_id_mod->addOutput('iif_id', $iif_id);
+			//echo "<tr class=row_${order}><th class=tdleft>" . $iif[$iif_id] . '</th><td>';
+			//echo getOpLink (array ('op' => 'addPack', 'standard' => $codename, 'iif_id' => $iif_id), '', 'add');
+			//echo '</td><td>';
+			//echo getOpLink (array ('op' => 'delPack', 'standard' => $codename, 'iif_id' => $iif_id), '', 'delete');
+			//echo '</td></tr>';
 			$order = $nextorder[$order];
+			$singlePack['iff_ids'] .= $iif_id_mod->run();
 		}
+		$allWDM_PacksOut[] = $singlePack;
 	}
-	echo '</table>';
-	finishPortlet();
+	$mod->addOutput("allWDM_Packs", $allWDM_PacksOut);
+		 
+	//echo '</table>';
+	//finishPortlet();
 
-	startPortlet ('interface by interface');
+	//startPortlet ('interface by interface');
 	global $nextorder;
 	$last_iif_id = 0;
 	$order = 'even';
-	echo '<br><table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>';
-	echo '<tr><th>&nbsp;</th><th class=tdleft>inner interface</th><th class=tdleft>outer interface</th></tr>';
+	//echo '<br><table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>';
+	//echo '<tr><th>&nbsp;</th><th class=tdleft>inner interface</th><th class=tdleft>outer interface</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewitemTR();
+	//	printNewitemTR();
+		$mod->addOutput("isAddNewItemTop", printNewitemTR());
+	$allInterfacesOut = array();
 	foreach (getPortInterfaceCompat() as $record)
 	{
 		if ($last_iif_id != $record['iif_id'])
@@ -7875,14 +8381,21 @@ function renderIIFOIFCompatEditor()
 			$order = $nextorder[$order];
 			$last_iif_id = $record['iif_id'];
 		}
-		echo "<tr class=row_${order}><td>";
-		echo getOpLink (array ('op' => 'del', 'iif_id' => $record['iif_id'], 'oif_id' => $record['oif_id']), '', 'delete', 'remove pair');
-		echo "</td><td class=tdleft>${record['iif_name']}</td><td class=tdleft>${record['oif_name']}</td></tr>";
+		$singleInterface = array('order' => $order);
+		//echo "<tr class=row_${order}><td>";
+		$singleInterface['opLink'] = getOpLink (array ('op' => 'del', 'iif_id' => $record['iif_id'], 'oif_id' => $record['oif_id']), '', 'delete', 'remove pair');
+		//echo getOpLink (array ('op' => 'del', 'iif_id' => $record['iif_id'], 'oif_id' => $record['oif_id']), '', 'delete', 'remove pair');
+		$singleInterface['iif_name'] = $record['iif_name'];
+		$singleInterface['oif_name'] = $record['oif_name'];
+		//echo "</td><td class=tdleft>${record['iif_name']}</td><td class=tdleft>${record['oif_name']}</td></tr>";
+		$allInterfacesOut[] = $singleInterface;
 	}
+	$mod->addOutput("allInterfaces", $allInterfacesOut);	 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewitemTR();
-	echo '</table>';
-	finishPortlet();
+		$mod->addOutput("isntAddNewItemTop", printNewitemTR());
+	//	printNewitemTR();
+	//echo '</table>';
+	//finishPortlet();
 }
 
 function render8021QOrderForm ($some_id)
@@ -7903,11 +8416,19 @@ function render8021QOrderForm ($some_id)
 			$focus[$hint_code] = getConfigVar ($option_name);
 		else
 			$focus[$hint_code] = NULL;
-		printOpFormIntro ('add');
-		echo '<tr>';
+		
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");
+		
+		$mod = $tplm->generateModule("Render8021QOrderForm_PrintNew");
+		$mod->setNamespace("vlandomain");
+		
+		//printOpFormIntro ('add');
+		//echo '<tr>';
 		if ($pageno != 'object')
 		{
-			echo '<td>';
+			$mod->setOutput("isNoObject", true);	 
+			//echo '<td>';
 			// hide any object that is already in the table
 			$options = array();
 			foreach (getNarrowObjectList ('VLANSWITCH_LISTSRC') as $object_id => $object_dname)
@@ -7920,13 +8441,19 @@ function render8021QOrderForm ($some_id)
 					if ($decision)
 						$options[$object_id] = $object_dname;
 				}
-			printSelect ($options, array ('name' => 'object_id', 'tabindex' => 101, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_objid']);
-			echo '</td>';
+			$mod->addOutput("selected", printSelect ($options, array ('name' => 'object_id', 'tabindex' => 101, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_objid'])); 
+			//printSelect ($options, array ('name' => 'object_id', 'tabindex' => 101, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_objid']);
+			//echo '</td>';
 		}
-		if ($pageno != 'vlandomain')
-			echo '<td>' . getSelect (getVLANDomainOptions(), array ('name' => 'vdom_id', 'tabindex' => 102, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_vdid']) . '</td>';
+		if ($pageno != 'vlandomain'){
+			$mod->setOutput("isNoVLANDomain", true);
+			$mod->addOutput("getVLDSelect", getSelect (getVLANDomainOptions(), array ('name' => 'vdom_id', 'tabindex' => 102, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_vdid']));	 
+			//echo '<td>' . getSelect (getVLANDomainOptions(), array ('name' => 'vdom_id', 'tabindex' => 102, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_vdid']) . '</td>';
+		}
 		if ($pageno != 'vst')
 		{
+			$mod->setOutput("isNoVST", true);
+				 
 			$options = array();
 			foreach (listCells ('vst') as $nominee)
 			{
@@ -7937,10 +8464,20 @@ function render8021QOrderForm ($some_id)
 				if ($decision)
 					$options[$nominee['id']] = niftyString ($nominee['description'], 30, FALSE);
 			}
-			echo '<td>' . getSelect ($options, array ('name' => 'vst_id', 'tabindex' => 103, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_vstid']) . '</td>';
+			$mod->addOutput("getVSTSelect", getSelect ($options, array ('name' => 'vst_id', 'tabindex' => 103, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_vstid']));
+			//echo '<td>' . getSelect ($options, array ('name' => 'vst_id', 'tabindex' => 103, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_vstid']) . '</td>';
 		}
-		echo '<td>' . getImageHREF ('Attach', 'set', TRUE, 104) . '</td></tr></form>';
+		//echo '<td>' . getImageHREF ('Attach', 'set', TRUE, 104) . '</td></tr></form>';
+		return $mod->run();
 	}
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","Render8021QOrderForm");
+	$mod->setNamespace("vlandomain");
+		
 	global $pageno;
 	$minuslines = array(); // indexed by object_id, which is unique
 	switch ($pageno)
@@ -7975,15 +8512,22 @@ function render8021QOrderForm ($some_id)
 	default:
 		throw new InvalidArgException ('pageno', $pageno, 'this function only works for a fixed set of values');
 	}
-	echo "<br><table border=0 cellspacing=0 cellpadding=5 align=center>";
-	echo '<tr>';
-	if ($pageno != 'object')
-		echo '<th>switch</th>';
-	if ($pageno != 'vlandomain')
-		echo '<th>domain</th>';
-	if ($pageno != 'vst')
-		echo '<th>template</th>';
-	echo '<th>&nbsp;</th></tr>';
+
+	//echo "<br><table border=0 cellspacing=0 cellpadding=5 align=center>";
+	//echo '<tr>';
+	if ($pageno != 'object'){
+		$mod->setOutput("isNoObject", true);
+		//echo '<th>switch</th>';
+	}
+	if ($pageno != 'vlandomain'){
+		$mod->setOutput("isNoVLANDomain", true);
+		//echo '<th>domain</th>';
+	}
+	if ($pageno != 'vst'){
+		$mod->setOutput("isNoVST", true);
+		//echo '<th>template</th>';
+	}
+	//echo '<th>&nbsp;</th></tr>';
 	// object_id is a UNIQUE in VLANSwitch table, so there is no sense
 	// in a "plus" row on the form, when there is already a "minus" one
 	if
@@ -7991,9 +8535,11 @@ function render8021QOrderForm ($some_id)
 		getConfigVar ('ADDNEW_AT_TOP') == 'yes' and
 		($pageno != 'object' or !count ($minuslines))
 	)
-		printNewItemTR();
+		$mod->addOutput("AddNewTop", printNewItemTR());
+	//	printNewItemTR();
 	$vdomlist = getVLANDomainOptions();
 	$vstlist = getVSTOptions();
+	$allMinuslinesOut = array();
 	foreach ($minuslines as $item_object_id => $item)
 	{
 		$ctx = getContext();
@@ -8017,25 +8563,39 @@ function render8021QOrderForm ($some_id)
 			$cutblock = getOpLink ($args, '', 'Cut', 'unbind');
 		}
 		restoreContext ($ctx);
-		echo '<tr>';
+		$singleMinusLine = array('cutblock' => $cutblock);
+		//echo '<tr>';
 		if ($pageno != 'object')
 		{
+			$singleMinusLine['isNoObject'] = true;
+			$singleMinusLine['objMkA'] = mkA ($object['dname'], 'object', $object['id']);
 			$object = spotEntity ('object', $item_object_id);
-			echo '<td>' . mkA ($object['dname'], 'object', $object['id']) . '</td>';
+			//echo '<td>' . mkA ($object['dname'], 'object', $object['id']) . '</td>';
 		}
-		if ($pageno != 'vlandomain')
-			echo '<td>' . mkA ($vdomlist[$item['vdom_id']], 'vlandomain', $item['vdom_id']) . '</td>';
-		if ($pageno != 'vst')
-			echo '<td>' . mkA ($vstlist[$item['vst_id']], 'vst', $item['vst_id']) . '</td>';
-		echo "<td>${cutblock}</td></tr>";
+		if ($pageno != 'vlandomain'){
+			$singleMinusLine['isNoVLANDomain'] = true;
+			$singleMinusLine['vlanDMkA'] = mkA ($vdomlist[$item['vdom_id']], 'vlandomain', $item['vdom_id']);
+			//echo '<td>' . mkA ($vdomlist[$item['vdom_id']], 'vlandomain', $item['vdom_id']) . '</td>';
+		}
+		if ($pageno != 'vst'){
+			$singleMinusLine['isNoVST'] = true;
+			$singleMinusLine['vstMkA'] = mkA ($vstlist[$item['vst_id']], 'vst', $item['vst_id']);
+			//echo '<td>' . mkA ($vstlist[$item['vst_id']], 'vst', $item['vst_id']) . '</td>';
+		}
+		
+		$allMinuslinesOut[] = $singleMinusLine;
+		//echo "<td>${cutblock}</td></tr>";
 	}
+	$mod->addOutput("allMinuslines", $allMinuslinesOut);
+		 
 	if
 	(
 		getConfigVar ('ADDNEW_AT_TOP') != 'yes' and
 		($pageno != 'object' or !count ($minuslines))
 	)
-		printNewItemTR();
-	echo '</table>';
+		$mod->addOutput("AddNewBottom", printNewItemTR());
+	//	printNewItemTR();
+	//echo '</table>';
 }
 
 function render8021QStatus ()
@@ -8233,73 +8793,108 @@ function renderVLANDomainListEditor ()
 
 function renderVLANDomain ($vdom_id)
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderVLANDomain");
+	$mod->setNamespace("vlandomain");
+		
 	global $nextorder;
 	$mydomain = getVLANDomain ($vdom_id);
-	echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
-	echo '<tr><td colspan=2 align=center><h1>' . niftyString ($mydomain['description']);
-	echo '</h1></td></tr>';
-	echo "<tr><td class=pcleft width='50%'>";
+	$mod->addOutput("niftyStr", niftyString ($mydomain['description']));
+		 
+	//echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
+	//echo '<tr><td colspan=2 align=center><h1>' . niftyString ($mydomain['description']);
+	//echo '</h1></td></tr>';
+	//echo "<tr><td class=pcleft width='50%'>";
 	if (!count ($mydomain['switchlist']))
-		startPortlet ('no orders');
+		$mod->addOutput("areDomains", false);	 
+		//startPortlet ('no orders');
 	else
 	{
-		startPortlet ('orders (' . count ($mydomain['switchlist']) . ')');
-		echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-		echo '<tr><th>switch</th><th>template</th><th>status</th></tr>';
+		//startPortlet ('orders (' . count ($mydomain['switchlist']) . ')');
+		$mod->addOutput("countDomains", count ($mydomain['switchlist']));	 
+		//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+		//echo '<tr><th>switch</th><th>template</th><th>status</th></tr>';
 		$order = 'odd';
 		$vstlist = getVSTOptions();
 		global $dqtitle;
+		$allDomainSwitchOut = array();
 		foreach ($mydomain['switchlist'] as $switchinfo)
 		{
-			echo "<tr class=row_${order}><td>";
-			renderCell (spotEntity ('object', $switchinfo['object_id']));
-			echo '</td><td class=tdleft>';
-			echo $vstlist[$switchinfo['template_id']];
-			echo '</td><td>';
-			$qcode = detectVLANSwitchQueue (getVLANSwitchInfo ($switchinfo['object_id']));
-			printImageHREF ("DQUEUE ${qcode}", $dqtitle[$qcode]);
-			echo '</td></tr>';
+			$singleDomain = array('order' => $order, 'renderedCell' => renderCell (spotEntity ('object', $switchinfo['object_id'])) );
+			//echo "<tr class=row_${order}><td>";
+			//renderCell (spotEntity ('object', $switchinfo['object_id']));
+			//echo '</td><td class=tdleft>';
+			$singleDomain['vstlist'] = $vstlist[$switchinfo['template_id']];
+			//echo $vstlist[$switchinfo['template_id']];
+			//echo '</td><td>';
+			//$qcode = detectVLANSwitchQueue (getVLANSwitchInfo ($switchinfo['object_id']));
+			//printImageHREF ("DQUEUE ${qcode}", $dqtitle[$qcode]);
+			$singleDomain['imageHREF'] = printImageHREF ("DQUEUE ${qcode}", $dqtitle[$qcode]);
+			//echo '</td></tr>';
 			$order = $nextorder[$order];
+			$allDomainSwitchOut[] = $singleDomain;
 		}
-		echo '</table>';
+		$mod->addOutput("allDomainSwitch", $allDomainSwitchOut);	 
+		//echo '</table>';
 	}
-	finishPortlet();
+	//finishPortlet();
 
-	echo '</td><td class=pcright>';
+	//echo '</td><td class=pcright>';
 
 	if (!count ($myvlans = getDomainVLANs ($vdom_id)))
-		startPortlet ('no VLANs');
+		$mod->addOutput("areVLANDomains", false);	 
+	//	startPortlet ('no VLANs');
 	else
 	{
-		startPortlet ('VLANs (' . count ($myvlans) . ')');
+		//startPortlet ('VLANs (' . count ($myvlans) . ')');
+		$mod->addOutput("countMyVLANs", count ($myvlans));	 
 		$order = 'odd';
 		global $vtdecoder;
-		echo '<table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>';
-		echo '<tr><th>VLAN ID</th><th>propagation</th><th>';
-		printImageHREF ('net', 'IPv4 networks linked');
-		echo '</th><th>ports</th><th>description</th></tr>';
+		//echo '<table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>';
+		//echo '<tr><th>VLAN ID</th><th>propagation</th><th>';
+		//printImageHREF ('net', 'IPv4 networks linked');
+		//echo '</th><th>ports</th><th>description</th></tr>';
+		$allMyVLANsOut = array();
 		foreach ($myvlans as $vlan_id => $vlan_info)
 		{
-			echo "<tr class=row_${order}>";
-			echo '<td class=tdright>' . mkA ($vlan_id, 'vlan', "${vdom_id}-${vlan_id}") . '</td>';
-			echo '<td>' . $vtdecoder[$vlan_info['vlan_type']] . '</td>';
-			echo '<td class=tdright>' . ($vlan_info['netc'] ? $vlan_info['netc'] : '&nbsp;') . '</td>';
-			echo '<td class=tdright>' . ($vlan_info['portc'] ? $vlan_info['portc'] : '&nbsp;') . '</td>';
-			echo "<td class=tdleft>${vlan_info['vlan_descr']}</td></tr>";
+			$singleMyVLANs = array('order' => $order, 'mkA' => mkA ($vlan_id, 'vlan', "${vdom_id}-${vlan_id}"));
+			//echo "<tr class=row_${order}>";
+			//echo '<td class=tdright>' . mkA ($vlan_id, 'vlan', "${vdom_id}-${vlan_id}") . '</td>';
+			$singleMyVLANs['vtdecoder'] = $vtdecoder[$vlan_info['vlan_type']];
+			//echo '<td>' . $vtdecoder[$vlan_info['vlan_type']] . '</td>';
+			$singleMyVLANs['infoNetc']  = ($vlan_info['netc'] ? $vlan_info['netc'] : '&nbsp;');
+			$singleMyVLANs['infoPortc'] = ($vlan_info['portc'] ? $vlan_info['portc'] : '&nbsp;');
+			//echo '<td class=tdright>' . ($vlan_info['netc'] ? $vlan_info['netc'] : '&nbsp;') . '</td>';
+			//echo '<td class=tdright>' . ($vlan_info['portc'] ? $vlan_info['portc'] : '&nbsp;') . '</td>';
+			$singleMyVLANs['infoDescr'] = $vlan_info['vlan_descr'];
+			//echo "<td class=tdleft>${vlan_info['vlan_descr']}</td></tr>";
+			$allMyVLANsOut[] = $singleMyVLANs;
 			$order = $nextorder[$order];
 		}
-		echo '</table>';
+		$mod->addOutput("allMyVLANs", $allMyVLANsOut); 
+		//echo '</table>';
 	}
-	finishPortlet();
-	echo '</td></tr></table>';
+	//finishPortlet();
+	//echo '</td></tr></table>';
 }
 
 function renderVLANDomainVLANList ($vdom_id)
 {
 	function printNewItemTR ()
 	{
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");
+			
 		global $vtoptions;
-		printOpFormIntro ('add');
+
+		$mod = $tplm->generateModule("RenderVLANDomainVLANList_printNew", false, array('vtoptions' => $vtoptions));
+		
+		$mod->setNamespace("NamespaceName");
+
+/**		printOpFormIntro ('add');
 		echo '<tr><td>';
 		printImageHREF ('create', 'add VLAN', TRUE, 110);
 		echo '</td><td>';
@@ -8310,32 +8905,54 @@ function renderVLANDomainVLANList ($vdom_id)
 		echo '<input type=text size=48 name=vlan_descr tabindex=103>';
 		echo '</td><td>';
 		printImageHREF ('create', 'add VLAN', TRUE, 110);
-		echo '</td></tr></form>';
+		echo '</td></tr></form>'; */
+		return $mod->run();
 	}
-	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-	echo '<tr><th>&nbsp;</th><th>ID</th><th>propagation</th><th>description</th><th>&nbsp;</th></tr>';
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderVLANDomainVLANList");
+	$mod->setNamespace("vlandomain");
+	
+	//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	//echo '<tr><th>&nbsp;</th><th>ID</th><th>propagation</th><th>description</th><th>&nbsp;</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR();
+		$mod->addOutput("AddNewTop", printNewItemTR());		 
+	//	printNewItemTR();
+	
 	global $vtoptions;
+	$allDomainVLANsOut = array();
 	foreach (getDomainVLANs ($vdom_id) as $vlan_id => $vlan_info)
 	{
-		printOpFormIntro ('upd', array ('vlan_id' => $vlan_id));
-		echo '<tr><td>';
+		$singleDomainVLAN = array('opIntro' => printOpFormIntro ('upd', array ('vlan_id' => $vlan_id)));
+		//printOpFormIntro ('upd', array ('vlan_id' => $vlan_id));
+		//echo '<tr><td>';
 		if ($vlan_info['portc'] or $vlan_id == VLAN_DFL_ID)
-			printImageHREF ('nodestroy', $vlan_info['portc'] . ' ports configured');
+			$singleDomainVLAN['portc'] = printImageHREF ('nodestroy', $vlan_info['portc'] . ' ports configured');
+		//	printImageHREF ('nodestroy', $vlan_info['portc'] . ' ports configured');
 		else
-			echo getOpLink (array ('op' => 'del', 'vlan_id' => $vlan_id), '', 'destroy', 'delete VLAN');
-		echo '</td><td class=tdright><tt>' . $vlan_id . '</tt></td><td>';
-		printSelect ($vtoptions, array ('name' => 'vlan_type'), $vlan_info['vlan_type']);
-		echo '</td><td>';
-		echo '<input name=vlan_descr type=text size=48 value="' . htmlspecialchars ($vlan_info['vlan_descr']) . '">';
-		echo '</td><td>';
-		printImageHREF ('save', 'update description', TRUE);
-		echo '</td></tr></form>';
+			$singleDomainVLAN['portc'] = getOpLink (array ('op' => 'del', 'vlan_id' => $vlan_id), '', 'destroy', 'delete VLAN');
+		//	echo getOpLink (array ('op' => 'del', 'vlan_id' => $vlan_id), '', 'destroy', 'delete VLAN');
+		$singleDomainVLAN['vlan_id'] = $vlan_id;
+		//echo '</td><td class=tdright><tt>' . $vlan_id . '</tt></td><td>';
+		//printSelect ($vtoptions, array ('name' => 'vlan_type'), $vlan_info['vlan_type']);
+		$singleDomainVLAN['printSel'] = printSelect ($vtoptions, array ('name' => 'vlan_type'), $vlan_info['vlan_type']);
+		//echo '</td><td>';
+		$singleDomainVLAN['htmlSpecialChr'] = htmlspecialchars ($vlan_info['vlan_descr']);
+		//echo '<input name=vlan_descr type=text size=48 value="' . htmlspecialchars ($vlan_info['vlan_descr']) . '">';
+		//echo '</td><td>';
+		//printImageHREF ('save', 'update description', TRUE);
+		//echo '</td></tr></form>';
+		$singleDomainVLAN['saveImg'] = printImageHREF ('save', 'update description', TRUE);
+		$allDomainVLANsOut[] = $singleDomainVLAN;
 	}
+	$mod->addOutput("allDomainVLANs", $allDomainVLANsOut);
+		 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR();
-	echo '</table>';
+		$mod->addOutput("AddNewBottom", printNewItemTR());		
+//		printNewItemTR();
+//	echo '</table>';
 }
 
 function get8021QPortTrClass ($port, $domain_vlans, $desired_mode = NULL)
@@ -8723,18 +9340,34 @@ function renderVLANInfo ($vlan_ck)
 {
 	global $vtoptions, $nextorder;
 	$vlan = getVLANInfo ($vlan_ck);
-	echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
-	echo '<tr><td colspan=2 align=center><h1>' . formatVLANAsRichText ($vlan) . '</h1></td></tr>';
-	echo "<tr><td class=pcleft width='50%'>";
-	startPortlet ('summary');
-	echo "<table border=0 cellspacing=0 cellpadding=3 width='100%'>";
-	echo "<tr><th width='50%' class=tdright>Domain:</th><td class=tdleft>";
-	echo niftyString ($vlan['domain_descr'], 0) . '</td></tr>';
-	echo "<tr><th width='50%' class=tdright>VLAN ID:</th><td class=tdleft>${vlan['vlan_id']}</td></tr>";
-	if (strlen ($vlan['vlan_descr']))
-		echo "<tr><th width='50%' class=tdright>Description:</th><td class=tdleft>" .
-			niftyString ($vlan['vlan_descr'], 0) . "</td></tr>";
-	echo "<tr><th width='50%' class=tdright>Propagation:</th><td class=tdleft>" . $vtoptions[$vlan['vlan_prop']] . "</td></tr>";
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderVLANInfo");
+	$mod->setNamespace("vlan");
+		
+	//echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
+	//echo '<tr><td colspan=2 align=center><h1>' . formatVLANAsRichText ($vlan) . '</h1></td></tr>';
+	$mod->addOutput("formatVlanTxt", formatVLANAsRichText ($vlan));
+	//echo "<tr><td class=pcleft width='50%'>";
+	//startPortlet ('summary');
+	//echo "<table border=0 cellspacing=0 cellpadding=3 width='100%'>";
+	//echo "<tr><th width='50%' class=tdright>Domain:</th><td class=tdleft>";
+	
+	//echo niftyString ($vlan['domain_descr'], 0) . '</td></tr>';
+	$mod->addOutput("niftyStr_domain_descr", niftyString ($vlan['domain_descr'], 0));
+	$mod->addOutput("vlan_id", $vlan['vlan_id'] );	 
+	//echo "<tr><th width='50%' class=tdright>VLAN ID:</th><td class=tdleft>${vlan['vlan_id']}</td></tr>";
+	if (strlen ($vlan['vlan_descr'])){
+		$mod->addOutput("isVlan_Descr", true);
+		$mod->addOutput("niftyStr_vlan_descr", niftyString ($vlan['vlan_descr'], 0));
+		//echo "<tr><th width='50%' class=tdright>Description:</th><td class=tdleft>" .
+		//	niftyString ($vlan['vlan_descr'], 0) . "</td></tr>";
+	}
+	$mod->addOutput("vtoptions", $vtoptions[$vlan['vlan_prop']]);
+	//echo "<tr><th width='50%' class=tdright>Propagation:</th><td class=tdleft>" . $vtoptions[$vlan['vlan_prop']] . "</td></tr>";
 	$others = getSearchResultByField
 	(
 		'VLANDescription',
@@ -8744,39 +9377,51 @@ function renderVLANInfo ($vlan_ck)
 		'domain_id',
 		1
 	);
+	$allOthersOut = array();
 	foreach ($others as $other)
 		if ($other['domain_id'] != $vlan['domain_id'])
-			echo '<tr><th class=tdright>Counterpart:</th><td class=tdleft>' .
-				formatVLANAsHyperlink (getVLANInfo ("${other['domain_id']}-${vlan['vlan_id']}")) .
-				'</td></tr>';
-	echo '</table>';
-	finishPortlet();
-	if (0 == count ($vlan['ipv4nets']) + count ($vlan['ipv6nets']))
-		startPortlet ('no networks');
+			$allOthersOut[] = array('vlanHyperlinks' => formatVLANAsHyperlink (getVLANInfo ("${other['domain_id']}-${vlan['vlan_id']}")) );
+		//	echo '<tr><th class=tdright>Counterpart:</th><td class=tdleft>' .
+		//		formatVLANAsHyperlink (getVLANInfo ("${other['domain_id']}-${vlan['vlan_id']}")) .
+		//		'</td></tr>';
+	$mod->addOutput("allOthers", $allOthersOut);	 
+	//echo '</table>';
+	//finishPortlet();
+
+	if (0 == count ($vlan['ipv4nets']) + count ($vlan['ipv6nets'])){
+		$mod->addOutput("noNetworks", true);
+	//	startPortlet ('no networks');
+	}
 	else
 	{
-		startPortlet ('networks (' . (count ($vlan['ipv4nets']) + count ($vlan['ipv6nets'])) . ')');
+		$mod->addOutput("overallCount", (count ($vlan['ipv4nets']) + count ($vlan['ipv6nets'])));
+		//startPortlet ('networks (' . (count ($vlan['ipv4nets']) + count ($vlan['ipv6nets'])) . ')');
 		$order = 'odd';
-		echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-		echo '<tr><th>';
-		printImageHREF ('net');
-		echo '</th><th>';
-		printImageHREF ('text');
-		echo '</th></tr>';
+		//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+		//echo '<tr><th>';
+		//printImageHREF ('net');
+		//echo '</th><th>';
+		//printImageHREF ('text');
+		//echo '</th></tr>';
+		$allNetsOut = array();
 		foreach (array ('ipv4net', 'ipv6net') as $nettype)
 		foreach ($vlan[$nettype . 's'] as $netid)
 		{
 			$net = spotEntity ($nettype, $netid);
 			#echo "<tr class=row_${order}><td>";
-			echo '<tr><td>';
-			renderCell ($net);
-			echo '</td><td>' . (mb_strlen ($net['comment']) ? niftyString ($net['comment']) : '&nbsp;');
-			echo '</td></tr>';
+			$allNetsOut[] = array('renderedCell' => renderCell ($net),
+							'niftyStr' => (mb_strlen ($net['comment']) ? niftyString ($net['comment']) : '&nbsp;'));
+			//echo '<tr><td>';
+			//renderCell ($net);
+			//echo '</td><td>' . (mb_strlen ($net['comment']) ? niftyString ($net['comment']) : '&nbsp;');
+			//echo '</td></tr>';
+			
 			$order = $nextorder[$order];
 		}
-		echo '</table>';
+		$mod->addOutput("allNets", $allNetsOut);
+		//echo '</table>';
 	}
-	finishPortlet();
+	//finishPortlet();
 
 	$confports = getVLANConfiguredPorts ($vlan_ck);
 
@@ -8792,73 +9437,117 @@ function renderVLANInfo ($vlan_ck)
 	}
 	if (! empty ($foreign_devices))
 	{
-		startPortlet ("Non-switch devices");
-		echo "<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>";
-		echo '<tr><th>device</th><th>ports</th></tr>';
+		$mod->addOutput("nonSwitchDev", true);
+			 
+		//startPortlet ("Non-switch devices");
+		//echo "<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>";
+		//echo '<tr><th>device</th><th>ports</th></tr>';
 		$order = 'odd';
+		$allForgDevOut = array();
 		foreach ($foreign_devices as $cell_id => $ports)
 		{
-			echo "<tr class=row_${order} valign=top><td>";
+			
+			//echo "<tr class=row_${order} valign=top><td>";
 			$cell = spotEntity ('object', $cell_id);
-			renderCell ($cell);
-			echo "</td><td><ul>";
-			foreach ($ports as $portinfo)
-				echo "<li>" . formatPortLink ($portinfo['remote_object_id'], NULL, $portinfo['remote_id'], $portinfo['remote_name']) . ' &mdash; ' . formatPort ($portinfo) . "</li>";
-			echo "</ul></td></tr>";
+			//renderCell ($cell);
+			$singleDev = array('order' => $order, 'rendCell' => renderCell ($cell), 'ports' => '');
+			//echo "</td><td><ul>";
+			foreach ($ports as $portinfo){
+			//	echo "<li>" . formatPortLink ($portinfo['remote_object_id'], NULL, $portinfo['remote_id'], $portinfo['remote_name']) . ' &mdash; ' . formatPort ($portinfo) . "</li>";
+				$singPort = $tplm->generateModule("StdListElem", true, array('cont' =>
+					formatPortLink ($portinfo['remote_object_id'], NULL, $portinfo['remote_id'], $portinfo['remote_name']) . ' &mdash; ' . formatPort ($portinfo)))	;
+				$singleDev['ports'] .= $singPort->run();
+			}	
+			$allForgDev[] = $singleDev;
+			//echo "</ul></td></tr>";
 			$order = $nextorder[$order];
+			
 		}
-		echo '</table>';
-		finishPortlet();
+		$mod->addOutput("allForgDev", $allForgDevOut);
+		//echo '</table>';
+		//finishPortlet();
 	}
 
-	echo '</td><td class=pcright>';
-	if (!count ($confports))
-		startPortlet ('no ports');
+	//echo '</td><td class=pcright>';
+	if (!count ($confports)){
+		$mod->addOutput("noPorts", true);
+	//	startPortlet ('no ports');
+	}
 	else
 	{
-		startPortlet ('Switch ports (' . count ($confports) . ')');
+		$mod->addOutput("countPorts", count ($confports));
+
+		//startPortlet ('Switch ports (' . count ($confports) . ')');
 		global $nextorder;
 		$order = 'odd';
-		echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
-		echo '<tr><th>switch</th><th>ports</th></tr>';
+		//echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+		//echo '<tr><th>switch</th><th>ports</th></tr>';
+		$allConfportsOut = array();
 		foreach ($confports as $switch_id => $portlist)
 		{
 			usort_portlist ($portlist);
-			echo "<tr class=row_${order} valign=top><td>";
+			$singlePort = array('order' => $order);
+			//echo "<tr class=row_${order} valign=top><td>";
 			$object = spotEntity ('object', $switch_id);
-			renderCell ($object);
-			echo '</td><td class=tdleft><ul>';
+			//renderCell ($object);
+			$singlePort['rendCell'] = renderCell ($object);
+			//echo '</td><td class=tdleft><ul>';
+			$singlePort['portlist'] = '';
 			foreach ($portlist as $port_name)
 			{
-				echo '<li>';
+				$singlePortlistElem = $tplm->generateModule("StdListElem", true);
+				//echo '<li>';
 				if ($portinfo = getPortinfoByName ($object, $port_name))
-					echo formatPortLink ($object['id'], NULL, $portinfo['id'], $portinfo['name']);
+					$singlePortlistElem->setOutput('cont', formatPortLink ($object['id'], NULL, $portinfo['id'], $portinfo['name']));
+				//	echo formatPortLink ($object['id'], NULL, $portinfo['id'], $portinfo['name']);
 				else
-					echo $port_name;
-				echo '</li>';
+					$singlePortlistElem->setOutput('cont', $port_name);
+				//	echo $port_name;
+				$singlePort['portlist'] .= $singlePortlistElem->run();
+				//echo '</li>';
 			}
-			echo '</ul></td></tr>';
+			//echo '</ul></td></tr>';
+			$allConfportsOut[] = $singlePort;
 			$order = $nextorder[$order];
 		}
-		echo '</table>';
+		$mod->addOutput("allConfports", $allConfportsOut);
+			 
+		//echo '</table>';
 	}
-	finishPortlet();
-	echo '</td></tr></table>';
+	//finishPortlet();
+	//echo '</td></tr></table>';
 }
 
 function renderVLANIPLinks ($some_id)
 {
 	function printNewItemTR ($sname, $options, $extra = array())
 	{
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");
+		
+		$mod = $tplm->generateModule("RenderVLANIPLinks_printNewItem", false, array('extra' => $extra));
+		$mod->setNamespace("vlan");
+		
 		if (!count ($options))
 			return;
-		printOpFormIntro ('bind', $extra);
-		echo '<tr><td>' . getOptionTree ($sname, $options, array ('tabindex' => 101));
-		echo '</td><td>' . getImageHREF ('ATTACH', 'bind', TRUE, 102) . '</td></tr></form>';
+		$mod->addOutput("optionTree", getOptionTree ($sname, $options, array ('tabindex' => 101)));
+			 
+	//	printOpFormIntro ('bind', $extra);
+	//	echo '<tr><td>' . getOptionTree ($sname, $options, array ('tabindex' => 101));
+	//	echo '</td><td>' . getImageHREF ('ATTACH', 'bind', TRUE, 102) . '</td></tr></form>';
+		return $mod->run();
 	}
 	global $pageno, $tabno;
-	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-	echo '<tr>';
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderVLANIPLinks");
+	$mod->setNamespace("vlan");
+		
+	//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	//echo '<tr>';
 
 	// fill $minuslines, $plusoptions, $select_name
 	$minuslines = array();
@@ -8867,8 +9556,10 @@ function renderVLANIPLinks ($some_id)
 	switch ($pageno)
 	{
 	case 'vlan':
+		$mod->addOutput("isVLAN", true);
+			 
 		$ip_ver = $tabno == 'ipv6' ? 'ipv6' : 'ipv4';
-		echo '<th>' . getImageHREF ('net') . '</th>';
+		//echo '<th>' . getImageHREF ('net') . '</th>';
 		$vlan = getVLANInfo ($some_id);
 		$domainclass = array ($vlan['domain_id'] => 'trbusy');
 		foreach ($vlan[$ip_ver . "nets"] as $net_id)
@@ -8893,7 +9584,9 @@ function renderVLANIPLinks ($some_id)
 		break;
 	case 'ipv4net':
 	case 'ipv6net':
-		echo '<th>VLAN</th>';
+		$mod->addOutput("isIpv6Net", true);
+
+		//echo '<th>VLAN</th>';
 		$netinfo = spotEntity ($pageno, $some_id);
 		$reuse_domain = considerConfiguredConstraint ($netinfo, '8021Q_MULTILINK_LISTSRC');
 		# For each of the domains linked to the network produce class name based on
@@ -8922,30 +9615,41 @@ function renderVLANIPLinks ($some_id)
 		$extra = array ('id' => $netinfo['id']);
 		break;
 	}
-	echo '<th>&nbsp;</th></tr>';
+	//echo '<th>&nbsp;</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR ($select_name, $plusoptions, $extra);
+		$mod->addOutput("AddNewTop", printNewItemTR ($select_name, $plusoptions, $extra));
+	//	printNewItemTR ($select_name, $plusoptions, $extra);
+	$allMinuslinesOut = array();
 	foreach ($minuslines as $item)
 	{
-		echo '<tr class=' . $domainclass[$item['domain_id']] . '><td>';
+		$singleMinusLine = array('domainclass' => $domainclass[$item['domain_id']]);
+		//echo '<tr class=' . $domainclass[$item['domain_id']] . '><td>';
 		switch ($pageno)
 		{
 		case 'vlan':
-			renderCell (spotEntity ($ip_ver . 'net', $item['net_id']));
+			$singleMinusLine['renderedCell'] = renderCell (spotEntity ($ip_ver . 'net', $item['net_id']));
+			//renderCell (spotEntity ($ip_ver . 'net', $item['net_id']));
 			break;
 		case 'ipv4net':
 		case 'ipv6net':
 			$vlaninfo = getVLANInfo ($item['domain_id'] . '-' . $item['vlan_id']);
-			echo formatVLANAsRichText ($vlaninfo);
+			$singleMinusLine['vlanRichTxt'] = formatVLANAsRichText ($vlaninfo);
+			//echo formatVLANAsRichText ($vlaninfo);
 			break;
 		}
-		echo '</td><td>';
-		echo getOpLink (array ('id' => $some_id, 'op' => 'unbind', 'id' => $item['net_id'], 'vlan_ck' => $item['domain_id'] . '-' . $item['vlan_id']), '', 'Cut', 'unbind');
-		echo '</td></tr>';
+		//echo '</td><td>';
+		//echo getOpLink (array ('id' => $some_id, 'op' => 'unbind', 'id' => $item['net_id'], 'vlan_ck' => $item['domain_id'] . '-' . $item['vlan_id']), '', 'Cut', 'unbind');
+		$singleMinusLine['opLink'] = getOpLink (array ('id' => $some_id, 'op' => 'unbind', 'id' => $item['net_id'], 
+			'vlan_ck' => $item['domain_id'] . '-' . $item['vlan_id']), '', 'Cut', 'unbind');
+		//echo '</td></tr>';
+		$allMinuslinesOut[] = $singleMinusLine;
 	}
+	$mod->addOutput("allMinuslines", $allMinuslinesOut);
+		 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR ($select_name, $plusoptions, $extra);
-	echo '</table>';
+		$mod->addOutput("AddNewBottom", printNewItemTR ($select_name, $plusoptions, $extra));
+	//	printNewItemTR ($select_name, $plusoptions, $extra);
+	//echo '</table>';
 }
 
 function renderObject8021QSync ($object_id)
@@ -9890,7 +10594,7 @@ END
 //
 // Display object level logs
 //
-function renderObjectLogEditor ()
+function renderObjectLogEditor ($parent = NULL, $placeholder = 'Payload')
 {
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
@@ -9901,6 +10605,7 @@ function renderObjectLogEditor ()
 
 	global $nextorder;
 
+
 	$mod->addOutput('Image_Href', getImageHREF ('CREATE', 'add record', TRUE, 101));
 
 	// echo "<center><h2>Log records for this object (<a href=?page=objectlog>complete list</a>)</h2></center>";
@@ -9910,10 +10615,31 @@ function renderObjectLogEditor ()
 	// echo '<td><textarea name=logentry rows=10 cols=80 tabindex=100></textarea></td>';
 	// echo '<td class=tdcenter>' . getImageHREF ('CREATE', 'add record', TRUE, 101) . '</td>' ;
 	// echo '</tr></form>';
-
+/*
+	
+	$tplm = TemplateManager::getInstance();
+	
+	if ($parent == NULL)
+	{
+		$tplm->setTemplate('vanilla');
+		$tplm->createMainModule();
+	}
+	
+	$mod = $tplm->generateSubmodule($placeholder, 'ObjectLogEditor', $parent);
+	$mod->setNamespace('objectlog',true);
+	
+	/**echo "<center><h2>Log records for this object (<a href=?page=objectlog>complete list</a>)</h2></center>";
+	//printOpFormIntro ('add');
+	echo "<table with=80% align=center border=0 cellpadding=5 cellspacing=0 align=center class=cooltable><tr valign=top class=row_odd>";
+	echo '<td class=tdcenter>' . getImageHREF ('CREATE', 'add record', TRUE, 101) . '</td>';
+	echo '<td><textarea name=logentry rows=10 cols=80 tabindex=100></textarea></td>';
+	echo '<td class=tdcenter>' . getImageHREF ('CREATE', 'add record', TRUE, 101) . '</td>' ;
+	echo '</tr></form>';
+*/
 	$order = 'even';
 	foreach (getLogRecordsForObject (getBypassValue()) as $row)
 	{
+
 		$submod = $tplm->generateSubmodule('Rows', 'RowGenerator', $mod);
 		$submod->setOutput('Order', $order);
 		$submod->setOutput('Date', $row['date']);
@@ -9929,6 +10655,22 @@ function renderObjectLogEditor ()
 		$order = $nextorder[$order];
 	}
 	// echo '</table>';
+/*		$smod = $tplm->generateSubmodule('Elements', 'ObjectLogEditorElement', $mod);
+		$smod->addOutput('Date', $row['date']);
+		$smod->addOutput('User', $row['user']);
+		$smod->addOutput('Id', $row['id']);
+		$smod->addOutput('Order', $order);
+		$smod->addOutput('Content', string_insert_hrefs(htmlspecialchars ($row['content'], ENT_NOQUOTES)));
+		/**echo "<tr class=row_${order} valign=top>";
+		echo '<td class=tdleft>' . $row['date'] . '<br>' . $row['user'] . '</td>';
+		echo '<td class="logentry">' . string_insert_hrefs (htmlspecialchars ($row['content'], ENT_NOQUOTES)) . '</td>';
+		echo "<td class=tdleft>";
+		echo getOpLink (array('op'=>'del', 'log_id'=>$row['id']), '', 'DESTROY', 'Delete log entry');
+		echo "</td></tr>\n";
+		$order = $nextorder[$order];
+	}
+	/**echo '</table>';*/
+
 
 
 }
@@ -10234,25 +10976,39 @@ function formatVLANPackDiff ($old, $current)
 
 function renderIPAddressLog ($ip_bin)
 {
-	startPortlet ('Log messages');
+	/**startPortlet ('Log messages');
 	echo '<table class="widetable" cellspacing="0" cellpadding="5" align="center" width="50%"><tr>';
 	echo '<th>Date &uarr;</th>';
 	echo '<th>User</th>';
 	echo '<th>Log message</th>';
-	echo '</tr>';
+	echo '</tr>';*/
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'IPAddressLog');
+	$mod->setNamespace('ipaddress',true);
+	$mod->setLock();
+	
 	$odd = FALSE;
+	$out = array();
 	foreach (array_reverse (fetchIPLogEntry ($ip_bin)) as $line)
 	{
 		$tr_class = $odd ? 'row_odd' : 'row_even';
+		$out[] = array('Class'=>$tr_class,'Date'=>$line['date'],'User'=>$line['user'],'Message'=>$line['message']);
+		/*
 		echo "<tr class='$tr_class'>";
 		echo '<td>' . $line['date'] . '</td>';
 		echo '<td>' . $line['user'] . '</td>';
 		echo '<td>' . $line['message'] . '</td>';
-		echo '</tr>';
+		echo '</tr>';*/
 		$odd = !$odd;
 	}
-	echo '</table>';
-	finishPortlet();
+	$mod->addOutput('Messages', $out);
+	
+	//echo '</table>';
+	//finishPortlet();
 }
 
 function renderObjectCactiGraphs ($object_id)
@@ -10353,22 +11109,38 @@ function renderEditVlan ($vlan_ck)
 {
 	global $vtoptions;
 	$vlan = getVLANInfo ($vlan_ck);
-	startPortlet ('Modify');
-	printOpFormIntro ('upd');
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderEditVlan");
+	$mod->setNamespace("vlan");
+		
+
+	//startPortlet ('Modify');
+	//printOpFormIntro ('upd');
 	// static attributes
-	echo '<table border=0 cellspacing=0 cellpadding=2 align=center>';
-	echo '<tr><th class=tdright>Name:</th><td class=tdleft>' .
-		"<input type=text size=40 name=vlan_descr value='${vlan['vlan_descr']}'>" .
-		'</td></tr>';
-	echo '<tr><th class=tdright>Type:</th><td class=tdleft>' .
-		getSelect ($vtoptions, array ('name' => 'vlan_type', 'tabindex' => 102), $vlan['vlan_prop']) .
-		'</td></tr>';
-	echo '</table>';
-	echo '<p>';
-	echo '<input type="hidden" name="vdom_id" value="' . htmlspecialchars ($vlan['domain_id'], ENT_QUOTES) . '">';
-	echo '<input type="hidden" name="vlan_id" value="' . htmlspecialchars ($vlan['vlan_id'], ENT_QUOTES) . '">';
-	printImageHREF ('SAVE', 'Update VLAN', TRUE);
-	echo '</form><p>';
+	//echo '<table border=0 cellspacing=0 cellpadding=2 align=center>';
+	//echo '<tr><th class=tdright>Name:</th><td class=tdleft>' .
+	//	"<input type=text size=40 name=vlan_descr value='${vlan['vlan_descr']}'>" .
+	//	'</td></tr>';
+	$mod->addOutput("vlan_descr", $vlan['vlan_descr']);
+		 
+	//echo '<tr><th class=tdright>Type:</th><td class=tdleft>' .
+	//	getSelect ($vtoptions, array ('name' => 'vlan_type', 'tabindex' => 102), $vlan['vlan_prop']) .
+	//	'</td></tr>';
+	$mod->addOutput("vtoptions", $vtoptions);
+	$mod->addOutput("vlan_prop", $vlan['vlan_prop']); 
+		 
+	//echo '</table>';
+	//echo '<p>';
+	//echo '<input type="hidden" name="vdom_id" value="' . htmlspecialchars ($vlan['domain_id'], ENT_QUOTES) . '">';
+	$mod->addOutput("htmlspcDomainID", htmlspecialchars ($vlan['domain_id'], ENT_QUOTES));	 
+	//echo '<input type="hidden" name="vlan_id" value="' . htmlspecialchars ($vlan['vlan_id'], ENT_QUOTES) . '">';
+	$mod->addOutput("htmlspcVlanID", htmlspecialchars ($vlan['vlan_id'], ENT_QUOTES));
+	//printImageHREF ('SAVE', 'Update VLAN', TRUE);
+	//echo '</form><p>';
 	// get configured ports count
 	$portc = 0;
 	foreach (getVLANConfiguredPorts ($vlan_ck) as $subarray)
@@ -10378,9 +11150,12 @@ function renderEditVlan ($vlan_ck)
 	$delete_line = '';
 	if ($portc)
 	{
-		$clear_line .= '<p>';
-		$clear_line .= getOpLink (array ('op' => 'clear'), 'remove', 'clear', "remove this VLAN from $portc ports") .
-			' this VLAN from ' . mkA ("${portc} ports", 'vlan', $vlan_ck);
+		$mod->addOutput("port", $portc);
+		$mod->addOutput("mkaPortc", mkA ("${portc} ports", 'vlan', $vlan_ck));
+		$mod->addOutput("isPortc", true);			 
+	//	$clear_line .= '<p>';
+	//	$clear_line .= getOpLink (array ('op' => 'clear'), 'remove', 'clear', "remove this VLAN from $portc ports") .
+	//		' this VLAN from ' . mkA ("${portc} ports", 'vlan', $vlan_ck);
 	}
 
 	$reason = '';
@@ -10389,11 +11164,13 @@ function renderEditVlan ($vlan_ck)
 	elseif ($portc)
 		$reason = "Can not delete: $portc ports configured";
 	if (! empty ($reason))
-		echo getOpLink (NULL, 'delete VLAN', 'nodestroy', $reason);
+		$mod->addOutput("reasonLink", getOpLink (NULL, 'delete VLAN', 'nodestroy', $reason)); 
+	//	echo getOpLink (NULL, 'delete VLAN', 'nodestroy', $reason);
 	else
-		echo getOpLink (array ('op' => 'del', 'vlan_ck' => $vlan_ck), 'delete VLAN', 'destroy');
-	echo $clear_line;
-	finishPortlet();
+		$mod->addOutput("reasonLink", getOpLink (array ('op' => 'del', 'vlan_ck' => $vlan_ck), 'delete VLAN', 'destroy'));
+	//	echo getOpLink (array ('op' => 'del', 'vlan_ck' => $vlan_ck), 'delete VLAN', 'destroy');
+	//echo $clear_line;
+	//finishPortlet();
 }
 
 function renderExpirations ()
@@ -10604,52 +11381,93 @@ function renderCactiServersEditor()
 
 function renderMuninConfig()
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderMuninConfig");
+	$mod->setNamespace("munin");
+		
 	$servers = getMuninServers();
-	startPortlet ('Munin servers (' . count ($servers) . ')');
-	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-	echo '<tr><th>base URL</th><th>graph(s)</th></tr>';
+	//startPortlet ('Munin servers (' . count ($servers) . ')');
+	$mod->addOutput("serverCount", count ($servers));
+		 
+	//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	//echo '<tr><th>base URL</th><th>graph(s)</th></tr>';
+	$allServersOut = array();
 	foreach ($servers as $server)
 	{
-		echo '<tr align=left valign=top><td>' . niftyString ($server['base_url']) . '</td>';
-		echo "<td class=tdright>${server['num_graphs']}</td></tr>";
+		$allServersOut[] = array('niftyStr' => niftyString ($server['base_url']), 'num_graphs' => $server['num_graphs'] );
+		//echo '<tr align=left valign=top><td>' . niftyString ($server['base_url']) . '</td>';
+		//echo "<td class=tdright>${server['num_graphs']}</td></tr>";
 	}
-	echo '</table>';
-	finishPortlet();
+	$mod->addOutput("allServers", $allServersOut);
+		 
+	//echo '</table>';
+	//finishPortlet();
 }
 
 function renderMuninServersEditor()
 {
 	function printNewItemTR()
 	{
-		printOpFormIntro ('add');
-		echo '<tr>';
-		echo '<td>' . getImageHREF ('create', 'add a new server', TRUE, 112) . '</td>';
-		echo '<td><input type=text size=48 name=base_url tabindex=101></td>';
-		echo '<td>&nbsp;</td>';
-		echo '<td>' . getImageHREF ('create', 'add a new server', TRUE, 111) . '</td>';
-		echo '</tr></form>';
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");
+		
+		$mod = $tplm->generateModule("RenderMuninServersEditor_NewItem");
+		$mod->setNamespace("munin");
+		
+		return $mod->run();
+		//printOpFormIntro ('add');
+		//echo '<tr>';
+		//echo '<td>' . getImageHREF ('create', 'add a new server', TRUE, 112) . '</td>';
+		//echo '<td><input type=text size=48 name=base_url tabindex=101></td>';
+		//echo '<td>&nbsp;</td>';
+		//echo '<td>' . getImageHREF ('create', 'add a new server', TRUE, 111) . '</td>';
+		//echo '</tr></form>';
 	}
-	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-	echo '<tr><th>&nbsp;</th><th>base URL</th><th>graph(s)</th><th>&nbsp;</th></tr>';
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderMuninServersEditor");
+	$mod->setNamespace("munin");
+		
+	//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	//echo '<tr><th>&nbsp;</th><th>base URL</th><th>graph(s)</th><th>&nbsp;</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR();
+	//	printNewItemTR();
+		$mod->addOutput("AddNewTop", printNewItemTR());
+	
+	$allMuninServersOut = array();		 
 	foreach (getMuninServers() as $server)
 	{
-		printOpFormIntro ('upd', array ('id' => $server['id']));
-		echo '<tr><td>';
+		$singleServer = array('formIntro' => printOpFormIntro ('upd', array ('id' => $server['id'])),
+								'specialCharSrv' => htmlspecialchars ($server['base_url'], ENT_QUOTES, 'UTF-8'),
+								'imageSave' => getImageHREF ('save', 'update this server', TRUE),
+								'num_graphs' => $server['num_graphs']);
+
+	//	printOpFormIntro ('upd', array ('id' => $server['id']));
+	//	echo '<tr><td>';
 		if ($server['num_graphs'])
-			printImageHREF ('nodestroy', 'cannot delete, graphs exist');
+			$singleServer['destroyImg'] = printImageHREF ('nodestroy', 'cannot delete, graphs exist');
+		//	printImageHREF ('nodestroy', 'cannot delete, graphs exist');
 		else
-			echo getOpLink (array ('op' => 'del', 'id' => $server['id']), '', 'destroy', 'delete this server');
-		echo '</td>';
-		echo '<td><input type=text size=48 name=base_url value="' . htmlspecialchars ($server['base_url'], ENT_QUOTES, 'UTF-8') . '"></td>';
-		echo "<td class=tdright>${server['num_graphs']}</td>";
-		echo '<td>' . getImageHREF ('save', 'update this server', TRUE) . '</td>';
-		echo '</tr></form>';
+			$singleServer['destroyImg'] = getOpLink (array ('op' => 'del', 'id' => $server['id']), '', 'destroy', 'delete this server');
+		//	echo getOpLink (array ('op' => 'del', 'id' => $server['id']), '', 'destroy', 'delete this server');
+		//echo '</td>';
+		//echo '<td><input type=text size=48 name=base_url value="' . htmlspecialchars ($server['base_url'], ENT_QUOTES, 'UTF-8') . '"></td>';
+		//echo "<td class=tdright>${server['num_graphs']}</td>";
+		//echo '<td>' . getImageHREF ('save', 'update this server', TRUE) . '</td>';
+		//echo '</tr></form>';
+		$allMinuslinesOut[] = $singleServer;
 	}
+	$mod->addOutput("allMuninServers", $allMuninServersOut);
+		 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR();
-	echo '</table>';
+	//	printNewItemTR();
+		$mod->addOutput("AddNewBottom", printNewItemTR());
+	//echo '</table>';
 }
 
 // The validity of some data cannot be guaranteed using foreign keys.

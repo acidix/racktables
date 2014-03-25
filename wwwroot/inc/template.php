@@ -876,6 +876,23 @@ class TemplateModule
 			return $tplm->addRequirement($placeholder,$name,$namespace,$inmemory,$cont);
 	}
 	
+	public function addJS($code, $inline = false) {
+		if ($inline) {
+			$this->addRequirement('Header', 'HeaderJsInline', array('code'=>$code,'',true));
+		} else {
+			$this->addRequirement('Header', 'HeaderJsInclude', array('path'=>$code,'',true));
+		}
+	}
+	
+	public function addCSS($code, $inline = false) {
+		if ($inline) {
+			$this->addRequirement('Header', 'HeaderCssInline', array('code'=>$code,'',true));
+		} else {
+			$this->addRequirement('Header', 'HeaderCssInclude', array('path'=>$code,'',true));
+		}
+		
+	}
+	
 	/**
 	 * Echo helper output with the given params.
 	 * @param string $name
@@ -955,6 +972,7 @@ class TemplateModule
 					}
 					$ret = str_replace("{{".$name."}}", $value, $ret);
 				}
+				$ret = preg_replace("(\{\{[^\}]*\}\})", '', $ret); //Remove all unreplaced Placeholders
 				echo $ret;
 			}
 			TemplateManager::log("Loop-i = " . count($this->output[$this->loopplaceholder]));
@@ -1141,6 +1159,8 @@ class TemplateInMemory extends TemplateModule
 			}
 			$code = str_replace("{{".$name."}}", $value, $code);
 		}
+		
+		$code = preg_replace('(\{\{[^\}]*\}\})', '', $code);
 		
 		return $code ;
 	}

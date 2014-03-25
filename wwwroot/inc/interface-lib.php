@@ -283,7 +283,8 @@ $page_by_realm['user'] = 'userlist';
 
 function printSelect ($optionList, $select_attrs = array(), $selected_id = NULL)
 {
-	echo getSelect ($optionList, $select_attrs, $selected_id);
+	//echo getSelect ($optionList, $select_attrs, $selected_id);
+	return getSelect ($optionList, $select_attrs, $selected_id);
 }
 
 // Input array keys are OPTION VALUEs and input array values are OPTION text.
@@ -912,31 +913,63 @@ function getTagClassName ($tagid)
 	return $class;
 }
 
-function serializeTags ($chain, $baseurl = '')
+function serializeTags ($chain, $baseurl = '', $parent = null, $placeholder = "SerializedTag")
 {
 	$tmp = array();
 	usort ($chain, 'cmpTags');
-	foreach ($chain as $taginfo)
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	foreach ($chain as $nr => $taginfo)
 	{
-		$title = '';
-		if (isset ($taginfo['user']) and isset ($taginfo['time']))
-			$title = 'title="' . htmlspecialchars ($taginfo['user'] . ', ' . formatAge ($taginfo['time']), ENT_QUOTES) . '"';
-
-		$class = '';
-		if (isset ($taginfo['id']))
-			$class = 'class="' . getTagClassName ($taginfo['id']) . '"';
-
-		$href = '';
-		if ($baseurl == '')
-			$tag = 'span';
+		if ($baseurl == ''){
+			if($parent == null)
+				$mod = $tplm->generateModule('SerializedTag',true);
+			else
+				$mod = $tplm->generateSubmodule($placeholder, 'SerializedTag', true, $parent);
+		}
 		else
 		{
-			$tag = 'a';
-			$href = "href='${baseurl}cft[]=${taginfo['id']}'";
+			if($parent == null)
+				$mod = $tplm->generateModule('SerializedTagLink',true);
+			else
+				$mod = $tplm->generateSubmodule($placeholder, 'SerializedTagLink', true, $parent);
+			$mod->addOutput('BaseUrl', $baseurl);
+			$mod->addOutput('ID', $taginfo['id']);
+			//$tag = 'a';
+			//$href = "href='${baseurl}cft[]=${taginfo['id']}'";
 		}
-		$tmp[] = "<$tag $href $title $class>" . $taginfo['tag'] . "</$tag>";
+		
+		//$title = '';
+		if (isset ($taginfo['user']) and isset ($taginfo['time']))
+			$mod->addOutput('Title', htmlspecialchars ($taginfo['user'] . ', ' . formatAge ($taginfo['time']), ENT_QUOTES));
+		else
+			$mod->addOutput('Title', '');
+			//$title = 'title="' . htmlspecialchars ($taginfo['user'] . ', ' . formatAge ($taginfo['time']), ENT_QUOTES) . '"';
+
+		//$class = '';
+		if (isset ($taginfo['id']))
+			$mod->addOutput('Class', getTagClassName($taginfo['id']));
+			//$class = 'class="' . getTagClassName ($taginfo['id']) . '"';
+
+		//$href = '';
+		//if ($baseurl == '')
+		//	$tag = 'span';
+		//else
+		//{
+		//	$tag = 'a';
+		//	$href = "href='${baseurl}cft[]=${taginfo['id']}'";
+		//}
+		//$tmp[] = "<$tag $href $title $class>" . $taginfo['tag'] . "</$tag>";
+		
+		if (array_key_exists($nr+1, $chain))
+			$mod->addOutput('Separator', '; ');
+		else
+			$mod->addOutput('Separator', '');
 	}
-	return implode (', ', $tmp);
+	if($parent == null)
+		return $mod->run();
+	//return implode (', ', $tmp);
 }
 
 function startPortlet ($title = '')
