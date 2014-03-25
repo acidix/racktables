@@ -913,20 +913,27 @@ function getTagClassName ($tagid)
 	return $class;
 }
 
-function serializeTags ($chain, $baseurl = '', $parent, $mod)
+function serializeTags ($chain, $baseurl = '', $parent = null, $placeholder = "SerializedTag")
 {
 	$tmp = array();
 	usort ($chain, 'cmpTags');
 	
 	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
 	foreach ($chain as $nr => $taginfo)
 	{
-		if ($baseurl == '')
-			$mod = $tplm->generateSubmodule($placeholder, 'SeralizedTag');
+		if ($baseurl == ''){
+			if($parent == null)
+				$mod = $tplm->generateModule('SerializedTag',true);
+			else
+				$mod = $tplm->generateSubmodule($placeholder, 'SerializedTag', true, $parent);
+		}
 		else
 		{
-
-			$mod = $tplm->generateSubmodule($placeholder, 'SeralizedTagLink');
+			if($parent == null)
+				$mod = $tplm->generateModule('SerializedTagLink',true);
+			else
+				$mod = $tplm->generateSubmodule($placeholder, 'SerializedTagLink', true, $parent);
 			$mod->addOutput('BaseUrl', $baseurl);
 			$mod->addOutput('ID', $taginfo['id']);
 			//$tag = 'a';
@@ -960,6 +967,8 @@ function serializeTags ($chain, $baseurl = '', $parent, $mod)
 		else
 			$mod->addOutput('Separator', '');
 	}
+	if($parent == null)
+		return $mod->run();
 	//return implode (', ', $tmp);
 }
 

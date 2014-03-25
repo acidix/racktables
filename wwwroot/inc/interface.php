@@ -6319,10 +6319,12 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 
 	$tplm = TemplateManager::getInstance();
 
-	if($parent == null)
+	if($parent == null){
 		$tplm->createMainModule();
-
-	$mod = $tplm->generateSubmodule($parentplaceholder, "CellFilterPortlet", $parent);
+		$mod = $tplm->generateModule("CellFilterPortlet");
+	}
+	else
+		$mod = $tplm->generateSubmodule($parentplaceholder, "CellFilterPortlet", $parent);
 	//startPortlet ($title);
 	$mod->setNamespace("");
 	$mod->setLock(true);
@@ -6346,8 +6348,9 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		if (!$rulerfirst)
 		{
 			$tplm->generateSubmodule("TableContent", "CellFilterSpacer", $mod, true);
-			$rulerfirst = false;
 		}
+		else
+			$rulerfirst = false;
 		//$hr = $ruler;
 		$andor = strlen ($preselect['andor']) ? $preselect['andor'] : getConfigVar ('FILTER_DEFAULT_ANDOR');
 		//echo '<tr>';
@@ -6380,8 +6383,9 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		if (!$rulerfirst)
 		{
 			$tplm->generateSubmodule("TableContent", "CellFilterSpacer", $mod, true);
-			$rulerfirst = false;
 		}
+		else
+			$rulerfirst = false;
 		// Show a tree of tags, pre-select according to currently requested list filter.
 		$objectivetags = getShrinkedTagTree($cell_list, $realm, $preselect);
 		if (!count ($objectivetags))
@@ -6402,12 +6406,14 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		if (count ($preselect['pnamelist']))
 			$enable_reset = TRUE;
 		//echo $hr;
+
 		//$hr = $ruler;
 		if (!$rulerfirst)
 		{
 			$tplm->generateSubmodule("TableContent", "CellFilterSpacer", $mod, true);
-			$rulerfirst = false;
 		}
+		else
+			$rulerfirst = false;
 		global $pTable;
 		$myPredicates = array();
 		$psieve = getConfigVar ('FILTER_PREDICATE_SIEVE');
@@ -7078,6 +7084,8 @@ function renderFileManager ()
 		$tplm = TemplateManager::getInstance();
 		
 		$mod = $tplm->generateSubmodule($placeholder, 'FileManagerNew', $parent);
+		$mod->setNamespace('files');
+		
 		renderNewEntityTags ('file',$mod,'Tags');
 		
 		/** startPortlet ('Upload new');
@@ -7095,7 +7103,9 @@ function renderFileManager ()
 	}
 	
 	$tplm = TemplateManager::getInstance();
-	
+	$tplm->createMainModule();
+	$tplm->setTemplate("vanilla");
+
 	$mod = $tplm->generateSubmodule('Payload', 'FileManager');
 	$mod->setNamespace('files');
 	
