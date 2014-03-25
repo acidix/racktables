@@ -5901,10 +5901,20 @@ function renderLivePTR ($id)
 	$maxperpage = getConfigVar ('IPV4_ADDRS_PER_PAGE');
 	$range = spotEntity ('ipv4net', $id);
 	loadIPAddrList ($range);
-	echo "<center><h1>${range['ip']}/${range['mask']}</h1><h2>${range['name']}</h2></center>\n";
+	
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'PTR');
+	$mod->setNamespace('ipnetwork',true);
+		
+	$mod->addOutput('IP', $range['ip']);
+	$mod->addOutput('Mask', $range['mask']);
+	$mod->addOutput('Name', $range['name']);
+	
+	//echo "<center><h1>${range['ip']}/${range['mask']}</h1><h2>${range['name']}</h2></center>\n";
 
-	echo "<table class=objview border=0 width='100%'><tr><td class=pcleft>";
-	startPortlet ('current records');
+	//echo "<table class=objview border=0 width='100%'><tr><td class=pcleft>";
+	//startPortlet ('current records');
 	$startip = ip4_bin2int ($range['ip_bin']);
 	$endip = ip4_bin2int (ip_last ($range));
 	$numpages = 0;
@@ -5914,21 +5924,44 @@ function renderLivePTR ($id)
 		$startip = $startip + $page * $maxperpage;
 		$endip = $startip + $maxperpage - 1;
 	}
-	echo "<center>";
+	//echo "<center>";
 	if ($numpages)
-		echo '<h3>' . ip4_format (ip4_int2bin ($startip)) . ' ~ ' . ip4_format (ip4_int2bin ($endip)) . '</h3>';
+	{
+		$mod->addOutput('Paged', true);
+		$mod->addOutput('StartIP', ip4_format (ip4_int2bin ($startip)));
+		$mod->addOutput('EndIP', ip4_format (ip4_int2bin ($endip)));
+	}
+	//	echo '<h3>' . ip4_format (ip4_int2bin ($startip)) . ' ~ ' . ip4_format (ip4_int2bin ($endip)) . '</h3>';
 	for ($i=0; $i<$numpages; $i++)
+	{
 		if ($i == $page)
-			echo "<b>$i</b> ";
+		{
+			$smod = $tplm->generateSubmodule('Pages', 'IPNetworkAddressesPager');
+			$smod->addOutput('B', '<b>');
+			$smod->addOutput('B', '</b>');
+			$smod->addOutput('i', $i);
+			$smod->addOutput('Link', makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'id'=>$id, 'pg'=>$i)));
+		}
+		//$rendered_pager .= "<b>$i</b> ";
 		else
-			echo "<a href='".makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'id'=>$id, 'pg'=>$i))."'>$i</a> ";
-	echo "</center>";
-
+		{
+			$smod = $tplm->generateSubmodule('Pages', 'IPNetworkAddressesPager');
+			$smod->addOutput('i', $i);
+			$smod->addOutput('Link', makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'id'=>$id, 'pg'=>$i)));
+		}
+	}
+	//	if ($i == $page)
+	//		echo "<b>$i</b> ";
+	//	else
+	//		echo "<a href='".makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'id'=>$id, 'pg'=>$i))."'>$i</a> ";
+	//echo "</center>";
+	
 	// FIXME: address counter could be calculated incorrectly in some cases
-	printOpFormIntro ('importPTRData', array ('addrcount' => ($endip - $startip + 1)));
+	$mod->addOutput('AddrCount', ($endip - $startip + 1));
+	//printOpFormIntro ('importPTRData', array ('addrcount' => ($endip - $startip + 1)));
 
-	echo "<table class='widetable' border=0 cellspacing=0 cellpadding=5 align='center'>\n";
-	echo "<tr><th>address</th><th>current name</th><th>DNS data</th><th>import</th></tr>\n";
+	//echo "<table class='widetable' border=0 cellspacing=0 cellpadding=5 align='center'>\n";
+	//echo "<tr><th>address</th><th>current name</th><th>DNS data</th><th>import</th></tr>\n";
 	$idx = 1;
 	$box_counter = 1;
 	$cnt_match = $cnt_mismatch = $cnt_missing = 0;
@@ -5942,57 +5975,82 @@ function renderLivePTR ($id)
 		$ptrname = gethostbyaddr ($straddr);
 		if ($ptrname == $straddr)
 			$ptrname = '';
-		echo "<input type=hidden name=addr_${idx} value=${straddr}>\n";
-		echo "<input type=hidden name=descr_${idx} value=${ptrname}>\n";
-		echo "<input type=hidden name=rsvd_${idx} value=${addr['reserved']}>\n";
-		echo '<tr';
+		
+		$smod = $tplm->generateSubmodule('IPList', 'PTRAddress', $mod);
+		
+		$smod->addOutput('IDx', $idx);
+		$smod->addOutput('StrAddr', $straddr);
+		$smod->addOutput('PtrName', $ptrname);
+		$smod->addOutput('Reserved', $addr['reserved']);
+		
+		//echo "<input type=hidden name=addr_${idx} value=${straddr}>\n";
+		//echo "<input type=hidden name=descr_${idx} value=${ptrname}>\n";
+		//echo "<input type=hidden name=rsvd_${idx} value=${addr['reserved']}>\n";
+		//echo '<tr';
 		$print_cbox = FALSE;
 		// Ignore network and broadcast addresses
 		if (($ip == $startip && $addr['name'] == 'network') || ($ip == $endip && $addr['name'] == 'broadcast'))
-			echo ' class=trbusy';
+			$smod->setOutput('CSSClass', 'trbusy');
+			//echo ' class=trbusy';
 		if ($addr['name'] == $ptrname)
 		{
 			if (strlen ($ptrname))
 			{
-				echo ' class=trok';
+				$smod->setOutput('CSSClass', 'trok');
 				$cnt_match++;
 			}
 		}
 		elseif (!strlen ($addr['name']) or !strlen ($ptrname))
 		{
-			echo ' class=trwarning';
+			$smod->setOutput('CSSClass', 'trwarning');
+			//echo ' class=trwarning';
 			$print_cbox = TRUE;
 			$cnt_missing++;
 		}
 		else
 		{
-			echo ' class=trerror';
+			$smod->setOutput('CSSClass', 'trerror');
+			//echo ' class=trerror';
 			$print_cbox = TRUE;
 			$cnt_mismatch++;
 		}
-		echo "><td class='tdleft";
+		//echo "><td class='tdleft";
 		if (isset ($range['addrlist'][$ip_bin]['class']) and strlen ($range['addrlist'][$ip_bin]['class']))
-			echo ' ' . $range['addrlist'][$ip_bin]['class'];
-		echo "'>" . mkA ($straddr, 'ipaddress', $straddr) . '</td>';
-		echo "<td class=tdleft>${addr['name']}</td><td class=tdleft>${ptrname}</td><td>";
+			$smod->addOutput('CSSTDClass', $range['addrlist'][$ip_bin]['class']);
+			//echo ' ' . $range['addrlist'][$ip_bin]['class'];
+		$smod->addOutput('Link', mkA ($straddr, 'ipaddress', $straddr));
+		//echo "'>" . mkA ($straddr, 'ipaddress', $straddr) . '</td>';
+		$smod->addOutput('Name', $addr['name']);
+		//echo "<td class=tdleft>${addr['name']}</td><td class=tdleft>${ptrname}</td><td>";
 		if ($print_cbox)
-			echo "<input type=checkbox name=import_${idx} tabindex=${idx} id=atom_1_" . $box_counter++ . "_1>";
-		else
-			echo '&nbsp;';
-		echo "</td></tr>\n";
+		{
+			$smod->addOutput('BoxCounter', $box_counter++);
+		}
+			//echo "<input type=checkbox name=import_${idx} tabindex=${idx} id=atom_1_" . $box_counter++ . "_1>";
+		//else
+		//	echo '&nbsp;';
+		//echo "</td></tr>\n";
 		$idx++;
 	}
-	echo "<tr><td colspan=3 align=center><input type=submit value='Import selected records'></td><td>";
-	addJS ('js/racktables.js');
-	echo --$box_counter ? "<a href='javascript:;' onclick=\"toggleColumnOfAtoms(1, 1, ${box_counter})\">(toggle selection)</a>" : '&nbsp;';
-	echo "</td></tr>";
-	echo "</table>";
-	echo "</form>";
-	finishPortlet();
+	//echo "<tr><td colspan=3 align=center><input type=submit value='Import selected records'></td><td>";
+	//addJS ('js/racktables.js');
+	if(--$box_counter) 
+	{
+		$mod->addOutput('BoxCounter', $box_counter);
+	}
+	//echo --$box_counter ? "<a href='javascript:;' onclick=\"toggleColumnOfAtoms(1, 1, ${box_counter})\">(toggle selection)</a>" : '&nbsp;';
+	//echo "</td></tr>";
+	//echo "</table>";
+	//echo "</form>";
+	//finishPortlet();
 
-	echo "</td><td class=pcright>";
-
-	startPortlet ('stats');
+	//echo "</td><td class=pcright>";
+	
+	$mod->addOutput('Match', $cnt_match);
+	$mod->addOutput('Missing', $cnt_missing);
+	if ($cnt_mismatch)
+		$mod->addOutput('Mismatch', $cnt_mismatch);
+	/** startPortlet ('stats');
 	echo "<table border=0 width='100%' cellspacing=0 cellpadding=2>";
 	echo "<tr class=trok><th class=tdright>Exact matches:</th><td class=tdleft>${cnt_match}</td></tr>\n";
 	echo "<tr class=trwarning><th class=tdright>Missing from DB/DNS:</th><td class=tdleft>${cnt_missing}</td></tr>\n";
@@ -6001,7 +6059,7 @@ function renderLivePTR ($id)
 	echo "</table>\n";
 	finishPortlet();
 
-	echo "</td></tr></table>\n";
+	echo "</td></tr></table>\n"; */
 }
 
 function renderAutoPortsForm ($object_id)
