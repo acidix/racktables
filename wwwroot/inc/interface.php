@@ -2963,6 +2963,8 @@ function renderIPNetwork ($id)
 	$realm = $pageno; // 'ipv4net', 'ipv6net'
 	$range = spotEntity ($realm, $id);
 	loadIPAddrList ($range);
+	
+
 	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
 	echo "<tr><td colspan=2 align=center><h1>${range['ip']}/${range['mask']}</h1><h2>";
 	echo htmlspecialchars ($range['name'], ENT_QUOTES, 'UTF-8') . "</h2></td></tr>\n";
@@ -4422,6 +4424,8 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 	//echo '</td><td class=pcright>';
 	renderCellFilterPortlet ($cellfilter, $realm, $celllist, array(), $mod );
 	//echo "</td></tr></table>\n"; */
+	if($parent == null)
+		return $mod->run();
 }
 
 function renderUserList ()

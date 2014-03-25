@@ -6,7 +6,12 @@
 
 function renderVSGList ()
 {
-	renderCellList ('ipvs', 'VS groups');
+	//renderCellList ('ipvs', 'VS groups');
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$main = $tplm->createMainModule("index");
+		
+	renderCellList ('ipvs', 'VS groups', FALSE, NULL, $main, "Payload");
 }
 
 function formatVSPort ($port, $plain_text = FALSE)
@@ -762,14 +767,22 @@ function renderIPVSConvert ($vs_id)
 
 function renderNewVSGForm ()
 {
-	startPortlet ('Add new VS group');
-	printOpFormIntro ('add');
-	echo '<table border=0 cellpadding=10 cellspacing=0 align=center>';
-	echo '<tr valign=bottom><th>name</th><th>Assign tags</th></tr>';
-	echo '<tr valign=top><td><input type=text name=name><p>';
-	printImageHREF ('CREATE', 'create virtual service', TRUE);
-	echo '</p></td><td>';
-	echo renderNewEntityTags ('ipvs');
-	echo '</td></tr></table></form>';
-	finishPortlet();
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderNewVSGForm");
+	$mod->setNamespace("ipv4slb");
+		
+	//startPortlet ('Add new VS group');
+	//printOpFormIntro ('add');
+	//echo '<table border=0 cellpadding=10 cellspacing=0 align=center>';
+	//echo '<tr valign=bottom><th>name</th><th>Assign tags</th></tr>';
+	//echo '<tr valign=top><td><input type=text name=name><p>';
+	//printImageHREF ('CREATE', 'create virtual service', TRUE);
+	//echo '</p></td><td>';
+	//echo renderNewEntityTags ('ipvs');
+	renderNewEntityTags ('ipvs', $mod, "entityTags");
+	//echo '</td></tr></table></form>';
+	//finishPortlet();
 }
