@@ -265,4 +265,11 @@ $this->setInMemoryTemplate('SerializedTag','<span class="{{Class}} title="{{Titl
  */
 $this->setInMemoryTemplate('IPNetBacktraceLink','<a href="{{Link}}" title="View IP tree with this net as root">{{Title}}</a>');
 
+/**
+*	StdListElem: 
+*	Usage:  renderVLANInfo -> interface.php
+*
+**/
+$this->setInMemoryTemplate("StdListElem"," <li>{{cont}}</li>");
+
 ?>

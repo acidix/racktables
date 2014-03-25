@@ -9260,18 +9260,34 @@ function renderVLANInfo ($vlan_ck)
 {
 	global $vtoptions, $nextorder;
 	$vlan = getVLANInfo ($vlan_ck);
-	echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
-	echo '<tr><td colspan=2 align=center><h1>' . formatVLANAsRichText ($vlan) . '</h1></td></tr>';
-	echo "<tr><td class=pcleft width='50%'>";
-	startPortlet ('summary');
-	echo "<table border=0 cellspacing=0 cellpadding=3 width='100%'>";
-	echo "<tr><th width='50%' class=tdright>Domain:</th><td class=tdleft>";
-	echo niftyString ($vlan['domain_descr'], 0) . '</td></tr>';
-	echo "<tr><th width='50%' class=tdright>VLAN ID:</th><td class=tdleft>${vlan['vlan_id']}</td></tr>";
-	if (strlen ($vlan['vlan_descr']))
-		echo "<tr><th width='50%' class=tdright>Description:</th><td class=tdleft>" .
-			niftyString ($vlan['vlan_descr'], 0) . "</td></tr>";
-	echo "<tr><th width='50%' class=tdright>Propagation:</th><td class=tdleft>" . $vtoptions[$vlan['vlan_prop']] . "</td></tr>";
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderVLANInfo");
+	$mod->setNamespace("vlan");
+		
+	//echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
+	//echo '<tr><td colspan=2 align=center><h1>' . formatVLANAsRichText ($vlan) . '</h1></td></tr>';
+	$mod->addOutput("formatVlanTxt", formatVLANAsRichText ($vlan));
+	//echo "<tr><td class=pcleft width='50%'>";
+	//startPortlet ('summary');
+	//echo "<table border=0 cellspacing=0 cellpadding=3 width='100%'>";
+	//echo "<tr><th width='50%' class=tdright>Domain:</th><td class=tdleft>";
+	
+	//echo niftyString ($vlan['domain_descr'], 0) . '</td></tr>';
+	$mod->addOutput("niftyStr_domain_descr", niftyString ($vlan['domain_descr'], 0));
+	$mod->addOutput("vlan_id", $vlan['vlan_id'] );	 
+	//echo "<tr><th width='50%' class=tdright>VLAN ID:</th><td class=tdleft>${vlan['vlan_id']}</td></tr>";
+	if (strlen ($vlan['vlan_descr'])){
+		$mod->addOutput("isVlan_Descr", true);
+		$mod->addOutput("niftyStr_vlan_descr", niftyString ($vlan['vlan_descr'], 0));
+		//echo "<tr><th width='50%' class=tdright>Description:</th><td class=tdleft>" .
+		//	niftyString ($vlan['vlan_descr'], 0) . "</td></tr>";
+	}
+	$mod->addOutput("vtoptions", $vtoptions[$vlan['vlan_prop']]);
+	//echo "<tr><th width='50%' class=tdright>Propagation:</th><td class=tdleft>" . $vtoptions[$vlan['vlan_prop']] . "</td></tr>";
 	$others = getSearchResultByField
 	(
 		'VLANDescription',
@@ -9281,39 +9297,51 @@ function renderVLANInfo ($vlan_ck)
 		'domain_id',
 		1
 	);
+	$allOthersOut = array();
 	foreach ($others as $other)
 		if ($other['domain_id'] != $vlan['domain_id'])
-			echo '<tr><th class=tdright>Counterpart:</th><td class=tdleft>' .
-				formatVLANAsHyperlink (getVLANInfo ("${other['domain_id']}-${vlan['vlan_id']}")) .
-				'</td></tr>';
-	echo '</table>';
-	finishPortlet();
-	if (0 == count ($vlan['ipv4nets']) + count ($vlan['ipv6nets']))
-		startPortlet ('no networks');
+			$allOthersOut[] = array('vlanHyperlinks' => formatVLANAsHyperlink (getVLANInfo ("${other['domain_id']}-${vlan['vlan_id']}")) );
+		//	echo '<tr><th class=tdright>Counterpart:</th><td class=tdleft>' .
+		//		formatVLANAsHyperlink (getVLANInfo ("${other['domain_id']}-${vlan['vlan_id']}")) .
+		//		'</td></tr>';
+	$mod->addOutput("allOthers", $allOthersOut);	 
+	//echo '</table>';
+	//finishPortlet();
+
+	if (0 == count ($vlan['ipv4nets']) + count ($vlan['ipv6nets'])){
+		$mod->addOutput("noNetworks", true);
+	//	startPortlet ('no networks');
+	}
 	else
 	{
-		startPortlet ('networks (' . (count ($vlan['ipv4nets']) + count ($vlan['ipv6nets'])) . ')');
+		$mod->addOutput("overallCount", (count ($vlan['ipv4nets']) + count ($vlan['ipv6nets'])));
+		//startPortlet ('networks (' . (count ($vlan['ipv4nets']) + count ($vlan['ipv6nets'])) . ')');
 		$order = 'odd';
-		echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-		echo '<tr><th>';
-		printImageHREF ('net');
-		echo '</th><th>';
-		printImageHREF ('text');
-		echo '</th></tr>';
+		//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+		//echo '<tr><th>';
+		//printImageHREF ('net');
+		//echo '</th><th>';
+		//printImageHREF ('text');
+		//echo '</th></tr>';
+		$allNetsOut = array();
 		foreach (array ('ipv4net', 'ipv6net') as $nettype)
 		foreach ($vlan[$nettype . 's'] as $netid)
 		{
 			$net = spotEntity ($nettype, $netid);
 			#echo "<tr class=row_${order}><td>";
-			echo '<tr><td>';
-			renderCell ($net);
-			echo '</td><td>' . (mb_strlen ($net['comment']) ? niftyString ($net['comment']) : '&nbsp;');
-			echo '</td></tr>';
+			$allNetsOut[] = array('renderedCell' => renderCell ($net),
+							'niftyStr' => (mb_strlen ($net['comment']) ? niftyString ($net['comment']) : '&nbsp;'));
+			//echo '<tr><td>';
+			//renderCell ($net);
+			//echo '</td><td>' . (mb_strlen ($net['comment']) ? niftyString ($net['comment']) : '&nbsp;');
+			//echo '</td></tr>';
+			
 			$order = $nextorder[$order];
 		}
-		echo '</table>';
+		$mod->addOutput("allNets", $allNetsOut);
+		//echo '</table>';
 	}
-	finishPortlet();
+	//finishPortlet();
 
 	$confports = getVLANConfiguredPorts ($vlan_ck);
 
@@ -9329,73 +9357,117 @@ function renderVLANInfo ($vlan_ck)
 	}
 	if (! empty ($foreign_devices))
 	{
-		startPortlet ("Non-switch devices");
-		echo "<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>";
-		echo '<tr><th>device</th><th>ports</th></tr>';
+		$mod->addOutput("nonSwitchDev", true);
+			 
+		//startPortlet ("Non-switch devices");
+		//echo "<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>";
+		//echo '<tr><th>device</th><th>ports</th></tr>';
 		$order = 'odd';
+		$allForgDevOut = array();
 		foreach ($foreign_devices as $cell_id => $ports)
 		{
-			echo "<tr class=row_${order} valign=top><td>";
+			
+			//echo "<tr class=row_${order} valign=top><td>";
 			$cell = spotEntity ('object', $cell_id);
-			renderCell ($cell);
-			echo "</td><td><ul>";
-			foreach ($ports as $portinfo)
-				echo "<li>" . formatPortLink ($portinfo['remote_object_id'], NULL, $portinfo['remote_id'], $portinfo['remote_name']) . ' &mdash; ' . formatPort ($portinfo) . "</li>";
-			echo "</ul></td></tr>";
+			//renderCell ($cell);
+			$singleDev = array('order' => $order, 'rendCell' => renderCell ($cell), 'ports' => '');
+			//echo "</td><td><ul>";
+			foreach ($ports as $portinfo){
+			//	echo "<li>" . formatPortLink ($portinfo['remote_object_id'], NULL, $portinfo['remote_id'], $portinfo['remote_name']) . ' &mdash; ' . formatPort ($portinfo) . "</li>";
+				$singPort = $tplm->generateModule("StdListElem", true, array('cont' =>
+					formatPortLink ($portinfo['remote_object_id'], NULL, $portinfo['remote_id'], $portinfo['remote_name']) . ' &mdash; ' . formatPort ($portinfo)))	;
+				$singleDev['ports'] .= $singPort->run();
+			}	
+			$allForgDev[] = $singleDev;
+			//echo "</ul></td></tr>";
 			$order = $nextorder[$order];
+			
 		}
-		echo '</table>';
-		finishPortlet();
+		$mod->addOutput("allForgDev", $allForgDevOut);
+		//echo '</table>';
+		//finishPortlet();
 	}
 
-	echo '</td><td class=pcright>';
-	if (!count ($confports))
-		startPortlet ('no ports');
+	//echo '</td><td class=pcright>';
+	if (!count ($confports)){
+		$mod->addOutput("noPorts", true);
+	//	startPortlet ('no ports');
+	}
 	else
 	{
-		startPortlet ('Switch ports (' . count ($confports) . ')');
+		$mod->addOutput("countPorts", count ($confports));
+
+		//startPortlet ('Switch ports (' . count ($confports) . ')');
 		global $nextorder;
 		$order = 'odd';
-		echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
-		echo '<tr><th>switch</th><th>ports</th></tr>';
+		//echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+		//echo '<tr><th>switch</th><th>ports</th></tr>';
+		$allConfportsOut = array();
 		foreach ($confports as $switch_id => $portlist)
 		{
 			usort_portlist ($portlist);
-			echo "<tr class=row_${order} valign=top><td>";
+			$singlePort = array('order' => $order);
+			//echo "<tr class=row_${order} valign=top><td>";
 			$object = spotEntity ('object', $switch_id);
-			renderCell ($object);
-			echo '</td><td class=tdleft><ul>';
+			//renderCell ($object);
+			$singlePort['rendCell'] = renderCell ($object);
+			//echo '</td><td class=tdleft><ul>';
+			$singlePort['portlist'] = '';
 			foreach ($portlist as $port_name)
 			{
-				echo '<li>';
+				$singlePortlistElem = $tplm->generateModule("StdListElem", true);
+				//echo '<li>';
 				if ($portinfo = getPortinfoByName ($object, $port_name))
-					echo formatPortLink ($object['id'], NULL, $portinfo['id'], $portinfo['name']);
+					$singlePortlistElem->setOutput('cont', formatPortLink ($object['id'], NULL, $portinfo['id'], $portinfo['name']));
+				//	echo formatPortLink ($object['id'], NULL, $portinfo['id'], $portinfo['name']);
 				else
-					echo $port_name;
-				echo '</li>';
+					$singlePortlistElem->setOutput('cont', $port_name);
+				//	echo $port_name;
+				$singlePort['portlist'] .= $singlePortlistElem->run();
+				//echo '</li>';
 			}
-			echo '</ul></td></tr>';
+			//echo '</ul></td></tr>';
+			$allConfportsOut[] = $singlePort;
 			$order = $nextorder[$order];
 		}
-		echo '</table>';
+		$mod->addOutput("allConfports", $allConfportsOut);
+			 
+		//echo '</table>';
 	}
-	finishPortlet();
-	echo '</td></tr></table>';
+	//finishPortlet();
+	//echo '</td></tr></table>';
 }
 
 function renderVLANIPLinks ($some_id)
 {
 	function printNewItemTR ($sname, $options, $extra = array())
 	{
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");
+		
+		$mod = $tplm->generateModule("RenderVLANIPLinks_printNewItem", false, array('extra' => $extra));
+		$mod->setNamespace("vlan");
+		
 		if (!count ($options))
 			return;
-		printOpFormIntro ('bind', $extra);
-		echo '<tr><td>' . getOptionTree ($sname, $options, array ('tabindex' => 101));
-		echo '</td><td>' . getImageHREF ('ATTACH', 'bind', TRUE, 102) . '</td></tr></form>';
+		$mod->addOutput("optionTree", getOptionTree ($sname, $options, array ('tabindex' => 101)));
+			 
+	//	printOpFormIntro ('bind', $extra);
+	//	echo '<tr><td>' . getOptionTree ($sname, $options, array ('tabindex' => 101));
+	//	echo '</td><td>' . getImageHREF ('ATTACH', 'bind', TRUE, 102) . '</td></tr></form>';
+		return $mod->run();
 	}
 	global $pageno, $tabno;
-	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-	echo '<tr>';
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderVLANIPLinks");
+	$mod->setNamespace("vlan");
+		
+	//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	//echo '<tr>';
 
 	// fill $minuslines, $plusoptions, $select_name
 	$minuslines = array();
@@ -9404,8 +9476,10 @@ function renderVLANIPLinks ($some_id)
 	switch ($pageno)
 	{
 	case 'vlan':
+		$mod->addOutput("isVLAN", true);
+			 
 		$ip_ver = $tabno == 'ipv6' ? 'ipv6' : 'ipv4';
-		echo '<th>' . getImageHREF ('net') . '</th>';
+		//echo '<th>' . getImageHREF ('net') . '</th>';
 		$vlan = getVLANInfo ($some_id);
 		$domainclass = array ($vlan['domain_id'] => 'trbusy');
 		foreach ($vlan[$ip_ver . "nets"] as $net_id)
@@ -9430,7 +9504,9 @@ function renderVLANIPLinks ($some_id)
 		break;
 	case 'ipv4net':
 	case 'ipv6net':
-		echo '<th>VLAN</th>';
+		$mod->addOutput("isIpv6Net", true);
+
+		//echo '<th>VLAN</th>';
 		$netinfo = spotEntity ($pageno, $some_id);
 		$reuse_domain = considerConfiguredConstraint ($netinfo, '8021Q_MULTILINK_LISTSRC');
 		# For each of the domains linked to the network produce class name based on
@@ -9459,30 +9535,41 @@ function renderVLANIPLinks ($some_id)
 		$extra = array ('id' => $netinfo['id']);
 		break;
 	}
-	echo '<th>&nbsp;</th></tr>';
+	//echo '<th>&nbsp;</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR ($select_name, $plusoptions, $extra);
+		$mod->addOutput("AddNewTop", printNewItemTR ($select_name, $plusoptions, $extra));
+	//	printNewItemTR ($select_name, $plusoptions, $extra);
+	$allMinuslinesOut = array();
 	foreach ($minuslines as $item)
 	{
-		echo '<tr class=' . $domainclass[$item['domain_id']] . '><td>';
+		$singleMinusLine = array('domainclass' => $domainclass[$item['domain_id']]);
+		//echo '<tr class=' . $domainclass[$item['domain_id']] . '><td>';
 		switch ($pageno)
 		{
 		case 'vlan':
-			renderCell (spotEntity ($ip_ver . 'net', $item['net_id']));
+			$singleMinusLine['renderedCell'] = renderCell (spotEntity ($ip_ver . 'net', $item['net_id']));
+			//renderCell (spotEntity ($ip_ver . 'net', $item['net_id']));
 			break;
 		case 'ipv4net':
 		case 'ipv6net':
 			$vlaninfo = getVLANInfo ($item['domain_id'] . '-' . $item['vlan_id']);
-			echo formatVLANAsRichText ($vlaninfo);
+			$singleMinusLine['vlanRichTxt'] = formatVLANAsRichText ($vlaninfo);
+			//echo formatVLANAsRichText ($vlaninfo);
 			break;
 		}
-		echo '</td><td>';
-		echo getOpLink (array ('id' => $some_id, 'op' => 'unbind', 'id' => $item['net_id'], 'vlan_ck' => $item['domain_id'] . '-' . $item['vlan_id']), '', 'Cut', 'unbind');
-		echo '</td></tr>';
+		//echo '</td><td>';
+		//echo getOpLink (array ('id' => $some_id, 'op' => 'unbind', 'id' => $item['net_id'], 'vlan_ck' => $item['domain_id'] . '-' . $item['vlan_id']), '', 'Cut', 'unbind');
+		$singleMinusLine['opLink'] = getOpLink (array ('id' => $some_id, 'op' => 'unbind', 'id' => $item['net_id'], 
+			'vlan_ck' => $item['domain_id'] . '-' . $item['vlan_id']), '', 'Cut', 'unbind');
+		//echo '</td></tr>';
+		$allMinuslinesOut[] = $singleMinusLine;
 	}
+	$mod->addOutput("allMinuslines", $allMinuslinesOut);
+		 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR ($select_name, $plusoptions, $extra);
-	echo '</table>';
+		$mod->addOutput("AddNewBottom", printNewItemTR ($select_name, $plusoptions, $extra));
+	//	printNewItemTR ($select_name, $plusoptions, $extra);
+	//echo '</table>';
 }
 
 function renderObject8021QSync ($object_id)
@@ -10906,22 +10993,38 @@ function renderEditVlan ($vlan_ck)
 {
 	global $vtoptions;
 	$vlan = getVLANInfo ($vlan_ck);
-	startPortlet ('Modify');
-	printOpFormIntro ('upd');
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderEditVlan");
+	$mod->setNamespace("vlan");
+		
+
+	//startPortlet ('Modify');
+	//printOpFormIntro ('upd');
 	// static attributes
-	echo '<table border=0 cellspacing=0 cellpadding=2 align=center>';
-	echo '<tr><th class=tdright>Name:</th><td class=tdleft>' .
-		"<input type=text size=40 name=vlan_descr value='${vlan['vlan_descr']}'>" .
-		'</td></tr>';
-	echo '<tr><th class=tdright>Type:</th><td class=tdleft>' .
-		getSelect ($vtoptions, array ('name' => 'vlan_type', 'tabindex' => 102), $vlan['vlan_prop']) .
-		'</td></tr>';
-	echo '</table>';
-	echo '<p>';
-	echo '<input type="hidden" name="vdom_id" value="' . htmlspecialchars ($vlan['domain_id'], ENT_QUOTES) . '">';
-	echo '<input type="hidden" name="vlan_id" value="' . htmlspecialchars ($vlan['vlan_id'], ENT_QUOTES) . '">';
-	printImageHREF ('SAVE', 'Update VLAN', TRUE);
-	echo '</form><p>';
+	//echo '<table border=0 cellspacing=0 cellpadding=2 align=center>';
+	//echo '<tr><th class=tdright>Name:</th><td class=tdleft>' .
+	//	"<input type=text size=40 name=vlan_descr value='${vlan['vlan_descr']}'>" .
+	//	'</td></tr>';
+	$mod->addOutput("vlan_descr", $vlan['vlan_descr']);
+		 
+	//echo '<tr><th class=tdright>Type:</th><td class=tdleft>' .
+	//	getSelect ($vtoptions, array ('name' => 'vlan_type', 'tabindex' => 102), $vlan['vlan_prop']) .
+	//	'</td></tr>';
+	$mod->addOutput("vtoptions", $vtoptions);
+	$mod->addOutput("vlan_prop", $vlan['vlan_prop']); 
+		 
+	//echo '</table>';
+	//echo '<p>';
+	//echo '<input type="hidden" name="vdom_id" value="' . htmlspecialchars ($vlan['domain_id'], ENT_QUOTES) . '">';
+	$mod->addOutput("htmlspcDomainID", htmlspecialchars ($vlan['domain_id'], ENT_QUOTES));	 
+	//echo '<input type="hidden" name="vlan_id" value="' . htmlspecialchars ($vlan['vlan_id'], ENT_QUOTES) . '">';
+	$mod->addOutput("htmlspcVlanID", htmlspecialchars ($vlan['vlan_id'], ENT_QUOTES));
+	//printImageHREF ('SAVE', 'Update VLAN', TRUE);
+	//echo '</form><p>';
 	// get configured ports count
 	$portc = 0;
 	foreach (getVLANConfiguredPorts ($vlan_ck) as $subarray)
@@ -10931,9 +11034,12 @@ function renderEditVlan ($vlan_ck)
 	$delete_line = '';
 	if ($portc)
 	{
-		$clear_line .= '<p>';
-		$clear_line .= getOpLink (array ('op' => 'clear'), 'remove', 'clear', "remove this VLAN from $portc ports") .
-			' this VLAN from ' . mkA ("${portc} ports", 'vlan', $vlan_ck);
+		$mod->addOutput("port", $portc);
+		$mod->addOutput("mkaPortc", mkA ("${portc} ports", 'vlan', $vlan_ck));
+		$mod->addOutput("isPortc", true);			 
+	//	$clear_line .= '<p>';
+	//	$clear_line .= getOpLink (array ('op' => 'clear'), 'remove', 'clear', "remove this VLAN from $portc ports") .
+	//		' this VLAN from ' . mkA ("${portc} ports", 'vlan', $vlan_ck);
 	}
 
 	$reason = '';
@@ -10942,11 +11048,13 @@ function renderEditVlan ($vlan_ck)
 	elseif ($portc)
 		$reason = "Can not delete: $portc ports configured";
 	if (! empty ($reason))
-		echo getOpLink (NULL, 'delete VLAN', 'nodestroy', $reason);
+		$mod->addOutput("reasonLink", getOpLink (NULL, 'delete VLAN', 'nodestroy', $reason)); 
+	//	echo getOpLink (NULL, 'delete VLAN', 'nodestroy', $reason);
 	else
-		echo getOpLink (array ('op' => 'del', 'vlan_ck' => $vlan_ck), 'delete VLAN', 'destroy');
-	echo $clear_line;
-	finishPortlet();
+		$mod->addOutput("reasonLink", getOpLink (array ('op' => 'del', 'vlan_ck' => $vlan_ck), 'delete VLAN', 'destroy'));
+	//	echo getOpLink (array ('op' => 'del', 'vlan_ck' => $vlan_ck), 'delete VLAN', 'destroy');
+	//echo $clear_line;
+	//finishPortlet();
 }
 
 function renderExpirations ()
