@@ -19,7 +19,7 @@
 	<?php } ?>
 	>
 	<?php if ($this->is("loadImage",true)) { ?>
-		<?php $this->getH("getImageHREF", array( $this->imgName, $this->comment)); ?>  
+		<?php $this->getH("PrintImageHref", array( $this->_imgName, $this->_comment)); ?>  
 	<?php } ?> 
 	<?php $this->title ?> </a>
 

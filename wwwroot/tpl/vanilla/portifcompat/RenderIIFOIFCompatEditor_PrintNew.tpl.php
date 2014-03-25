@@ -1,15 +1,12 @@
 <?php if (defined("RS_TPL")) {?>
-
-	<?php $this->getH('PrintOpFormIntro', 'add'); ?>
+	<?php $this->getH("PrintOpFormIntro", array('add')); ?> 
 	<tr><th class=tdleft>
-	<?php $this->getH('PrintImageHref', array('add', 'add pair', TRUE)); ?>
+	<?php $this->getH("PrintImageHref", array('add', 'add pair', TRUE)); ?> 
 	</th><th class=tdleft>
-	<?php $this->Type1; ?>
+	<?php $this->iifOptions ?> 
 	</th><th class=tdleft>
-	<?php $this->Type2; ?>
+	<?php $this->chapter ?> 
 	</th></tr></form>
-
-
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

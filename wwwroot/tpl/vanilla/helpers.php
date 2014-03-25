@@ -128,7 +128,7 @@ class TemplateHelperPrintImageHref extends TemplateHelperAbstract
 }
 
 /**
-*	TemplateHelper for the PrintImageHREF funktion
+*	TemplateHelper for the Mka funktion
 *
 *	Params:
 *	[0] = Object to Render
@@ -361,8 +361,10 @@ class TemplateHelperGetOpLink extends TemplateHelperAbstract
 		//Initiate TemplateManager
 		$tplm = TemplateManager::getInstance();
 		$tplm->setTemplate("vanilla");
-		$mod = $tplm->generateModule("GetOpLink", false);
+
+		$mod = $tplm->generateModule("GetOpLink");		
 		
+
 		if (isset ($stdparams)){
 			$mod->setOutput("issetParams", true);
 			$mod->setOutput("href", makeHrefProcess ($stdparams));
@@ -434,6 +436,32 @@ class TemplateHelperSelect extends TemplateHelperAbstract
 	protected function generate($params)
 	{
 		
+	}
+}
+
+/**
+*	TemplateHelper for the PrintSelect function
+*
+*	Params:
+*	[0] = optionList
+*	[1] = select_attrs = array()
+*	[2] = selected_id = NULL
+*	@author Jakob Frick
+**/
+class TemplateHelperPrintSelect extends TemplateHelperAbstract
+{
+	protected function generate($params)
+	{
+		if(count($params) < 1)
+			return "";
+		$optList = $params[0];
+		$select_attrs = array();
+		$selected_id = NULL;
+		if(count($params) > 1)
+			$select_attrs = $params[1];
+		if(count($params) > 2)
+			$selected_id = $params[2];
+		return getSelect($optList, $select_attrs, $selected_id);			
 	}
 }
 ?>
