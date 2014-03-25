@@ -4798,7 +4798,7 @@ function renderLocationPage ($location_id)
 	$summary['tags'] = '';
 	if (strlen ($locationData['comment']))
 		$summary['Comment'] = $locationData['comment'];
-	$mod->addOutput('Renderentitysummary', renderEntitySummary ($locationData, 'Summary', $summary, $mod))
+	$mod->addOutput('Renderentitysummary', renderEntitySummary ($locationData, 'Summary', $summary, $mod));
 	$mod->addOutput('Renderfilesportlet', renderFilesPortlet ('location', $location_id));
 	// echo '</td>';
 
@@ -4812,7 +4812,7 @@ function renderLocationPage ($location_id)
 		// echo '<tr><td>' . mkA ($name, 'row', $row_id) . '</td></tr>';
 	// echo "</table>\n";
 	// finishPortlet();
-	$mod->addOutput('Countlocations', count ($locationData['locations']);
+	$mod->addOutput('Countlocations', count ($locationData['locations']));
 	// startPortlet ('Child Locations (' . count ($locationData['locations']) . ')');
 	// echo "<table border=0 cellspacing=0 cellpadding=5 align=center>\n";
 	foreach ($locationData['locations'] as $location_id => $name)
@@ -4847,7 +4847,7 @@ function renderEditLocationForm ($location_id)
 	foreach (listCells ('location') as $id => $locationInfo)
 		$locations[$id] = $locationInfo['name'];
 	natcasesort($locations);
-	$mod->addOutput('Getselect', getSelect ($locations, array ('name' => 'parent_id'), $location['parent_id']))
+	$mod->addOutput('Getselect', getSelect ($locations, array ('name' => 'parent_id'), $location['parent_id']));
 	$mod->addOutput('Locationname', $location['name']);
 	// echo "</td></tr>\n";
 	// echo "<tr><td>&nbsp;</td><th class=tdright>Name (required):</th><td class=tdleft><input type=text name=name value='${location['name']}'></td></tr>\n";
