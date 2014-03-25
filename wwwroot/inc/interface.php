@@ -2511,26 +2511,39 @@ function renderEmptyResults($cellfilter, $entities_name, $count = NULL, $pmod = 
 }
 
 // History viewer for history-enabled simple dictionaries.
-function renderObjectHistory ($object_id)
+function renderObjectHistory ($object_id, $parent, $placeholder)
 {
+	$tplm = TemplateManager::getInstance();
+
+	$tplm->setTemplate("vanilla");
+
+	$mod = $tplm->generateSubmodule($placeholder, "RenderObjectHistory", $parent);
+	
 	$order = 'odd';
 	global $nextorder;
-	echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
-	echo '<tr><th>change time</th><th>author</th><th>name</th><th>visible label</th><th>asset no</th><th>has problems?</th><th>comment</th></tr>';
+	// echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
+	// echo '<tr><th>change time</th><th>author</th><th>name</th><th>visible label</th><th>asset no</th><th>has problems?</th><th>comment</th></tr>';
 	$result = usePreparedSelectBlade
 	(
 		'SELECT ctime, user_name, name, label, asset_no, has_problems, comment FROM ObjectHistory WHERE id=? ORDER BY ctime',
 		array ($object_id)
 	);
+
 	while ($row = $result->fetch (PDO::FETCH_NUM))
 	{
-		echo "<tr class=row_${order}><td>${row[0]}</td>";
+		$submod = $tplm->generateSubmodule('Row', 'RowGenerator', $mod);
+		$submod->setOutput('Order', $order);
+		$submod->setOutput('Row', $row[0]);
+		// echo "<tr class=row_${order}><td>${row[0]}</td>";
+		$rowarray = array();
 		for ($i = 1; $i <= 6; $i++)
-			echo "<td>" . $row[$i] . "</td>";
-		echo "</tr>\n";
+			$rowarray[] = array('Content'=>$row[$i]);
+		$submod->addOutput('Looparray', $rowarray);		
+		// echo "<td>" . $row[$i] . "</td>";
+		// echo "</tr>\n";
 		$order = $nextorder[$order];
 	}
-	echo "</table><br>\n";
+	// echo "</table><br>\n";
 }
 
 function renderRackspaceHistory ()
@@ -4517,12 +4530,19 @@ function renderConfigMainpage ()
 
 function renderLocationPage ($location_id)
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule("Payload", "RenderLocationPage");
+	$mod->setNamespace("location",true);
+
 	$locationData = spotEntity ('location', $location_id);
 	amplifyCell ($locationData);
-	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0><tr>";
+	// echo "<table border=0 class=objectview cellspacing=0 cellpadding=0><tr>";
 
-	// Left column with information.
-	echo "<td class=pcleft>";
+	// // Left column with information.
+	// echo "<td class=pcleft>";
 	$summary = array();
 	$summary['Name'] = $locationData['name'];
 	if (! empty ($locationData['parent_id']))
@@ -4541,98 +4561,128 @@ function renderLocationPage ($location_id)
 	$summary['tags'] = '';
 	if (strlen ($locationData['comment']))
 		$summary['Comment'] = $locationData['comment'];
-	renderEntitySummary ($locationData, 'Summary', $summary);
-	renderFilesPortlet ('location', $location_id);
-	echo '</td>';
+	$mod->addOutput('Renderentitysummary', renderEntitySummary ($locationData, 'Summary', $summary, $mod))
+	$mod->addOutput('Renderfilesportlet', renderFilesPortlet ('location', $location_id));
+	// echo '</td>';
 
 	// Right column with list of rows and child locations
-	echo '<td class=pcright>';
-	startPortlet ('Rows ('. count ($locationData['rows']) . ')');
-	echo "<table border=0 cellspacing=0 cellpadding=5 align=center>\n";
+	// echo '<td class=pcright>';
+	// $mod->addOutput('Count', count ($locationData['rows']));
+	// startPortlet ('Rows ('. count ($locationData['rows']) . ')');
+	// echo "<table border=0 cellspacing=0 cellpadding=5 align=center>\n";
 	foreach ($locationData['rows'] as $row_id => $name)
-		echo '<tr><td>' . mkA ($name, 'row', $row_id) . '</td></tr>';
-	echo "</table>\n";
-	finishPortlet();
-	startPortlet ('Child Locations (' . count ($locationData['locations']) . ')');
-	echo "<table border=0 cellspacing=0 cellpadding=5 align=center>\n";
+		$mod->addOutput('Looparray', array('mKa'=> mkA ($name, 'row', $row_id)));
+		// echo '<tr><td>' . mkA ($name, 'row', $row_id) . '</td></tr>';
+	// echo "</table>\n";
+	// finishPortlet();
+	$mod->addOutput('Countlocations', count ($locationData['locations']);
+	// startPortlet ('Child Locations (' . count ($locationData['locations']) . ')');
+	// echo "<table border=0 cellspacing=0 cellpadding=5 align=center>\n";
 	foreach ($locationData['locations'] as $location_id => $name)
-		echo '<tr><td>' . mkA ($name, 'location', $location_id) . '</td></tr>';
-	echo "</table>\n";
-	finishPortlet();
-	echo '</td>';
-	echo '</tr></table>';
+		$mod->addOutput('Looparray2', array('Locationmka' => mkA ($name, 'location', $location_id) ));
+		// echo '<tr><td>' . mkA ($name, 'location', $location_id) . '</td></tr>';
+	// echo "</table>\n";
+	// finishPortlet();
+	// echo '</td>';
+	// echo '</tr></table>';
 }
 
 function renderEditLocationForm ($location_id)
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule("Payload", "RenderEditLocationForm");
+	$mod->setNamespace("location",true);
+
+
 	global $pageno;
 	$location = spotEntity ('location', $location_id);
 	amplifyCell ($location);
 
-	startPortlet ('Attributes');
-	printOpFormIntro ('updateLocation');
-	echo '<table border=0 align=center>';
-	echo "<tr><td>&nbsp;</td><th class=tdright>Parent location:</th><td class=tdleft>";
+	// startPortlet ('Attributes');
+	// printOpFormIntro ('updateLocation');
+	// echo '<table border=0 align=center>';
+	// echo "<tr><td>&nbsp;</td><th class=tdright>Parent location:</th><td class=tdleft>";
 	$locations = array ();
 	$locations[0] = '-- NOT SET --';
 	foreach (listCells ('location') as $id => $locationInfo)
 		$locations[$id] = $locationInfo['name'];
 	natcasesort($locations);
-	printSelect ($locations, array ('name' => 'parent_id'), $location['parent_id']);
-	echo "</td></tr>\n";
-	echo "<tr><td>&nbsp;</td><th class=tdright>Name (required):</th><td class=tdleft><input type=text name=name value='${location['name']}'></td></tr>\n";
+	$mod->addOutput('Getselect', getSelect ($locations, array ('name' => 'parent_id'), $location['parent_id']))
+	$mod->addOutput('Locationname', $location['name']);
+	// echo "</td></tr>\n";
+	// echo "<tr><td>&nbsp;</td><th class=tdright>Name (required):</th><td class=tdleft><input type=text name=name value='${location['name']}'></td></tr>\n";
 	// optional attributes
 	$values = getAttrValues ($location_id);
 	$num_attrs = count($values);
-	echo "<input type=hidden name=num_attrs value=${num_attrs}>\n";
+	$mod->addOutput('Num_attrs', $num_attrs);
+	// echo "<input type=hidden name=num_attrs value=${num_attrs}>\n";
 	$i = 0;
 	foreach ($values as $record)
 	{
-		echo "<input type=hidden name=${i}_attr_id value=${record['id']}>";
-		echo '<tr><td>';
+		$submod = $tplm->generateSubmodule('Loopcontent', 'Loop', $mod);
+
+		$submod->addOutput('Record_Id', $record['id']);
+		$submod->addOutput('Index', $i);
+
+		// echo "<input type=hidden name=${i}_attr_id value=${record['id']}>";
+		// echo '<tr><td>';
 		if (strlen ($record['value']))
-			echo getOpLink (array ('op'=>'clearSticker', 'attr_id'=>$record['id']), '', 'clear', 'Clear value', 'need-confirmation');
-		else
-			echo '&nbsp;';
-		echo '</td>';
-		echo "<th class=sticker>${record['name']}:</th><td class=tdleft>";
+			$submod->addOutput('Value', TRUE);
+			// echo getOpLink (array ('op'=>'clearSticker', 'attr_id'=>$record['id']), '', 'clear', 'Clear value', 'need-confirmation');
+		// else
+		// 	echo '&nbsp;';
+		// echo '</td>';
+		$submod->addOutput('Record_Name', $record['name']);
+		// echo "<th class=sticker>${record['name']}:</th><td class=tdleft>";
+		$submod->setOutput('Record_Value', $record['value']);
 		switch ($record['type'])
 		{
 			case 'uint':
 			case 'float':
 			case 'string':
-				echo "<input type=text name=${i}_value value='${record['value']}'>";
+				$submod->addOutput('Switch_Option', 'ONE');
+				// echo "<input type=text name=${i}_value value='${record['value']}'>";
 				break;
 			case 'dict':
+				$submod->addOutput('Switch_Option', 'TWO');
 				$chapter = readChapter ($record['chapter_id'], 'o');
 				$chapter[0] = '-- NOT SET --';
 				$chapter = cookOptgroups ($chapter, 1562, $record['key']);
-				printNiftySelect ($chapter, array ('name' => "${i}_value"), $record['key']);
+				$submod->addOutput('Nifty_Select', getNiftySelect( $chapter, array ('name' => "${i}_value"), $record['key']));
+				// printNiftySelect ($chapter, array ('name' => "${i}_value"), $record['key']);
 				break;
 		}
-		echo "</td></tr>\n";
+		// echo "</td></tr>\n";
 		$i++;
 	}
-	echo "<tr><td>&nbsp;</td><th class=tdright>Has problems:</th><td class=tdleft><input type=checkbox name=has_problems";
+	// echo "<tr><td>&nbsp;</td><th class=tdright>Has problems:</th><td class=tdleft><input type=checkbox name=has_problems";
 	if ($location['has_problems'] == 'yes')
-		echo ' checked';
-	echo "></td></tr>\n";
+		$mod->setOutput('Has_Problems', TRUE);
+		// echo ' checked';
+	// echo "></td></tr>\n";
 	if (count ($location['locations']) == 0 and count ($location['rows']) == 0)
 	{
-		echo "<tr><td>&nbsp;</td><th class=tdright>Actions:</th><td class=tdleft>";
-		echo getOpLink (array('op'=>'deleteLocation'), '', 'destroy', 'Delete location', 'need-confirmation');
-		echo "&nbsp;</td></tr>\n";
+		$mod->setOutput('Empty_Locations', TRUE);
+		// echo "<tr><td>&nbsp;</td><th class=tdright>Actions:</th><td class=tdleft>";
+		// echo getOpLink (array('op'=>'deleteLocation'), '', 'destroy', 'Delete location', 'need-confirmation');
+		// echo "&nbsp;</td></tr>\n";
 	}
-	echo "<tr><td colspan=3><b>Comment:</b><br><textarea name=comment rows=10 cols=80>${location['comment']}</textarea></td></tr>";
-	echo "<tr><td class=submit colspan=3>";
-	printImageHREF ('SAVE', 'Save changes', TRUE);
-	echo "</td></tr>\n";
-	echo '</form></table><br>';
-	finishPortlet();
 
-	startPortlet ('History');
-	renderObjectHistory ($location_id);
-	finishPortlet();
+	$mod->addOutput('Location_Comment', $location['comment']);
+
+	// echo "<tr><td colspan=3><b>Comment:</b><br><textarea name=comment rows=10 cols=80>${location['comment']}</textarea></td></tr>";
+	// echo "<tr><td class=submit colspan=3>";
+	// printImageHREF ('SAVE', 'Save changes', TRUE);
+	// echo "</td></tr>\n";
+	// echo '</form></table><br>';
+	// finishPortlet();
+
+	// startPortlet ('History');
+	renderObjectHistory ($location_id, $mod, 'Objecthistory');
+	// finishPortlet();
 }
 
 function renderRackPage ($rack_id)
@@ -6486,6 +6536,8 @@ function renderConfigEditor ()
 	// echo "<th class=tdleft>Value</th></tr>";
 	// printOpFormIntro ('upd');
 
+
+
 	$i = 0;
 	foreach ($per_user ? $configCache : loadConfigCache() as $v)
 	{
@@ -6530,11 +6582,7 @@ function renderMyAccount ()
 	$tplm->createMainModule("index");
 	$mod = $tplm->generateSubmodule("Payload", "RenderMyAccount");
 	$mod->setNamespace("myaccount");
-		$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
-	$mod = $tplm->generateSubmodule("Payload", "RenderMyAccount");
-	$mod->setNamespace("myaccount");
+		
 
 	
 	global $remote_username, $remote_displayname, $expl_tags, $impl_tags, $auto_tags;
@@ -9844,28 +9892,43 @@ END
 //
 function renderObjectLogEditor ()
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate('vanilla');
+	$tplm->createMainModule();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'RenderObjectLogEditor');
+	$mod->setNamespace('location',true);
+
 	global $nextorder;
 
-	echo "<center><h2>Log records for this object (<a href=?page=objectlog>complete list</a>)</h2></center>";
-	printOpFormIntro ('add');
-	echo "<table with=80% align=center border=0 cellpadding=5 cellspacing=0 align=center class=cooltable><tr valign=top class=row_odd>";
-	echo '<td class=tdcenter>' . getImageHREF ('CREATE', 'add record', TRUE, 101) . '</td>';
-	echo '<td><textarea name=logentry rows=10 cols=80 tabindex=100></textarea></td>';
-	echo '<td class=tdcenter>' . getImageHREF ('CREATE', 'add record', TRUE, 101) . '</td>' ;
-	echo '</tr></form>';
+	$mod->addOutput('Image_Href', getImageHREF ('CREATE', 'add record', TRUE, 101));
+
+	// echo "<center><h2>Log records for this object (<a href=?page=objectlog>complete list</a>)</h2></center>";
+	// printOpFormIntro ('add');
+	// echo "<table with=80% align=center border=0 cellpadding=5 cellspacing=0 align=center class=cooltable><tr valign=top class=row_odd>";
+	// echo '<td class=tdcenter>' . getImageHREF ('CREATE', 'add record', TRUE, 101) . '</td>';
+	// echo '<td><textarea name=logentry rows=10 cols=80 tabindex=100></textarea></td>';
+	// echo '<td class=tdcenter>' . getImageHREF ('CREATE', 'add record', TRUE, 101) . '</td>' ;
+	// echo '</tr></form>';
 
 	$order = 'even';
 	foreach (getLogRecordsForObject (getBypassValue()) as $row)
 	{
-		echo "<tr class=row_${order} valign=top>";
-		echo '<td class=tdleft>' . $row['date'] . '<br>' . $row['user'] . '</td>';
-		echo '<td class="logentry">' . string_insert_hrefs (htmlspecialchars ($row['content'], ENT_NOQUOTES)) . '</td>';
-		echo "<td class=tdleft>";
-		echo getOpLink (array('op'=>'del', 'log_id'=>$row['id']), '', 'DESTROY', 'Delete log entry');
-		echo "</td></tr>\n";
+		$submod = $tplm->generateSubmodule('Rows', 'RowGenerator', $mod);
+		$submod->setOutput('Order', $order);
+		$submod->setOutput('Date', $row['date']);
+		$submod->setOutput('User', $row['user']);
+		$submod->setOutput('Hrefs', string_insert_hrefs (htmlspecialchars ($row['content'], ENT_NOQUOTES)));
+		$submod->setOutput('Id', $row['id']);
+		// echo "<tr class=row_${order} valign=top>";
+		// echo '<td class=tdleft>' . $row['date'] . '<br>' . $row['user'] . '</td>';
+		// echo '<td class="logentry">' . string_insert_hrefs (htmlspecialchars ($row['content'], ENT_NOQUOTES)) . '</td>';
+		// echo "<td class=tdleft>";
+		// echo getOpLink (array('op'=>'del', 'log_id'=>$row['id']), '', 'DESTROY', 'Delete log entry');
+		// echo "</td></tr>\n";
 		$order = $nextorder[$order];
 	}
-	echo '</table>';
+	// echo '</table>';
 
 
 }
