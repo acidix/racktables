@@ -4,9 +4,9 @@
 	<tr><th class=tdleft>
 	<?php $this->getH('PrintImageHref', array('add', 'add pair', TRUE)); ?>
 	</th><th class=tdleft>
-	<?php $this->Parent; ?>
+	<?php $this->Type1; ?>
 	</th><th class=tdleft>
-	<?php $this->Child; ?>
+	<?php $this->Type2; ?>
 	</th></tr></form>
 
 
