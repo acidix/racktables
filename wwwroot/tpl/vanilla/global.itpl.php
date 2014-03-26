@@ -270,6 +270,13 @@ $this->setInMemoryTemplate('IPNetBacktraceLink','<a href="{{Link}}" title="View 
 *	Usage:  renderVLANInfo -> interface.php
 *
 **/
-$this->setInMemoryTemplate("StdListElem"," <li>{{cont}}</li>");
+$this->setInMemoryTemplate('StdListElem','<li>{{cont}}</li>');
+
+/**
+*	RenderedIPPortPair: 
+*	Usage:  Usage
+*
+**/
+$this->setInMemoryTemplate('RenderedIPPortPair','<a href="{{href}}">{{ip}}</a>{{isPort}}');
 
 ?>

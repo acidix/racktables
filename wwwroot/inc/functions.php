@@ -2694,7 +2694,7 @@ function convertToBytes ($value)
 }
 
 // make "A" HTML element
-function mkA ($text, $nextpage, $bypass = NULL, $nexttab = NULL)
+function mkA ($text, $nextpage, $bypass = NULL, $nexttab = NULL, $parent = null, $placeholder = 'mkA')
 {
 	global $page, $tab;
 	
@@ -2720,10 +2720,15 @@ function mkA ($text, $nextpage, $bypass = NULL, $nexttab = NULL)
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");
 		
-	$mod = $tplm->generateModule( "MkAInMemory", true,
+	if($parent == null)
+		$mod = $tplm->generateModule( "MkAInMemory", true,
+									array("link" => makeHref($args), "text" => $text));
+	else
+		$mod = $tplm->generateSubmodule( $placeholder,"MkAInMemory", $parent, true,
 									array("link" => makeHref($args), "text" => $text));
 //	return '<a href="' . makeHref ($args) . '">' . $text . '</a>';
-	return $mod->run();
+	if($parent == null)
+		return $mod->run();
 }
 
 // make "HREF" HTML attribute

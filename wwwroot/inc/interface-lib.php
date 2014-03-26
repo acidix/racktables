@@ -1211,19 +1211,50 @@ function renderNetVLAN ($cell)
 	return $mod->run();
 }
 
-function includeJQueryUI ($do_css = TRUE)
+function includeJQueryUI ($do_css = TRUE, $parent = null, $placeholder = "jqueryUI")
 {
-	addJS ('js/jquery-ui-1.8.21.min.js');
+	$tplm = TemplateManager::getInstance();
+	if($parent==null)
+		$tplm->setTemplate("vanilla");
+	
+	if($parent==null)	
+		$mod = $tplm->generateModule("IncludeJQueryUI");
+	else
+		$mod = $tplm->generateSubmodule($placeholder, "IncludeJQueryUI", $parent);
+	
+	$mod->setNamespace("");
+	
+	
+//	addJS ('js/jquery-ui-1.8.21.min.js');
 	if ($do_css)
-		addCSS ('css/jquery-ui-1.8.22.redmond.css');
+		$mod->addOutput("do_css", true);			 
+//		addCSS ('css/jquery-ui-1.8.22.redmond.css');
+	if($parent==null)
+		return $mod->run();
 }
 
-function getRenderedIPPortPair ($ip, $port = NULL)
+function getRenderedIPPortPair ($ip, $port = NULL, $parent = null, $placeholder = "RenderedIPPortPair")
 {
-	return "<a href=\"" .
-		makeHref (array ('page' => 'ipaddress',  'tab'=>'default', 'ip' => $ip)) .
-		"\">" . $ip . "</a>" .
-		(isset ($port) ? ":" . $port : "");
+	$tplm = TemplateManager::getInstance();
+	if($parent==null)
+		$tplm->setTemplate("vanilla");
+	
+	if($parent==null)	
+		$mod = $tplm->generateModule("RenderedIPPortPair", true );
+	else
+		$mod = $tplm->generateSubmodule("RenderedIPPortPair", "RenderedIPPortPair", $parent, true);
+	
+	$mod->setNamespace("");
+	$mod->addOutput("href", makeHref (array ('page' => 'ipaddress',  'tab'=>'default', 'ip' => $ip)));
+	$mod->addOutput("ip", $ip);
+	$mod->addOutput("isPort", (isset ($port) ? ":" . $port : "")); 	 	 	 	 	 
+
+	if($parent==null)
+		return $mod->run();
+	//return "<a href=\"" .
+	//	makeHref (array ('page' => 'ipaddress',  'tab'=>'default', 'ip' => $ip)) .
+	//	"\">" . $ip . "</a>" .
+	//	(isset ($port) ? ":" . $port : "");
 }
 
 // Print common operation form prologue, include bypass argument, if
