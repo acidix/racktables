@@ -214,6 +214,14 @@ $this->setInMemoryTemplate("StdCenterTableCell","<td class=tdcenter>{{cont}}</td
 $this->setInMemoryTemplate("StdTableCell","<td>{{cont}}</td>");
 
 /**
+*	StdTableRow: 
+*	Usage: printObjectDetailsForRenderRack -> interface.php
+*
+**/
+$this->setInMemoryTemplate("StdTableRow","<tr>{{cont}}</tr>");
+
+
+/**
 *	RenderTagStatsALink: 
 *	Usage:  interface.php
 *
@@ -274,9 +282,30 @@ $this->setInMemoryTemplate('StdListElem','<li>{{cont}}</li>');
 
 /**
 *	RenderedIPPortPair: 
-*	Usage:  Usage
+*	Usage:  interface.php
 *
 **/
 $this->setInMemoryTemplate('RenderedIPPortPair','<a href="{{href}}">{{ip}}</a>{{isPort}}');
+
+/**
+*	FormatLoggedSpan: 
+*	Usage:  ajax-interface.php
+*
+**/
+$this->setInMemoryTemplate("FormatLoggedSpan","<span{{class}}{title}}>{{text}}</span>");
+
+/**
+*	FullWidthTable: 
+*	Usage:  printObjectDetailsForRenderRack -> interface.php
+*
+**/
+$this->setInMemoryTemplate("FullWidthTable","<table width='100%' border='1'>{{cont}}</table>");
+
+/**
+*	ObjectFreeSolt: 
+*	Usage:  printObjectDetailsForRenderRack -> interface.php
+*
+**/
+$this->setInMemoryTemplate("ObjectFreeSolt","<td class='state_F'><div title='Free slot'>&nbsp;</div></td>");
 
 ?>

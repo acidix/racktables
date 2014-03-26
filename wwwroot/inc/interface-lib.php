@@ -1107,7 +1107,7 @@ function getOpLink ($params, $title,  $img_name = '', $comment = '', $class = ''
 	if($parent == null)
 		$mod = $tplm->generateModule("GetOpLink");
 	else 
-		$mod = $tplm->generateSubmodule($parent, "GetOpLink", $placeholder);
+		$mod = $tplm->generateSubmodule($placeholder, "GetOpLink", $parent);
 	$mod->setNamespace("");
 	
 	if (isset ($params))
