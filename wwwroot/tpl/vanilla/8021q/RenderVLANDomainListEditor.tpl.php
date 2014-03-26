@@ -14,7 +14,7 @@
 			<?php $this->linkDestroy ?> 
 		<?php } ?> 
 
-		</td><td><input name=vdom_descr type=text size=48 value=<?php $this->niftyStr ?> 
+		</td><td><input name=vdom_descr type=text size=48 value=<?php $this->niftyStr ?>> 
 		</td><td>
 		<?php $this->imageUpdate ?> 
 		</td></tr></form>
