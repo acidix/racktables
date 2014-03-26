@@ -48,7 +48,7 @@
 			<?php $this->endLoop(); ?> 
 			</table>
 		</div>
-	<?php }?> 
+	<?php  } ?> 
 	</td><td class=pcright>
 	<div class=portlet>
 		<h2>deploy queues</h2>
