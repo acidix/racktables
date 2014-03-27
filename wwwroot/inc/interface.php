@@ -3349,7 +3349,7 @@ END
 	$mod->addOutput("prefix_value", $prefix_value);	 
 	//echo "<th class=tdright>prefix</th><td class=tdleft><input type=text name='range' size=36 class='live-validate' tabindex=1 value='${prefix_value}'></td>";
 	//echo '<tr><th class=tdright>VLAN</th><td class=tdleft>';
-	getOptionTree ('vlan_ck', getAllVLANOptions(), array ('select_class' => 'vertical', 'tabindex' => 2), $mod, 'optionTree')
+	getOptionTree ('vlan_ck', getAllVLANOptions(), array ('select_class' => 'vertical', 'tabindex' => 2), $mod, 'optionTree');
 	//echo getOptionTree ('vlan_ck', getAllVLANOptions(), array ('select_class' => 'vertical', 'tabindex' => 2)) . '</td></tr>';
 	//echo "<tr><th class=tdright>name</th><td class=tdleft><input type=text name='name' size='20' tabindex=3></td></tr>";
 	//echo '<tr><td class=tdright><input type=checkbox name="is_connected" id="is_connected" tabindex=4></td>';
