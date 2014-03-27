@@ -2536,14 +2536,26 @@ function renderPortsInfo($object_id)
 		return;
 	}
 
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderPortsInfo");
+	$mod->setNamespace("object");
+		
+
 	global $nextorder;
-	echo "<table width='100%'><tr>";
+	//echo "<table width='100%'><tr>";
 	if (! empty ($linkStatus))
 	{
-		echo "<td valign='top' width='50%'>";
+		$mod->addOutput("isLinkStatus", true);
+			 
+		/*echo "<td valign='top' width='50%'>";
 		startPortlet('Link status');
 		echo "<table width='80%' class='widetable' cellspacing=0 cellpadding='5px' align='center'><tr><th>Port<th><th>Link status<th>Link info</tr>";
+		*/
 		$order = 'even';
+		$allLinkStatusOut = array();
 		foreach ($linkStatus as $pn => $link)
 		{
 			switch ($link['status'])
@@ -2560,12 +2572,13 @@ function renderPortsInfo($object_id)
 				default:
 					$img_filename = '1x1t.gif';
 			}
-
-			echo "<tr class='row_$order'>";
+			$singleLinkStatus = array('order' => $order, 'img_filename' => $img_filename, 'pn' => $pn,
+								'linkStatus' => $link['status'] );
+			//echo "<tr class='row_$order'>";
 			$order = $nextorder[$order];
-			echo '<td>' . $pn;
+			/*echo '<td>' . $pn;
 			echo '<td>' . '<img width=16 height=16 src="?module=chrome&uri=pix/' . $img_filename . '">';
-			echo '<td>' . $link['status'];
+			echo '<td>' . $link['status']; */
 			$info = '';
 			if (isset ($link['speed']))
 				$info .= $link['speed'];
@@ -2575,41 +2588,53 @@ function renderPortsInfo($object_id)
 					$info .= ', ';
 				$info .= $link['duplex'];
 			}
-			echo '<td>' . $info;
-			echo '</tr>';
+			$singleLinkStatus['info'] = $info;
+			//echo '<td>' . $info;
+			//echo '</tr>';
+			$allLinkStatusOut[] = $singleLinkStatus;
 		}
-		echo "</table></td>";
-		finishPortlet();
+		$mod->addOutput("allLinkStatus", $allLinkStatusOut);
+			 
+		//echo "</table></td>";
+		//finishPortlet();
 	}
+
 
 	if (! empty ($macList))
 	{
-		echo "<td valign='top' width='50%'>";
+		$mod->addOutput("hasMacList", true);
+			 
+		//echo "<td valign='top' width='50%'>";
 		$rendered_macs = '';
 		$mac_count = 0;
-		$rendered_macs .=  "<table width='80%' class='widetable' cellspacing=0 cellpadding='5px' align='center'><tr><th>MAC<th>Vlan<th>Port</tr>";
+		//$rendered_macs .=  "<table width='80%' class='widetable' cellspacing=0 cellpadding='5px' align='center'><tr><th>MAC<th>Vlan<th>Port</tr>";
 		$order = 'even';
+		$allMacsOut = array();
 		foreach ($macList as $pn => $list)
 		{
 			$order = $nextorder[$order];
 			foreach ($list as $item)
 			{
 				++$mac_count;
-				$rendered_macs .= "<tr class='row_$order'>";
+				$allMacsOut[] = array('item' => $item['mac'], 'vid' => $item['vid'], 'pn' => $pn, 'order' => $order);
+				/*$rendered_macs .= "<tr class='row_$order'>";
 				$rendered_macs .= '<td style="font-family: monospace">' . $item['mac'];
 				$rendered_macs .= '<td>' . $item['vid'];
 				$rendered_macs .= '<td>' . $pn;
-				$rendered_macs .= '</tr>';
+				$rendered_macs .= '</tr>'; */
 			}
 		}
-		$rendered_macs .= "</table></td>";
-
-		startPortlet("Learned MACs ($mac_count)");
-		echo $rendered_macs;
-		finishPortlet();
+		$mod->addOutput("allMacs", $allMacsOut);
+			 
+		//$rendered_macs .= "</table></td>";
+		$mod->addOutput("macCount", $mac_count);
+			 
+		//startPortlet("Learned MACs ($mac_count)");
+		//echo $rendered_macs;
+		//finishPortlet();
 	}
 
-	echo "</td></tr></table>";
+	//echo "</td></tr></table>";
 }
 
 /*
@@ -6310,16 +6335,25 @@ function renderUIConfig ()
 
 function renderSNMPPortFinder ($object_id)
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+
 	if (!extension_loaded ('snmp'))
 	{
-		echo "<div class=msg_error>The PHP SNMP extension is not loaded.  Cannot continue.</div>";
+		$mod = $tplm->generateSubmodule("Payload","RenderSNMPPortFinder_NoExt", null, true);
+		//echo "<div class=msg_error>The PHP SNMP extension is not loaded.  Cannot continue.</div>";
 		return;
 	}
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderSNMPPortFinder");
+	$mod->setNamespace("object");
+		
 	$snmpcomm = getConfigVar('DEFAULT_SNMP_COMMUNITY');
 	if (empty($snmpcomm))
 		$snmpcomm = 'public';
 
-	startPortlet ('SNMPv1');
+	/*startPortlet ('SNMPv1');
 	printOpFormIntro ('querySNMPData', array ('ver' => 1));
 	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
 	echo '<tr><th class=tdright><label for=communityv1>Community: </label></th>';
@@ -6338,7 +6372,9 @@ function renderSNMPPortFinder ($object_id)
 	finishPortlet();
 
 	startPortlet ('SNMPv3');
-	printOpFormIntro ('querySNMPData', array ('ver' => 3));
+	printOpFormIntro ('querySNMPData', array ('ver' => 3));*/
+	$mod->addOutput("snmpcomm", $snmpcomm);
+	/*	 
 ?>
 	<table cellspacing=0 cellpadding=5 align=center class=widetable>
 	<tr>
@@ -6381,9 +6417,10 @@ function renderSNMPPortFinder ($object_id)
 	</tr>
 	<tr><td colspan=2><input type=submit value="Try now"></td></tr>
 	</table>
-<?php
+?<php
 	echo '</form>';
 	finishPortlet();
+	*/
 }
 
 function renderUIResetForm()
@@ -6575,16 +6612,28 @@ function renderAutoPortsForm ($object_id)
 {
 	$info = spotEntity ('object', $object_id);
 	$ptlist = readChapter (CHAP_PORTTYPE, 'a');
-	echo "<table class='widetable' border=0 cellspacing=0 cellpadding=5 align='center'>\n";
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderAutoPortsForm");
+	$mod->setNamespace("object");
+
+	/*echo "<table class='widetable' border=0 cellspacing=0 cellpadding=5 align='center'>\n";
 	echo "<caption>The following ports can be quickly added:</caption>";
-	echo "<tr><th>type</th><th>name</th></tr>";
+	echo "<tr><th>type</th><th>name</th></tr>";*/
+	$allAutoPortsOut = array();
 	foreach (getAutoPorts ($info['objtype_id']) as $autoport)
-		echo "<tr><td>" . $ptlist[$autoport['type']] . "</td><td>${autoport['name']}</td></tr>";
-	printOpFormIntro ('generate');
+		$allAutoPortsOut[] = array('type' => $ptlist[$autoport['type']], 'name' => $autoport['name']);
+		//echo "<tr><td>" . $ptlist[$autoport['type']] . "</td><td>${autoport['name']}</td></tr>";
+	$mod->addOutput("allAutoPorts", $allAutoPortsOut);
+		 
+	/*printOpFormIntro ('generate');
 	echo "<tr><td colspan=2 align=center>";
 	echo "<input type=submit value='Generate'>";
 	echo "</td></tr>";
-	echo "</table></form>";
+	echo "</table></form>";*/
 }
 
 function renderTagRowForViewer ($taginfo, $level = 0, $parent, $placeholder = 'Taglist')
@@ -10873,11 +10922,20 @@ function renderDiscoveredNeighbors ($object_id)
 		addAutoScrollScript ("port-$hl_port_id");
 	}
 
-	switchportInfoJS($object_id); // load JS code to make portnames interactive
-	printOpFormIntro ('importDPData');
-	echo '<br><table cellspacing=0 cellpadding=5 align=center class=widetable>';
-	echo '<tr><th colspan=2>local port</th><th></th><th>remote device</th><th colspan=2>remote port</th><th><input type="checkbox" checked id="cb-toggle"></th></tr>';
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderDiscoveredNeighbors");
+	$mod->setNamespace("object");
+		
+	//switchportInfoJS($object_id); // load JS code to make portnames interactive
+	switchportInfoJS($object_id, $mod, 'switchPortScripts'); // load JS code to make portnames interactive
+	//printOpFormIntro ('importDPData');
+	//echo '<br><table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	//echo '<tr><th colspan=2>local port</th><th></th><th>remote device</th><th colspan=2>remote port</th><th><input type="checkbox" checked id="cb-toggle"></th></tr>';
 	$inputno = 0;
+	$allNeighborsOut = array();
 	foreach ($neighbors as $local_port => $remote_list)
 	{
 		$initial_row = TRUE; // if port has multiple neighbors, the first table row is initial
@@ -10989,47 +11047,74 @@ function renderDiscoveredNeighbors ($object_id)
 			} while (FALSE); // do {
 
 			$tr_class = $link_matches ? 'trok' : (isset ($error_message) ? 'trerror' : 'trwarning');
-			echo "<tr class=\"$tr_class\">";
+			$singleNeighbor = array('tr_class' => $tr_class);
+
+			//echo "<tr class=\"$tr_class\">";
 			if ($initial_row)
 			{
 				$count = count ($remote_list);
 				$td_class = '';
+
+				$singleNeighbor['isInitialRow'] = true;
+
 				if (isset ($hl_port_id) and $hl_port_id == $portinfo_local['id'])
-					$td_class = "class='border_highlight'";
-				echo "<td rowspan=\"$count\" $td_class NOWRAP>" .
+					$singleNeighbor['td_class'] = "class='border_highlight'";
+				//	$td_class = "class='border_highlight'";
+				/*echo "<td rowspan=\"$count\" $td_class NOWRAP>" .
 					($portinfo_local ?
 						formatPortLink ($mydevice['id'], NULL, $portinfo_local['id'], $portinfo_local['name'], 'interactive-portname port-menu') :
 						"<a class='interactive-portname port-menu nolink'>$local_port</a>"
 					) .
 					($count > 1 ? "<br> ($count neighbors)" : '') .
-					'</td>';
+					'</td>';*/
+				if($portinfo_local)
+					formatPortLink ($mydevice['id'], NULL, $portinfo_local['id'], $portinfo_local['name'], 'interactive-portname port-menu', $mod, 'id_port_link_local');
+				else
+					$singlePort['localport'] = $localport;
+
 				$initial_row = FALSE;
 			}
-			echo "<td>" . ($portinfo_local ?  formatPortIIFOIF ($portinfo_local) : '&nbsp') . "</td>";
-			echo "<td>" . formatIfTypeVariants ($variants, "ports_${inputno}") . "</td>";
-			echo "<td>${dp_neighbor['device']}</td>";
-			echo "<td>" . ($portinfo_remote ? formatPortLink ($dp_remote_object_id, NULL, $portinfo_remote['id'], $portinfo_remote['name']) : $dp_neighbor['port'] ) . "</td>";
-			echo "<td>" . ($portinfo_remote ?  formatPortIIFOIF ($portinfo_remote) : '&nbsp') . "</td>";
-			echo "<td>";
+			//echo "<td>" . ($portinfo_local ?  formatPortIIFOIF ($portinfo_local) : '&nbsp') . "</td>";
+			//echo "<td>" . formatIfTypeVariants ($variants, "ports_${inputno}") . "</td>";
+			$singleNeighbor['portIIFOIFLocal'] = ($portinfo_local ?  formatPortIIFOIF ($portinfo_local) : '&nbsp');
+			formatIfTypeVariants ($variants, "ports_${inputno}", $mod, "ifTypeVariants");
+			$singleNeighbor['device'] = $dp_neighbor['device'];
+			if($portinfo_remote)
+				formatPortLink ($dp_remote_object_id, NULL, $portinfo_remote['id'], $portinfo_remote['name'], $mod, 'id_port_link_remote');
+			else
+				$singlePort['port'] = $dp_neighbor['port'];
+			$singleNeighbor['portIIFOIFRemote'] = ($portinfo_remote ?  formatPortIIFOIF ($portinfo_remote) : '&nbsp');
+			//echo "<td>${dp_neighbor['device']}</td>";
+			//echo "<td>" . ($portinfo_remote ? formatPortLink ($dp_remote_object_id, NULL, $portinfo_remote['id'], $portinfo_remote['name']) : $dp_neighbor['port'] ) . "</td>";
+			//echo "<td>" . ($portinfo_remote ?  formatPortIIFOIF ($portinfo_remote) : '&nbsp') . "</td>";
+			//echo "<td>";
 			if (! empty ($variants))
 			{
-				echo "<input type=checkbox name=do_${inputno} class='cb-makelink'>";
+				$singleNeighbor['inputno'] = $inputno;
+				//echo "<input type=checkbox name=do_${inputno} class='cb-makelink'>";
 				$inputno++;
 			}
-			echo "</td>";
+			//echo "</td>";
 
 			if (isset ($error_message))
-				echo "<td style=\"background-color: white; border-top: none\">$error_message</td>";
-			echo "</tr>";
+				$singleNeighbor['error_message'] = $error_message;
+			//	echo "<td style=\"background-color: white; border-top: none\">$error_message</td>";
+			//echo "</tr>";
+			$allNeighborsOut[] = $singleNeighbor;
 		}
 	}
+	$mod->addOutput("allNeighbors", $allNeighborsOut);
+		 
+
 	if ($inputno)
 	{
-		echo "<input type=hidden name=nports value=${inputno}>";
-		echo '<tr><td colspan=7 align=center>' . getImageHREF ('CREATE', 'import selected', TRUE) . '</td></tr>';
+		$mod->addOutput("inputno", $inputno);
+			 
+	//	echo "<input type=hidden name=nports value=${inputno}>";
+	//	echo '<tr><td colspan=7 align=center>' . getImageHREF ('CREATE', 'import selected', TRUE) . '</td></tr>';
 	}
-	echo '</table></form>';
-
+	//echo '</table></form>';
+/*
 	addJS (<<<END
 $(document).ready(function () {
 	$('#cb-toggle').click(function (event) {
@@ -11042,7 +11127,7 @@ $(document).ready(function () {
 });
 END
 		, TRUE
-	);
+	);*/
 }
 
 // $variants is an array of items like this:
@@ -11050,7 +11135,7 @@ END
 //	'left' => array ('id' => oif_id, 'name' => oif_name, 'portinfo' => $port_info),
 //	'left' => array ('id' => oif_id, 'name' => oif_name, 'portinfo' => $port_info),
 // )
-function formatIfTypeVariants ($variants, $select_name)
+function formatIfTypeVariants ($variants, $select_name, $parent = null, $placeholder = "ifTypeVariants" )
 {
 	if (empty ($variants))
 		return;
@@ -11115,7 +11200,10 @@ function formatIfTypeVariants ($variants, $select_name)
 	$sorted_select = array();
 	foreach (array_keys ($weights) as $key)
 		$sorted_select[$key] = $select[$key];
-	return getSelect ($sorted_select, array('name' => $select_name));
+	if($parent == null)
+		return getSelect ($sorted_select, array('name' => $select_name));
+	else	
+		getSelect ($sorted_select, array('name' => $select_name), NULL, TRUE, $parent, $placeholder);
 }
 
 function formatAttributeValue ($record)
@@ -11159,8 +11247,22 @@ function formatAttributeValue ($record)
 	return $result;
 }
 
-function addAutoScrollScript ($anchor_name)
+function addAutoScrollScript ($anchor_name, $parent = null, $placeholder = "autoScrollScript")
 {
+	$tplm = TemplateManager::getInstance();
+	if($parent==null)
+		$tplm->setTemplate("vanilla");
+	
+	if($parent==null)	
+		$mod = $tplm->generateModule("AddAutoScrollScript");
+	else
+		$mod = $tplm->generateSubmodule($placeholder, "AddAutoScrollScript", $parent);
+	
+	$mod->setNamespace("");
+	
+	if($parent==null)
+		return $mod->run();
+/*
 	addJS (<<<END
 $(document).ready(function() {
 	var anchor = document.getElementsByName('$anchor_name')[0];
@@ -11168,7 +11270,7 @@ $(document).ready(function() {
 		anchor.scrollIntoView(false);
 });
 END
-	, TRUE);
+	, TRUE);*/
 }
 
 //

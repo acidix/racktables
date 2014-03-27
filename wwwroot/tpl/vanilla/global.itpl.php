@@ -308,4 +308,18 @@ $this->setInMemoryTemplate("FullWidthTable","<table width='100%' border='1'>{{co
 **/
 $this->setInMemoryTemplate("ObjectFreeSolt","<td class='state_F'><div title='Free slot'>&nbsp;</div></td>");
 
+/**
+*	FormatPortLink: 
+*	Usage:  formatPortLink -> interface.php
+*
+**/
+$this->setInMemoryTemplate("FormatPortLink",'<a $additional href="{{href}}">{{text_items}}</a>');
+
+/**
+*	RenderSNMPPortFinder_NoExt: 
+*	Usage:  renderSNMPPortFinder -> interface.php
+*
+**/
+$this->setInMemoryTemplate("RenderSNMPPortFinder_NoExt","<div class=msg_error>The PHP SNMP extension is not loaded.  Cannot continue.</div>");
+
 ?>

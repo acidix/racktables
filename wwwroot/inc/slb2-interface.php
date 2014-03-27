@@ -89,7 +89,13 @@ function renderTripletForm ($bypass_id)
 {
 	global $pageno, $etype_by_pageno;
 	$cell = spotEntity ($etype_by_pageno[$pageno], $bypass_id);
-	renderSLBTriplets2 ($cell, TRUE);
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$main = $tplm->createMainModule();
+
+	//renderSLBTriplets2 ($cell, TRUE);
+	renderSLBTriplets2 ($cell, TRUE, NULL, $main, 'Payload');
 }
 
 // either $port of $vip argument should be NULL
