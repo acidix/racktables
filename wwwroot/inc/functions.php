@@ -2694,7 +2694,7 @@ function convertToBytes ($value)
 }
 
 // make "A" HTML element
-function mkA ($text, $nextpage, $bypass = NULL, $nexttab = NULL)
+function mkA ($text, $nextpage, $bypass = NULL, $nexttab = NULL, $parent = null, $placeholder = 'mkA')
 {
 	global $page, $tab;
 	
@@ -2720,10 +2720,15 @@ function mkA ($text, $nextpage, $bypass = NULL, $nexttab = NULL)
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");
 		
-	$mod = $tplm->generateModule( "MkAInMemory", true,
+	if($parent == null)
+		$mod = $tplm->generateModule( "MkAInMemory", true,
+									array("link" => makeHref($args), "text" => $text));
+	else
+		$mod = $tplm->generateSubmodule( $placeholder,"MkAInMemory", $parent, true,
 									array("link" => makeHref($args), "text" => $text));
 //	return '<a href="' . makeHref ($args) . '">' . $text . '</a>';
-	return $mod->run();
+	if($parent == null)
+		return $mod->run();
 }
 
 // make "HREF" HTML attribute
@@ -4490,7 +4495,7 @@ function formatPortIIFOIF ($port)
 
 // returns '<a...</a>' html string containing a link to specified port or object.
 // link title is "hostname portname" if both parts are defined
-function formatPortLink($host_id, $hostname, $port_id, $portname, $a_class = '')
+function formatPortLink($host_id, $hostname, $port_id, $portname, $a_class = '', $parent = null, $placeholder = "formatedPortLink")
 {
 	$href = 'index.php?page=object&object_id=' . urlencode($host_id);
 	$additional = '';
@@ -4508,7 +4513,21 @@ function formatPortLink($host_id, $hostname, $port_id, $portname, $a_class = '')
 	if (isset ($portname))
 		$text_items[] = $portname;
 
-	return "<a $additional href=\"$href\">" . implode(' ', $text_items) . '</a>';
+	$tplm = TemplateManager::getInstance();
+	if($parent==null)
+		$tplm->setTemplate("vanilla");
+	
+	if($parent==null)	
+		$mod = $tplm->generateModule("FormatPortLink",   true);
+	else
+		$mod = $tplm->generateSubmodule($placeholder, "FormatPortLink", $parent, true);
+	
+	$mod->addOutput("href", $href);
+	$mod->addOutput("text_items", $text_items);	 
+
+	if($parent==null)
+		return $mod->run();
+	//return "<a $additional href=\"$href\">" . implode(' ', $text_items) . '</a>';
 }
 
 // function returns a HTML-formatted link to the specified port

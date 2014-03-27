@@ -105,10 +105,23 @@ function formatLoggedSpan ($log_item, $text, $html_class = '')
 		$html_class = trim ($html_class . ' hover-history');
 		$title = htmlspecialchars ($log_item['user'] . ', ' . formatAge ($log_item['time']), ENT_QUOTES);
 	}
-	return "<span" .
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	
+	$mod = $tplm->generateModule("FormatLoggedSpan", true);
+	$mod->addOutput("class", (strlen ($html_class) ? " class='$html_class'" : ''));
+	$mod->addOutput("title", (strlen ($title) ? " title='$title'" : ''));
+	$mod->addOutput("text", $text);
+		 
+	
+	/*return "<span" .
 		(strlen ($html_class) ? " class='$html_class'" : '') .
 		(strlen ($title) ? " title='$title'" : '') .
-		">$text</span>";
+		">$text</span>";*/
+
+	return $mod->run();
+
 }
 
 function getTagSelectAJAX()

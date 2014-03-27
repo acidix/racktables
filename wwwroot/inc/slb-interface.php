@@ -884,10 +884,19 @@ function renderEditVService ($vsid)
 
 function renderLVSConfig ($object_id)
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderLVSConfig");
+	$mod->setNamespace("object");
+	$mod->addOutput("lvsConfig", buildLVSConfig ($object_id));
+		 
+	/*
 	printOpFormIntro ('submitSLBConfig');
 	echo "<center><input type=submit value='Submit for activation'></center>";
 	echo "</form>";
-	echo "<pre>" . buildLVSConfig ($object_id) . "</pre>";
+	echo "<pre>" . buildLVSConfig ($object_id) . "</pre>";*/
 }
 
 ?>
