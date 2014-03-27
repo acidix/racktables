@@ -272,4 +272,14 @@ $this->setInMemoryTemplate('IPNetBacktraceLink','<a href="{{Link}}" title="View 
 **/
 $this->setInMemoryTemplate("StdListElem"," <li>{{cont}}</li>");
 
+/**
+ *	IPv6Separators:
+ *	Usage: renderIPv6Addresses -> interface.php 
+ *
+ **/
+$this->setInMemoryTemplate("IPv6SeparatorPlain","<tr><td colspan=4 class=tdleft></td></tr>");
+$this->setInMemoryTemplate("IPv6Separator","<tr class='tdleft {{Highlight}}'><td><a name='ip-{{FMT}}' href='{{Link'>{{FMT}}</a>" . 
+												"</td><td><span class='rsvtext {{Editable}} id-{{FMT}} op-upd-ip-name'></span></td>" .
+												"<td><span class='rsvtext {{Editable}} id-{{FMT}} op-upd-ip-comment'></span></td><td>&nbsp;</td></tr>");
+
 ?>

@@ -3061,25 +3061,32 @@ function renderIPNetwork ($id)
 }
 
 // Used solely by renderSeparator
-function renderEmptyIPv6 ($ip_bin, $hl_ip)
+function renderEmptyIPv6 ($ip_bin, $hl_ip, $parent, $placeholder)
 {
-	$class = 'tdleft';
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule($placeholder, 'IPv6Separator', $parent, true);
+	$class = '';
 	if ($ip_bin === $hl_ip)
-		$class .= ' highlight';
-	$fmt = ip6_format ($ip_bin);
-	echo "<tr class='$class'><td><a name='ip-$fmt' href='" . makeHref (array ('page' => 'ipaddress', 'ip' => $fmt)) . "'>" . $fmt;
+		$class .= 'highlight';
+	$mod->addOutput('Highlight', $class);
+	$mod->addOutput('FMT', ip6_format ($ip_bin));
+	//$fmt = ip6_format ($ip_bin);
+	//echo "<tr class='$class'><td><a name='ip-$fmt' href='" . makeHref (array ('page' => 'ipaddress', 'ip' => $fmt)) . "'>" . $fmt;
+	$mod->addOutput('Link',makeHref (array ('page' => 'ipaddress', 'ip' => $fmt)));
 	$editable = permitted ('ipaddress', 'properties', 'editAddress')
 		? 'editable'
 		: '';
-	echo "</a></td><td><span class='rsvtext $editable id-$fmt op-upd-ip-name'></span></td>";
-	echo "<td><span class='rsvtext $editable id-$fmt op-upd-ip-comment'></span></td><td>&nbsp;</td></tr>\n";
+	$mod->addOutput('Editable', $editable);
+	//echo "</a></td><td><span class='rsvtext $editable id-$fmt op-upd-ip-name'></span></td>";
+	//echo "<td><span class='rsvtext $editable id-$fmt op-upd-ip-comment'></span></td><td>&nbsp;</td></tr>\n";
 }
 
 // Renders empty table line to shrink empty IPv6 address ranges.
 // If the range consists of single address, renders the address instead of empty line.
 // Renders address $hl_ip inside the range.
 // Used solely by renderIPv6NetworkAddresses
-function renderSeparator ($first, $last, $hl_ip)
+function renderSeparator ($first, $last, $hl_ip, $parent, $placeholder)
 {
 	$self = __FUNCTION__;
 	if (strcmp ($first, $last) > 0)
@@ -3093,7 +3100,11 @@ function renderSeparator ($first, $last, $hl_ip)
 		$self (ip_next ($hl_ip), $last, $hl_ip);
 	}
 	else
-		echo "<tr><td colspan=4 class=tdleft></td></tr>\n";
+	{
+		$tplm = TemplateManager::getInstance();
+		$mod = $tplm->generateSubmodule($placeholder, 'IPv6SeparatorPlain', $parent, true);
+	}
+		//echo "<tr><td colspan=4 class=tdleft></td></tr>\n";
 }
 
 // calculates page number that contains given $ip (used by renderIPv6NetworkAddresses)
@@ -3113,7 +3124,7 @@ function renderIPNetworkAddresses ($range, $parent, $placeholder)
 	switch (strlen ($range['ip_bin']))
 	{
 		case 4:  return renderIPv4NetworkAddresses ($range, $parent, $placeholder);
-		case 16: return renderIPv6NetworkAddresses ($range);
+		case 16: return renderIPv6NetworkAddresses ($range, $parent, $placeholder);
 		default: throw new InvalidArgException ("range['ip_bin']", $range['ip_bin']);
 	}
 }
@@ -3127,7 +3138,7 @@ function renderIPv4NetworkAddresses ($range, $parent, $placeholder)
 	$tplm = TemplateManager::getInstance();
 	
 	$mod = $tplm->generateSubmodule($placeholder, 'IPNetworkAddresses', $parent);
-	$mod->setNamespace('ipnetwork');
+	$mod->setNamespace('ipnetwork',true);
 
 	if (isset ($_REQUEST['hl_ip']))
 	{
@@ -3150,24 +3161,27 @@ function renderIPv4NetworkAddresses ($range, $parent, $placeholder)
 			$mod->addOutput('StartIP', ip4_format (ip4_int2bin ($startip)));
 			$mod->addOutput('EndIP', ip4_format (ip4_int2bin ($endip)));
 			//echo '<h3>' . ip4_format (ip4_int2bin ($startip)) . ' ~ ' . ip4_format (ip4_int2bin ($endip)) . '</h3>';
-			$outarr = array();
+			$pagesarray = array();
+			$smod = $tplm->generateSubmodule('Pager', 'IPNetworkAddressesPager', $mod);
 			for ($i = 0; $i < $numpages; $i++)
 				if ($i == $page)
 				{
-					$smod = $tplm->generateSubmodule('Pager', 'IPNetworkAddressesPager');
-					$smod->addOutput('B', '<b>');
-					$smod->addOutput('B', '</b>');
-					$smod->addOutput('i', $i);
-					$smod->addOutput('Link', makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $range['id'], 'pg' => $i)));
+					$pagesarray[] = array(
+						'B' => '<b>',
+						'BEnd' => '</b>',
+						'i' => $i,
+						'Link' => makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $netinfo['id'], 'pg' => $i))
+					);
 				}
 					//$rendered_pager .= "<b>$i</b> ";
 				else
 				{	
-					$smod = $tplm->generateSubmodule('Pager', 'IPNetworkAddressesPager');
-					$smod->addOutput('i', $i);
-					$smod->addOutput('Link', makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $range['id'], 'pg' => $i)));					
+					$pagesarray[] = array(
+						'i' => $i,
+						'Link' => makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $netinfo['id'], 'pg' => $i))
+					);
 				}
-					//$rendered_pager .= "<a href='".makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $range['id'], 'pg' => $i)) . "'>$i</a> ";
+			$smod->addOutput('Pages', $pagesarray);
 		}
 		$startip = $startip + $page * $maxperpage;
 		$endip = min ($startip + $maxperpage - 1, $endip);
@@ -3310,7 +3324,7 @@ function renderIPv4NetworkAddresses ($range, $parent, $placeholder)
 		
 		if (count($outarr)>0)
 		{
-			$smod->addOutput('VSGList', $outarr);
+			$smod->addOutput('RSPList', $outarr);
 		}
 		//echo "</td></tr>\n";
 	}
@@ -3326,17 +3340,24 @@ function renderIPv4NetworkAddresses ($range, $parent, $placeholder)
 		//echo '<p>' . $rendered_pager . '</p>';
 }
 
-function renderIPv6NetworkAddresses ($netinfo)
+function renderIPv6NetworkAddresses ($netinfo, $parent, $placeholder)
 {
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule($placeholder, 'IPv6NetworkAddresses', $parent);
+	$mod->setNamespace('ipnetwork',true);
+	
+	
 	global $pageno, $tabno, $aac2;
-	echo "<table class='widetable' border=0 cellspacing=0 cellpadding=5 align='center' width='100%'>\n";
-	echo "<tr><th>Address</th><th>Name</th><th>Comment</th><th>Allocation</th></tr>\n";
+	//echo "<table class='widetable' border=0 cellspacing=0 cellpadding=5 align='center' width='100%'>\n";
+	//echo "<tr><th>Address</th><th>Name</th><th>Comment</th><th>Allocation</th></tr>\n";
 
 	$hl_ip = NULL;
 	if (isset ($_REQUEST['hl_ip']))
 	{
 		$hl_ip = ip6_parse ($_REQUEST['hl_ip']);
-		addAutoScrollScript ('ip-' . ip6_format ($hl_ip));
+		$mod->addOutput('AutoScroll', ip6_format($hl_ip));
+		//addAutoScrollScript ('ip-' . ip6_format ($hl_ip));
 	}
 
 	$addresses = $netinfo['addrlist'];
@@ -3347,17 +3368,39 @@ function renderIPv6NetworkAddresses ($netinfo)
 	$maxperpage = getConfigVar ('IPV4_ADDRS_PER_PAGE');
 	if (count ($addresses) > $maxperpage && $maxperpage > 0)
 	{
+		$mod->addOutput('HasPagination', true);
 		$page = isset ($_REQUEST['pg']) ? $_REQUEST['pg'] : (isset ($hl_ip) ? getPageNumOfIPv6 ($addresses, $hl_ip, $maxperpage) : 0);
 		$numpages = ceil (count ($addresses) / $maxperpage);
-		echo "<center><h3>$numpages pages:</h3>";
+		$mod->addOutput('NumPages', $numpages);
+		//echo "<center><h3>$numpages pages:</h3>";
+		$pagesarray = array();
 		for ($i=0; $i<$numpages; $i++)
 		{
 			if ($i == $page)
+			{
+				$pagesarray[] = array(
+						'B' => '<b>',
+						'BEnd' => '</b>',
+						'i' => $i,
+						'Link' => makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $netinfo['id'], 'pg' => $i))
+				);
+			}
+			//$rendered_pager .= "<b>$i</b> ";
+			else
+			{
+				$pagesarray[] = array(
+						'i' => $i,
+						'Link' => makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $netinfo['id'], 'pg' => $i))
+				);
+			}
+			$mod->addOutput('Pages', $pagesarray);
+			/*
+			if ($i == $page)
 				echo "<b>$i</b> ";
 			else
-				echo "<a href='" . makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $netinfo['id'], 'pg' => $i)) . "'>$i</a> ";
+				echo "<a href='" . makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $netinfo['id'], 'pg' => $i)) . "'>$i</a> "; */
 		}
-		echo "</center>";
+		//echo "</center>";
 	}
 
 	$i = 0;
@@ -3378,78 +3421,138 @@ function renderIPv6NetworkAddresses ($netinfo)
 		}
 
 		if ($ip_bin != ip_next ($prev_ip))
-			renderSeparator (ip_next ($prev_ip), ip_prev ($ip_bin), $hl_ip);
+			renderSeparator (ip_next ($prev_ip), ip_prev ($ip_bin), $hl_ip, $mod, 'IPList');
 		$prev_ip = $ip_bin;
 
+		$smod = $tplm->generateSubmodule('IPList', 'IPv6NetworkAddress');
+	
 		// render IP change history
 		$title = '';
 		$history_class = '';
 		if (isset ($addr['last_log']))
 		{
-			$title = ' title="' . htmlspecialchars ($addr['last_log']['user'] . ', ' . formatAge ($addr['last_log']['time']) , ENT_QUOTES) . '"';
+			//$title = ' title="' . htmlspecialchars ($addr['last_log']['user'] . ', ' . formatAge ($addr['last_log']['time']) , ENT_QUOTES) . '"';
+			$title = htmlspecialchars ($addr['last_log']['user'] . ', ' . formatAge ($addr['last_log']['time']) , ENT_QUOTES);
 			$history_class = 'hover-history underline';
 		}
+		
+		$smod->addOutput('Title', $title);
+		$smod->addOutput('RowClass', $addr['class']);
+		$smod->addOutput('Highlighted', ($hl_ip === $ip_bin ? 'highlight' : ''));
+		$smod->addOutput('Class', $history_class);
+		
+		//$tr_class = $addr['class'] . ' tdleft' . ($hl_ip === $ip_bin ? ' highlight' : '');
 
-		$tr_class = $addr['class'] . ' tdleft' . ($hl_ip === $ip_bin ? ' highlight' : '');
-		echo "<tr class='$tr_class'>";
-		echo "<td><a class='$history_class' $title name='ip-${addr['ip']}' href='" . makeHref (array ('page' => 'ipaddress', 'ip' => $addr['ip'])) . "'>${addr['ip']}</a></td>";
+		$smod->addOutput('Link', makeHref (array ('page' => 'ipaddress', 'ip' => $addr['ip'])));
+		$smod->addOutput('IP', $addr['ip']);
+		
+		//echo "<tr class='$tr_class'>";
+		//echo "<td><a class='$history_class' $title name='ip-${addr['ip']}' href='" . makeHref (array ('page' => 'ipaddress', 'ip' => $addr['ip'])) . "'>${addr['ip']}</a></td>";
 		$editable =
 			(empty ($addr['allocs']) || !empty ($addr['name'])
 			&& permitted ('ipaddress', 'properties', 'editAddress')
 			? 'editable'
 			: '');
-		echo "<td><span class='rsvtext $editable id-${addr['ip']} op-upd-ip-name'>${addr['name']}</span></td>";
-		echo "<td><span class='rsvtext $editable id-${addr['ip']} op-upd-ip-comment'>${addr['comment']}</span></td><td>";
-		$delim = '';
+		$smod->addOutput('Editable', $editable);
+		$smod->addOutput('Name', $addr['name']);
+		$smod->addOutput('Comment', $addr['comment']);
+		
+		//echo "<td><span class='rsvtext $editable id-${addr['ip']} op-upd-ip-name'>${addr['name']}</span></td>";
+		//echo "<td><span class='rsvtext $editable id-${addr['ip']} op-upd-ip-comment'>${addr['comment']}</span></td><td>";
+		//$delim = '';
 		if ( $addr['reserved'] == 'yes')
 		{
-			echo "<strong>RESERVED</strong> ";
-			$delim = '; ';
+			$smod->addOutput('Reserved', true);
+			//echo "<strong>RESERVED</strong> ";
+			//$delim = '; ';
 		}
+		
+		$outarr = array();
 		foreach ($addr['allocs'] as $ref)
 		{
-			echo $delim . $aac2[$ref['type']];
+			
+			$name = $ref['name'] . (!strlen ($ref['name']) ? '' : '@') . $ref['object_name'];
+			$outarr[] = array(
+				'Type'=>$aac2[$ref['type']],
+				'Link'=>makeHref(array('page'=>'object', 'object_id'=>$ref['object_id'], 'tab' => 'default', 'hl_ip'=>$addr['ip'])),
+				'Name'=>$name	
+			);
+			/**echo $delim . $aac2[$ref['type']];
 			echo "<a href='".makeHref(array('page'=>'object', 'object_id'=>$ref['object_id'], 'tab' => 'default', 'hl_ip'=>$addr['ip']))."'>";
 			echo $ref['name'] . (!strlen ($ref['name']) ? '' : '@');
 			echo "${ref['object_name']}</a>";
-			$delim = '; ';
+			$delim = '; '; */
 		}
-		if ($delim != '')
-			$delim = '<br>';
+		
+		if (count($outarr)>0)
+		{
+			$smod->addOutput('Allocs', $outarr);
+		}
+		//if ($delim != '')
+		//	$delim = '<br>';
+		
+		$outarr = array();
 		foreach ($addr['vslist'] as $vs_id)
 		{
 			$vs = spotEntity ('ipv4vs', $vs_id);
-			echo $delim . mkA ("${vs['name']}:${vs['vport']}/${vs['proto']}", 'ipv4vs', $vs['id']) . '&rarr;';
-			$delim = '<br>';
+			
+			$outarr[] = array('Link'=>mkA ("${vs['name']}:${vs['vport']}/${vs['proto']}", 'ipv4vs', $vs['id']));
+			//echo $delim . mkA ("${vs['name']}:${vs['vport']}/${vs['proto']}", 'ipv4vs', $vs['id']) . '&rarr;';
+			//$delim = '<br>';
 		}
+		if (count($outarr)>0)
+		{
+			$smod->addOutput('VSList', $outarr);
+		}
+		
+		$outarr = array();
 		foreach ($addr['vsglist'] as $vs_id)
 		{
 			$vs = spotEntity ('ipvs', $vs_id);
-			echo $delim . mkA ($vs['name'], 'ipvs', $vs['id']) . '&rarr;';
-			$delim = '<br>';
+			
+			$outarr[] = array('Link'=>mkA ($vs['name'], 'ipvs', $vs['id']));
+			//echo $delim . mkA ($vs['name'], 'ipvs', $vs['id']) . '&rarr;';
+			//$delim = '<br>';
 		}
+		if (count($outarr)>0)
+		{
+			$smod->addOutput('VSGList', $outarr);
+		}
+		
+		$outarr = array();
 		foreach ($addr['rsplist'] as $rsp_id)
 		{
 			$rsp = spotEntity ('ipv4rspool', $rsp_id);
-			echo "${delim}&rarr;" . mkA ($rsp['name'], 'ipv4rspool', $rsp['id']);
-			$delim = '<br>';
+			
+			$outarr[] = array('Link'=>mkA ($rsp['name'], 'ipv4rspool', $rsp['id']));
+			//echo "${delim}&rarr;" . mkA ($rsp['name'], 'ipv4rspool', $rsp['id']);
+			//$delim = '<br>';
 		}
-		echo "</td></tr>\n";
+		
+		if (count($outarr)>0)
+		{
+			$smod->addOutput('RSPList', $outarr);
+		}
+		//echo "</td></tr>\n";
 	}
 	if (! $interruped)
-		renderSeparator (ip_next ($prev_ip), ip_last ($netinfo), $hl_ip);
+		renderSeparator (ip_next ($prev_ip), ip_last ($netinfo), $hl_ip, $mod, 'IPList');
 	if (isset ($page))
 	{ // bottom pager
-		echo "<tr><td colspan=3>";
+		$mod->addOutput('BottomPager', true);
+		//echo "<tr><td colspan=3>";
 		if ($page > 0)
-			echo "<a href='" . makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $netinfo['id'], 'pg' => $page - 1)) . "'><< prev</a> ";
+			$mod->addOutput('BottomPagerPrevLink', makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $netinfo['id'], 'pg' => $page - 1)));
+			//echo "<a href='" . makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $netinfo['id'], 'pg' => $page - 1)) . "'><< prev</a> ";
 		if ($page < $numpages - 1)
-			echo "<a href='" . makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $netinfo['id'], 'pg' => $page + 1)) . "'>next >></a> ";
-		echo "</td></tr>";
+			$mod->addOutput('BottomPagerNextLink', makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $netinfo['id'], 'pg' => $page + 1)));
+			//echo "<a href='" . makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $netinfo['id'], 'pg' => $page + 1)) . "'>next >></a> ";
+		//echo "</td></tr>";
 	}
-	echo "</table>";
+	//echo "</table>";
 	if (permitted (NULL, NULL, 'set_reserve_comment'))
-		addJS ('js/inplace-edit.js');
+		$mod->addOutput('UserHasEditPerm', true);
+		//addJS ('js/inplace-edit.js');
 }
 
 function renderIPNetworkProperties ($id)
