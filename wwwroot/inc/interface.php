@@ -3254,6 +3254,14 @@ function renderIPSpaceEditor()
 	$realm = ($pageno == 'ipv4space' ? 'ipv4net' : 'ipv6net');
 	$net_page = $realm; // 'ipv4net', 'ipv6net'
 	$addrspaceList = listCells ($realm);
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderIPSpaceEditor");
+	$mod->setNamespace("ipspace");
+		
 	startPortlet ('Manage existing (' . count ($addrspaceList) . ')');
 	if (count ($addrspaceList))
 	{
@@ -3277,6 +3285,7 @@ function renderIPSpaceEditor()
 		echo "</table>";
 		finishPortlet();
 	}
+
 }
 
 function renderIPNewNetForm ()
