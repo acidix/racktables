@@ -3261,29 +3261,43 @@ function renderIPSpaceEditor()
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderIPSpaceEditor");
 	$mod->setNamespace("ipspace");
-		
-	startPortlet ('Manage existing (' . count ($addrspaceList) . ')');
+	
+	$mod->addOutput("countAddrspaceList", count ($addrspaceList));
+			 	
+	//startPortlet ('Manage existing (' . count ($addrspaceList) . ')');
 	if (count ($addrspaceList))
 	{
-		echo "<table class='widetable' border=0 cellpadding=5 cellspacing=0 align='center'>\n";
-		echo "<tr><th>&nbsp;</th><th>prefix</th><th>name</th><th>capacity</th></tr>";
+
+		$mod->addOutput("hasAddrspaceList", true);
+			 
+		//echo "<table class='widetable' border=0 cellpadding=5 cellspacing=0 align='center'>\n";
+		//echo "<tr><th>&nbsp;</th><th>prefix</th><th>name</th><th>capacity</th></tr>";
+		$allNetinfoOut = array();
 		foreach ($addrspaceList as $netinfo)
 		{
-			echo "<tr valign=top><td>";
+	//		echo "<tr valign=top><td>";
+			$singleNetinfo = array( 'mkAIpmask' => mkA ("${netinfo['ip']}/${netinfo['mask']}", $net_page, $netinfo['id']),
+									'name' => niftyString ($netinfo['name']));
 			if (! isIPNetworkEmpty ($netinfo))
-				printImageHREF ('nodestroy', 'There are ' . count ($netinfo['addrlist']) . ' allocations inside');
+	//			printImageHREF ('nodestroy', 'There are ' . count ($netinfo['addrlist']) . ' allocations inside');
+				$singleNetinfo['destroyItem'] = printImageHREF ('nodestroy', 'There are ' . count ($netinfo['addrlist']) . ' allocations inside');
 			else
-				echo getOpLink (array	('op' => 'del', 'id' => $netinfo['id']), '', 'destroy', 'Delete this prefix');
-			echo '</td><td class=tdleft>' . mkA ("${netinfo['ip']}/${netinfo['mask']}", $net_page, $netinfo['id']) . '</td>';
-			echo '<td class=tdleft>' . niftyString ($netinfo['name']);
+				$singleNetinfo['destroyItem'] = getOpLink (array	('op' => 'del', 'id' => $netinfo['id']), '', 'destroy', 'Delete this prefix');
+	//			echo getOpLink (array	('op' => 'del', 'id' => $netinfo['id']), '', 'destroy', 'Delete this prefix');
+	//		echo '</td><td class=tdleft>' . mkA ("${netinfo['ip']}/${netinfo['mask']}", $net_page, $netinfo['id']) . '</td>';
+	//		echo '<td class=tdleft>' . niftyString ($netinfo['name']);
 			if (count ($netinfo['etags']))
-				echo '<br><small>' . serializeTags ($netinfo['etags']) . '</small>';
-			echo '</td><td>';
-			echo getRenderedIPNetCapacity ($netinfo);
-			echo '</tr>';
+				$singleNetinfo['tags'] = serializeTags ($netinfo['etags']);
+	//			echo '<br><small>' . serializeTags ($netinfo['etags']) . '</small>';
+	//		echo '</td><td>';
+			$singleNetinfo['ipnetCap'] = getRenderedIPNetCapacity ($netinfo);
+	//		echo getRenderedIPNetCapacity ($netinfo);
+	//		echo '</tr>';
 		}
-		echo "</table>";
-		finishPortlet();
+		$mod->addOutput("allNetinfo", $allNetinfoOut);
+			 
+	//	echo "</table>";
+	//	finishPortlet();
 	}
 
 }
@@ -3301,10 +3315,19 @@ function renderIPNewNetForm ()
 		$realm = 'ipv4net';
 		$regexp = '^(\d{1,3}\.){3}\d{1,3}/\d{1,2}$';
 	}
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderIPNewNetForm");
+	$mod->setNamespace("ipspace");
+		
 
 	// IP prefix validator
-	addJS ('js/live_validation.js');
+	//addJS ('js/live_validation.js');
 	$regexp = addslashes ($regexp);
+	$mod->addOutput("regexp", $regexp);
+	/*	 
 	addJS (<<<END
 $(document).ready(function () {
 	$('form#add' input[name="range"]).attr('match', '$regexp');
@@ -3315,24 +3338,27 @@ END
 
 	startPortlet ('Add new');
 	echo '<table border=0 cellpadding=10 align=center>';
-	printOpFormIntro ('add');
+	printOpFormIntro ('add');*/
 	// tags column
-	echo '<tr><td rowspan=5><h3>assign tags</h3>';
-	echo renderNewEntityTags ($realm);
-	echo '</td>';
+	//echo '<tr><td rowspan=5><h3>assign tags</h3>';
+	//echo renderNewEntityTags ($realm);
+	renderNewEntityTags ($realm, $mod, 'rendNewEntityTags');
+	//echo '</td>';
 	// inputs column
 	$prefix_value = empty ($_REQUEST['set-prefix']) ? '' : $_REQUEST['set-prefix'];
-	echo "<th class=tdright>prefix</th><td class=tdleft><input type=text name='range' size=36 class='live-validate' tabindex=1 value='${prefix_value}'></td>";
-	echo '<tr><th class=tdright>VLAN</th><td class=tdleft>';
-	echo getOptionTree ('vlan_ck', getAllVLANOptions(), array ('select_class' => 'vertical', 'tabindex' => 2)) . '</td></tr>';
-	echo "<tr><th class=tdright>name</th><td class=tdleft><input type=text name='name' size='20' tabindex=3></td></tr>";
-	echo '<tr><td class=tdright><input type=checkbox name="is_connected" id="is_connected" tabindex=4></td>';
-	echo '<th class=tdleft><label for="is_connected">reserve subnet-router anycast address</label></th></tr>';
-	echo "<tr><td colspan=2>";
-	printImageHREF ('CREATE', 'Add a new network', TRUE, 5);
-	echo '</td></tr>';
-	echo "</form></table><br><br>\n";
-	finishPortlet();
+	$mod->addOutput("prefix_value", $prefix_value);	 
+	//echo "<th class=tdright>prefix</th><td class=tdleft><input type=text name='range' size=36 class='live-validate' tabindex=1 value='${prefix_value}'></td>";
+	//echo '<tr><th class=tdright>VLAN</th><td class=tdleft>';
+	getOptionTree ('vlan_ck', getAllVLANOptions(), array ('select_class' => 'vertical', 'tabindex' => 2), $mod, 'optionTree')
+	//echo getOptionTree ('vlan_ck', getAllVLANOptions(), array ('select_class' => 'vertical', 'tabindex' => 2)) . '</td></tr>';
+	//echo "<tr><th class=tdright>name</th><td class=tdleft><input type=text name='name' size='20' tabindex=3></td></tr>";
+	//echo '<tr><td class=tdright><input type=checkbox name="is_connected" id="is_connected" tabindex=4></td>';
+	//echo '<th class=tdleft><label for="is_connected">reserve subnet-router anycast address</label></th></tr>';
+	//echo "<tr><td colspan=2>";
+	//printImageHREF ('CREATE', 'Add a new network', TRUE, 5);
+	//echo '</td></tr>';
+	//echo "</form></table><br><br>\n";
+	//finishPortlet();
 }
 
 function getRenderedIPNetBacktrace ($range)

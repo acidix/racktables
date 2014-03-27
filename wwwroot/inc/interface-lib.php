@@ -464,7 +464,7 @@ function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree =
 	}
 }
 
-function getOptionTree ($tree_name, $tree_options, $tree_config = array())
+function getOptionTree ($tree_name, $tree_options, $tree_config = array(), $parent = null , $placeholder = "optionTreeJS")
 {
 	function serializeJSArray ($options)
 	{
@@ -496,7 +496,7 @@ function getOptionTree ($tree_name, $tree_options, $tree_config = array())
 	foreach ($tree_config as $cfgoption_name => $cfgoption_value)
 		$default_config[$cfgoption_name] = $cfgoption_value;
 	# it is safe to call many times for the same file
-	addJS ('js/jquery.optionTree.js');
+	/*addJS ('js/jquery.optionTree.js');
 	$ret  = "<input type=hidden name=${tree_name}>\n";
 	$ret .= "<script type='text/javascript'>\n";
 	$ret .= "\$(function() {\n";
@@ -505,7 +505,25 @@ function getOptionTree ($tree_name, $tree_options, $tree_config = array())
 	$ret .= "    \$('input[name=${tree_name}]').optionTree(option_tree, options);\n";
 	$ret .= "});\n";
 	$ret .= "</script>\n";
-	return $ret;
+	return $ret;*/
+
+	
+	$tplm = TemplateManager::getInstance();
+	if($parent==null)
+		$tplm->setTemplate("vanilla");
+	
+	if($parent==null)	
+		$mod = $tplm->generateModule("GetOptionTree");
+	else
+		$mod = $tplm->generateSubmodule($placeholder, "GetOptionTree", $parent);
+	
+	$mod->setNamespace("");
+	$mod->addOutput("tree_name", $tree_name);
+	$mod->addOutput("option_tree",  serializeJSTree ($tree_options));
+	$mod->addOutput("options",  serializeJSTree ($default_config));
+
+	if($parent==null)
+		return $mod->run();
 }
 
 function printImageHREF ($tag, $title = '', $do_input = FALSE, $tabindex = 0)
