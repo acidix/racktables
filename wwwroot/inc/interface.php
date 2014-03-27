@@ -3193,7 +3193,7 @@ function renderIPSpace()
 	echo "<tr><td class=pcleft>";
 
 	$netlist = array();
-	if (! ($cellfilter['is_empty'] && ! $eid && renderEmptyResults($cellfilter, 'IP nets', getEntitiesCount ($realm))))
+	if (! ($cellfilter['is_empty'] && ! $eid && renderEmptyResults($cellfilter, 'IP nets', getEntitiesCount ($realm), $mod, 'EmptyResults')))
 	{
 		$top = NULL;
 		foreach (listCells ($realm) as $net)
@@ -3209,7 +3209,7 @@ function renderIPSpace()
 		$netcount = count ($netlist);
 		$tree = prepareIPTree ($netlist, $eid);
 
-		if (! renderEmptyResults($cellfilter, 'IP nets', count($tree)))
+		if (! renderEmptyResults($cellfilter, 'IP nets', count($tree),$mod,'EmptyResults'))
 		{
 			startPortlet ("networks (${netcount})");
 			echo '<h4>';
@@ -3237,14 +3237,14 @@ function renderIPSpace()
 				echo "<th>routed by</th>";
 			echo "</tr>\n";
 			$baseurl = makeHref(array('page'=>$pageno, 'tab'=>$tabno)) . $cellfilter['urlextra'];
-			renderIPSpaceRecords ($tree, $baseurl, $eid);
+			renderIPSpaceRecords ($tree, $baseurl, $eid, $mod, 'IPRecords');
 			echo "</table>\n";
 			finishPortlet();
 		}
 	}
 
 	echo '</td><td class=pcright>';
-	renderCellFilterPortlet ($cellfilter, $realm, $netlist);
+	renderCellFilterPortlet ($cellfilter, $realm, $netlist, $mod, 'CellFilter');
 	echo "</td></tr></table>\n";
 }
 
