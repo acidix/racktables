@@ -7,9 +7,7 @@
 			<tr class="state_<?php $this->countStats ?>"><th class=tdright><?php $this->vlan_id ?></th>
 			<?php $this->domains ?> 
 			</tr>
-			<?php if ($this->is("tbc",true)) { ?>
-			 	<tr class="state_A"><th>...</th><td colspan=<?php $this->countDom ?> >&nbsp;</td></tr>
-			 <?php } ?>  
+			<?php $this->TbcLine ?>  
 		<?php $this->endLoop(); ?> 
 		</table>
 	</div>

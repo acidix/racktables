@@ -4,9 +4,7 @@
 		<?php $this->startLoop("allSects"); ?>	
 			<table align=center width=60% border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>
 			<caption><?php $this->title ?></caption>
-			<?php if ($this->is("count",false)) { ?>
-				<tr><td colspan=4>(none)</td></tr></table><br>
-			<?php } ?> 
+			<?php $this->CountMod ?>
 			<?php $this->resOut ?> 
 			</table><br>
 		<?php $this->endLoop(); ?>

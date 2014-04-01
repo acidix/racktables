@@ -28,51 +28,7 @@
 	<?php $this->AddNewTopMod ?>
 	<?php $this->clearPortLink ?>
 	<?php $this->switchPortJS ?>
-	<?php $this->startLoop("allPorts"); ?>	
-		<?php $this->opFormIntro ?>
-		<tr <?php $this->tr_class ?>><td><a name='port-<?php $this->port_id ?>' href='<?php $this->href_process ?>'>
-		<?php $this->deleteImg ?>
-		</a></td>
-		<td class='tdleft' NOWRAP><input type=text name=name class='interactive-portname <?php $this->a_class ?>' value='<?php $this->port_name ?>' size=8></td>
-		<td><input type=text name=label value='<?php $this->label ?>'></td>
-		<td>
-		<?php if (!$this->is("iif_name",null)) { ?>
-			<label><?php $this->iif_name ?>
-		<?php } ?> 
-		<?php $this->printSelExType ?>
-		<?php if (!$this->is("iif_name",null)) { ?>
-			</label>
-		<?php } ?>
-		</td>
-		<td><input type=text name=l2address value='<?php $this->l2address ?>' size=18 maxlength=24></td>
-		<?php if ($this->is("isRemoteObj",true)) { ?>
-			<td><?php $this->logged_span_rem_obj_id ?></td>
-			<td><?php $this->logged_span_rem_name ?><<input type=hidden name=reservation_comment value=''></td>
-			<td><input type=text name=cable value='<?php $this->calbeid ?>'></td>
-			<td class=tdcenter><?php $this->unlink_op_link ?></td>
-		<?php } elseif ($this->is("hasReservation_comment",true)) { ?>
-			<td><?php $this->logged_span_rem_reserved ?></td>
-			<td><input type=text name=reservation_comment value='<?php $this->reservation_comment ?>'></td>
-			<td></td>
-			<td class=tdcenter>
-			<?php $this->use_up_op_link ?>
-			</td>
-		<?php } else {?>
-			<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td class=tdcenter><span
-			ondblclick='window.open("<?php $this->href_helper_portlist ?>", "findlink", 
-			"height=700, width=400, location=no, menubar=no,
-						resizable=yes, scrollbars=yes, status=no, titlebar=no, toolbar=no");'
-			onclick='window.open("<?php $this->href_helper_portlist ?>", "findlink", 
-			"height=700, width=400, location=no, menubar=no,
-						resizable=yes, scrollbars=yes, status=no, titlebar=no, toolbar=no");'>
-			<?php $this->link_img ?>
-			</span>
-			<input type=text name=reservation_comment></td>
-		<?php } ?>
-		<td>
-		<?php $this->save_img ?>
-		</td></form></tr>
-	<?php $this->endLoop(); ?> 
+	<?php $this->singlePorts ?>
 	<?php $this->AddNewTopMod2 ?>
 	</table><br>
 	<?php if ($this->is("isBulkportFrom",true)) { ?>
@@ -91,7 +47,6 @@
 		<?php $this->getH("PrintImageHref", array('add', 'add ports', TRUE, 110)); ?>
 		</td></tr></form>
 		</table><br>
-
 	<?php } ?> 
 	<?php if ($this->is("isEnableMultiport",true)) { ?>
 		</div>

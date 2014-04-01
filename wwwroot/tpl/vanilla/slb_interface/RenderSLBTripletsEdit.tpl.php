@@ -3,15 +3,14 @@
 		<h2>Manage existing (<?php $this->tripletsCount ?>)</h2>
 		<table cellspacing=0 cellpadding=5 align=center class=cooltable>
 		<?php $this->startLoop("allTripletsOutput"); ?>	
-
-			<?php $this->getH("PrintOpFormIntro", array('updLB', $this->ids)); ?>
+			<?php $this->OpFormIntro ?>
 			<tr valign=top class=row_<?php $this->order ?> ><td rowspan=2 class=tdright valign=middle> 
-			<?php $this->getH("GetOpLink", array($this->del_para, '', 'DELETE', 'Unconfigure')); ?> 
+			<?php $this->OpLink ?>
 			</td><td class=tdleft valign=bottom>
 			<?php $this->entitiyCell1 ?> 
 			</td><td>VS config &darr;<br><textarea name=vsconfig rows=5 cols=70><?php $this->vsconfig ?> </textarea></td>
 			<td class=tdleft rowspan=2 valign=middle>
-			<?php $this->getH("PrintImageHREF", array('SAVE', 'Save changes', TRUE)); ?> 
+			<?php $this->ImgHref ?>
 			</td>
 			</tr><tr class=row_<?php $this->order ?> ><td class=tdleft valign=top>
 			<?php $this->entitiyCell2 ?>

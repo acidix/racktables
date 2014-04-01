@@ -49,9 +49,7 @@
 			<?php } ?>
 			<?php $this->startLoop("allPorts"); ?>	
 				<tr class='tr_class' valign=top>
-				<?php if ($this->is("isFrist", true)) { ?>
-					<td class=tdleft <?php $this->rowspan ?>><?php $this->fullName ?></td>
-				<?php } ?> 
+				<?php $this->FristMod ?>
 				<?php $this->td_ip ?>
 				<?php $this->td_network ?>
 				<?php $this->td_routed_by ?>
@@ -74,9 +72,7 @@
                     <td class=tdleft><?php $this->rendRemoteIP ?></td>
                     <td class='description'>
                     <?php $this->mkAs ?>
-                    <?php if ($this->is("isRemAddrName", true)) { ?>
-                    	(<?php $this->remAddrName ?>)
-                    <?php } ?> 
+                    <?php $this->RemAddrName ?>
                     </td><td class='description'><?php $this->description ?></td></tr>
                 <?php $this->endLoop(); ?> 
 				</table><br><br>

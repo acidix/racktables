@@ -326,14 +326,16 @@ function renderSLBTripletsEdit ($cell)
 			$del_params = $ids;
 			$del_params['op'] = 'delLB';
 			
-			$tripletOut['ids'] = $ids;
 			$tripletOut['order'] = $order;
-			$tripletOut['del_para'] = $del_params;
 			$tripletOut['entitiyCell1'] = renderSLBEntityCell ($cells[0]);
 			$tripletOut['entitiyCell2'] = renderSLBEntityCell ($cells[1]);
 			$tripletOut['vsconfig'] = htmlspecialchars ($slb->slb['vsconfig']);
 			$tripletOut['rsconfig'] = htmlspecialchars ($slb->slb['rsconfig']);
 			$tripletOut['prio'] = htmlspecialchars ($slb->slb['prio']);
+			$tripletOut['OpFormIntro'] = printOpFormIntro ('updLB', $ids);
+			$tripletOut['OpLink'] = getOpLink ($del_params, '', 'DELETE', 'Unconfigure');
+			$tripletOut['ImgHref'] = printImageHREF ('SAVE', 'Save changes', TRUE);
+			
 
 			//printOpFormIntro ('updLB', $ids);
 			//echo "<tr valign=top class=row_${order}><td rowspan=2 class=tdright valign=middle>";
@@ -529,13 +531,15 @@ function renderEditRSList ($rs_list, TemplateModule $parent = null)
 	$rs_outTable = array();
 	foreach ($rs_list as $rsid => $rs)
 	{
-		$rs_element = array();
-		$rs_element['rs_id'] = $rsid;
-		$rs_element['order'] = $order;
-		$rs_element['rs_rsip'] = $rs['rsip'];
-		$rs_element['rs_rsport'] = $rs['rsport'];
-		$rs_element['rs_comment'] = $rs['comment'];
-		$rs_element['rs_rsconfig'] = $rs['rsconfig'];
+		$rs_element = array( 'OpFormIntro' => printOpFormIntro ('updRS', array ('rs_id' => $rsid)),
+							 'OpLink' => getOpLink (array('op'=>'delRS', 'id'=>$rsid), '', 'delete', 'Delete this real server'),
+							 'ImgHref' => printImageHREF ('SAVE', 'Save changes', TRUE),
+							 'rs_id' => $rsid,
+							 'order' => $order, 
+							 'rs_rsip' => $rs['rsip'],
+							 'rs_rsport' => $rs['rsport'],
+							 'rs_comment' => $rs['comment'],
+							 'rs_rsconfig' => $rs['rs_rsconfig']);
 				
 //		printOpFormIntro ('updRS', array ('rs_id' => $rsid));
 //		echo "<tr valign=top class=row_${order}><td>";

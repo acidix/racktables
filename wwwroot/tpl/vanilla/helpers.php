@@ -271,12 +271,12 @@ class TemplateHelperPrintTagTRs extends TemplateHelperAbstract
 {
 	protected function generate($params)
 	{
-		//($chain, $baseurl = '')
+		//($cell, $baseurl = '')
 		//Initalize paramters 
 		if(count($params) < 1)
 			return "";
 		
-		$chain = $params[0];
+		$cell = $params[0];
 		$baseurl = '';
 
 		if(count($params) > 1)

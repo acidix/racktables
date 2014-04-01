@@ -9,7 +9,6 @@
 						<?php $this->renderedRows ?>
 					</tr>
 					<?php $this->endLoop(); ?> 
-
 					</table>
 				</div>
 			</td>

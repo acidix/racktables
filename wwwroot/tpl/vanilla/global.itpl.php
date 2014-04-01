@@ -182,7 +182,7 @@ $this->setInMemoryTemplate('FileSummaryDownloadLink',"<a href='?module=download&
 $this->setInMemoryTemplate("ReportsCounter","<tr><td class=tdright>{{header}}:</td><td class=tdleft>{{data}}</td></tr>");
 $this->setInMemoryTemplate("ReportsMesseges","<tr class='msg_{{class}}><td class=tdright>{{header}}:</td><td class=tdleft>{{text}}</td></tr>");
 $this->setInMemoryTemplate("ReportsCustom","<tr><td colspan=2>\n{{itemCont}}\n</td></tr>");
-$this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{title}:</td><td class=tdcenter>\n{{progressBar}}\n<br><small>{{isMax}}</small></td></tr>");
+$this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{title}}:</td><td class=tdcenter>\n{{progressBar}}\n<br><small>{{isMax}}</small></td></tr>");
 
 /**
 *	GetProgressBar: 
@@ -321,5 +321,70 @@ $this->setInMemoryTemplate("FormatPortLink",'<a $additional href="{{href}}">{{te
 *
 **/
 $this->setInMemoryTemplate("RenderSNMPPortFinder_NoExt","<div class=msg_error>The PHP SNMP extension is not loaded.  Cannot continue.</div>");
+
+/**
+*	GlobalPlaceholder: 
+*	A very basic globalplaceholder to be filled with submodules
+*	Usage:  serializeTags -> interface-lib.php
+*
+**/
+$this->setInMemoryTemplate("GlobalPlaceholder","{{cont}}");
+
+/**
+*	ETagsLine: 
+*	Usage:  render8021QStatus -> interface.php
+*
+**/
+$this->setInMemoryTemplate("ETagsLine","<br><small>{{cont}}</small>");
+
+/**
+*	PCodeLine: 
+*	Usage:  renderFilesPortlet -> interface.php
+*
+**/
+$this->setInMemoryTemplate("PCodeLine", "<tr><td colspan=2>{{pcode}}</td></tr>\n");
+
+/**
+*	EmptyTableCell: 
+*	Usage:  renderIndex -> interface.php
+*
+**/
+$this->setInMemoryTemplate("EmptyTableCell","<td>&nbsp;</td>");
+
+/**
+*	IndexItemMod': 
+*	Usage: renderIndex -> interface.php
+*
+**/
+$this->setInMemoryTemplate("IndexItemMod"," <td>\n<h1><a href='{{Href}}'>" .
+		"{{PageName}}<br>\n{{Image}} </a></h1>\n</td>");
+
+/**
+*	TDLeftCell: 
+*	Usage: renderObject -> interface.php
+*
+**/
+$this->setInMemoryTemplate("TDLeftCell","<td class=tdleft {{rowspan}}>{{cont}}</td>");
+
+/**
+*	RoundBracketsMod: 
+*	Usage:  renderObject -> interface.php
+*
+**/
+$this->setInMemoryTemplate("RoundBracketsMod","({{cont}})");
+
+/**
+*	TbcLine: 
+*	Usage:  Render8021QReport -> interface.php
+*
+**/
+$this->setInMemoryTemplate("TbcLineMod","<tr class='state_A'><th>...</th><td colspan={{CountDomains}}>&nbsp;</td></tr>");
+
+/**
+*	ExpirationsNoSection: 
+*	Usage:  renderExpirations -> interface.php
+*
+**/
+$this->setInMemoryTemplate("ExpirationsNoSection","<tr><td colspan=4>(none)</td></tr></table><br>\n");
 
 ?>
