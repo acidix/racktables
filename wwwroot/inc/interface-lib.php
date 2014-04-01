@@ -327,11 +327,11 @@ function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $
 //		$ret .= " ${attr_name}=${attr_value}";
 	$mod->setOutput("selectedList", $selectedOutArray);
 //	$ret .= '>';
-	$allOpitonsArray = array();
+	$allOptionsArray = array();
 	foreach ($optionList as $dict_key => $dict_value)
-		$allOpitonsArray[] = array("dict_key" => $dict_key, "isSelected" =>  ($dict_key == $selected_id ? ' selected' : ''), "dict_val" => $dict_value );
+		$allOptionsArray[] = array("dict_key" => $dict_key, "isSelected" =>  ($dict_key == $selected_id ? ' selected' : ''), "dict_val" => $dict_value );
 //		$ret .= "<option value='${dict_key}'" . ($dict_key == $selected_id ? ' selected' : '') . ">${dict_value}</option>";
-	$mod->setOutput("allOptions", $allOpitonsArray);
+	$mod->setOutput("allOptions", $allOptionsArray);
 //	$ret .= '</select>';
 //	return $ret;
 	if($parent == null)

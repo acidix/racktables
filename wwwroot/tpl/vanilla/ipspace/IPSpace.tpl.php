@@ -3,7 +3,7 @@
 		<tr>
 			<td class=pcleft>
 				<?php $this->EmptyResults; ?>
-				<?php if(!$this->is('EmptyResults')) { ?>
+				<?php if($this->is('hasResults')) { ?>
 				<div class=portlet>
 					<h2>networks <?php $this->NetCount; ?></h2>
 					<h4>
