@@ -3375,7 +3375,7 @@ END
 	$mod->addOutput("prefix_value", $prefix_value);	 
 	//echo "<th class=tdright>prefix</th><td class=tdleft><input type=text name='range' size=36 class='live-validate' tabindex=1 value='${prefix_value}'></td>";
 	//echo '<tr><th class=tdright>VLAN</th><td class=tdleft>';
-	getOptionTree ('vlan_ck', getAllVLANOptions(), array ('select_class' => 'vertical', 'tabindex' => 2), $mod, 'optionTree')
+	getOptionTree ('vlan_ck', getAllVLANOptions(), array ('select_class' => 'vertical', 'tabindex' => 2), $mod, 'optionTree');
 	//echo getOptionTree ('vlan_ck', getAllVLANOptions(), array ('select_class' => 'vertical', 'tabindex' => 2)) . '</td></tr>';
 	//echo "<tr><th class=tdright>name</th><td class=tdleft><input type=text name='name' size='20' tabindex=3></td></tr>";
 	//echo '<tr><td class=tdright><input type=checkbox name="is_connected" id="is_connected" tabindex=4></td>';
@@ -10544,41 +10544,58 @@ function renderObject8021QSync ($object_id)
 		$R = NULL;
 	}
 
-	echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
-	echo '<tr><td class=pcleft width="50%">';
-	startPortlet ('schedule');
-	renderObject8021QSyncSchedule ($object, $vswitch, $maxdecisions);
-	finishPortlet();
-	startPortlet ('preview legend');
-	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-	echo '<tr><th>status</th><th width="50%">color code</th></tr>';
-	echo '<tr><td class=tdright>with template role:</td><td class=trbusy>&nbsp;</td></tr>';
-	echo '<tr><td class=tdright>without template role:</td><td>&nbsp;</td></tr>';
-	echo '<tr><td class=tdright>new data:</td><td class=trok>&nbsp;</td></tr>';
-	echo '<tr><td class=tdright>warnings in new data:</td><td class=trwarning>&nbsp;</td></tr>';
-	echo '<tr><td class=tdright>fatal errors in new data:</td><td class=trerror>&nbsp;</td></tr>';
-	echo '<tr><td class=tdright>deleted data:</td><td class=trnull>&nbsp;</td></tr>';
-	echo '</table>';
-	finishPortlet();
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderObject8021QSync");
+	$mod->setNamespace("object", TRUE);	
+
+	// echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
+	// echo '<tr><td class=pcleft width="50%">';
+	// startPortlet ('schedule');
+	renderObject8021QSyncSchedule ($object, $vswitch, $maxdecisions, 'Sync_Schedule', $mod);
+	// finishPortlet();
+	// startPortlet ('preview legend');
+	// echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	// echo '<tr><th>status</th><th width="50%">color code</th></tr>';
+	// echo '<tr><td class=tdright>with template role:</td><td class=trbusy>&nbsp;</td></tr>';
+	// echo '<tr><td class=tdright>without template role:</td><td>&nbsp;</td></tr>';
+	// echo '<tr><td class=tdright>new data:</td><td class=trok>&nbsp;</td></tr>';
+	// echo '<tr><td class=tdright>warnings in new data:</td><td class=trwarning>&nbsp;</td></tr>';
+	// echo '<tr><td class=tdright>fatal errors in new data:</td><td class=trerror>&nbsp;</td></tr>';
+	// echo '<tr><td class=tdright>deleted data:</td><td class=trnull>&nbsp;</td></tr>';
+	// echo '</table>';
+	// finishPortlet();
 	if (considerConfiguredConstraint ($object, '8021Q_EXTSYNC_LISTSRC'))
-	{
-		startPortlet ('add/remove 802.1Q ports');
-		renderObject8021QSyncPorts ($object, $D);
-		finishPortlet();
+	{	$mod->setOutput('Considerconfiguratedconstraint', TRUE);
+		// startPortlet ('add/remove 802.1Q ports');
+		renderObject8021QSyncPorts ($object, $D, 'Sync_Ports', $mod);
+		// finishPortlet();
 	}
-	echo '</td><td class=pcright>';
-	startPortlet ('sync plan live preview');
-	if ($R !== NULL)
-		renderObject8021QSyncPreview ($object, $vswitch, $plan, $C, $R, $maxdecisions);
-	else
-		echo "<p class=row_error>gateway error: ${error}</p>";
-	finishPortlet();
-	echo '</td></tr></table>';
+	// echo '</td><td class=pcright>';
+	// startPortlet ('sync plan live preview');
+	if ($R !== NULL){
+		$mod->setOutput('R_Set', TRUE);
+		renderObject8021QSyncPreview ($object, $vswitch, $plan, $C, $R, $maxdecisions, 'Sync_Preview', $mod);
+	}
+	else{
+		$mod->setOutput('Error', $error);
+		// echo "<p class=row_error>gateway error: ${error}</p>";
+	}
+	// finishPortlet();
+	// echo '</td></tr></table>';
 }
 
-function renderObject8021QSyncSchedule ($object, $vswitch, $maxdecisions)
+function renderObject8021QSyncSchedule ($object, $vswitch, $maxdecisions, $placeholder, $parent)
 {
-	echo '<table border=0 cellspacing=0 cellpadding=3 align=center>';
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule($placeholder , "RenderObject8021QSyncSchedule", $parent);
+
+	// echo '<table border=0 cellspacing=0 cellpadding=3 align=center>';
 	// FIXME: sort rows newest event last
 	$rows = array();
 	if (! considerConfiguredConstraint ($object, 'SYNC_802Q_LISTSRC'))
@@ -10597,31 +10614,48 @@ function renderObject8021QSyncSchedule ($object, $vswitch, $maxdecisions)
 	if (NULL !== $new_rows = callHook ('alter8021qSyncSummaryItems', $rows))
 		$rows = $new_rows;
 
-	foreach ($rows as $th => $td)
-		echo "<tr><th width='50%' class=tdright>${th}:</th><td class=tdleft colspan=2>${td}</td></tr>";
-
-	echo '<tr><th class=tdright>run now:</th><td class=tdcenter>';
-	printOpFormIntro ('exec8021QPull');
-	echo getImageHREF ('prev', 'pull remote changes in', TRUE, 101) . '</form></td><td class=tdcenter>';
-	if ($maxdecisions)
-		echo getImageHREF ('COMMIT gray', 'cannot push due to version conflict(s)');
-	else
-	{
-		printOpFormIntro ('exec8021QPush');
-		echo getImageHREF ('COMMIT', 'push local changes out', TRUE, 102) . '</form>';
+		$rowgen = array();
+	foreach ($rows as $th => $td){
+		$rowgen[] = array('Th' => $th, 'Td' => $td);
+		// echo "<tr><th width='50%' class=tdright>${th}:</th><td class=tdleft colspan=2>${td}</td></tr>";
 	}
-	echo '</td></tr>';
-	echo '</table>';
+	$mod->setOutput('Looparray', $rowgen);
+
+	// echo '<tr><th class=tdright>run now:</th><td class=tdcenter>';
+	// printOpFormIntro ('exec8021QPull');
+	// echo getImageHREF ('prev', 'pull remote changes in', TRUE, 101) . '</form></td><td class=tdcenter>';
+	if ($maxdecisions){
+		$mod->setOutput('Maxdecision', TRUE);
+		// echo getImageHREF ('COMMIT gray', 'cannot push due to version conflict(s)');
+	}
+	// else
+	// {
+	// 	printOpFormIntro ('exec8021QPush');
+	// 	echo getImageHREF ('COMMIT', 'push local changes out', TRUE, 102) . '</form>';
+	// }
+	// echo '</td></tr>';
+	// echo '</table>';
 }
 
-function renderObject8021QSyncPreview ($object, $vswitch, $plan, $C, $R, $maxdecisions)
+function renderObject8021QSyncPreview ($object, $vswitch, $plan, $C, $R, $maxdecisions, $placeholder, $parent)
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule($placeholder , "RenderObject8021QSyncPreview", $parent);
+
+
+
 	if (isset ($_REQUEST['hl_port_id']))
 	{
+		$mod->setOutput('Port_Id', $hl_port_id):
 		assertUIntArg ('hl_port_id');
 		$hl_port_id = intval ($_REQUEST['hl_port_id']);
 		$hl_port_name = NULL;
-		addAutoScrollScript ("port-$hl_port_id");
+
+		$mod->setOutput('Port_Id', $hl_port_id):
+		// addAutoScrollScript ("port-$hl_port_id");
 
 		foreach ($object['ports'] as $port)
 			if (mb_strlen ($port['name']) && $port['id'] == $hl_port_id)
@@ -10632,32 +10666,39 @@ function renderObject8021QSyncPreview ($object, $vswitch, $plan, $C, $R, $maxdec
 		unset ($object);
 	}
 
-	switchportInfoJS ($vswitch['object_id']); // load JS code to make portnames interactive
+	switchportInfoJS ($vswitch['object_id'], $mod); // load JS code to make portnames interactive
 	// initialize one of three popups: we've got data already
-	$port_config = addslashes (json_encode (formatPortConfigHints ($vswitch['object_id'], $R)));
-	addJS (<<<END
-$(document).ready(function(){
-	var confData = $.parseJSON('$port_config');
-	applyConfData(confData);
-	var menuItem = $('.context-menu-item.itemname-conf');
-	menuItem.addClass($.contextMenu.disabledItemClassName);
-	setItemIcon(menuItem[0], 'ok');
-});
-END
-	, TRUE);
-	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable width="100%">';
-	if ($maxdecisions)
-		echo '<tr><th colspan=2>&nbsp;</th><th colspan=3>discard</th><th>&nbsp;</th></tr>';
-	echo '<tr valign=top><th>port</th><th width="40%">last&nbsp;saved&nbsp;version</th>';
+	$mod->addOutput('Port_Config', addslashes (json_encode (formatPortConfigHints ($vswitch['object_id'], $R))));
+	
+// 	addJS (<<<END
+// $(document).ready(function(){
+// 	var confData = $.parseJSON('$port_config');
+// 	applyConfData(confData);
+// 	var menuItem = $('.context-menu-item.itemname-conf');
+// 	menuItem.addClass($.contextMenu.disabledItemClassName);
+// 	setItemIcon(menuItem[0], 'ok');
+// });
+// END
+	// , TRUE);
+	// echo '<table cellspacing=0 cellpadding=5 align=center class=widetable width="100%">';
+	if ($maxdecisions){
+		$mod->setOutput('Maxdecisions', TRUE)
+		// echo '<tr><th colspan=2>&nbsp;</th><th colspan=3>discard</th><th>&nbsp;</th></tr>';
+	}
+	// echo '<tr valign=top><th>port</th><th width="40%">last&nbsp;saved&nbsp;version</th>';
 	if ($maxdecisions)
 	{
-		addJS ('js/racktables.js');
-		printOpFormIntro ('resolve8021QConflicts', array ('mutex_rev' => $vswitch['mutex_rev']));
-		foreach (array ('left', 'asis', 'right') as $pos)
-			echo "<th class=tdcenter><input type=radio name=column_radio value=${pos} " .
-				"onclick=\"checkColumnOfRadios('i_', ${maxdecisions}, '_${pos}')\"></th>";
+		// addJS ('js/racktables.js');
+		// printOpFormIntro ('resolve8021QConflicts', array ('mutex_rev' => $vswitch['mutex_rev']));
+		$position = array();
+		foreach (array ('left', 'asis', 'right') as $pos){
+			$position[] = array('Position' => $pos, 'Maxdecision' => $maxdecisions);
+			// echo "<th class=tdcenter><input type=radio name=column_radio value=${pos} " .
+			// 	"onclick=\"checkColumnOfRadios('i_', ${maxdecisions}, '_${pos}')\"></th>";
+		}
+		$mod->addOutput('Looparray2', $positions);
 	}
-	echo '<th width="40%">running&nbsp;version</th></tr>';
+	// echo '<th width="40%">running&nbsp;version</th></tr>';
 	$rownum = 0;
 	$plan = sortPortList ($plan);
 	$domvlans = array_keys (getDomainVLANList ($vswitch['domain_id']));
@@ -10669,6 +10710,7 @@ END
 	);
 	foreach ($plan as $port_name => $item)
 	{
+		$smod = $tplm->generateSubmodule('Loop', 'LoopMod' , $mod)
 		$trclass = $left_extra = $right_extra = $left_text = $right_text = '';
 		$radio_attrs = array();
 		switch ($item['status'])
@@ -10785,45 +10827,74 @@ END
 			$anchor = "name='port-$hl_port_id'";
 			$td_class = ' border_highlight';
 		}
-		echo "<tr class='${trclass}'><td class='tdleft${td_class}' NOWRAP><a class='interactive-portname port-menu nolink' $anchor>${port_name}</a></td>";
+		$smod->addOutput('Trclass', $trclass);
+		$smod->addOutput('Tdclass', $td_class);
+		$smod->addOutput('Port_Name', $port_name);
+		$smod->addOutput('Left_Extra', $left_extra);
+		$smod->addOutput('Left_Text', $left_text);
+		$smod->addOutput('Right_Extra', $right_extra);
+		$smod->addOutput('Right_Text', $right_text);
+		// echo "<tr class='${trclass}'><td class='tdleft${td_class}' NOWRAP><a class='interactive-portname port-menu nolink' $anchor>${port_name}</a></td>";
 		if (!count ($radio_attrs))
 		{
-			echo "<td class='tdleft${left_extra}'>${left_text}</td>";
+			$smod->addOutput('Empty_Radioattrs', TRUE);
+			// echo "<td class='tdleft${left_extra}'>${left_text}</td>";
 			if ($maxdecisions)
-				echo '<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>';
-			echo "<td class='tdleft${right_extra}'>${right_text}</td>";
+				$smod->addOutput('Maxdecisions', TRUE);
+				// echo '<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>';
+			// echo "<td class='tdleft${right_extra}'>${right_text}</td>";
 		}
 		else
 		{
-			echo "<td class='tdleft${left_extra}'><label for=i_${rownum}_left>${left_text}</label></td>";
-			foreach ($radio_attrs as $pos => $attrs)
-				echo "<td><input id=i_${rownum}_${pos} name=i_${rownum} type=radio value=${pos}${attrs}></td>";
-			echo "<td class='tdleft${right_extra}'><label for=i_${rownum}_right>${right_text}</label></td>";
+			// echo "<td class='tdleft${left_extra}'><label for=i_${rownum}_left>${left_text}</label></td>";
+			$tdloop = array();
+			foreach ($radio_attrs as $pos => $attrs){
+				$tdloop[] = array(  'Rownum' => $rownum,
+									'Position' => $pos, 
+									'Attrs' => $attrs);
+				// echo "<td><input id=i_${rownum}_${pos} name=i_${rownum} type=radio value=${pos}${attrs}></td>";
+			}
+			$smod->addOutput('Looparray', $tdloop); 
+			// echo "<td class='tdleft${right_extra}'><label for=i_${rownum}_right>${right_text}</label></td>";
 		}
-		echo '</tr>';
+		// echo '</tr>';
 		if (count ($radio_attrs))
-		{
-			echo "<input type=hidden name=rm_${rownum} value=" . $item['right']['mode'] . '>';
-			echo "<input type=hidden name=rn_${rownum} value=" . $item['right']['native'] . '>';
-			foreach ($item['right']['allowed'] as $a)
-				echo "<input type=hidden name=ra_${rownum}[] value=${a}>";
-			echo "<input type=hidden name=pn_${rownum} value='" . htmlspecialchars ($port_name) . "'>";
+		{	
+			$smod->addOutput('Item_Mode', $item['right']['mode']);
+			$smod->addOutput('Item_Native', $item['right']['native']);			
+			// echo "<input type=hidden name=rm_${rownum} value=" . $item['right']['mode'] . '>';
+			// echo "<input type=hidden name=rn_${rownum} value=" . $item['right']['native'] . '>';
+			$input = array();
+			foreach ($item['right']['allowed'] as $a){
+				$input[] = array('Rownum' => $rownum,
+								 'A' => $a);
+				// echo "<input type=hidden name=ra_${rownum}[] value=${a}>";
+			}
+			$smod->addOutput('Looparray2', $input);
+			$smod->addOutput('Html', htmlspecialchars ($port_name));
+			// echo "<input type=hidden name=pn_${rownum} value='" . htmlspecialchars ($port_name) . "'>";
 		}
 		$rownum += count ($radio_attrs) ? 1 : 0;
 	}
 	if ($rownum) // normally should be equal to $maxdecisions
 	{
-		echo "<input type=hidden name=nrows value=${rownum}>";
-		echo '<tr><td colspan=2>&nbsp;</td><td colspan=3 align=center class=tdcenter>';
-		printImageHREF ('UNLOCK', 'resolve conflicts', TRUE);
-		echo '</td><td>&nbsp;</td></tr>';
+		$mod->addOutput('Rownum_Set', TRUE);
+		// echo "<input type=hidden name=nrows value=${rownum}>";
+		// echo '<tr><td colspan=2>&nbsp;</td><td colspan=3 align=center class=tdcenter>';
+		// printImageHREF ('UNLOCK', 'resolve conflicts', TRUE);
+		// echo '</td><td>&nbsp;</td></tr>';
 	}
-	echo '</table>';
-	echo '</form>';
+	// echo '</table>';
+	// echo '</form>';
 }
 
-function renderObject8021QSyncPorts ($object, $D)
+function renderObject8021QSyncPorts ($object, $D, $placeholder, $parent)
 {
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	
+	$mod = $tplm->generateSubmodule($placeholder ,"RenderObject8021QSyncPorts", $parent);
+
 	$allethports = array();
 	foreach (array_filter ($object['ports'], 'isEthernetPort') as $port)
 		$allethports[$port['name']] = formatPortIIFOIF ($port);
@@ -10838,17 +10909,20 @@ function renderObject8021QSyncPorts ($object, $D)
 	foreach (sortPortList ($allethports) as $portname => $iifoif)
 		if (! array_key_exists ("disable ${portname}", $enabled))
 			$disabled["enable ${portname}"] = "${portname} (${iifoif})";
-	printOpFormIntro ('updPortList');
-	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-	echo '<tr><td>';
-	printNiftySelect
-	(
-		array ('select ports to disable 802.1Q' => $enabled, 'select ports to enable 802.1Q' => $disabled),
-		array ('name' => 'ports[]', 'multiple' => 1, 'size' => getConfigVar ('MAXSELSIZE'))
-	);
-	echo '</td></tr>';
-	echo '<tr><td>' . getImageHREF ('RECALC', 'process changes', TRUE) . '</td></tr>';
-	echo '</table></form>';
+	// printOpFormIntro ('updPortList');
+	// echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	// echo '<tr><td>';
+		$mod->setOutput('Nifty_Select', getNiftySelect (array ('select ports to disable 802.1Q' => $enabled, 'select ports to enable 802.1Q' => $disabled),
+								 array ('name' => 'ports[]', 'multiple' => 1, 'size' => getConfigVar ('MAXSELSIZE')),
+								  NULL));
+	// printNiftySelect
+	// (
+	// 	array ('select ports to disable 802.1Q' => $enabled, 'select ports to enable 802.1Q' => $disabled),
+	// 	array ('name' => 'ports[]', 'multiple' => 1, 'size' => getConfigVar ('MAXSELSIZE'))
+	// );
+	// echo '</td></tr>';
+	// echo '<tr><td>' . getImageHREF ('RECALC', 'process changes', TRUE) . '</td></tr>';
+	// echo '</table></form>';
 }
 
 function renderVSTListEditor()
@@ -11944,20 +12018,33 @@ function renderIPAddressLog ($ip_bin)
 
 function renderObjectCactiGraphs ($object_id)
 {
-	function printNewItemTR ($options)
+	function printNewItemTR ($options, $placeholder)
 	{
-		echo "<table cellspacing=\"0\" align=\"center\" width=\"50%\">";
-		echo "<tr><td>&nbsp;</td><th>Server</th><th>Graph ID</th><th>Caption</th><td>&nbsp;</td></tr>\n";
-		printOpFormIntro ('add');
-		echo "<tr><td>";
-		printImageHREF ('Attach', 'Link new graph', TRUE);
-		echo '</td><td>' . getSelect ($options, array ('name' => 'server_id'));
-		echo "</td><td><input type=text name=graph_id tabindex=100></td><td><input type=text name=caption tabindex=101></td><td>";
-		printImageHREF ('Attach', 'Link new graph', TRUE, 101);
-		echo "</td></tr></form>";
-		echo "</table>";
-		echo "<br/><br/>";
-	}
+		$smod = $tplm->generateSubmodule($placeholder, 'PrintNewItem', $mod);
+		$smod->addOutput('Getselect', getSelect ($options, array ('name' => 'server_id')));
+		// echo "<table cellspacing=\"0\" align=\"center\" width=\"50%\">";
+		// echo "<tr><td>&nbsp;</td><th>Server</th><th>Graph ID</th><th>Caption</th><td>&nbsp;</td></tr>\n";
+		// printOpFormIntro ('add');
+		// echo "<tr><td>";
+		// printImageHREF ('Attach', 'Link new graph', TRUE);
+		// echo '</td><td>' . getSelect ($options, array ('name' => 'server_id'));
+		// echo "</td><td><input type=text name=graph_id tabindex=100></td><td><input type=text name=caption tabindex=101></td><td>";
+		// printImageHREF ('Attach', 'Link new graph', TRUE, 101);
+		// echo "</td></tr></form>";
+		// echo "</table>";
+		// echo "<br/><br/>";
+
+	}	
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderObjectCactiGraphs");
+	$mod->setNamespace("object", TRUE);
+
+
+
 	if (!extension_loaded ('curl'))
 		throw new RackTablesError ("The PHP cURL extension is not loaded.", RackTablesError::MISCONFIGURED);
 
@@ -11965,44 +12052,66 @@ function renderObjectCactiGraphs ($object_id)
 	$options = array();
 	foreach ($servers as $server)
 		$options[$server['id']] = "${server['id']}: ${server['base_url']}";
-	startPortlet ('Cacti Graphs');
+	// startPortlet ('Cacti Graphs');
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes' && permitted('object','cacti','add'))
-		printNewItemTR ($options);
-	echo "<table cellspacing=\"0\" cellpadding=\"10\" align=\"center\" width=\"50%\">";
+		printNewItemTR ($options, 'NewTop');
+	// echo "<table cellspacing=\"0\" cellpadding=\"10\" align=\"center\" width=\"50%\">";
 	foreach (getCactiGraphsForObject ($object_id) as $graph_id => $graph)
 	{
-		$cacti_url = $servers[$graph['server_id']]['base_url'];
-		$text = "(graph ${graph_id} on server ${graph['server_id']})";
-		echo "<tr><td>";
-		echo "<a href='${cacti_url}/graph.php?action=view&local_graph_id=${graph_id}&rra_id=all' target='_blank'>";
-		echo "<img src='index.php?module=image&img=cactigraph&object_id=${object_id}&server_id=${graph['server_id']}&graph_id=${graph_id}' alt='${text}' title='${text}'></a></td><td>";
+		$submod = $tplm->generateSubmodule('RowsTR', 'RowTR', $mod);
+		// $munin_url = $servers[$graph['server_id']]['base_url'];
+		$submod->addOutput('Cacti_Url', $servers[$graph['server_id']]['base_url']);
+		$submod->addOutput('Graph_Id', $graph_id);
+		$submod->addOutput('Object_Id', $object_id);
+		$submod->addOutput('Server_Id', $graph['server_id']);
+		$submod->addOutput('Caption', $graph['caption']);
+
+
+
+		// $cacti_url = $servers[$graph['server_id']]['base_url'];
+		// $text = "(graph ${graph_id} on server ${graph['server_id']})";
+		// echo "<tr><td>";
+		// echo "<a href='${cacti_url}/graph.php?action=view&local_graph_id=${graph_id}&rra_id=all' target='_blank'>";
+		// echo "<img src='index.php?module=image&img=cactigraph&object_id=${object_id}&server_id=${graph['server_id']}&graph_id=${graph_id}' alt='${text}' title='${text}'></a></td><td>";
 		if(permitted('object','cacti','del'))
-			echo getOpLink (array ('op' => 'del', 'server_id' => $graph['server_id'], 'graph_id' => $graph_id), '', 'Cut', 'Unlink graph', 'need-confirmation');
-		echo "&nbsp; &nbsp;${graph['caption']}";
-		echo "</td></tr>";
+			$submod->setOutput('Permitted', TRUE);
+			// echo getOpLink (array ('op' => 'del', 'server_id' => $graph['server_id'], 'graph_id' => $graph_id), '', 'Cut', 'Unlink graph', 'need-confirmation');
+		// echo "&nbsp; &nbsp;${graph['caption']}";
+		// echo "</td></tr>";
 	}
 	echo '</table>';
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes' && permitted('object','cacti','add'))
-		printNewItemTR ($options);
-	finishPortlet ();
+		printNewItemTR ($options, 'NewBottom');
+	// finishPortlet ();
 }
 
 function renderObjectMuninGraphs ($object_id)
 {
-	function printNewItem ($options)
+	function printNewItem ($options, $placeholder)
 	{
-		echo "<table cellspacing=\"0\" align=\"center\" width=\"50%\">";
-		echo "<tr><td>&nbsp;</td><th>Server</th><th>Graph</th><th>Caption</th><td>&nbsp;</td></tr>\n";
-		printOpFormIntro ('add');
-		echo "<tr><td>";
-		printImageHREF ('Attach', 'Link new graph', TRUE);
-		echo '</td><td>' . getSelect ($options, array ('name' => 'server_id'));
-		echo "</td><td><input type=text name=graph tabindex=100></td><td><input type=text name=caption tabindex=101></td><td>";
-		printImageHREF ('Attach', 'Link new graph', TRUE, 101);
-		echo "</td></tr></form>";
-		echo "</table>";
-		echo "<br/><br/>";
+		$smod = $tplm->generateSubmodule($placeholder, 'PrintNewItem', $mod);
+		$smod->addOutput('Getselect', getSelect ($options, array ('name' => 'server_id')));
+		// echo "<table cellspacing=\"0\" align=\"center\" width=\"50%\">";
+		// echo "<tr><td>&nbsp;</td><th>Server</th><th>Graph</th><th>Caption</th><td>&nbsp;</td></tr>\n";
+		// printOpFormIntro ('add');
+		// echo "<tr><td>";
+		// printImageHREF ('Attach', 'Link new graph', TRUE);
+		// echo '</td><td>' . getSelect ($options, array ('name' => 'server_id'));
+		// echo "</td><td><input type=text name=graph tabindex=100></td><td><input type=text name=caption tabindex=101></td><td>";
+		// printImageHREF ('Attach', 'Link new graph', TRUE, 101);
+		// echo "</td></tr></form>";
+		// echo "</table>";
+		// echo "<br/><br/>";
 	}
+
+
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule("index");
+	
+	$mod = $tplm->generateSubmodule("Payload","RenderObjectMuninGraphs");
+	$mod->setNamespace("object", TRUE);
+
 	if (!extension_loaded ('curl'))
 		throw new RackTablesError ("The PHP cURL extension is not loaded.", RackTablesError::MISCONFIGURED);
 
@@ -12010,30 +12119,39 @@ function renderObjectMuninGraphs ($object_id)
 	$options = array();
 	foreach ($servers as $server)
 		$options[$server['id']] = "${server['id']}: ${server['base_url']}";
-	startPortlet ('Munin Graphs');
+	// startPortlet ('Munin Graphs');
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItem ($options);
-	echo "<table cellspacing=\"0\" cellpadding=\"10\" align=\"center\" width=\"50%\">";
+		printNewItem ($options, 'NewTop');
+	// echo "<table cellspacing=\"0\" cellpadding=\"10\" align=\"center\" width=\"50%\">";
 
 	$object = spotEntity ('object', $object_id);
 	list ($host, $domain) = preg_split ("/\./", $object['dname'], 2);
 
 	foreach (getMuninGraphsForObject ($object_id) as $graph_name => $graph)
 	{
-		$munin_url = $servers[$graph['server_id']]['base_url'];
-		$text = "(graph ${graph_name} on server ${graph['server_id']})";
-		echo "<tr><td>";
-		echo "<a href='${munin_url}/${domain}/${object['dname']}/${graph_name}.html' target='_blank'>";
-		echo "<img src='index.php?module=image&img=muningraph&object_id=${object_id}&server_id=${graph['server_id']}&graph=${graph_name}' alt='${text}' title='${text}'></a></td>";
-		echo "<td>";
-		echo getOpLink (array ('op' => 'del', 'server_id' => $graph['server_id'], 'graph' => $graph_name), '', 'Cut', 'Unlink graph', 'need-confirmation');
-		echo "&nbsp; &nbsp;${graph['caption']}";
-		echo "</td></tr>";
+		$submod = $tplm->generateSubmodule('Rows', 'Row', $mod);
+		// $munin_url = $servers[$graph['server_id']]['base_url'];
+		$submod->addOutput('Munin_Url', $servers[$graph['server_id']]['base_url']);
+		$submod->addOutput('Domain', $domain);
+		$submod->addOutput('Dname', $object['dname']);
+		$submod->addOutput('Graph_Name', $graph_name);
+		$submod->addOutput('Object_Id', $object_id);
+		$submod->addOutput('Server_Id', $graph['server_id']);
+		$submod->addOutput('Caption', $graph['caption']);
+
+		// $text = "(graph ${graph_name} on server ${graph['server_id']})";
+		// echo "<tr><td>";
+		// echo "<a href='${munin_url}/${domain}/${object['dname']}/${graph_name}.html' target='_blank'>";
+		// echo "<img src='index.php?module=image&img=muningraph&object_id=${object_id}&server_id=${graph['server_id']}&graph=${graph_name}' alt='${text}' title='${text}'></a></td>";
+		// echo "<td>";
+		// echo getOpLink (array ('op' => 'del', 'server_id' => $graph['server_id'], 'graph' => $graph_name), '', 'Cut', 'Unlink graph', 'need-confirmation');
+		// echo "&nbsp; &nbsp;${graph['caption']}";
+		// echo "</td></tr>";
 	}
-	echo '</table>';
+	// echo '</table>';
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItem ($options);
-	finishPortlet ();
+		printNewItem ($options, 'NewBottom');
+	// finishPortlet ();
 }
 
 function renderEditVlan ($vlan_ck)
@@ -12206,21 +12324,27 @@ function formatPortReservation ($port)
 
 function renderEditUCSForm()
 {
-	startPortlet ('UCS Actions');
-	printOpFormIntro ('autoPopulateUCS');
-	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-	echo "<tr><th class=tdright><label for=ucs_login>Login:</label></th>";
-	echo "<td class=tdleft colspan=2><input type=text name=ucs_login id=ucs_login></td></tr>\n";
-	echo "<tr><th class=tdright><label for=ucs_password>Password:</label></th>";
-	echo "<td class=tdleft colspan=2><input type=password name=ucs_password id=ucs_password></td></tr>\n";
-	echo "<tr><th colspan=3><input type=checkbox name=use_terminal_settings id=use_terminal_settings>";
-	echo "<label for=use_terminal_settings>Use Credentials from terminal_settings()</label></th></tr>\n";
-	echo "<tr><th class=tdright>Actions:</th><td class=tdleft>";
-	printImageHREF ('DQUEUE sync_ready', 'Auto-populate UCS', TRUE);
-	echo '</td><td class=tdright>';
-	echo getOpLink (array ('op' => 'cleanupUCS'), '', 'CLEAR', 'Clean-up UCS domain', 'need-confirmation');
-	echo "</td></tr></table></form>\n";
-	finishPortlet();
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");
+	$tplm->createMainModule();
+	$mod = $tplm->generateSubmodule("Payload", "RenderEditUCSForm");
+	$mod->setNamespace("object",true);
+
+	// startPortlet ('UCS Actions');
+	// printOpFormIntro ('autoPopulateUCS');
+	// echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+	// echo "<tr><th class=tdright><label for=ucs_login>Login:</label></th>";
+	// echo "<td class=tdleft colspan=2><input type=text name=ucs_login id=ucs_login></td></tr>\n";
+	// echo "<tr><th class=tdright><label for=ucs_password>Password:</label></th>";
+	// echo "<td class=tdleft colspan=2><input type=password name=ucs_password id=ucs_password></td></tr>\n";
+	// echo "<tr><th colspan=3><input type=checkbox name=use_terminal_settings id=use_terminal_settings>";
+	// echo "<label for=use_terminal_settings>Use Credentials from terminal_settings()</label></th></tr>\n";
+	// echo "<tr><th class=tdright>Actions:</th><td class=tdleft>";
+	// printImageHREF ('DQUEUE sync_ready', 'Auto-populate UCS', TRUE);
+	// echo '</td><td class=tdright>';
+	// echo getOpLink (array ('op' => 'cleanupUCS'), '', 'CLEAR', 'Clean-up UCS domain', 'need-confirmation');
+	// echo "</td></tr></table></form>\n";
+	// finishPortlet();
 }
 
 function renderCactiConfig()
