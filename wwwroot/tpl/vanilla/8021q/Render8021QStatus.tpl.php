@@ -40,11 +40,9 @@
 			<?php $this->startLoop("vstListOut"); ?>	
 				<tr align=left valign=top><td>
 				<?php $this->mkA ?>
-				<?php if ($this->is("areTags", true)) { ?>
-				 	<br><small><?php $this->serializedTags ?> </small>
-				 <?php } ?> 
-				 </td>
-				 <td><?php $this->rulec ?></td><td><?php $this->switchc ?></td></tr> 
+				<?php $this->serializedTags ?>
+				</td>
+				<td><?php $this->rulec ?></td><td><?php $this->switchc ?></td></tr> 
 			<?php $this->endLoop(); ?> 
 			</table>
 		</div>

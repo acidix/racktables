@@ -209,6 +209,7 @@ function renderEditVS ($vs_id)
 	echo '</th></tr>';
 	echo '</table></form>';
 
+	//TODO remove or port JS
 	addJS ('js/jquery.thumbhover.js');
 	addJS ('js/slb_editor.js');
 

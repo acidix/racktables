@@ -7,13 +7,8 @@
 	<?php $this->startLoop("allDomainStats"); ?>	
 		<?php $this->formIntro ?> 
 		<tr><td>
-
-		<?php if ($this->is("isSwtchOrVlan", true)) { ?>
-			<?php $this->imageNoDestroy ?> 	
-		<?php } else { ?> 
-			<?php $this->linkDestroy ?> 
-		<?php } ?> 
-
+		<?php $this->imageNoDestroy ?> 	
+		<?php $this->linkDestroy ?> 
 		</td><td><input name=vdom_descr type=text size=48 value=<?php $this->niftyStr ?>> 
 		</td><td>
 		<?php $this->imageUpdate ?> 

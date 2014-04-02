@@ -6,8 +6,8 @@
 			<tr><td colspan=2><hr></td></tr>
 		<?php $this->endLoop(); ?> 
 
-	</table>
 
+	</table>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

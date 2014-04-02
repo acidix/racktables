@@ -288,6 +288,7 @@ function handlePopupPortLink()
 				formatPort ($remote_port_info),
 			)
 		);
+		//TODO port / remove  addJS
 		addJS (<<<END
 window.opener.location.reload(true);
 window.close();

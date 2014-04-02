@@ -184,6 +184,7 @@ $this->setInMemoryTemplate("ReportsMessages","<tr class='msg_{{Class}}><td class
 $this->setInMemoryTemplate("ReportsCustom","<tr><td colspan=2>\n{{ItemCont}}\n</td></tr>");
 $this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{Title}:</td><td class=tdcenter>\n{{ProgressBar}}\n<br><small>{{IsMax}}</small></td></tr>");
 
+
 /**
 *	GetProgressBar: 
 *	Usage: interface-lib-php
@@ -322,4 +323,78 @@ $this->setInMemoryTemplate("FormatPortLink",'<a $additional href="{{href}}">{{te
 **/
 $this->setInMemoryTemplate("RenderSNMPPortFinder_NoExt","<div class=msg_error>The PHP SNMP extension is not loaded.  Cannot continue.</div>");
 
+/**
+*	GlobalPlaceholder: 
+*	A very basic globalplaceholder to be filled with submodules
+*	Usage:  serializeTags -> interface-lib.php
+*
+**/
+$this->setInMemoryTemplate("GlobalPlaceholder","{{cont}}");
+
+/**
+*	ETagsLine: 
+*	Usage:  render8021QStatus -> interface.php
+*
+**/
+$this->setInMemoryTemplate("ETagsLine","<br><small>{{cont}}</small>");
+
+/**
+*	PCodeLine: 
+*	Usage:  renderFilesPortlet -> interface.php
+*
+**/
+$this->setInMemoryTemplate("PCodeLine", "<tr><td colspan=2>{{pcode}}</td></tr>\n");
+
+/**
+*	EmptyTableCell: 
+*	Usage:  renderIndex -> interface.php
+*
+**/
+$this->setInMemoryTemplate("EmptyTableCell","<td>&nbsp;</td>");
+
+/**
+*	IndexItemMod': 
+*	Usage: renderIndex -> interface.php
+*
+**/
+$this->setInMemoryTemplate("IndexItemMod"," <td>\n<h1><a href='{{Href}}'>" .
+		"{{PageName}}<br>\n{{Image}} </a></h1>\n</td>");
+
+/**
+*	TDLeftCell: 
+*	Usage: renderObject -> interface.php
+*
+**/
+$this->setInMemoryTemplate("TDLeftCell","<td class=tdleft {{rowspan}}>{{cont}}</td>");
+
+/**
+*	RoundBracketsMod: 
+*	Usage:  renderObject -> interface.php
+*
+**/
+$this->setInMemoryTemplate("RoundBracketsMod","({{cont}})");
+
+/**
+*	TbcLine: 
+*	Usage:  Render8021QReport -> interface.php
+*
+**/
+$this->setInMemoryTemplate("TbcLineMod","<tr class='state_A'><th>...</th><td colspan={{CountDomains}}>&nbsp;</td></tr>");
+
+/**
+*	ExpirationsNoSection: 
+*	Usage:  renderExpirations -> interface.php
+*
+**/
+$this->setInMemoryTemplate("ExpirationsNoSection","<tr><td colspan=4>(none)</td></tr></table><br>\n");
+
+/**
+ *	IPv6Separators:
+ *	Usage: renderIPv6Addresses -> interface.php 
+ *
+ **/
+$this->setInMemoryTemplate("IPv6SeparatorPlain","<tr><td colspan=4 class=tdleft></td></tr>");
+$this->setInMemoryTemplate("IPv6Separator","<tr class='tdleft {{Highlight}}'><td><a name='ip-{{FMT}}' href='{{Link'>{{FMT}}</a>" . 
+												"</td><td><span class='rsvtext {{Editable}} id-{{FMT}} op-upd-ip-name'></span></td>" .
+												"<td><span class='rsvtext {{Editable}} id-{{FMT}} op-upd-ip-comment'></span></td><td>&nbsp;</td></tr>");
 ?>

@@ -9,14 +9,14 @@ $(document).ready(function () {
 	$('select.taglist-popup').bind('mousedown', tageditor_showselectbox);
 });			
 JS;
+	$this->addJS($js,true);
 ?>
-		<?php $this->addRequirement("Header","HeaderJsInline",array("code"=>$js));?>
-		<?php if($this->is('hasOTags',true)) { ?>
+		<?php if($this->is('OTags')) { ?>
 			<div class=portlet>
 				<h2>fallen leaves</h2>
 				<table cellspacing=0 cellpadding=5 align=center class=widetable>
 					<tr class=trerror><th>tag name</th><th>parent tag</th><th>&nbsp;</th></tr>
-					<?php $this->Otags; ?>
+					<?php $this->OTags; ?>
 				</table>
 			</div>
 		<?php } ?>
