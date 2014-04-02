@@ -3299,7 +3299,8 @@ function updateCurrentTemplate()
 	$arr = TemplateManager::getOrderedTemplateList();
 	if (array_key_exists($id, $arr))
 	{
-		$_SESSION['template'] = $arr[$id];
+		setcookie('RacktablesTemplate',$id,time()+60*60*24*7);
+		//$_SESSION['template'] = $arr[$id];
 		showSuccess("Template is set to:" . $arr[$id] . " for this session.");
 	}
 	else 

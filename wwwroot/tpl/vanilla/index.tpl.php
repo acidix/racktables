@@ -24,7 +24,7 @@
 			</form>
 		</div>
  		<div style='float: right'>
-			<form method=post id=TplSelect name=TplSelect action='?module=redirect&page=index&tab=index&op=settemplate'>
+			<form method=post id=TplSelect name=TplSelect action='?module=redirect&page=myaccount&tab=interface&op=settemplate'>
 				<?php $this->getH('TplSelect') ;?>	
 				<input class="icon" type="image" border="0" title="set template" src="?module=chrome&uri=pix/tango-document-save-16x16.png" name="submit"></input>
 			</form>

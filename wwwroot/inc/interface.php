@@ -10682,7 +10682,7 @@ function renderObject8021QSyncPreview ($object, $vswitch, $plan, $C, $R, $maxdec
 	// , TRUE);
 	// echo '<table cellspacing=0 cellpadding=5 align=center class=widetable width="100%">';
 	if ($maxdecisions){
-		$mod->setOutput('Maxdecisions', TRUE)
+		$mod->setOutput('Maxdecisions', TRUE);
 		// echo '<tr><th colspan=2>&nbsp;</th><th colspan=3>discard</th><th>&nbsp;</th></tr>';
 	}
 	// echo '<tr valign=top><th>port</th><th width="40%">last&nbsp;saved&nbsp;version</th>';
@@ -10710,7 +10710,7 @@ function renderObject8021QSyncPreview ($object, $vswitch, $plan, $C, $R, $maxdec
 	);
 	foreach ($plan as $port_name => $item)
 	{
-		$smod = $tplm->generateSubmodule('Loop', 'LoopMod' , $mod)
+		$smod = $tplm->generateSubmodule('Loop', 'LoopMod' , $mod);
 		$trclass = $left_extra = $right_extra = $left_text = $right_text = '';
 		$radio_attrs = array();
 		switch ($item['status'])

@@ -43,28 +43,49 @@ class TemplateManager
 	 */
 	public static function intializeTemplate()
 	{
-		if (!array_key_exists('template', $_SESSION))
+		$tpl_to_use = '';
+		if (!array_key_exists('RacktablesTemplate', $_COOKIE))
 		{
-			$_SESSION['template'] = getConfigVar('default_template');
+			setcookie('RacktablesTemplate',getConfigVar('default_template'));
+			$tpl_to_use = getConfigVar('default_template');
+			//$_COOKIE['RacktablesTemplate'] = getConfigVar('default_template');
+		}
+		else
+		{
+			$tpl_to_use = $_COOKIE['RacktablesTemplate'];
 		}
 		
-		if (!array_search($_SESSION['template'], self::getOrderedTemplateList()))
+		$template_list = self::getOrderedTemplateList();
+		$flipped = array_flip($template_list);
+		if (!array_key_exists($_COOKIE['RacktablesTemplate'], $template_list))
 		{
-			if (!array_search('vanilla', self::getOrderedTemplateList()))
+			if (!array_search('vanilla', $template_list))
 			{
 				throw new TemplateException('TplErr: Vanilla template is not installed, can\'t fall back to another template.');
 			}
 			else 
 			{
-				$_SESSION['template'] = 'vanilla';
+				setcookie('RacktablesTemplate',$flipped['vanilla']);
+				$tpl_to_use = $flipped['vanilla'];
+				//$_COOKIE['RacktablesTemplate'] = $flipped['vanilla'];
 			}
 		}
 		
 		$inst = self::getInstance();
 		
 		//@XXX escape string!!
-		$inst->setTemplate($_SESSION['template']);
+		$inst->setTemplate($template_list[$tpl_to_use]);
 		$inst->createMainModule('index');
+		
+	}
+	
+	public static function changeStaticDir()
+	{
+		$inst = SELF::getInstance();
+		
+		global $local_staticdir ;
+		
+		$local_staticdir = $inst->getTemplate();
 	}
 
 	/**
