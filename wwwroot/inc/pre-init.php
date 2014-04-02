@@ -51,13 +51,6 @@ if (! isset ($local_gwdir)) // the directory where RT will search gateway script
 if (! isset ($local_staticdir)) // the directory where RT will search static files (js/*, css/*, pix/*) if not found in $racktables_staticdir
 	$local_staticdir = $racktables_plugins_dir;
 
-
-//Initialize template functionality
-TemplateManager::intializeTemplate();
-
-//Adjust static dir to search within the template directory ./tpl/template/css etc.
-TemplateManager::changeStaticDir();
-
 // (re)connects to DB, stores PDO object in $dbxlink global var
 function connectDB()
 {

@@ -137,6 +137,13 @@ $virtual_obj_types = explode (',', getConfigVar ('VIRTUAL_OBJ_LISTSRC'));
 alterConfigWithUserPreferences();
 $op = '';
 
+
+//Initialize template functionality
+TemplateManager::intializeTemplate();
+
+//Adjust static dir to search within the template directory ./tpl/template/css etc.
+TemplateManager::changeStaticDir();
+
 // load additional plugins
 ob_start();
 foreach (glob("$racktables_plugins_dir/*.php") as $filename)
