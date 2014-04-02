@@ -1147,7 +1147,7 @@ class TemplateInMemory extends TemplateModule
 		}
 		$code = $tplm->getInMemoryTemplate($this->module);
 		
-		$this->runModules($this->output);
+		$this->output = $this->runModules($this->output);
 		
 		$this->output["css"] = './tpl/' . $this->tpl . '/css/';
 		$this->output["img"] = './tpl/' . $this->tpl . '/img/';

@@ -2517,7 +2517,7 @@ function showMessageOrError ($tpl = false)
 		}
 		else 
 		{ // @TODO Remove old version, use TEmplate Engine instead
-		echo '<div class=msg_' . $msginfo[$record['c']]['code'] . ">${msgtext}</div>";
+			echo '<div class=msg_' . $msginfo[$record['c']]['code'] . ">${msgtext}</div>";
 		}
 	}
 	$log_messages = array();
@@ -5128,8 +5128,7 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");	
 	if($parent == null){	
-		$main =	$tplm->createMainModule();
-		$mod = $tplm->generateSubmodule("Payload","CellList", $main);
+		$mod = $tplm->generateModule("CellList");
 	}
 	else{
 		$mod = $tplm->generateSubmodule($placeholder, "CellList", $parent);
@@ -5141,7 +5140,7 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 	//echo "<table border=0 class=objectview>\n";
 	//echo "<tr><td class=pcleft>";
 
-	if ($realm != 'file' || ! renderEmptyResults ($cellfilter, 'files', count($celllist), $mod, "EmptyResults"))
+	if ($realm != 'file' || ! renderEmptyResults ($cellfilter, 'files', count($celllist), $mod, "EmptyResults "))
 	{
 		if ($do_amplify)
 			array_walk ($celllist, 'amplifyCell');
@@ -5167,9 +5166,9 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 		//echo '</table>';
 		//finishPortlet();
 	}
-	else {
-		$mod->setOutput("EmptyResults","");
-	}
+//	else {
+
+//	}
 	//echo '</td><td class=pcright>';
 	renderCellFilterPortlet ($cellfilter, $realm, $celllist, array(), $mod );
 	//echo "</td></tr></table>\n"; */
@@ -5179,7 +5178,11 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 
 function renderUserList ()
 {
-	renderCellList ('user', 'User accounts');
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");	
+	$main = $tplm->createMainModule();
+
+	renderCellList ('user', 'User accounts',FALSE, NULL, $main, 'Payload');
 }
 
 function renderUserListEditor ()
@@ -5188,7 +5191,7 @@ function renderUserListEditor ()
 	{
 		$tplm = TemplateManager::getInstance();
 		$smod2 = $tplm->generateSubmodule($placeholder, "UserListEditorNew", $parent);
-		
+		$smod2->setNamespace('userlist');
 		//startPortlet ('Add new');
 		//printOpFormIntro ('createUser');
 		//echo '<table cellspacing=0 cellpadding=5 align=center>';
@@ -5196,6 +5199,7 @@ function renderUserListEditor ()
 		//echo '<tr><th class=tdright>Username</th><td class=tdleft><input type=text size=64 name=username tabindex=100></td>';
 		//echo '<td rowspan=4>';
 		renderNewEntityTags ('user', $smod2, "RenderedNewEntityTags");
+
 		//echo '</td></tr>';
 		//echo '<tr><th class=tdright>Real name</th><td class=tdleft><input type=text size=64 name=realname tabindex=101></td></tr>';
 		//echo '<tr><th class=tdright>Password</th><td class=tdleft><input type=password size=64 name=password tabindex=102></td></tr>';
@@ -5211,7 +5215,7 @@ function renderUserListEditor ()
 	$tplm->createMainModule();
 	
 	$mod = $tplm->generateSubmodule("Payload", "UserListEditor");
-	$mod->setNamespace("userlist",true);
+	$mod->setNamespace("userlist");
 	
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
 		printNewitemTR($mod,"AddNewTop");
@@ -5224,7 +5228,7 @@ function renderUserListEditor ()
 	foreach ($accounts as $account)
 	{
 		$smod = $tplm->generateSubmodule("Users", "UserListEditorRow", $mod);
-		$smod->setLock();
+		$smod->setNamespace('userlist');
 		$smod->addOutput("UserId", $account['user_id']);
 		$smod->addOutput("Name", $account['user_name']);
 		$smod->addOutput("RealName", $account['user_realname']);
@@ -7276,7 +7280,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	// and/or block
 	if (getConfigVar ('FILTER_SUGGEST_ANDOR') == 'yes' or strlen ($preselect['andor']))
 	{
-		$andormod = $tplm->generateSubmodule("TableContent", "CellFilterAndOr",$mod);
+		
 		//echo $hr;
 		if (!$rulerfirst)
 		{
@@ -7284,6 +7288,8 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		}
 		else
 			$rulerfirst = false;
+		$andormod = $tplm->generateSubmodule("TableContent", "CellFilterAndOr",$mod);
+
 		//$hr = $ruler;
 		$andor = strlen ($preselect['andor']) ? $preselect['andor'] : getConfigVar ('FILTER_DEFAULT_ANDOR');
 		//echo '<tr>';
@@ -7485,11 +7491,11 @@ function renderNewEntityTags ($for_realm = '', $parent = null , $placeholder = "
 	global $taglist, $tagtree;
 	if (!count ($taglist))
 	{
-		if($parent != null)
+		if($parent != null){
 			$mod = $tplm->generateSubmodule($placeholder, "RenderNewEntityTags_empty", $parent,  true);
+		}
 		else{
 			$mod = $tplm->generateModule("RenderNewEntityTags_empty",  true);
-
 			return $mod->run();
 		}
 		return;
@@ -7503,6 +7509,7 @@ function renderNewEntityTags ($for_realm = '', $parent = null , $placeholder = "
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderNewEntityTags", $parent);
 
+	$mod->setNamespace('');
  	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm, $mod, "checkbox");
 //	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm);
 //	echo '</table></div>';
@@ -8336,10 +8343,8 @@ function renderCell ($cell)
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule("index");		
 
-	$mod = $tplm->generateModule("renderCell");
-	$mod->setNamespace("renderCell", true);
-
-
+	$mod = $tplm->generateModule("RenderCell");
+	
 	switch ($cell['realm'])
 	{
 	case 'user':
@@ -8359,12 +8364,21 @@ function renderCell ($cell)
 			$mod->setOutput("hasUserRealname", false);
 			//echo "<tr><td class=sparenetwork>no name</td></tr>";
 		}
+
 	//	echo '<td>';
 		if (!isset ($cell['etags']))
 			$cell['etags'] = getExplicitTagsOnly (loadEntityTags ('user', $cell['user_id']));
 		//echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
-		$mod->setOutput("userTags", count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;' );
-		//echo "</td></tr></table>";
+		if(count ($cell['etags'])){
+			$smallMod = $tplm->generateSubmodule('UserTags', 'SmallElement', $mod, true);
+			serializeTags($cell['etags'], '', $smallMod, 'Cont');
+		}
+		else{
+			$mod->setOutput('UserTags', '&nbsp;');
+		}
+
+		//$mod->setOutput("userTags", count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;' );
+		//echo "</td></tr></table>";*/
 		break;
 
 	case 'file':

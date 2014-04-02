@@ -90,10 +90,10 @@ $this->setInMemoryTemplate("NoSearchItemFound","<center><h2>Nothing found for {{
  * The four error messages.
  * Usage: interface.php (showMessageOrError)
  */
-$this->setInMemoryTemplate("MessageNeutral","<div class=msg_neutral'> {{Message}} </div>");
-$this->setInMemoryTemplate("MessageSuccess","<div class=msg_success'> {{Message}} </div>");
-$this->setInMemoryTemplate("MessageError","<div class=msg_error'> {{Message}} </div>");
-$this->setInMemoryTemplate("MessageWarning","<div class=msg_warning'> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageNeutral","<div class=msg_neutral> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageSuccess","<div class=msg_success> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageError","<div class=msg_error> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageWarning","<div class=msg_warning> {{Message}} </div>");
 
 /**
  * Text to render when no CellList elements are available.
@@ -264,8 +264,8 @@ $this->setInMemoryTemplate('CellLink','<a href="{{Link}}">{{Title}}</a>');
  * Serialized Tag
  * Usage: serializeTags (interface-lib.php)
  */
-$this->setInMemoryTemplate('SerializedTagLink','<a href="{{BaseUrl}}cft[]={{ID}}" class="{{Class}} title="{{Title}}">{{Tag}}</a> {{Delimiter}}');
-$this->setInMemoryTemplate('SerializedTag','<span class="{{Class}} title="{{Title}}">{{Tag}}</span> {{Delimiter}}');
+$this->setInMemoryTemplate('SerializedTagLink','<a href="{{BaseUrl}}cft[]={{ID}}" class="{{Class}}" title="{{Title}}">{{Tag}}</a> {{Delimiter}}');
+$this->setInMemoryTemplate('SerializedTag','<span class="{{Class}}" title="{{Title}}">{{Tag}}</span> {{Delimiter}}');
 
 /**
  * FileSummaryComment
@@ -328,7 +328,7 @@ $this->setInMemoryTemplate("RenderSNMPPortFinder_NoExt","<div class=msg_error>Th
 *	Usage:  serializeTags -> interface-lib.php
 *
 **/
-$this->setInMemoryTemplate("GlobalPlaceholder","{{cont}}");
+$this->setInMemoryTemplate("GlobalPlaceholder","{{Cont}}");
 
 /**
 *	ETagsLine: 
@@ -396,4 +396,12 @@ $this->setInMemoryTemplate("IPv6SeparatorPlain","<tr><td colspan=4 class=tdleft>
 $this->setInMemoryTemplate("IPv6Separator","<tr class='tdleft {{Highlight}}'><td><a name='ip-{{FMT}}' href='{{Link'>{{FMT}}</a>" . 
 												"</td><td><span class='rsvtext {{Editable}} id-{{FMT}} op-upd-ip-name'></span></td>" .
 												"<td><span class='rsvtext {{Editable}} id-{{FMT}} op-upd-ip-comment'></span></td><td>&nbsp;</td></tr>");
+
+/**
+*	SmallElement: 
+*	Usage:  renderCell -> interface.php
+*
+**/
+$this->setInMemoryTemplate('SmallElement',"<small>{{Cont}}</small>");
+
 ?>

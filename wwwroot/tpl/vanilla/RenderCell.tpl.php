@@ -12,10 +12,8 @@
 			<tr><td class=sparenetwork>no name</td></tr>
 		<?php }?>
 		<td>
-
+			<?php $this->get('UserTags') ?>
 		</td></tr></table>
-		
-		<?php $this->get('userTags') ?>
 	<?php } ?>
 
 	<?php if ($this->is("typeFile",true)) { ?>
