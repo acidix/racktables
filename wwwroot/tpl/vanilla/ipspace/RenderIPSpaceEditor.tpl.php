@@ -9,9 +9,7 @@
 				<?php $this->destroyItem ?>
 				</td><td class=tdleft><?php $this->mkAIpmask ?></td>
 				<td class=tdleft><?php $this->name ?>
-				<?php if (!$this->is("tags", null)) { ?>
-				      <br><small><?php $this->tags ?></small>		
-				<?php } ?> 
+				<?php $this->RendTags ?>
 				</td><td>
 				<?php $this->ipnetCap ?>
 				</tr>

@@ -369,7 +369,8 @@ function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree =
 	if($parent == null){	
 		if ($tree)
 		{
-			# it is safe to call many times for the same file
+			//TODO remove after port
+			// it is safe to call many times for the same file
 			addJS ('js/jquery.optionTree.js');
 			$ret  = "<input type=hidden name=${select_attrs['name']}>\n";
 			$ret .= "<script type='text/javascript'>\n";
@@ -934,25 +935,29 @@ function getTagClassName ($tagid)
 
 function serializeTags ($chain, $baseurl = '', $parent = null, $placeholder = "SerializedTag")
 {
-	$tmp = array();
+	//$tmp = array();
 	usort ($chain, 'cmpTags');
 	
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");
+
+	if($parent == null)
+		$globalPlc = $tplm->generateModule('GlobalPlaceholder', true);
+
 	foreach ($chain as $nr => $taginfo)
 	{
 		if ($baseurl == ''){
 			if($parent == null)
-				$mod = $tplm->generateModule('SerializedTag',true);
+				$mod = $tplm->generateSubmodule('Cont', 'SerializedTag', $globalPlc, true);
 			else
-				$mod = $tplm->generateSubmodule($placeholder, 'SerializedTag', true, $parent);
+				$mod = $tplm->generateSubmodule($placeholder, 'SerializedTag', $parent, true);
 		}
 		else
 		{
 			if($parent == null)
-				$mod = $tplm->generateModule('SerializedTagLink',true);
+				$mod = $tplm->generateSubmodule('Cont', 'SerializedTagLink', $globalPlc, true);
 			else
-				$mod = $tplm->generateSubmodule($placeholder, 'SerializedTagLink', true, $parent);
+				$mod = $tplm->generateSubmodule($placeholder, 'SerializedTagLink', $parent, true);
 			$mod->addOutput('BaseUrl', $baseurl);
 			$mod->addOutput('ID', $taginfo['id']);
 			//$tag = 'a';
@@ -970,7 +975,7 @@ function serializeTags ($chain, $baseurl = '', $parent = null, $placeholder = "S
 		if (isset ($taginfo['id']))
 			$mod->addOutput('Class', getTagClassName($taginfo['id']));
 			//$class = 'class="' . getTagClassName ($taginfo['id']) . '"';
-
+		
 		//$href = '';
 		//if ($baseurl == '')
 		//	$tag = 'span';
@@ -980,14 +985,18 @@ function serializeTags ($chain, $baseurl = '', $parent = null, $placeholder = "S
 		//	$href = "href='${baseurl}cft[]=${taginfo['id']}'";
 		//}
 		//$tmp[] = "<$tag $href $title $class>" . $taginfo['tag'] . "</$tag>";
-		
+		$mod->addOutput('Tag', $taginfo['tag']);
+			 
+
 		if (array_key_exists($nr+1, $chain))
-			$mod->addOutput('Separator', '; ');
+			$mod->addOutput('Delimiter', '; ');
 		else
-			$mod->addOutput('Separator', '');
+			$mod->addOutput('Delimiter', '');
+		
 	}
+	
 	if($parent == null)
-		return $mod->run();
+		return $globalPlc->run();
 	//return implode (', ', $tmp);
 }
 
@@ -1059,16 +1068,15 @@ function renderEntitySummary ($cell, $title, $values = array(), $parent = null, 
 	$mod->setOutput("title", $title);
 	//echo "<table border=0 cellspacing=0 cellpadding=3 width='100%'>\n";
 
-	$loopArray = array();
+	
 	foreach ($values as $name => $value)
 	{
-		$lineArray = array();
+		$loopMod = $tplm->generateSubmodule("loopMod", "RenderEntitySummary_LoopCont" , $mod);
 		if (is_array ($value) and count ($value) == 1)
 		{
 			$value = array_shift ($value);
-			$lineArray["val"] = $value;
-			$lineArray["singleVal"] = true;
-			$loopArray[] = $lineArray;
+			$loopMod->setOutput("val", $value);
+			$loopMod->setOutput("singleValue", true);
 			//echo $value;
 			continue;
 		}
@@ -1087,28 +1095,27 @@ function renderEntitySummary ($cell, $title, $values = array(), $parent = null, 
 			$name = $m[2];
 		}
 
-		$lineArray["class"] = $class;
-		$lineArray["name"] = $name;
- 		$lineArray["val"] = $value;
-
+		$loopMod->setOutput("class", $class);
+		$loopMod->setOutput("name", $name);
+		$loopMod->setOutput("val", $value);
+	
 		if ($name == 'tags:')
 		{
-			$lineArray["showTags"] = true; 
+			$loopMod->setOutput("showTags", true);	 
 	
 			$baseurl = '';
 			if (isset ($page_by_realm[$cell['realm']]))
-				$baseurl =  makeHref(array('page'=>$page_by_realm[$cell['realm']], 'tab'=>'default'))."&";
+				$baseurl = makeHref(array('page'=>$page_by_realm[$cell['realm']], 'tab'=>'default'))."&";
 			
-
-			$lineArray["cell"] = $cell;
-			$lineArray["baseurl"] = $baseurl;
+			$loopMod->setOutput("cell", $cell);
+			$loopMod->setOutput("baseurl", $baseurl);
 	//		printTagTRs ($cell, $baseurl);
 		}
 	//	else
 	//		echo "<tr><th width='50%' class='$class'>$name</th><td class=tdleft>$value</td></tr>";
-		$loopArray[] = $lineArray;
 	}
-	$mod->setOutput("loopArray", $loopArray);
+
+	
 	
 	if($parent == null)
 		return $mod->run();
@@ -1175,7 +1182,8 @@ function getOpLink ($params, $title,  $img_name = '', $comment = '', $class = ''
 }
 
 function renderProgressBar ($percentage = 0, $theme = '', $inline = FALSE)
-{
+{	
+
 	echo getProgressBar ($percentage, $theme, $inline);
 }
 

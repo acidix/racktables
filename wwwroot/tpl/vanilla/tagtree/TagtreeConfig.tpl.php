@@ -1,7 +1,7 @@
 <?php if (defined("RS_TPL")) {?>
 		<center>
 		<table>
-			<?php $this->Taglist; ?>
+			<?php $this->TagList; ?>
 		</table>
 	</center>		
 <?php } else { ?>

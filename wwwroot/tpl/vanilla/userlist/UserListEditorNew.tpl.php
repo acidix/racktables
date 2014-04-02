@@ -1,7 +1,7 @@
 <?php if (defined("RS_TPL")) {?>
 	<div class=portlet><h2>Add new</h2>
 		<?php $this->getH("Form","createUser"); ?>
-		<table cellspacing=0 cellpadding=5 align=center>';
+		<table cellspacing=0 cellpadding=5 align=center>
 		<tr><th>&nbsp;</th><th>&nbsp;</th><th>Assign tags</th></tr>
 		<tr><th class=tdright>Username</th><td class=tdleft><input type=text size=64 name=username tabindex=100></td>
 		<td rowspan=4>

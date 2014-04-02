@@ -90,10 +90,10 @@ $this->setInMemoryTemplate("NoSearchItemFound","<center><h2>Nothing found for {{
  * The four error messages.
  * Usage: interface.php (showMessageOrError)
  */
-$this->setInMemoryTemplate("MessageNeutral","<div class=msg_neutral'> {{Message}} </div>");
-$this->setInMemoryTemplate("MessageSuccess","<div class=msg_success'> {{Message}} </div>");
-$this->setInMemoryTemplate("MessageError","<div class=msg_error'> {{Message}} </div>");
-$this->setInMemoryTemplate("MessageWarning","<div class=msg_warning'> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageNeutral","<div class=msg_neutral> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageSuccess","<div class=msg_success> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageError","<div class=msg_error> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageWarning","<div class=msg_warning> {{Message}} </div>");
 
 /**
  * Text to render when no CellList elements are available.
@@ -179,10 +179,11 @@ $this->setInMemoryTemplate('FileSummaryDownloadLink',"<a href='?module=download&
 *	Usage: interface.php
 *
 **/
-$this->setInMemoryTemplate("ReportsCounter","<tr><td class=tdright>{{header}}:</td><td class=tdleft>{{data}}</td></tr>");
-$this->setInMemoryTemplate("ReportsMesseges","<tr class='msg_{{class}}><td class=tdright>{{header}}:</td><td class=tdleft>{{text}}</td></tr>");
-$this->setInMemoryTemplate("ReportsCustom","<tr><td colspan=2>\n{{itemCont}}\n</td></tr>");
-$this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{title}:</td><td class=tdcenter>\n{{progressBar}}\n<br><small>{{isMax}}</small></td></tr>");
+$this->setInMemoryTemplate("ReportsCounter","<tr><td class=tdright>{{Header}}:</td><td class=tdleft>{{Data}}</td></tr>");
+$this->setInMemoryTemplate("ReportsMessages","<tr class='msg_{{Class}}><td class=tdright>{{Header}}:</td><td class=tdleft>{{Text}}</td></tr>");
+$this->setInMemoryTemplate("ReportsCustom","<tr><td colspan=2>\n{{ItemCont}}\n</td></tr>");
+$this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{Title}:</td><td class=tdcenter>\n{{ProgressBar}}\n<br><small>{{IsMax}}</small></td></tr>");
+
 
 /**
 *	GetProgressBar: 
@@ -204,7 +205,7 @@ $this->setInMemoryTemplate("NoVLANConfig","<center><h3>(no VLAN configuration ex
 *	Usage: interface.php
 *
 **/
-$this->setInMemoryTemplate("StdCenterTableCell","<td class=tdcenter>{{cont}}</td>");
+$this->setInMemoryTemplate("StdCenterTableCell","<td class=tdcenter>{{Cont}}</td>");
 
 /**
 *	StdTableCell: 
@@ -264,8 +265,8 @@ $this->setInMemoryTemplate('CellLink','<a href="{{Link}}">{{Title}}</a>');
  * Serialized Tag
  * Usage: serializeTags (interface-lib.php)
  */
-$this->setInMemoryTemplate('SerializedTagLink','<a href="{{BaseUrl}}cft[]={{ID}}" class="{{Class}} title="{{Title}}">{{Tag}}</a> {{Delimiter}}');
-$this->setInMemoryTemplate('SerializedTag','<span class="{{Class}} title="{{Title}}">{{Tag}}</span> {{Delimiter}}');
+$this->setInMemoryTemplate('SerializedTagLink','<a href="{{BaseUrl}}cft[]={{ID}}" class="{{Class}}" title="{{Title}}">{{Tag}}</a> {{Delimiter}}');
+$this->setInMemoryTemplate('SerializedTag','<span class="{{Class}}" title="{{Title}}">{{Tag}}</span> {{Delimiter}}');
 
 /**
  * FileSummaryComment
@@ -323,6 +324,71 @@ $this->setInMemoryTemplate("FormatPortLink",'<a $additional href="{{href}}">{{te
 $this->setInMemoryTemplate("RenderSNMPPortFinder_NoExt","<div class=msg_error>The PHP SNMP extension is not loaded.  Cannot continue.</div>");
 
 /**
+*	GlobalPlaceholder: 
+*	A very basic globalplaceholder to be filled with submodules
+*	Usage:  serializeTags -> interface-lib.php
+*
+**/
+$this->setInMemoryTemplate("GlobalPlaceholder","{{Cont}}");
+
+/**
+*	ETagsLine: 
+*	Usage:  render8021QStatus -> interface.php
+*
+**/
+$this->setInMemoryTemplate("ETagsLine","<br><small>{{cont}}</small>");
+
+/**
+*	PCodeLine: 
+*	Usage:  renderFilesPortlet -> interface.php
+*
+**/
+$this->setInMemoryTemplate("PCodeLine", "<tr><td colspan=2>{{pcode}}</td></tr>\n");
+
+/**
+*	EmptyTableCell: 
+*	Usage:  renderIndex -> interface.php
+*
+**/
+$this->setInMemoryTemplate("EmptyTableCell","<td>&nbsp;</td>");
+
+/**
+*	IndexItemMod': 
+*	Usage: renderIndex -> interface.php
+*
+**/
+$this->setInMemoryTemplate("IndexItemMod"," <td>\n<h1><a href='{{Href}}'>" .
+		"{{PageName}}<br>\n{{Image}} </a></h1>\n</td>");
+
+/**
+*	TDLeftCell: 
+*	Usage: renderObject -> interface.php
+*
+**/
+$this->setInMemoryTemplate("TDLeftCell","<td class=tdleft {{rowspan}}>{{cont}}</td>");
+
+/**
+*	RoundBracketsMod: 
+*	Usage:  renderObject -> interface.php
+*
+**/
+$this->setInMemoryTemplate("RoundBracketsMod","({{cont}})");
+
+/**
+*	TbcLine: 
+*	Usage:  Render8021QReport -> interface.php
+*
+**/
+$this->setInMemoryTemplate("TbcLineMod","<tr class='state_A'><th>...</th><td colspan={{CountDomains}}>&nbsp;</td></tr>");
+
+/**
+*	ExpirationsNoSection: 
+*	Usage:  renderExpirations -> interface.php
+*
+**/
+$this->setInMemoryTemplate("ExpirationsNoSection","<tr><td colspan=4>(none)</td></tr></table><br>\n");
+
+/**
  *	IPv6Separators:
  *	Usage: renderIPv6Addresses -> interface.php 
  *
@@ -331,5 +397,12 @@ $this->setInMemoryTemplate("IPv6SeparatorPlain","<tr><td colspan=4 class=tdleft>
 $this->setInMemoryTemplate("IPv6Separator","<tr class='tdleft {{Highlight}}'><td><a name='ip-{{FMT}}' href='{{Link'>{{FMT}}</a>" . 
 												"</td><td><span class='rsvtext {{Editable}} id-{{FMT}} op-upd-ip-name'></span></td>" .
 												"<td><span class='rsvtext {{Editable}} id-{{FMT}} op-upd-ip-comment'></span></td><td>&nbsp;</td></tr>");
+
+/**
+*	SmallElement: 
+*	Usage:  renderCell -> interface.php
+*
+**/
+$this->setInMemoryTemplate('SmallElement',"<small>{{Cont}}</small>");
 
 ?>

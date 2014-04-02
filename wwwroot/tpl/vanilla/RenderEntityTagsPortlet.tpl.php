@@ -6,13 +6,13 @@
 		<?php $this->getH("PrintOpFormIntro", array('saveTags')); ?> 
 		<?php $this->get("TagCheckbox"); ?>
 		<tr><td class=tdleft>
-		<?php $this->getH("PrintImageHREF", array('SAVE', 'Save changes', TRUE)); ?> 
+		<?php $this->getH("PrintImageHref", array('SAVE', 'Save changes', TRUE)); ?> 
 		</form></td><td class=tdright>
 		<?php if ($this->is("preSelect",false)) { ?>
-			<?php $this->getH("PrintImageHREF", array('CLEAR gray')); ?> 
+			<?php $this->getH("PrintImageHref", array('CLEAR gray')); ?> 
 		<?php } else {?> 
 			<?php $this->getH("PrintOpFormIntro", array('saveTags', array ('taglist[]' => ''))); ?> 
-			<?php $this->getH("PrintImageHREF", array( 'CLEAR', 'Reset all tags', TRUE)); ?> 
+			<?php $this->getH("PrintImageHref", array( 'CLEAR', 'Reset all tags', TRUE)); ?> 
 			</form>
 		<?php } ?>
 		</td></tr></table>

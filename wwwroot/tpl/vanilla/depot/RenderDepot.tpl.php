@@ -11,9 +11,7 @@
 					<tr><th>Common name</th><th>Visible label</th><th>Asset tag</th><th>Row/Rack or Container</th></tr>
 					<?php $this->startLoop("allObjects"); ?>	
 						<tr class='row_<?php $this->order ?> tdleft' valign=top><td> <?php $this->mka ?> 
-						<?php if ($this->is("isEtags")) { ?>
-							<br><small> <?php $this->tags ?> </small> 
-						<?php } ?> 
+						<?php $this->RenderedTags ?>
 						</td><td> <?php $this->label ?> </td>
 						<td><?php $this->asset_no ?> </td>
 						<td> <?php $this->places ?> </td>

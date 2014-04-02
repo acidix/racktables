@@ -2,9 +2,8 @@
 	<table border=0 class=objectview>
 		<tr>
 			<td class=pcleft>
-						<?php if(!$this->is("EmptyResults")) { ?>
+				<?php if(!$this->is("EmptyResults")) { ?>
 				<div class=portlet><h2><?php $this->Title; ?> (<?php $this->CellCount; ?>) </h2>
-					
 						<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>
 						<?php $this->startLoop("CellListContent"); ?>
 							<tr class=row_<?php $this->Order; ?>>

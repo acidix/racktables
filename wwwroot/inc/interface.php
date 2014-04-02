@@ -136,6 +136,7 @@ function renderInterfaceHTML ($pageno, $tabno, $payload)
 }
 
 // Main menu.
+// Not used with templates
 function renderIndexItem ($ypageno)
 {
 	echo (! permitted ($ypageno)) ? "          <td>&nbsp;</td>\n" :
@@ -153,7 +154,7 @@ function renderIndex()
 
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
+	$tplm->createMainModule("index");
 
 	$mod = $tplm->generateSubmodule("Payload", "RenderIndex");
 	$mod->setNamespace("index");
@@ -167,11 +168,18 @@ function renderIndex()
 		$rowsCont = array();
 		foreach ($row as $column)
 			if ($column === NULL)
-				$rowsCont[] = array("isNull" => true);
+				$rowsCont[] = array('IsNull' => $tplm->generateModule('EmptyTableCell', true)->run());
 			else{
 				//$rowsCont[] = array("isNull" => false);
-				$rowsCont[] = array("isNull" => false, "permitted" => (!permitted ($column)), "href" => makeHref (array ('page' => $column)),
-							  "pageName" =>getPageName ($column), "image" =>getImageHREF ($column));
+				if((!permitted ($column)))
+					$rowsCont[] = array('Permitted' => $tplm->generateModule('EmptyTableCell', true)->run());
+				else
+				$rowsCont[] = array(
+					'IndexItem' => $tplm->generateModule('IndexItemMod', true, array(
+						'Href' => makeHref (array ('page' => $column)),
+						'PageName' => getPageName ($column),
+						'Image' => getImageHREF ($column))
+						)->run());
 			}
 		$rowMod->setOutput("singleRowCont", $rowsCont);
 
@@ -822,7 +830,7 @@ function renderRow ($row_id)
 	
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule('Payload', 'Row');
 	$mod->setNamespace('row',true);
@@ -1115,7 +1123,7 @@ function renderRack ($rack_id, $hl_obj_id = 0, $parent = null, $placeholder = "R
 		$singleRow = $tplm->generateSubmodule("RackLoopSpace", "RenderRack_Loop", $mod);
 		$singleRow->addOutput("inverseRack", inverseRackUnit ($i, $rackData));
 		//echo "<tr><th>" . inverseRackUnit ($i, $rackData) . "</th>";
-		$allLocIDxOut = array();
+		
 		for ($locidx = 0; $locidx < 3; $locidx++)
 		{
 			if (isset ($rackData[$i][$locidx]['skipped']))
@@ -1159,10 +1167,9 @@ function renderRack ($rack_id, $hl_obj_id = 0, $parent = null, $placeholder = "R
 			}
 
 			//echo '</td>';
-			$allLocIDxOut[] = $singleLocId;
+			$tplm->generateSubmodule('AllLocIdx','RenderRack_Loop_Location', $singleRow, $singleLocId);
 		}
 	//	echo "</tr>\n";
-		$singleRow->addOutput("allLocIDx", $allLocIDxOut);		 
 	}
 	//echo "</table>\n";
 	
@@ -1240,7 +1247,7 @@ function renderNewRackForm ($row_id)
 	$tplm = TemplateManager::getInstance();
 	
 	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule('Payload', 'NewRackForm');
 	$mod->setNamespace('row',true);
@@ -1353,7 +1360,6 @@ function renderEditObjectForm()
 	{
 		$mod->addOutput("areValues", true);
 		
-		$allObjValsOut = array();	 
 		foreach ($values as $record)
 		{
 			if (! permitted (NULL, NULL, NULL, array (
@@ -1401,10 +1407,10 @@ function renderEditObjectForm()
 					break;
 			}
 			//echo "</td></tr>\n";
-			$allObjectsOut[] = $singleVal;
+			$tplm->generateSubmodule('AllObjValues', 'RenderEditObjectForm_ObjValues', $mod, $singleVal);
+
 			$i++;
 		}
-		$mod->addOutput("allObjVals", $allObjectsOut);
 			 
 	}
 	$mod->addOutput("i", $i);
@@ -1446,7 +1452,7 @@ function renderEditRackForm ($rack_id)
 {
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule('Payload', 'RackEditor');
 	$mod->setNamespace('rack',true);
@@ -1600,7 +1606,7 @@ function renderGridForm ($rack_id, $filter, $header, $submit, $state1, $state2)
 	
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule('Payload', 'GridForm');
 	$mod->setNamespace('rack',true);
@@ -1854,10 +1860,11 @@ function renderObject ($object_id)
 				// display iface name, same values are grouped into single cell
 				if ($is_first_row)
 				{
-					$singlePort['isFirst'] = true;
 					$rowspan = count ($alloclist) > 1 ? 'rowspan="' . count ($alloclist) . '"' : '';
-					$singlePort['rowspan']  = $rowspan;
-					$singlePort['fullName'] = $iface_name . $rendered_alloc['td_name_suffix'];
+					$firstRowMod = $tplm->generateModule('TDLeftCell', true, array(
+						'rowspan' => $rowspan,
+						'cont' => $iface_name . $rendered_alloc['td_name_suffix']));
+					$singlePort['FristMod'] = $firstRowMod->run();
 					//echo "<td class=tdleft $rowspan>" . $iface_name . $rendered_alloc['td_name_suffix'] . "</td>";
 					$is_first_row = FALSE;
 				}
@@ -1924,9 +1931,8 @@ function renderObject ($object_id)
 				//		echo mkA ("${bond['object_name']}(${bond['name']})", 'object', $bond['object_id']) . ' ';
 
 				elseif (strlen ($pf['remote_addr_name'])){
-					$singleFwd['isRemAddrName'] = true;
-					$singleFwd['remAddrName'] = $pf['remote_addr_name'];
-					
+					$remoteAddrNameMod = $tplm->generateModule('RoundBracketsMod', true, array('cont' => $pf['remote_addr_name']));
+					$singleFwd['RemAddrName'] = $remoteAddrNameMod->run();					
 					//echo '(' . $pf['remote_addr_name'] . ')';
 				}
 				$singleFwd['description'] = $pf['description'];
@@ -2026,9 +2032,11 @@ function renderRackMultiSelect ($sname, $racks, $selected, $parent = null, $plac
 	//	echo "<optgroup label='${optgroup}'>";
 		foreach ($rdata[$optgroup] as $rack_id => $rack_name)
 		{
-			$singleRow = array('rack_id' => $rack_id, 'rack_name' => $rack_name, 'is_selected' => !(array_search ($rack_id, $selected) === FALSE));
+			$singleRow = array('rack_id' => $rack_id, 'rack_name' => $rack_name);
+
 		//	echo "<option value=${rack_id}";
-		//	if (!(array_search ($rack_id, $selected) === FALSE))
+			if (!(array_search ($rack_id, $selected) === FALSE))
+				$singleRow['selectTxt'] = ' selected';
 		//		echo ' selected';
 		//	echo">${rack_name}</option>\n";
 			$allRowDataOut[] = $singleRow;
@@ -2119,7 +2127,6 @@ function renderPortsForObject ($object_id)
 	}
 	switchportInfoJS ($object_id, $mod, 'switchPortJS'); // load JS code to make portnames interactive
 	
-	$allPortsOut = array();
 	foreach ($object['ports'] as $port)
 	{
 		$tr_class = isset ($hl_port_id) && $hl_port_id == $port['id'] ? 'class="highlight"' : '';
@@ -2209,10 +2216,11 @@ function renderPortsForObject ($object_id)
 		//echo "<td>";
 		$singlePort['save_img'] = printImageHREF ('save', 'Save changes', TRUE);
 		//echo "</td></form></tr>\n";
-		$allPortsOut[] = $singlePort;
+		$tplm->generateSubmodule('singlePorts', 'RenderPortsForObject_SinglePort', $mod, $singlePort);
+
 	}
-	$mod->addOutput("allPorts", $allPortsOut);
-		 
+	
+
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
 		//printNewItemTR ($prefs);
 		printNewItemTR ($prefs, $mod, 'AddNewTopMod2');
@@ -2509,7 +2517,7 @@ function showMessageOrError ($tpl = false)
 		}
 		else 
 		{ // @TODO Remove old version, use TEmplate Engine instead
-		echo '<div class=msg_' . $msginfo[$record['c']]['code'] . ">${msgtext}</div>";
+			echo '<div class=msg_' . $msginfo[$record['c']]['code'] . ">${msgtext}</div>";
 		}
 	}
 	$log_messages = array();
@@ -2852,9 +2860,9 @@ function renderDepot ()
 
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
+	$tplm->createMainModule("index");
 	
-	$mod = $tplm->generateSubmodule("Payload", "Depot");
+	$mod = $tplm->generateSubmodule("Payload", "RenderDepot");
 	$mod->setNamespace("depot",true);
 	
 	//echo "<table border=0 class=objectview>\n";
@@ -2891,8 +2899,9 @@ function renderDepot ()
 			//	echo "<tr class='row_${order} tdleft' valign=top><td>" . mkA ("<strong>${obj['dname']}</strong>", 'object', $obj['id']);
 				if (count ($obj['etags'])){
 				//		echo '<br><small>' . serializeTags ($obj['etags'], makeHref(array('page'=>$pageno, 'tab'=>'default')) . '&') . '</small>';	
-					$singleObj["isEtags"] = true;
-					$singleObj["tags"] = serializeTags ($obj['etags'], makeHref(array('page'=>$pageno, 'tab'=>'default')) . '&');
+					$tagsLineMod = $tplm->generateModule('ETagsLine',true, array(
+						'cont' => serializeTags ($obj['etags'], makeHref(array('page'=>$pageno, 'tab'=>'default')) . '&')));
+					$singleObj["RenderedTags"] = $tagsLineMod->run();
 				}
 
 				$singleObj['label']	= $obj['label'];
@@ -3057,7 +3066,7 @@ function renderRackspaceHistory ()
 	$tplm = TemplateManager::getInstance();
 	
 	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
+	$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RackspaceHistory");
 	$mod->setNamespace("rackspace",true);
@@ -3108,7 +3117,7 @@ function renderRackspaceHistory ()
 		$smod->addOutput("Link",makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'op_id'=>$row['mo_id'])));
 		$smod->addOutput("Time",$row['ctime']);
 		$smod->addOutput("UserName",$row['user_name']);
-		$smod->addOutput("renderedCell",renderCell (spotEntity ('object', $row['ro_id'])));
+		$smod->addOutput("RenderedCell",renderCell (spotEntity ('object', $row['ro_id'])));
 		$smod->addOutput("Comment",$row['comment']);
 		//echo "<tr class=${class}><td><a href='".makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'op_id'=>$row['mo_id']))."'>${row['ctime']}</a></td>";
 		//echo "<td>${row['user_name']}</td><td>";
@@ -3312,8 +3321,10 @@ function renderIPSpaceEditor()
 	//			echo getOpLink (array	('op' => 'del', 'id' => $netinfo['id']), '', 'destroy', 'Delete this prefix');
 	//		echo '</td><td class=tdleft>' . mkA ("${netinfo['ip']}/${netinfo['mask']}", $net_page, $netinfo['id']) . '</td>';
 	//		echo '<td class=tdleft>' . niftyString ($netinfo['name']);
-			if (count ($netinfo['etags']))
-				$singleNetinfo['tags'] = serializeTags ($netinfo['etags']);
+			if (count ($netinfo['etags'])){
+				$etagsMod = $tplm->generateModule('ETagsLine', true, array('cont' => serializeTags ($netinfo['etags'])));
+				$singleNetinfo['RendTags'] = $etagsMod->run();
+			}
 	//			echo '<br><small>' . serializeTags ($netinfo['etags']) . '</small>';
 	//		echo '</td><td>';
 			$singleNetinfo['ipnetCap'] = getRenderedIPNetCapacity ($netinfo);
@@ -4042,7 +4053,7 @@ function renderIPAddress ($ip_bin)
 {
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule('Payload', 'IPAddress');
 	$mod->setNamespace('ipaddress',true);
@@ -4189,7 +4200,7 @@ function renderIPAddressProperties ($ip_bin)
 	
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule('Payload', 'IPAddressProperties');
 	$mod->setNamespace('ipaddress',true);
@@ -4257,7 +4268,7 @@ function renderIPAddressAllocations ($ip_bin)
 	
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	$tplm->createMainModule('index');
 	
 	$mod = $tplm->generateSubmodule('Payload', 'IPAddressAllocation');
 	$mod->setNamespace('ipaddress',true);
@@ -4361,7 +4372,6 @@ function renderNATv4ForObject ($object_id)
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
 		printNewItemTR ($focus['ipv4'], $mod, 'printNewItemTop_mod');
 	//	printNewItemTR ($focus['ipv4']);
-	$allNatv4PortsOut = array();
 	foreach ($focus['nat4']['out'] as $pf)
 	{
 		$class = 'trerror';
@@ -4433,9 +4443,10 @@ function renderNATv4ForObject ($object_id)
 		$singlePort['saveImg'] = printImageHREF ('save', 'Save changes', TRUE);
 		//echo "</td></form></tr>";
 		$singlePort['description'] = $pf['description'];
-		$allNatv4PortsOut[] = $singlePort;
+
+		//Using loop array style paramter for output
+		$tplm->generateSubmodule('AllNatv4Ports','RenderNATv4ForObject_NATv4Port', $mod, $singlePort);
 	}
-	$mod->addOutput("allNatv4Ports", $allNatv4PortsOut);
 		 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
 		printNewItemTR ($focus['ipv4'], $mod, 'printNewItemBottom_mod');
@@ -4497,7 +4508,7 @@ function renderAddMultipleObjectsForm ()
 
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
+	$tplm->createMainModule('index');
 
 	$mod = $tplm->generateSubmodule("Payload","AddMultipleObjects");
 	$mod->setNamespace("depot");
@@ -4810,14 +4821,13 @@ function renderSearchResults ($terms, $summary)
 	//			echo '<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
 				// FIXME: address, parent network, routers (if extended view is enabled)
 	//			echo '<tr><th>Address</th><th>Description</th></tr>';
-				$ipvOutArray = array();
 				foreach ($what as $addr)
 				{
 	//				echo "<tr class=row_${order}><td class=tdleft>";
 					$fmt = ip_format ($addr['ip']);
 					$parentnet = getIPAddressNetworkId ($addr['ip']);
 
-					$ipvOutArray[] = array( 'rowOrder' => $order,
+					$singleAddr = array( 'rowOrder' => $order,
 											'rowLink' => makeHref (array ( 'page' => strlen ($addr['ip']) == 16 ? 'ipv6net' : 'ipv4net',
 																	'id' => $parentnet,
 																	'tab' => 'default',
@@ -4836,11 +4846,13 @@ function renderSearchResults ($terms, $summary)
 	//				else
 	//					echo "<a href='index.php?page=ipaddress&tab=default&ip=${fmt}'>${fmt}</a></td>";
 	//				echo "<td class=tdleft>${addr['name']}</td></tr>";
+					$tplm->generateSubmodule('AllSearchAddrs','SearchIpv6address_Object', $foundIPVAddress, $singleAddr);
 					$order = $nextorder[$order];
+
 				}
 	//			echo '</table>';
 	//			finishPortlet();
-				$foundIPVAddress->setOutput("IPVAddrObjs", $ipvOutArray);
+				
 
 				break;
 			case 'ipv4rspool':
@@ -5116,8 +5128,7 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");	
 	if($parent == null){	
-		$main =	$tplm->createMainModule();
-		$mod = $tplm->generateSubmodule("Payload","CellList", $main);
+		$mod = $tplm->generateModule("CellList");
 	}
 	else{
 		$mod = $tplm->generateSubmodule($placeholder, "CellList", $parent);
@@ -5129,7 +5140,7 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 	//echo "<table border=0 class=objectview>\n";
 	//echo "<tr><td class=pcleft>";
 
-	if ($realm != 'file' || ! renderEmptyResults ($cellfilter, 'files', count($celllist), $mod, "EmptyResults"))
+	if ($realm != 'file' || ! renderEmptyResults ($cellfilter, 'files', count($celllist), $mod, "EmptyResults "))
 	{
 		if ($do_amplify)
 			array_walk ($celllist, 'amplifyCell');
@@ -5155,9 +5166,9 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 		//echo '</table>';
 		//finishPortlet();
 	}
-	else {
-		$mod->setOutput("EmptyResults","");
-	}
+//	else {
+
+//	}
 	//echo '</td><td class=pcright>';
 	renderCellFilterPortlet ($cellfilter, $realm, $celllist, array(), $mod );
 	//echo "</td></tr></table>\n"; */
@@ -5167,7 +5178,11 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 
 function renderUserList ()
 {
-	renderCellList ('user', 'User accounts');
+	$tplm = TemplateManager::getInstance();
+	$tplm->setTemplate("vanilla");	
+	$main = $tplm->createMainModule();
+
+	renderCellList ('user', 'User accounts',FALSE, NULL, $main, 'Payload');
 }
 
 function renderUserListEditor ()
@@ -5176,7 +5191,7 @@ function renderUserListEditor ()
 	{
 		$tplm = TemplateManager::getInstance();
 		$smod2 = $tplm->generateSubmodule($placeholder, "UserListEditorNew", $parent);
-		
+		$smod2->setNamespace('userlist');
 		//startPortlet ('Add new');
 		//printOpFormIntro ('createUser');
 		//echo '<table cellspacing=0 cellpadding=5 align=center>';
@@ -5184,6 +5199,7 @@ function renderUserListEditor ()
 		//echo '<tr><th class=tdright>Username</th><td class=tdleft><input type=text size=64 name=username tabindex=100></td>';
 		//echo '<td rowspan=4>';
 		renderNewEntityTags ('user', $smod2, "RenderedNewEntityTags");
+
 		//echo '</td></tr>';
 		//echo '<tr><th class=tdright>Real name</th><td class=tdleft><input type=text size=64 name=realname tabindex=101></td></tr>';
 		//echo '<tr><th class=tdright>Password</th><td class=tdleft><input type=password size=64 name=password tabindex=102></td></tr>';
@@ -5199,7 +5215,7 @@ function renderUserListEditor ()
 	$tplm->createMainModule();
 	
 	$mod = $tplm->generateSubmodule("Payload", "UserListEditor");
-	$mod->setNamespace("userlist",true);
+	$mod->setNamespace("userlist");
 	
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
 		printNewitemTR($mod,"AddNewTop");
@@ -5212,7 +5228,7 @@ function renderUserListEditor ()
 	foreach ($accounts as $account)
 	{
 		$smod = $tplm->generateSubmodule("Users", "UserListEditorRow", $mod);
-		$smod->setLock();
+		$smod->setNamespace('userlist');
 		$smod->addOutput("UserId", $account['user_id']);
 		$smod->addOutput("Name", $account['user_name']);
 		$smod->addOutput("RealName", $account['user_realname']);
@@ -5283,7 +5299,7 @@ function renderOIFCompatEditor()
 	
 		$tplm->setTemplate("vanilla");
 		$tplm->createMainModule();
-		$submod = $tplm->generateSubmodule($placeholder, 'PrintNewItem', $mod);
+		$submod = $tplm->generateSubmodule($placeholder, 'RenderOIFCompatEditor_PrintNewItem', $mod);
 		// printOpFormIntro ('add');
 		// echo '<tr><th class=tdleft>';
 		// printImageHREF ('add', 'add pair', TRUE);
@@ -5389,7 +5405,7 @@ function renderObjectParentCompatEditor()
 
 	function printNewitemTR($placeholder)
 	{
-		$submod = $tplm->generateSubmodule($placeholder, 'PrintNewItem', $mod);
+		$submod = $tplm->generateSubmodule($placeholder, 'RenderObjectParentCompatEditor_PrintNewItem', $mod);
 
 		// printOpFormIntro ('add');
 		// echo '<tr><th class=tdleft>';
@@ -5751,7 +5767,7 @@ function renderChapterEditor ($tgt_chapter_no)
 	function printNewItemTR ($parent, $placeholder)
 	{
 		$tplm = TemplateManager::getInstance();
-		$smod = $tplm->generateSubmodule($placeholder, 'PrintNewItem', $parent);
+		$smod = $tplm->generateSubmodule($placeholder, 'RenderChapterEditor_PrintNewItem', $parent);
 		//$mod->addOutput('OpForm', $this->getH('PrintOpFormIntro', 'add'));
 		
 		//printOpFormIntro ('add');
@@ -5915,32 +5931,44 @@ function renderAttributes ()
 	//echo "<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>";
 	//echo "<tr><th class=tdleft>Attribute name</th><th class=tdleft>Attribute type</th><th class=tdleft>Applies to</th></tr>";
 	$order = 'odd';
+	$allAttrsOut = array();
 	foreach (getAttrMap() as $attr)
 	{
-		$mod->addOutput('Looparray', array(
-											'Order' => $order, 
-											'Name'  => $attr['name'],
-											'Type'  => $attrtypes[$attr['type']]
-											));
+		$singleAttr =  array(
+							'Order' => $order, 
+							'Name'  => $attr['name'],
+							'Type'  => $attrtypes[$attr['type']]
+							);
 		//echo "<tr class=row_${order}>";
 		//echo "<td class=tdleft>${attr['name']}</td>";
 		//echo "<td class=tdleft>" . $attrtypes[$attr['type']] . "</td>";
 		//echo '<td class=tdleft>';
 		if (count ($attr['application']) == 0)
-			$mod->addOutput('Application_set', TRUE);
+			$singleAttr['Application_set'] = '&nbsp;';
 			//echo '&nbsp;';
-		else
+		else{
+			$allAppAttrsOut = array();
 			foreach ($attr['application'] as $app){
-				$mod->addOutput('Apparray', array('Objtype' => decodeObjectType ($app['objtype_id'], 'a'), 'Chapter_name' => $app['chapter_name']));
+				$singleAppAttr = array('Objtype' => decodeObjectType ($app['objtype_id'], 'a'), 'Chapter_name' => $app['chapter_name']);
+				
+				//Could be done in a inmemory template in need of change
 				if ($attr['type'] == 'dict')
-					$mod->setOutput('Dict_set', TRUE); else $mod->setOutput('Dict_set', FALSE);
+					$singleAppAttr['dictCont'] = " (values from '${app['chapter_name']}')";
 				//echo decodeObjectType ($app['objtype_id'], 'a') . " (values from '${app['chapter_name']}')<br>";
 				//else
 					//echo decodeObjectType ($app['objtype_id'], 'a') . '<br>';
+			 	$allAppAttrsOut[] = $singleAppAttr;
 			 }
+			 $applicationArrayMod = $tplm->generateModule('RenderAttributes_Loop', true, array('AllAppAtts' => $allAppAttrsOut));
+
+			 $singleAttr['AllAppAttrsMod'] = $applicationArrayMod->run();		 	 
+		}
 		//echo '</td></tr>';
+		$allAttrsOut[] = $singleAttr;
 		$order = $nextorder[$order];
 	}
+	$mod->addOutput("AllAttrs", $allAttrsOut);
+		 
 	//echo "</table><br>\n";
 	//finishPortlet();
 }
@@ -5955,7 +5983,7 @@ function renderEditAttributesForm ()
 	
 	function printNewItemTR ($placeholder)
 	{
-		$submod = $tplm->generateSubmodule($placeholder, 'PrintNewItem', $mod);
+		$submod = $tplm->generateSubmodule($placeholder, 'RenderEditAttributesForm_PrintNewItem', $mod);
 		//printOpFormIntro ('add');
 		//echo '<tr><td>';
 		//printImageHREF ('create', 'Create attribute', TRUE);
@@ -5971,27 +5999,34 @@ function renderEditAttributesForm ()
 	//echo '<tr><th>&nbsp;</th><th>Name</th><th>Type</th><th>&nbsp;</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
 		printNewItemTR('Newtop');
+	$allAttrMapsOut = array();
 	foreach (getAttrMap() as $attr)
 	{
-		$mod->addOutput('Looparray', array('Id' => $attr['id'], 'Application' => $attr['application'], 'Name' => $attr['name'], 'Type' =>$attr['type']));
+		$singleAttrMap = array( 'Name' => $attr['name'], 
+				  				'Type' =>$attr['type'],
+				  				'OpFormIntro' => printOpFormIntro ('upd', array ('attr_id' => $attr['id'])));
 		
 		//printOpFormIntro ('upd', array ('attr_id' => $attr['id']));
 		//echo '<tr><td>';
 		if($attr['id'] < 10000)
-			$mod->setOutput('Option', 'one');
+			$singleAttrMap['DestroyImg'] = printImageHREF ('nodestroy', 'system attribute');
 			//printImageHREF ('nodestroy', 'system attribute');
 		elseif (count ($attr['application']))
-			$mod->setOutput('Option', 'two');
+			$singleAttrMap['DestroyImg'] = printImageHREF ('nodestroy', count ($attr['application']) . ' reference(s) in attribute map');
 			//printImageHREF ('nodestroy', count ($attr['application']) . ' reference(s) in attribute map');
 		else
-			$mod->setOutput('Option', 'three');
+			$singleAttrMap['DestroyImg'] = getOpLink (array('op'=>'del', 'attr_id'=>$attr['id']), '', 'destroy', 'Remove attribute');
 			//echo getOpLink (array('op'=>'del', 'attr_id'=>$attr['id']), '', 'destroy', 'Remove attribute');
 		//echo "</td><td><input type=text name=attr_name value='${attr['name']}'></td>";
 		//echo "<td class=tdleft>${attr['type']}</td><td>";
+		$singleAttrMap['SaveImg'] = printImageHREF ('save', 'Save changes', TRUE);
 		//printImageHREF ('save', 'Save changes', TRUE);
 		//echo '</td></tr>';
 		//echo '</form>';
+		$allAttrMapsOut[] = $singleAttrMap;
 	}
+	$mod->addOutput("AllAttrMaps", $allAttrMapsOut);
+		 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
 		printNewItemTR('Newbottom');
 	//echo "</table>\n";
@@ -6010,7 +6045,7 @@ function renderEditAttrMapForm ()
 
 	function printNewItemTR ($placeholder, $attrMap)
 	{
-		$submod = $tplm->generateSubmodule($placeholder, 'PrintNewItemTR', $mod);
+		$submod = $tplm->generateSubmodule($placeholder, 'RenderEditAttrMapForm_PrintNewItemTR', $mod);
 
 		//printOpFormIntro ('add');
 		//echo '<tr><td colspan=2 class=tdleft>';
@@ -6020,8 +6055,11 @@ function renderEditAttrMapForm ()
 		$shortType['string'] = 'S';
 		$shortType['dict'] = 'D';
 		$shortType['date'] = 'T';
+		$allAttrMapsOut = array();
 		foreach ($attrMap as $attr)
-			$submod->addOutput('Looparray', array('Id' => $attr['id'], 'Shorttype' => $shortType[$attr['type']], 'Name' => $attr['name']));
+			$allAttrMapsOut[] =  array('Id' => $attr['id'], 'Shorttype' => $shortType[$attr['type']], 'Name' => $attr['name']);
+		$mod->addOutput("AllAttrMaps", $allAttrMapsOut);
+			 
 			// echo "<option value=${attr['id']}>[" . $shortType[$attr['type']] . "] ${attr['name']}</option>";
 		// echo "</select></td><td class=tdleft>";
 		// printImageHREF ('add', '', TRUE);
@@ -6033,12 +6071,13 @@ function renderEditAttrMapForm ()
 
 		// printNiftySelect (cookOptgroups ($objtypes), array ('name' => 'objtype_id', 'tabindex' => 101));
 		// echo ' <select name=chapter_no tabindex=102><option value=0>-- dictionary chapter for [D] attributes --</option>';
+		$allChaptersOut = array();
 		foreach (getChapterList() as $chapter){ 
-			$submod->addOutput('Looparray', array('Id' => $chapter['id'], 'Name' => $chapter['name'], 'Sticky_unset' => $chapter['sticky'] != 'yes'? TRUE: FALSE));
-		
+			if ($chapter['sticky'] != 'yes')
+				$allChaptersOut[] = array('Id' => $chapter['id'], 'Name' => $chapter['name']);
 			// if ($chapter['sticky'] != 'yes')
 				//echo "<option value='${chapter['id']}'>${chapter['name']}</option>";
-
+		$submod->setOutput('AllChapters', $allChaptersOut);
 		}
 					
 		// echo '</select></td></tr></form>';
@@ -6053,22 +6092,27 @@ function renderEditAttrMapForm ()
 		printNewItemTR ('Newtop', $attrMap);
 	foreach ($attrMap as $attr)
 	{
-		$mod->addOutput('Looparray', array('Continue' => !count ($attr['application'])? TRUE: FALSE, 'Attrtypes' => $attrtypes[$attr['type']], 'Name' => $attr['name'], 'Order' => $attr['order'] ));
-		// if (!count ($attr['application']))
+		if (!count ($attr['application']))
 			//continue;
+		$mod->addOutput('Looparray', array('Attrtypes' => $attrtypes[$attr['type']], 'Name' => $attr['name'], 'Order' => $attr['order'] ));
+		
 		// echo "<tr class=row_${order}><td class=tdleft>${attr['name']}</td>";
 		// echo "<td class=tdleft>" . $attrtypes[$attr['type']] . "</td><td colspan=2 class=tdleft>";
+
 		foreach ($attr['application'] as $app)
 		{
-			$mod->addOutput('Looparray2', array(
-													'Sticky' => $app['sticky'], 
-													'Refcnt' =>  $app['refcnt'],
-													'Id' => $attr['id'], 
-													'Objtype_id' => $app['objtype_id'],
-													'Decodeobjecttype' => decodeObjectType ($app['objtype_id'], 'o'),
-													'Type' => $attr['type']));
+			$singleAttrApp = $tplm->generateSubmodule('AllAttrApps', 'RenderEditAttrMapForm_AttrApp', $mod,
+													  array('sticky' => $app['sticky'],
+													  		'refcnt' => $app['refcnt'],
+													  		'id' => $attr['id'],
+													  		'obj_id' => $app['objtype_id'],
+													  		'type' => $attr['type'],
+													  		'chapter_name' => $app['chapter_name'],
+													  		'dec_obj' => decodeObjectType ($app['objtype_id'], 'o')));
+
 			//if ($app['sticky'] == 'yes')
 				// printImageHREF ('nodelete', 'system mapping');
+			
 			// elseif ($app['refcnt'])
 				// printImageHREF ('nodelete', $app['refcnt'] . ' value(s) stored for objects');
 			// else
@@ -6235,6 +6279,7 @@ function render8021QReport ()
 	}
 	ksort ($output, SORT_NUMERIC);
 	$header_delay = 0;
+	
 //	startPortlet ('VLAN existence per domain');
 //	echo '<table border=1 cellspacing=0 cellpadding=5 align=center class=rackspace>';
 	$outputArray = array();
@@ -6243,15 +6288,15 @@ function render8021QReport ()
 		$singleElemOut = array();
 		if (--$header_delay <= 0)
 		{
-			$singleElemOut['header'] = $header;
+			$singleElemOut['Header'] = $header;
 			//echo $header;
 			$header_delay = 25;
 		}
 		else
-			$singleElemOut['header'] = '';
+			$singleElemOut['Header'] = '';
 
-		$singleElemOut['countStats'] = (count ($vlanstats[$vlan_id]) ? 'T' : 'F');
-		$singleElemOut['vlan_id'] = $vlan_id;
+		$singleElemOut['CountStats'] = (count ($vlanstats[$vlan_id]) ? 'T' : 'F');
+		$singleElemOut['VlanId'] = $vlan_id;
 	//	echo '<tr class="state_' . (count ($vlanstats[$vlan_id]) ? 'T' : 'F');
 	//	echo '"><th class=tdright>' . $vlan_id . '</th>';
 
@@ -6261,19 +6306,21 @@ function render8021QReport ()
 			$singleCell = $tplm->generateModule("StdCenterTableCell", true);
 			//echo '<td class=tdcenter>';
 			if (array_key_exists ($domain_id, $vlanstats[$vlan_id]))
-				$singleCell->setOutput("cont", mkA ('&exist;', 'vlan', "${domain_id}-${vlan_id}"));
+				$singleCell->setOutput("Cont", mkA ('&exist;', 'vlan', "${domain_id}-${vlan_id}"));
 			//	echo mkA ('&exist;', 'vlan', "${domain_id}-${vlan_id}");
 			else
-				$singleCell->setOutput("cont", '&nbsp;');
+				$singleCell->setOutput("Cont", '&nbsp;');
 			//	echo '&nbsp;';
 			//echo '</td>';
-			$singleElemOut['domains'] = '';
-			$singleElemOut['domains'] = $singleElemOut['domains'] + $singleCell->run();
+			$singleElemOut['Domains'] = '';
+			$singleElemOut['Domains'] = $singleElemOut['domains'] + $singleCell->run();
 		}
 	//	echo '</tr>';
 		if ($tbc){
-			$singleElemOut['countDom'] = count($domains);
-			$singleElemOut['tbc'] = true;
+			$singleElemOut['CountDom'] = count($domains);
+			$singleElemOut['Tbc'] = true;
+			$singleElemOut['TbcLine'] = $tplm->generateModule('TbcLineMod',true, array('CountDomains' => count ($domains)))->run();
+
 		//	echo '<tr class="state_A"><th>...</th><td colspan=' . count ($domains) . '>&nbsp;</td></tr>';
 		}
 		$outputArray[] = $singleElemOut;
@@ -6293,12 +6340,12 @@ function renderReports ($what)
 	$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderReports");
-	$mod->setNamespace("reports", true);
+	$mod->setNamespace("reports");
 	
 	$itemContArr = array();
 	foreach ($what as $item)
 	{
-		$singleItemArr = array('title' => $item['title'], 'cont' => "");
+		$singleItemArr = array('title' => $item['title']);
 		$singleItemArr['cont'] = '';
 	//	echo "<tr><th colspan=2><h3>${item['title']}</h3></th></tr>\n";
 		switch ($item['type'])
@@ -6310,9 +6357,9 @@ function renderReports ($what)
 					$data = $item['func'] ();
 				foreach ($data as $header => $data){
 					$singleMod = $tplm->generateModule("ReportsCounter", true);
-					$singleMod->setOutput("header", $header);
-					$singleMod->setOutput("data", $data);
-					$singleItemArr['cont'] .= $singleMod->run();
+					$singleMod->setOutput("Header", $header);
+					$singleMod->setOutput("Data", $data);
+					$singleItemArr['Cont'] .= $singleMod->run();
 	//				echo "<tr><td class=tdright>${header}:</td><td class=tdleft>${data}</td></tr>\n";
 				}
 				break;
@@ -6323,12 +6370,12 @@ function renderReports ($what)
 					$data = $item['func'] ();
 
 				foreach ($data as $msg){
-					$singleMod = $tplm->generateModule("ReportsMesseges", true);
-					$singleMod->setOutput("class", $msg['class']);
-					$singleMod->setOutput("header", $msg['header']);
-					$singleMod->setOutput("text", $msg['text']);
+					$singleMod = $tplm->generateModule("ReportsMessages", true);
+					$singleMod->setOutput("Class", $msg['class']);
+					$singleMod->setOutput("Header", $msg['header']);
+					$singleMod->setOutput("Text", $msg['text']);
 					
-					$singleItemArr['cont'] .= $singleMod->run();
+					$singleItemArr['Cont'] .= $singleMod->run();
 	//				echo "<tr class='msg_${msg['class']}'><td class=tdright>${msg['header']}:</td><td class=tdleft>${msg['text']}</td></tr>\n";
 				}
 				break;
@@ -6340,10 +6387,11 @@ function renderReports ($what)
 				foreach ($data as $meter)
 				{
 					$singleMod = $tplm->generateModule("ReportsMeters", true);
-					$singleMod->setOutput("title", $meter['title']);
-					$singleMod->setOutput("progressBar", renderProgressBar ($meter['max'] ? $meter['current'] / $meter['max'] : 0));
-					$singleMod->setOutput("isMax", ($meter['max'] ? $meter['current'] . '/' . $meter['max'] : '0'));
-					$singleItemArr['cont'] .= $singleMod->run();
+					$singleMod->setOutput("Title", $meter['title']);
+					$singleMod->setOutput("ProgressBar", renderProgressBar ($meter['max'] ? $meter['current'] / $meter['max'] : 0));
+					$singleMod->setOutput("IsMax", ($meter['max'] ? $meter['current'] . '/' . $meter['max'] : '0'));
+					$singleItemArr['Cont'] .= $singleMod->run();
+
 	//				echo "<tr><td class=tdright>${meter['title']}:</td><td class=tdcenter>";
 	//				renderProgressBar ($meter['max'] ? $meter['current'] / $meter['max'] : 0);
 	//				echo '<br><small>' . ($meter['max'] ? $meter['current'] . '/' . $meter['max'] : '0') . '</small></td></tr>';
@@ -6351,8 +6399,8 @@ function renderReports ($what)
 				break;
 			case 'custom':
 				$singleMod = $tplm->generateModule("ReportsCustom", true);
-				$singleMod->setOutput("itemCont", (string) $item['func']());
-				$singleItemArr['cont'] .= $singleMod->run();
+				$singleMod->setOutput("ItemCont", (string) $item['func']());
+				$singleItemArr['Cont'] .= $singleMod->run();
 			//	echo "<tr><td colspan=2>";
 			//	$item['func']();
 			//	echo "</td></tr>\n";
@@ -6400,13 +6448,13 @@ function renderTagStats ()
 			//echo '<td>';
 
 			if (!isset ($taginfo['refcnt'][$realm]))
-				$realmMod->addOutput('cont', '&nbsp;');
+				$realmMod->setOutput('cont', '&nbsp;');
 			//	echo '&nbsp;';
 			else
 			{
 				$realmLinkMod = $tplm->generateModule('RenderTagStatsALink', true, array('pagerealm' => $pagebyrealm[$realm], 
 					'taginfoID' => $taginfo['id'], 'taginfo'=> $taginfo['refcnt'][$realm]));
-				$realmMod->addOutput('cont', $realmLinkMod->run());
+				$realmMod->setOutput('cont', $realmLinkMod->run());
 				//echo "<a href='index.php?page=" . $pagebyrealm[$realm] . "&cft[]=${taginfo['id']}'>";
 				//echo $taginfo['refcnt'][$realm] . '</a>';
 			}
@@ -6806,7 +6854,7 @@ function renderTagRowForViewer ($taginfo, $level = 0, $parent, $placeholder = 'T
 	
 	$tplm = TemplateManager::getInstance();
 	
-	$mod = $tplm->generateSubmodule("Taglist", "TagtreeElement");
+	$mod = $tplm->generateSubmodule("TagList", "TagtreeElement");
 	$mod->setNamespace("tagtree",true);
 	$mod->setLock();
 	
@@ -6829,14 +6877,14 @@ function renderTagRowForViewer ($taginfo, $level = 0, $parent, $placeholder = 'T
 	$trclass = $taginfo['is_assignable'] == 'yes' ? '' : ($taginfo['kidc'] ? ' class=trnull' : ' class=trwarning');
 	
 	if ($taginfo['is_assignable'] == 'yes')
-		$mod->addOutput('assignable', true);
+		$mod->addOutput('Assignable', true);
 	else 
-		$mod->addOutput('assignable', false);
+		$mod->addOutput('Assignable', false);
 	
 	if ($taginfo['kidc'])
-		$mod->addOutput('hasChildren', true);
+		$mod->addOutput('HasChildren', true);
 	else
-		$mod->addOutput('hasChildren', false);
+		$mod->addOutput('HasChildren', false);
 	
 	
 	//echo "<tr${trclass}><td align=left style='padding-left: " . ($level * 16) . "px;'>";
@@ -6848,7 +6896,7 @@ function renderTagRowForViewer ($taginfo, $level = 0, $parent, $placeholder = 'T
 			if (array_key_exists ($article, $statsdecoder))
 				$stats[] = $count . $statsdecoder[$article];
 	$mod->addOutput('Stats', implode(', ', $stats));
-	$mod->addOutput('Spanclass', getTagClassName($taginfo['id']));
+	$mod->addOutput('SpanClass', getTagClassName($taginfo['id']));
 	$mod->addOutput('Tag', $taginfo['tag']);
 	$mod->addOutput('Refc', $refc ? $refc : '');
 	$mod->addOutput('Level', $level * 16);
@@ -6935,7 +6983,6 @@ function renderTagTreeEditor ()
 {
 	/*addJS
 	(
-<<<END
 function tageditor_showselectbox(e) {
 	$(this).load('index.php', {module: 'ajax', ac: 'get-tag-select', tagid: this.id});
 	$(this).unbind('mousedown', tageditor_showselectbox);
@@ -7059,7 +7106,7 @@ function buildTagCheckboxRows ($inputname, $preselect, $neg_preselect, $taginfo,
 }
 
 # generate HTML from the data produced by the above function
-function printTagCheckboxTable ($input_name, $preselect, $neg_preselect, $taglist, $realm = '', TemplateModule $addto = null, $placeholder = "")
+function printTagCheckboxTable ($input_name, $preselect, $neg_preselect, $taglist, $realm = '', TemplateModule $addto = null, $placeholder = "tagCheckbox")
 {
 	$tplm = TemplateManager::getInstance();
 	foreach ($taglist as $taginfo)
@@ -7126,7 +7173,7 @@ function renderEntityTagsPortlet ($title, $tags, $preselect, $realm, TemplateMod
 	if($parent==null)	
 		$mod = $tplm->generateModule("RenderEntityTagsPortlet");
 	else
-		$mod = $tplm->generateSubmodule($placeholder, "RenderedEntityTagsPortlet", $parent);
+		$mod = $tplm->generateSubmodule($placeholder, "RenderEntityTagsPortlet", $parent);
  
 	$mod->setOutput("title", $title);		 
 //	startPortlet ($title);
@@ -7134,7 +7181,7 @@ function renderEntityTagsPortlet ($title, $tags, $preselect, $realm, TemplateMod
 //	echo '<table border=0 cellspacing=0 cellpadding=3 align=center class="tagtree">';
 //	printOpFormIntro ('saveTags');
 //	printTagCheckboxTable ('taglist', $preselect, array(), $tags, $realm);
-	printTagCheckboxTable('taglist', $preselect, array(), $tags, $realm,"TagCheckbox", $mod);
+	printTagCheckboxTable('taglist', $preselect, array(), $tags, $realm, $mod, "TagCheckbox");
 //	echo '<tr><td class=tdleft>';
 //	printImageHREF ('SAVE', 'Save changes', TRUE);
 //	echo "</form></td><td class=tdright>";
@@ -7237,7 +7284,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	// and/or block
 	if (getConfigVar ('FILTER_SUGGEST_ANDOR') == 'yes' or strlen ($preselect['andor']))
 	{
-		$andormod = $tplm->generateSubmodule("TableContent", "CellFilterAndOr",$mod);
+		
 		//echo $hr;
 		if (!$rulerfirst)
 		{
@@ -7245,6 +7292,8 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		}
 		else
 			$rulerfirst = false;
+		$andormod = $tplm->generateSubmodule("TableContent", "CellFilterAndOr",$mod);
+
 		//$hr = $ruler;
 		$andor = strlen ($preselect['andor']) ? $preselect['andor'] : getConfigVar ('FILTER_DEFAULT_ANDOR');
 		//echo '<tr>';
@@ -7446,11 +7495,11 @@ function renderNewEntityTags ($for_realm = '', $parent = null , $placeholder = "
 	global $taglist, $tagtree;
 	if (!count ($taglist))
 	{
-		if($parent != null)
+		if($parent != null){
 			$mod = $tplm->generateSubmodule($placeholder, "RenderNewEntityTags_empty", $parent,  true);
+		}
 		else{
 			$mod = $tplm->generateModule("RenderNewEntityTags_empty",  true);
-
 			return $mod->run();
 		}
 		return;
@@ -7464,6 +7513,7 @@ function renderNewEntityTags ($for_realm = '', $parent = null , $placeholder = "
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderNewEntityTags", $parent);
 
+	$mod->setNamespace('');
  	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm, $mod, "checkbox");
 //	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm);
 //	echo '</table></div>';
@@ -7648,12 +7698,12 @@ function renderUser ($user_id)
 	$summary['tags'] = '';
 	
 	$tplm = TemplateManager::getInstance();
-	
+	$main = $tplm->createMainModule();
 	
 	
 	renderEntitySummary ($userinfo, 'summary', $summary, $tplm->getMainModule(), 'Payload');
 
-	$tplm->getMainModule()->addOutput('Payload', renderFilesPortlet('user', $user_id));
+	//$tplm->generateSubmodule('Payload', renderFilesPortlet('user', $user_id));
 }
 
 function renderMyPasswordEditor ()
@@ -7705,12 +7755,12 @@ function renderConfigEditor ()
 		if ($per_user && $v['is_userdefined'] != 'yes')
 			continue;
 
-		$singleConfig = array(			'Ishidden' => $v['is_hidden'],
-						'Isuserdefined' =>   $v['is_userdefined'], 
-						'Renderconfig' => renderConfigVarName ($v),
-						'Htmlspecialchars' => htmlspecialchars ($v['varvalue'], ENT_QUOTES),
-						'Varname' => $v['varname'],
-						'Index' => $i);
+		$singleConfig = array(			
+								'RenderConfig' => renderConfigVarName ($v),
+								'HtmlSpecialChars' => htmlspecialchars ($v['varvalue'], ENT_QUOTES),
+								'VarName' => $v['varname'],
+								'Index' => $i
+								);
 		// echo "<input type=hidden name=${i}_varname value='${v['varname']}'>";
 		// echo '<tr><td class="tdright">';
 		// echo renderConfigVarName ($v);
@@ -7718,17 +7768,17 @@ function renderConfigEditor ()
 		// echo "<td class=\"tdleft\"><input type=text name=${i}_varvalue value='" . htmlspecialchars ($v['varvalue'], ENT_QUOTES) . "' size=24></td>";
 		// echo '<td class="tdleft">';
 		if ($per_user && $v['is_altered'] == 'yes')
-			$singleConfig['opLink'] = getOpLink (array('op'=>'reset', 'varname'=>$v['varname']), 'reset');
+			$singleConfig['OpLink'] = getOpLink (array('op'=>'reset', 'varname'=>$v['varname']), 'reset');
 		else
-			$singleConfig['opLink'] = '';
+			$singleConfig['OpLink'] = '';
 		// 	echo getOpLink (array('op'=>'reset', 'varname'=>$v['varname']), 'reset');
 		// echo '</td>';
 		// echo "</tr>\n";
 		$i++;
 		$allConfigsPerUser[] = $singleConfig;
 	}
-	$mod->addOutput('Looparray', $allConfigsPerUser);
-	$mod->addOutput("i", $i);
+	$mod->addOutput('LoopArray', $allConfigsPerUser);
+	$mod->addOutput("Index", $i);
 		 
 	// echo "<input type=hidden name=num_vars value=${i}>\n";
 	// echo "<tr><td colspan=3>";
@@ -7744,14 +7794,14 @@ function renderMyAccount ()
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule("index");
 	$mod = $tplm->generateSubmodule("Payload", "RenderMyAccount");
-	$mod->setNamespace("myaccount");
+	$mod->setNamespace("myaccount", true);
 		
 
 	
 	global $remote_username, $remote_displayname, $expl_tags, $impl_tags, $auto_tags;
 	
-	$mod->setOutput('Username', $remote_username);
-	$mod->setOutput('Displayname', $remote_displayname);
+	$mod->setOutput('UserName', $remote_username);
+	$mod->setOutput('DisplayName', $remote_displayname);
 	$mod->setOutput('Serialize1', serializeTags (getExplicitTagsOnly ($expl_tags)));
 	$mod->setOutput('Serialize2', serializeTags ($impl_tags));
 	$mod->setOutput('Serialize3', serializeTags ($auto_tags));
@@ -7783,13 +7833,15 @@ function renderMyQuickLinks ()
 	// printOpFormIntro ('save');
 	// echo '<ul class="qlinks-form">';
 	$active_items = explode (',', getConfigVar ('QUICK_LINK_PAGES'));
+	$rowarray = array();
 	foreach ($indexlayout as $row)
 		foreach ($row as $ypageno)
 		{
 			$checked_state = in_array ($ypageno, $active_items) ? 'checked' : '';
-			$mod->addOutput('Looparray', array('Pagename' => getPageName ($ypageno), 'Pageno' => $ypageno, 'Checkedstate' =>  $checked_state ));
+			$rowarray[] = array('PageName' => getPageName ($ypageno), 'PageNo' => $ypageno, 'CheckedState' =>  $checked_state );
 			// echo "<li><label><input type='checkbox' name='page_list[]' value='$ypageno' $checked_state>" . getPageName ($ypageno) . "</label></li>\n";
 		}
+	$mod->setOutput('LoopArray', $rowarray);	
 	// echo '</ul>';
 	// printImageHREF ('SAVE', 'Save changes', TRUE);
 	// echo '</form></div>';
@@ -8076,8 +8128,8 @@ function renderFilesPortlet ($entity_type = NULL, $entity_id = 0, $parent = null
 			$fileArray["comment"] = $file["comment"];
 //			echo "</td><td class=tdleft>${file['comment']}</td></tr>";
 			if (isolatedPermission ('file', 'download', $file) and '' != ($pcode = getFilePreviewCode ($file))){
-				$fileArray["isPcode"] = true;
-				$fileArray["pcode"] = $pcode;
+				$pCodeMod = $tplm->generateModule('PCodeLine', true, array('pcode' => $pcode));
+				$fileArray["pcode"] = $pCodeMod->run();
 			}
 //				echo "<tr><td colspan=2>${pcode}</td></tr>\n";
 
@@ -8101,7 +8153,7 @@ function renderFilesForEntity ($entity_id)
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule("index");
 	
-	$mod = $tplm->generateModule("Payload","RenderFilesForEntity");
+	$mod = $tplm->generateSubmodule("Payload","RenderFilesForEntity");
 
 /*	startPortlet ('Upload and link new');
 	echo "<table border=0 cellspacing=0 cellpadding='5' align='center' class='widetable'>\n";
@@ -8154,6 +8206,7 @@ function renderFilesForEntity ($entity_id)
 			$fileOutArray['fileLink'] = $file['link_id'];
 			
 //			echo "</td><td class=tdleft>${file['comment']}</td><td class=tdcenter>";
+			$fileOutArray['opLink'] = getOpLink (array('op'=>'unlinkFile', 'link_id'=>$file['link_id']), '', 'CUT', 'Unlink file');
 //			echo getOpLink (array('op'=>'unlinkFile', 'link_id'=>$file['link_id']), '', 'CUT', 'Unlink file');
 //			echo "</td></tr>\n";
 			$fileListOutArray[] = $fileOutArray;
@@ -8296,10 +8349,8 @@ function renderCell ($cell)
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule("index");		
 
-	$mod = $tplm->generateModule("renderCell");
-	$mod->setNamespace("renderCell", true);
-
-
+	$mod = $tplm->generateModule("RenderCell");
+	
 	switch ($cell['realm'])
 	{
 	case 'user':
@@ -8319,12 +8370,21 @@ function renderCell ($cell)
 			$mod->setOutput("hasUserRealname", false);
 			//echo "<tr><td class=sparenetwork>no name</td></tr>";
 		}
+
 	//	echo '<td>';
 		if (!isset ($cell['etags']))
 			$cell['etags'] = getExplicitTagsOnly (loadEntityTags ('user', $cell['user_id']));
 		//echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
-		$mod->setOutput("userTags", count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;' );
-		//echo "</td></tr></table>";
+		if(count ($cell['etags'])){
+			$smallMod = $tplm->generateSubmodule('UserTags', 'SmallElement', $mod, true);
+			serializeTags($cell['etags'], '', $smallMod, 'Cont');
+		}
+		else{
+			$mod->setOutput('UserTags', '&nbsp;');
+		}
+
+		//$mod->setOutput("userTags", count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;' );
+		//echo "</td></tr></table>";*/
 		break;
 
 	case 'file':
@@ -9403,7 +9463,7 @@ function render8021QOrderForm ($some_id)
 	//	printNewItemTR();
 	$vdomlist = getVLANDomainOptions();
 	$vstlist = getVSTOptions();
-	$allMinuslinesOut = array();
+	
 	foreach ($minuslines as $item_object_id => $item)
 	{
 		$ctx = getContext();
@@ -9447,10 +9507,10 @@ function render8021QOrderForm ($some_id)
 			//echo '<td>' . mkA ($vstlist[$item['vst_id']], 'vst', $item['vst_id']) . '</td>';
 		}
 		
-		$allMinuslinesOut[] = $singleMinusLine;
+		$tplm->generateSubmodule('AllMinusLines', 'Render8021QOrderForm_MinusLine', $mod ,$singleMinusLine);
 		//echo "<td>${cutblock}</td></tr>";
 	}
-	$mod->addOutput("allMinuslines", $allMinuslinesOut);
+	
 		 
 	if
 	(
@@ -9542,7 +9602,9 @@ function render8021QStatus ()
 			//echo '<tr align=left valign=top><td>';
 			//echo mkA (niftyString ($vst_info['description']), 'vst', $vst_id);
 			if (count ($vst_info['etags'])){
-				$singleVST_ID['serializedTags'] = serializeTags ($vst_info['etags']);
+				$etagsMod = $tplm->generateModule('ETagsLine', true, array('cont' => serializeTags ($vst_info['etags'])));
+				$singleVST_ID['serializedTags'] = $etagsMod->run();
+			//	$singleVST_ID['serializedTags'] = serializeTags ($vst_info['etags']);
 			}
 			//	echo '<br><small>' . serializeTags ($vst_info['etags']) . '</small>';
 			//echo '</td>';
@@ -9623,12 +9685,10 @@ function renderVLANDomainListEditor ()
 		//printOpFormIntro ('upd', array ('vdom_id' => $vdom_id));
 		//echo '<tr><td>';
 		if ($dominfo['switchc'] or $dominfo['vlanc'] > 1){
-			$singleDomainStat['isSwtchOrVlan'] = true;
 			$singleDomainStat['imageNoDestroy'] = printImageHREF ('nodestroy', 'domain used elsewhere');
 		//	printImageHREF ('nodestroy', 'domain used elsewhere');
 		}
 		else{
-			$singleDomainStat['isSwtchOrVlan'] = false;
 			$singleDomainStat['linkDestroy'] = getOpLink (array ('op' => 'del', 'vdom_id' => $vdom_id), '', 'destroy', 'delete domain');
 			//	echo getOpLink (array ('op' => 'del', 'vdom_id' => $vdom_id), '', 'destroy', 'delete domain');
 		}
@@ -10649,12 +10709,12 @@ function renderObject8021QSyncPreview ($object, $vswitch, $plan, $C, $R, $maxdec
 
 	if (isset ($_REQUEST['hl_port_id']))
 	{
-		$mod->setOutput('Port_Id', $hl_port_id):
+		$mod->setOutput('Port_Id', $hl_port_id);
 		assertUIntArg ('hl_port_id');
 		$hl_port_id = intval ($_REQUEST['hl_port_id']);
 		$hl_port_name = NULL;
 
-		$mod->setOutput('Port_Id', $hl_port_id):
+		$mod->setOutput('Port_Id', $hl_port_id);
 		// addAutoScrollScript ("port-$hl_port_id");
 
 		foreach ($object['ports'] as $port)
@@ -10938,7 +10998,7 @@ function renderVSTListEditor()
 		$tplm  =TemplateManager::getInstance();
 		$tplm->setTemplate('vanilla');
 		$tplm->createMainModule();	
-		$submod = $tplm->generateSubmodule($placeholder, 'PrintNewItem', $parent);
+		$submod = $tplm->generateSubmodule($placeholder, 'RenderVSTListEditor_PrintNewItem', $parent);
 		
 		//printOpFormIntro ('add');
 		//echo '<tr>';
@@ -10953,7 +11013,7 @@ function renderVSTListEditor()
 		printNewItemTR('NewTop', $mod);
 		//printNewItemTR();
 	{	
-		$submod = $tplm->generateSubmodule('Merge', 'CreateRow', $mod);
+		$submod = $tplm->generateSubmodule('Merge', 'RenderVSTListEditor_CreateRow', $mod);
 		$submod->setOutput('Vst_id', $vst_id);
 		//printOpFormIntro ('upd', array ('vst_id' => $vst_id));
 		//echo '<tr><td>';
@@ -11244,7 +11304,6 @@ function renderDiscoveredNeighbors ($object_id)
 	//echo '<br><table cellspacing=0 cellpadding=5 align=center class=widetable>';
 	//echo '<tr><th colspan=2>local port</th><th></th><th>remote device</th><th colspan=2>remote port</th><th><input type="checkbox" checked id="cb-toggle"></th></tr>';
 	$inputno = 0;
-	$allNeighborsOut = array();
 	foreach ($neighbors as $local_port => $remote_list)
 	{
 		$initial_row = TRUE; // if port has multiple neighbors, the first table row is initial
@@ -11409,10 +11468,11 @@ function renderDiscoveredNeighbors ($object_id)
 				$singleNeighbor['error_message'] = $error_message;
 			//	echo "<td style=\"background-color: white; border-top: none\">$error_message</td>";
 			//echo "</tr>";
-			$allNeighborsOut[] = $singleNeighbor;
+
+			//Using array generated for possible array
+			$tplm->generateSubmodule('AllNeighbors','RenderDiscoveredNeighbors_NeighborsMod', $mod, $singleNeighbor);
 		}
 	}
-	$mod->addOutput("allNeighbors", $allNeighborsOut);
 		 
 
 	if ($inputno)
@@ -12261,7 +12321,7 @@ function renderExpirations ()
 
 			if (! count ($result))
 			{
-				$singleSectOut['count'] = false;
+				$singleSectOut['CountMod'] = $tplm->generateModule('ExpirationsNoSection', true)->run();
 			//	echo "<tr><td colspan=4>(none)</td></tr></table><br>\n";
 				continue;
 			}
