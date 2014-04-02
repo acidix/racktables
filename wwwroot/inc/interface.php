@@ -5995,27 +5995,34 @@ function renderEditAttributesForm ()
 	//echo '<tr><th>&nbsp;</th><th>Name</th><th>Type</th><th>&nbsp;</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
 		printNewItemTR('Newtop');
+	$allAttrMapsOut = array();
 	foreach (getAttrMap() as $attr)
 	{
-		$mod->addOutput('Looparray', array('Id' => $attr['id'], 'Application' => $attr['application'], 'Name' => $attr['name'], 'Type' =>$attr['type']));
+		$singleAttrMap = array( 'Name' => $attr['name'], 
+				  				'Type' =>$attr['type'],
+				  				'OpFormIntro' => printOpFormIntro ('upd', array ('attr_id' => $attr['id'])));
 		
 		//printOpFormIntro ('upd', array ('attr_id' => $attr['id']));
 		//echo '<tr><td>';
 		if($attr['id'] < 10000)
-			$mod->setOutput('Option', 'one');
+			$singleAttrMap['DestroyImg'] = printImageHREF ('nodestroy', 'system attribute');
 			//printImageHREF ('nodestroy', 'system attribute');
 		elseif (count ($attr['application']))
-			$mod->setOutput('Option', 'two');
+			$singleAttrMap['DestroyImg'] = printImageHREF ('nodestroy', count ($attr['application']) . ' reference(s) in attribute map');
 			//printImageHREF ('nodestroy', count ($attr['application']) . ' reference(s) in attribute map');
 		else
-			$mod->setOutput('Option', 'three');
+			$singleAttrMap['DestroyImg'] = getOpLink (array('op'=>'del', 'attr_id'=>$attr['id']), '', 'destroy', 'Remove attribute');
 			//echo getOpLink (array('op'=>'del', 'attr_id'=>$attr['id']), '', 'destroy', 'Remove attribute');
 		//echo "</td><td><input type=text name=attr_name value='${attr['name']}'></td>";
 		//echo "<td class=tdleft>${attr['type']}</td><td>";
+		$singleAttrMap['SaveImg'] = printImageHREF ('save', 'Save changes', TRUE);
 		//printImageHREF ('save', 'Save changes', TRUE);
 		//echo '</td></tr>';
 		//echo '</form>';
+		$allAttrMapsOut[] = $singleAttrMap;
 	}
+	$mod->addOutput("AllAttrMaps", $allAttrMapsOut);
+		 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
 		printNewItemTR('Newbottom');
 	//echo "</table>\n";
@@ -6081,22 +6088,27 @@ function renderEditAttrMapForm ()
 		printNewItemTR ('Newtop', $attrMap);
 	foreach ($attrMap as $attr)
 	{
-		$mod->addOutput('Looparray', array('Continue' => !count ($attr['application'])? TRUE: FALSE, 'Attrtypes' => $attrtypes[$attr['type']], 'Name' => $attr['name'], 'Order' => $attr['order'] ));
-		// if (!count ($attr['application']))
+		if (!count ($attr['application']))
 			//continue;
+		$mod->addOutput('Looparray', array('Attrtypes' => $attrtypes[$attr['type']], 'Name' => $attr['name'], 'Order' => $attr['order'] ));
+		
 		// echo "<tr class=row_${order}><td class=tdleft>${attr['name']}</td>";
 		// echo "<td class=tdleft>" . $attrtypes[$attr['type']] . "</td><td colspan=2 class=tdleft>";
+
 		foreach ($attr['application'] as $app)
 		{
-			$mod->addOutput('Looparray2', array(
-													'Sticky' => $app['sticky'], 
-													'Refcnt' =>  $app['refcnt'],
-													'Id' => $attr['id'], 
-													'Objtype_id' => $app['objtype_id'],
-													'Decodeobjecttype' => decodeObjectType ($app['objtype_id'], 'o'),
-													'Type' => $attr['type']));
+			$singleAttrApp = $tplm->generateSubmodule('AllAttrApps', 'RenderEditAttrMapForm_AttrApp', $mod,
+													  array('sticky' => $app['sticky'],
+													  		'refcnt' => $app['refcnt'],
+													  		'id' => $attr['id'],
+													  		'obj_id' => $app['objtype_id'],
+													  		'type' => $attr['type'],
+													  		'chapter_name' => $app['chapter_name'],
+													  		'dec_obj' => decodeObjectType ($app['objtype_id'], 'o')));
+
 			//if ($app['sticky'] == 'yes')
 				// printImageHREF ('nodelete', 'system mapping');
+			
 			// elseif ($app['refcnt'])
 				// printImageHREF ('nodelete', $app['refcnt'] . ' value(s) stored for objects');
 			// else
@@ -10677,12 +10689,12 @@ function renderObject8021QSyncPreview ($object, $vswitch, $plan, $C, $R, $maxdec
 
 	if (isset ($_REQUEST['hl_port_id']))
 	{
-		$mod->setOutput('Port_Id', $hl_port_id):
+		$mod->setOutput('Port_Id', $hl_port_id);
 		assertUIntArg ('hl_port_id');
 		$hl_port_id = intval ($_REQUEST['hl_port_id']);
 		$hl_port_name = NULL;
 
-		$mod->setOutput('Port_Id', $hl_port_id):
+		$mod->setOutput('Port_Id', $hl_port_id);
 		// addAutoScrollScript ("port-$hl_port_id");
 
 		foreach ($object['ports'] as $port)
@@ -10710,7 +10722,7 @@ function renderObject8021QSyncPreview ($object, $vswitch, $plan, $C, $R, $maxdec
 	// , TRUE);
 	// echo '<table cellspacing=0 cellpadding=5 align=center class=widetable width="100%">';
 	if ($maxdecisions){
-		$mod->setOutput('Maxdecisions', TRUE)
+		$mod->setOutput('Maxdecisions', TRUE);
 		// echo '<tr><th colspan=2>&nbsp;</th><th colspan=3>discard</th><th>&nbsp;</th></tr>';
 	}
 	// echo '<tr valign=top><th>port</th><th width="40%">last&nbsp;saved&nbsp;version</th>';
@@ -10738,7 +10750,7 @@ function renderObject8021QSyncPreview ($object, $vswitch, $plan, $C, $R, $maxdec
 	);
 	foreach ($plan as $port_name => $item)
 	{
-		$smod = $tplm->generateSubmodule('Loop', 'LoopMod' , $mod)
+		$smod = $tplm->generateSubmodule('Loop', 'LoopMod' , $mod);
 		$trclass = $left_extra = $right_extra = $left_text = $right_text = '';
 		$radio_attrs = array();
 		switch ($item['status'])

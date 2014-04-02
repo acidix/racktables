@@ -6,28 +6,12 @@
 		<?php 
 		$this->Newtop;
 		$this->startLoop('Looparray');
-		if($this->is('Continue', FALSE)){ ?>
-
+		?>
 			<tr class=row_<?php $this->Order; ?>><td class=tdleft><?php $this->Name; ?></td>
 				<td class=tdleft><?php $this->Attrtypes; ?></td><td colspan=2 class=tdleft>
-
-				<?php $this->startLoop('Looparray2'); 
-					if ($this->_Sticky == 'yes') $this->getH('PrintImageHref', array('nodelete', 'system mapping'));
-					elseif ($this->_Refcnt) $this->getH('PrintImageHref', array('nodelete', $this->_Refcnt . ' value(s) stored for objects'));
-					else $this->getH('GetOpLink', array(array('op'=>'del', 'attr_id'=>$this->_Id, 'objtype_id'=>$this->_Objtype_id), '', 'delete', 'Remove mapping')); echo ' ';
-					$this->Decodeobjecttype; 
-					if($this->_Type == 'dict')  echo " (values from '<?php $this->_Chapter_name ?>')<br>"; else echo '<br>';
-					$this->endLoop();
-				?>
-
-				
-
-
-		<?php } ?> 
-
+				<?php $this->AllAttrApps ?>		 
 			</td></tr>
 		<?php	$this->endLoop();
-
 			$this->Newbottom; ?>
 
 			</table></div>
