@@ -179,10 +179,10 @@ $this->setInMemoryTemplate('FileSummaryDownloadLink',"<a href='?module=download&
 *	Usage: interface.php
 *
 **/
-$this->setInMemoryTemplate("ReportsCounter","<tr><td class=tdright>{{header}}:</td><td class=tdleft>{{data}}</td></tr>");
-$this->setInMemoryTemplate("ReportsMesseges","<tr class='msg_{{class}}><td class=tdright>{{header}}:</td><td class=tdleft>{{text}}</td></tr>");
-$this->setInMemoryTemplate("ReportsCustom","<tr><td colspan=2>\n{{itemCont}}\n</td></tr>");
-$this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{title}:</td><td class=tdcenter>\n{{progressBar}}\n<br><small>{{isMax}}</small></td></tr>");
+$this->setInMemoryTemplate("ReportsCounter","<tr><td class=tdright>{{Header}}:</td><td class=tdleft>{{Data}}</td></tr>");
+$this->setInMemoryTemplate("ReportsMessages","<tr class='msg_{{Class}}><td class=tdright>{{Header}}:</td><td class=tdleft>{{Text}}</td></tr>");
+$this->setInMemoryTemplate("ReportsCustom","<tr><td colspan=2>\n{{ItemCont}}\n</td></tr>");
+$this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{Title}:</td><td class=tdcenter>\n{{ProgressBar}}\n<br><small>{{IsMax}}</small></td></tr>");
 
 /**
 *	GetProgressBar: 
@@ -204,7 +204,7 @@ $this->setInMemoryTemplate("NoVLANConfig","<center><h3>(no VLAN configuration ex
 *	Usage: interface.php
 *
 **/
-$this->setInMemoryTemplate("StdCenterTableCell","<td class=tdcenter>{{cont}}</td>");
+$this->setInMemoryTemplate("StdCenterTableCell","<td class=tdcenter>{{Cont}}</td>");
 
 /**
 *	StdTableCell: 

@@ -6,14 +6,14 @@
 	<th class=tdleft>Value</th></tr>
 	<?php $this->getH('PrintOpFormIntro', 'upd'); ?> 
 
-	<?php $this->startLoop('Looparray'); ?>
-		<input type=hidden name=<?php $this->Index; ?>_varname value='<?php $this->Varname; ?>'>
+	<?php $this->startLoop('LoopArray'); ?>
+		<input type=hidden name=<?php $this->Index; ?>_varname value='<?php $this->VarName; ?>'>
 		<tr><td class="tdright">
-		<?php $this->Renderconfig; ?>
+		<?php $this->RenderConfig; ?>
 		</td>
-		<td class="tdleft"><input type=text name=<?php $this->Index; ?>_varvalue value='<?php $this->Htmlspecialchars; ?>' size=24></td>
+		<td class="tdleft"><input type=text name=<?php $this->Index; ?>_varvalue value='<?php $this->HtmlSpecialChars; ?>' size=24></td>
 		<td class="tdleft">
-		<?php $this->opLink ?> 
+		<?php $this->OpLink ?> 
 		</td></tr>
 	<?php $this->endLoop(); ?>
 	<input type=hidden name=num_vars value=<?php $this->i; ?>>

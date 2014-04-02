@@ -4,8 +4,8 @@
 		<div style="text-align: left; display: inline-block;">
 		<?php $this->getH('PrintOpFormIntro', 'save'); ?>
 		<ul class="qlinks-form">
-		<?php $this->startLoop('Looparray'); ?>
-			<li><label><input type='checkbox' name='page_list[]' value='<?php $this->Pageno; ?>' <?php $this->Checkedstate; ?>> <?php $this->Pagename; ?></label></li>
+		<?php $this->startLoop('LoopArray'); ?>
+			<li><label><input type='checkbox' name='page_list[]' value='<?php $this->PageNo; ?>' <?php $this->CheckedState; ?>> <?php $this->PageName; ?></label></li>
 		<?php $this->endLoop(); ?>
 		</ul>
 		<?php $this-> getH('PrintImageHref', array('SAVE', 'Save changes', TRUE)); ?>

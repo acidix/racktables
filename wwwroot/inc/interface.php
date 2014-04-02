@@ -3108,7 +3108,7 @@ function renderRackspaceHistory ()
 		$smod->addOutput("Link",makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'op_id'=>$row['mo_id'])));
 		$smod->addOutput("Time",$row['ctime']);
 		$smod->addOutput("UserName",$row['user_name']);
-		$smod->addOutput("renderedCell",renderCell (spotEntity ('object', $row['ro_id'])));
+		$smod->addOutput("RenderedCell",renderCell (spotEntity ('object', $row['ro_id'])));
 		$smod->addOutput("Comment",$row['comment']);
 		//echo "<tr class=${class}><td><a href='".makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'op_id'=>$row['mo_id']))."'>${row['ctime']}</a></td>";
 		//echo "<td>${row['user_name']}</td><td>";
@@ -6114,15 +6114,15 @@ function render8021QReport ()
 		$singleElemOut = array();
 		if (--$header_delay <= 0)
 		{
-			$singleElemOut['header'] = $header;
+			$singleElemOut['Header'] = $header;
 			//echo $header;
 			$header_delay = 25;
 		}
 		else
-			$singleElemOut['header'] = '';
+			$singleElemOut['Header'] = '';
 
-		$singleElemOut['countStats'] = (count ($vlanstats[$vlan_id]) ? 'T' : 'F');
-		$singleElemOut['vlan_id'] = $vlan_id;
+		$singleElemOut['CountStats'] = (count ($vlanstats[$vlan_id]) ? 'T' : 'F');
+		$singleElemOut['VlanId'] = $vlan_id;
 	//	echo '<tr class="state_' . (count ($vlanstats[$vlan_id]) ? 'T' : 'F');
 	//	echo '"><th class=tdright>' . $vlan_id . '</th>';
 
@@ -6132,19 +6132,19 @@ function render8021QReport ()
 			$singleCell = $tplm->generateModule("StdCenterTableCell", true);
 			//echo '<td class=tdcenter>';
 			if (array_key_exists ($domain_id, $vlanstats[$vlan_id]))
-				$singleCell->setOutput("cont", mkA ('&exist;', 'vlan', "${domain_id}-${vlan_id}"));
+				$singleCell->setOutput("Cont", mkA ('&exist;', 'vlan', "${domain_id}-${vlan_id}"));
 			//	echo mkA ('&exist;', 'vlan', "${domain_id}-${vlan_id}");
 			else
-				$singleCell->setOutput("cont", '&nbsp;');
+				$singleCell->setOutput("Cont", '&nbsp;');
 			//	echo '&nbsp;';
 			//echo '</td>';
-			$singleElemOut['domains'] = '';
-			$singleElemOut['domains'] = $singleElemOut['domains'] + $singleCell->run();
+			$singleElemOut['Domains'] = '';
+			$singleElemOut['Domains'] = $singleElemOut['domains'] + $singleCell->run();
 		}
 	//	echo '</tr>';
 		if ($tbc){
-			$singleElemOut['countDom'] = count($domains);
-			$singleElemOut['tbc'] = true;
+			$singleElemOut['CountDom'] = count($domains);
+			$singleElemOut['Tbc'] = true;
 		//	echo '<tr class="state_A"><th>...</th><td colspan=' . count ($domains) . '>&nbsp;</td></tr>';
 		}
 		$outputArray[] = $singleElemOut;
@@ -6181,9 +6181,9 @@ function renderReports ($what)
 					$data = $item['func'] ();
 				foreach ($data as $header => $data){
 					$singleMod = $tplm->generateModule("ReportsCounter", true);
-					$singleMod->setOutput("header", $header);
-					$singleMod->setOutput("data", $data);
-					$singleItemArr['cont'] .= $singleMod->run();
+					$singleMod->setOutput("Header", $header);
+					$singleMod->setOutput("Data", $data);
+					$singleItemArr['Cont'] .= $singleMod->run();
 	//				echo "<tr><td class=tdright>${header}:</td><td class=tdleft>${data}</td></tr>\n";
 				}
 				break;
@@ -6194,12 +6194,12 @@ function renderReports ($what)
 					$data = $item['func'] ();
 
 				foreach ($data as $msg){
-					$singleMod = $tplm->generateModule("ReportsMesseges", true);
-					$singleMod->setOutput("class", $msg['class']);
-					$singleMod->setOutput("header", $msg['header']);
-					$singleMod->setOutput("text", $msg['text']);
+					$singleMod = $tplm->generateModule("ReportsMessages", true);
+					$singleMod->setOutput("Class", $msg['class']);
+					$singleMod->setOutput("Header", $msg['header']);
+					$singleMod->setOutput("Text", $msg['text']);
 					
-					$singleItemArr['cont'] .= $singleMod->run();
+					$singleItemArr['Cont'] .= $singleMod->run();
 	//				echo "<tr class='msg_${msg['class']}'><td class=tdright>${msg['header']}:</td><td class=tdleft>${msg['text']}</td></tr>\n";
 				}
 				break;
@@ -6211,10 +6211,10 @@ function renderReports ($what)
 				foreach ($data as $meter)
 				{
 					$singleMod = $tplm->generateModule("ReportsMeters", true);
-					$singleMod->setOutput("title", $meter['title']);
-					$singleMod->setOutput("progressBar", renderProgressBar ($meter['max'] ? $meter['current'] / $meter['max'] : 0));
-					$singleMod->setOutput("isMax", ($meter['max'] ? $meter['current'] . '/' . $meter['max'] : '0'));
-					$singleItemArr['cont'] .= $singleMod->run();
+					$singleMod->setOutput("Title", $meter['title']);
+					$singleMod->setOutput("ProgressBar", renderProgressBar ($meter['max'] ? $meter['current'] / $meter['max'] : 0));
+					$singleMod->setOutput("IsMax", ($meter['max'] ? $meter['current'] . '/' . $meter['max'] : '0'));
+					$singleItemArr['Cont'] .= $singleMod->run();
 	//				echo "<tr><td class=tdright>${meter['title']}:</td><td class=tdcenter>";
 	//				renderProgressBar ($meter['max'] ? $meter['current'] / $meter['max'] : 0);
 	//				echo '<br><small>' . ($meter['max'] ? $meter['current'] . '/' . $meter['max'] : '0') . '</small></td></tr>';
@@ -6222,8 +6222,8 @@ function renderReports ($what)
 				break;
 			case 'custom':
 				$singleMod = $tplm->generateModule("ReportsCustom", true);
-				$singleMod->setOutput("itemCont", (string) $item['func']());
-				$singleItemArr['cont'] .= $singleMod->run();
+				$singleMod->setOutput("ItemCont", (string) $item['func']());
+				$singleItemArr['Cont'] .= $singleMod->run();
 			//	echo "<tr><td colspan=2>";
 			//	$item['func']();
 			//	echo "</td></tr>\n";
@@ -6677,7 +6677,7 @@ function renderTagRowForViewer ($taginfo, $level = 0, $parent, $placeholder = 'T
 	
 	$tplm = TemplateManager::getInstance();
 	
-	$mod = $tplm->generateSubmodule("Taglist", "TagtreeElement");
+	$mod = $tplm->generateSubmodule("TagList", "TagtreeElement");
 	$mod->setNamespace("tagtree",true);
 	$mod->setLock();
 	
@@ -6700,14 +6700,14 @@ function renderTagRowForViewer ($taginfo, $level = 0, $parent, $placeholder = 'T
 	$trclass = $taginfo['is_assignable'] == 'yes' ? '' : ($taginfo['kidc'] ? ' class=trnull' : ' class=trwarning');
 	
 	if ($taginfo['is_assignable'] == 'yes')
-		$mod->addOutput('assignable', true);
+		$mod->addOutput('Assignable', true);
 	else 
-		$mod->addOutput('assignable', false);
+		$mod->addOutput('Assignable', false);
 	
 	if ($taginfo['kidc'])
-		$mod->addOutput('hasChildren', true);
+		$mod->addOutput('HasChildren', true);
 	else
-		$mod->addOutput('hasChildren', false);
+		$mod->addOutput('HasChildren', false);
 	
 	
 	//echo "<tr${trclass}><td align=left style='padding-left: " . ($level * 16) . "px;'>";
@@ -6719,7 +6719,7 @@ function renderTagRowForViewer ($taginfo, $level = 0, $parent, $placeholder = 'T
 			if (array_key_exists ($article, $statsdecoder))
 				$stats[] = $count . $statsdecoder[$article];
 	$mod->addOutput('Stats', implode(', ', $stats));
-	$mod->addOutput('Spanclass', getTagClassName($taginfo['id']));
+	$mod->addOutput('SpanClass', getTagClassName($taginfo['id']));
 	$mod->addOutput('Tag', $taginfo['tag']);
 	$mod->addOutput('Refc', $refc ? $refc : '');
 	$mod->addOutput('Level', $level * 16);
@@ -7540,12 +7540,12 @@ function renderConfigEditor ()
 		if ($per_user && $v['is_userdefined'] != 'yes')
 			continue;
 
-		$singleConfig = array(			'Ishidden' => $v['is_hidden'],
-						'Isuserdefined' =>   $v['is_userdefined'], 
-						'Renderconfig' => renderConfigVarName ($v),
-						'Htmlspecialchars' => htmlspecialchars ($v['varvalue'], ENT_QUOTES),
-						'Varname' => $v['varname'],
-						'Index' => $i);
+		$singleConfig = array(			
+								'RenderConfig' => renderConfigVarName ($v),
+								'HtmlSpecialChars' => htmlspecialchars ($v['varvalue'], ENT_QUOTES),
+								'VarName' => $v['varname'],
+								'Index' => $i
+								);
 		// echo "<input type=hidden name=${i}_varname value='${v['varname']}'>";
 		// echo '<tr><td class="tdright">';
 		// echo renderConfigVarName ($v);
@@ -7553,17 +7553,17 @@ function renderConfigEditor ()
 		// echo "<td class=\"tdleft\"><input type=text name=${i}_varvalue value='" . htmlspecialchars ($v['varvalue'], ENT_QUOTES) . "' size=24></td>";
 		// echo '<td class="tdleft">';
 		if ($per_user && $v['is_altered'] == 'yes')
-			$singleConfig['opLink'] = getOpLink (array('op'=>'reset', 'varname'=>$v['varname']), 'reset');
+			$singleConfig['OpLink'] = getOpLink (array('op'=>'reset', 'varname'=>$v['varname']), 'reset');
 		else
-			$singleConfig['opLink'] = '';
+			$singleConfig['OpLink'] = '';
 		// 	echo getOpLink (array('op'=>'reset', 'varname'=>$v['varname']), 'reset');
 		// echo '</td>';
 		// echo "</tr>\n";
 		$i++;
 		$allConfigsPerUser[] = $singleConfig;
 	}
-	$mod->addOutput('Looparray', $allConfigsPerUser);
-	$mod->addOutput("i", $i);
+	$mod->addOutput('LoopArray', $allConfigsPerUser);
+	$mod->addOutput("Index", $i);
 		 
 	// echo "<input type=hidden name=num_vars value=${i}>\n";
 	// echo "<tr><td colspan=3>";
@@ -7579,14 +7579,14 @@ function renderMyAccount ()
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule("index");
 	$mod = $tplm->generateSubmodule("Payload", "RenderMyAccount");
-	$mod->setNamespace("myaccount");
+	$mod->setNamespace("myaccount", true);
 		
 
 	
 	global $remote_username, $remote_displayname, $expl_tags, $impl_tags, $auto_tags;
 	
-	$mod->setOutput('Username', $remote_username);
-	$mod->setOutput('Displayname', $remote_displayname);
+	$mod->setOutput('UserName', $remote_username);
+	$mod->setOutput('DisplayName', $remote_displayname);
 	$mod->setOutput('Serialize1', serializeTags (getExplicitTagsOnly ($expl_tags)));
 	$mod->setOutput('Serialize2', serializeTags ($impl_tags));
 	$mod->setOutput('Serialize3', serializeTags ($auto_tags));
@@ -7618,13 +7618,15 @@ function renderMyQuickLinks ()
 	// printOpFormIntro ('save');
 	// echo '<ul class="qlinks-form">';
 	$active_items = explode (',', getConfigVar ('QUICK_LINK_PAGES'));
+	$rowarray = array();
 	foreach ($indexlayout as $row)
 		foreach ($row as $ypageno)
 		{
 			$checked_state = in_array ($ypageno, $active_items) ? 'checked' : '';
-			$mod->addOutput('Looparray', array('Pagename' => getPageName ($ypageno), 'Pageno' => $ypageno, 'Checkedstate' =>  $checked_state ));
+			$rowarray[] = array('PageName' => getPageName ($ypageno), 'PageNo' => $ypageno, 'CheckedState' =>  $checked_state );
 			// echo "<li><label><input type='checkbox' name='page_list[]' value='$ypageno' $checked_state>" . getPageName ($ypageno) . "</label></li>\n";
 		}
+	$mod->setOutput('LoopArray', $rowarray);	
 	// echo '</ul>';
 	// printImageHREF ('SAVE', 'Save changes', TRUE);
 	// echo '</form></div>';

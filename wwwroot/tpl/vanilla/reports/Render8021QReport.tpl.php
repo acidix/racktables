@@ -3,12 +3,12 @@
 		<h2>VLAN existence per domain</h2>
 		<table border=1 cellspacing=0 cellpadding=5 align=center class=rackspace>
 		<?php $this->startLoop("OutputArr"); ?>	
-			<?php $this->header ?>
-			<tr class="state_<?php $this->countStats ?>"><th class=tdright><?php $this->vlan_id ?></th>
-			<?php $this->domains ?> 
+			<?php $this->Header; ?>
+			<tr class="state_<?php $this->CountStats ?>"><th class=tdright><?php $this->VlanId ?></th>
+			<?php $this->Domains; ?> 
 			</tr>
-			<?php if ($this->is("tbc",true)) { ?>
-			 	<tr class="state_A"><th>...</th><td colspan=<?php $this->countDom ?> >&nbsp;</td></tr>
+			<?php if ($this->is("Tbc",true)) { ?>
+			 	<tr class="state_A"><th>...</th><td colspan=<?php $this->CountDom ?> >&nbsp;</td></tr>
 			 <?php } ?>  
 		<?php $this->endLoop(); ?> 
 		</table>
