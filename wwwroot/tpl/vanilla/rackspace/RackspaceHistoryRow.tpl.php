@@ -7,7 +7,7 @@
 			<?php $this->UserName; ?>
 		</td>
 		<td>
-			<?php $this->renderedCell; ?>
+			<?php $this->RenderedCell; ?>
 		</td>
 		<td>
 			<?php $this->getH("NiftyString","%%Comment"); ?>

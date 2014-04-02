@@ -4,8 +4,8 @@
 	<div class=portlet><h2>Current user info</h2>
 	<div style="text-align: left; display: inline-block;">
 	<table>
-	<tr><th>Login:</th><td><?php $this->Username; ?><td></tr>
-	<tr><th>Name:</th><td><?php $this->Displayname; ?></td></tr>
+	<tr><th>Login:</th><td><?php $this->UserName; ?><td></tr>
+	<tr><th>Name:</th><td><?php $this->DisplayName; ?></td></tr>
 	<tr><th>Explicit tags:</th><td><?php $this->Serialize1; ?></td></tr>
 	<tr><th>Implicit tags:</th><td><?php $this->Serialize2; ?><td></tr>
 	<tr><th>Automatic tags:</th><td><?php $this->Serialize3; ?><td></tr>
