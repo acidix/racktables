@@ -69,7 +69,7 @@ class TemplateHelperForm extends TemplateHelperAbstract
 class TemplateHelperPrintImageHref extends TemplateHelperAbstract
 {
 	protected function generate($params){
-		if (count($params) == 0||$params[0]=="")
+		if (count($params) == 0 || $params[0]=="")
 		{
 			echo "";
 		}
@@ -104,10 +104,9 @@ class TemplateHelperPrintImageHref extends TemplateHelperAbstract
 		$img['path'] = '?module=chrome&uri=' . $img['path'];
 
 		//Loading and rendering small module in memory and returning the
-		if ($do_input == TRUE){
-			$tplm = TemplateManager::getInstance();
-			$tplm->setTemplate("vanilla");
-			
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");	
+		if ($do_input == TRUE){		
 			$mod = $tplm->generateModule( "GetImageHrefDoInput", true, 
 					array( "SrcPath" => $img['path'],  "TabIndex" => ($tabindex ? "tabindex=${tabindex}" : ''),
 							"Title" => (!strlen ($title) ? '' : " title='${title}'") ));
@@ -115,8 +114,6 @@ class TemplateHelperPrintImageHref extends TemplateHelperAbstract
 			echo $mod->run();
 		}
 		else{
-			$tplm = TemplateManager::getInstance();
-			$tplm->setTemplate("vanilla");
 
 			$mod = $tplm->generateModule("GetImageHrefNoInput", true, 
 					array( "SrcPath" => $img['path'],  "ImgWidth" => $img['width'], "ImgHeight" => $img['height'] ,
@@ -333,7 +330,7 @@ class TemplateHelperPrintOpFormIntro extends TemplateHelperAbstract
 			$loopArray[] = array("name" => htmlspecialchars ($inputname, ENT_QUOTES), "val" => htmlspecialchars ($inputvalue, ENT_QUOTES));
 	//		printf ('<input type=hidden name="%s" value="%s">', htmlspecialchars ($inputname, ENT_QUOTES), htmlspecialchars ($inputvalue, ENT_QUOTES));
 		$mod->setOutput("loopArray", $loopArray);
-		$mod->run();
+		echo $mod->run();
 	}
 
 }
@@ -406,7 +403,7 @@ class TemplateHelperGetOpLink extends TemplateHelperAbstract
 		$mod->setOutput("title", $title);
 	//	$ret .= $title . '</a>';
 	//	return $ret;
-		return $mod->run();
+		echo $mod->run();
 	}
 } 
 
@@ -461,7 +458,7 @@ class TemplateHelperPrintSelect extends TemplateHelperAbstract
 			$select_attrs = $params[1];
 		if(count($params) > 2)
 			$selected_id = $params[2];
-		return getSelect($optList, $select_attrs, $selected_id);			
+		echo getSelect($optList, $select_attrs, $selected_id);			
 	}
 }
 ?>

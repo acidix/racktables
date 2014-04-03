@@ -9,7 +9,7 @@
 			<div class=commentblock><?php $this->comment_hrefs ?></div>
 		</div>
 	<?php } ?>
-	<?php if ($this->is("areLogrecords",true)) { ?>
+	<?php if ($this->is("areLogRecords",true)) { ?>
 	 	<div class=portlet>
 	 		<h2>log records</h2>
 	 		<table cellspacing=0 cellpadding=5 align=center class=widetable width='100%'>

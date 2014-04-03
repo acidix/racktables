@@ -1407,8 +1407,8 @@ function renderEditObjectForm()
 					break;
 			}
 			//echo "</td></tr>\n";
-			$tplm->generateSubmodule('AllObjValues', 'RenderEditObjectForm_ObjValues', $mod, false, $singleVal);
-
+			$allObjMod = $tplm->generateSubmodule('AllObjValues', 'RenderEditObjectForm_ObjValues', $mod, false, $singleVal);
+			$allObjMod->setNamespace('object');
 			$i++;
 		}
 			 
@@ -1429,7 +1429,7 @@ function renderEditObjectForm()
 	//echo "&nbsp;";
 	//echo getOpLink (array ('op'=>'resetObject'), '' ,'clear', 'Reset (cleanup) object', 'need-confirmation');
 	getOpLink (array ('op'=>'resetObject'), '' ,'clear', 'Reset (cleanup) object', 
-		'need-confirmation', $mod, 'addObjLink');
+		'need-confirmation', $mod, 'resObjLink');
 	//echo "</td></tr>\n";
 	$mod->addOutput("obj_comment", $object['comment']);
 		 
@@ -1786,6 +1786,7 @@ function renderObject ($object_id)
 			$singleRecord['cont'] = string_insert_hrefs (htmlspecialchars ($row['content'], ENT_NOQUOTES));
 			//echo '<td class="logentry">' . string_insert_hrefs (htmlspecialchars ($row['content'], ENT_NOQUOTES)) . '</td>';
 			//echo '</tr>';
+			$allLogrecordsOut[] = $singleRecord;
 			$order = $nextorder[$order];
 		}
 		$mod->addOutput("allLogrecords", $allLogrecordsOut);
@@ -11645,13 +11646,13 @@ END
 //
 // Display object level logs
 //
-function renderObjectLogEditor ($parent = NULL, $placeholder = 'Payload')
+function renderObjectLogEditor ()
 {
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
-	
-	$mod = $tplm->generateSubmodule('Payload', 'RenderObjectLogEditor', $parent);
+	$main = $tplm->createMainModule();
+		
+	$mod = $tplm->generateSubmodule('Payload', 'RenderObjectLogEditor', $main);
 	$mod->setNamespace('location',true);
 
 	global $nextorder;
@@ -11723,7 +11724,6 @@ function renderObjectLogEditor ($parent = NULL, $placeholder = 'Payload')
 	/**echo '</table>';*/
 
 
-
 }
 
 //
@@ -11755,7 +11755,7 @@ function allObjectLogs ()
 
 		foreach ($logs as $row)
 		{
-			$row_data = array();
+			$row_data = array('order' => $order);
 			// Link to a different page if the object is a Rack
 			if ($row['objtype_id'] == 1560)
 			{
@@ -11784,7 +11784,7 @@ function allObjectLogs ()
 			$log_data_array[] = $row_data;
 		}
 		
-		$mod->setOutputVariable("IMAGE_HREF", getImageHREF('text'));
+		$mod->setOutput("IMAGE_HREF", getImageHREF('text'));
 		$mod->addOutput("LogTableData", $log_data_array);
 		//echo '</table>';
 	}

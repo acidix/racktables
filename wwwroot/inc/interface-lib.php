@@ -323,7 +323,7 @@ function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $
 //	$ret .= '<select';
 	$selectedOutArray = array();
 	foreach ($select_attrs as $attr_name => $attr_value)
-		$selectedOutArray[] = array('attr_name' =>  $attr_name, "attr_val" => $attr_name );
+		$selectedOutArray[] = array('attr_name' =>  $attr_name, "attr_val" => $attr_value );
 //		$ret .= " ${attr_name}=${attr_value}";
 	$mod->setOutput("selectedList", $selectedOutArray);
 //	$ret .= '>';

@@ -5,11 +5,11 @@
 	<th class=tdcenter> <?php $this->get("Image_Href"); ?>  </th></tr>
 	
 	<?php $this->startLoop("LogTableData"); ?>
-	<tr class=row_${order} valign=top>
+	<tr class=row_<?php $this->order ?> valign=top>
 		<td class=tdleft> <?php $this->get("Object_id"); ?> </td>
 		<td class=tdleft> <?php $this->get("User"); ?> <br> <?php $this->get("Date"); ?> </td>
 		<td class="logentry"> <?php $this->get("Logentry"); ?> </td>
-	</tr>\n
+	</tr>
 	<?php $this->endLoop(); ?>
 
 

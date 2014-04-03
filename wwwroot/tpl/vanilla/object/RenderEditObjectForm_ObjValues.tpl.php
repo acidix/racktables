@@ -4,11 +4,11 @@
 	<?php $this->value_link ?>
 	</td>
 	<th class=sticker><?php $this->name ?>
-	<?php if (!$this->is("dateFormatTime", null)) { ?>
+	<?php if ($this->is("dateFormatTime")) { ?>
 		(<?php $this->dateFormatTime ?>)
-	<?php } ?> 	
-	:</th><td class=tdleft>
-	<?php if ($this->is('type','string')) { ?>
+	<?php } ?>:</th><td class=tdleft>
+	<?php if ($this->is('type','string') || $this->is('type','float') ||
+			  $this->is('type','uint') ) { ?>
 		<input type=text name=<?php $this->i ?>_value value='<?php $this->value ?>'>
 	<?php } ?> 
 	<?php if ($this->is('type','dict')) { ?>
