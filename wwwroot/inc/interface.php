@@ -2011,8 +2011,6 @@ function renderRackMultiSelect ($sname, $racks, $selected, $parent = null, $plac
 	}
 	
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
 		$mod = $tplm->generateModule("RenderRackMultiSelect");
@@ -2031,18 +2029,21 @@ function renderRackMultiSelect ($sname, $racks, $selected, $parent = null, $plac
 	foreach ($row_names as $optgroup)
 	{
 	//	echo "<optgroup label='${optgroup}'>";
+		$allRowDataOut[] = array('GroupLabel' => $optgroup);
+
 		foreach ($rdata[$optgroup] as $rack_id => $rack_name)
 		{
-			$singleRow = array('rack_id' => $rack_id, 'rack_name' => $rack_name);
-
+			$tplm->generateSubmodule('RackEntries', 'StdOptionTemplate', $mod, true, 
+					array(	'RackId' => $rack_id,
+							'IsSelected' => ((array_search ($rack_id, $selected) === FALSE) ? '' : 'selected'),
+							'RackName' => $rack_name));	
 		//	echo "<option value=${rack_id}";
-			if (!(array_search ($rack_id, $selected) === FALSE))
-				$singleRow['selectTxt'] = ' selected';
+		//	if (!(array_search ($rack_id, $selected) === FALSE))		
 		//		echo ' selected';
 		//	echo">${rack_name}</option>\n";
-			$allRowDataOut[] = $singleRow;
 		}
 	}
+
 	$mod->addOutput("allRowData", $allRowDataOut);
 		 
 	//echo "</select>\n";
@@ -2217,8 +2218,8 @@ function renderPortsForObject ($object_id)
 		//echo "<td>";
 		$singlePort['save_img'] = printImageHREF ('save', 'Save changes', TRUE);
 		//echo "</td></form></tr>\n";
-		$tplm->generateSubmodule('singlePorts', 'RenderPortsForObject_SinglePort', $mod, false, $singlePort);
-
+		$singlePortMod = $tplm->generateSubmodule('singlePorts', 'RenderPortsForObject_SinglePort', $mod, false, $singlePort);
+		$singlePortMod->setNamespace('object');
 	}
 	
 
@@ -2248,8 +2249,10 @@ function renderPortsForObject ($object_id)
 	}
 	//if (getConfigVar('ENABLE_MULTIPORT_FORM') == 'yes')
 	//	finishPortlet();
-	if (getConfigVar('ENABLE_MULTIPORT_FORM') != 'yes')
+	if (getConfigVar('ENABLE_MULTIPORT_FORM') != 'yes'){
+		$mod->setOutput('isEnableMultiport', false);
 		return;
+	}
 
 	/*
 	startPortlet ('Add/update multiple ports');
@@ -6300,7 +6303,7 @@ function render8021QReport ()
 		$singleElemOut['VlanId'] = $vlan_id;
 	//	echo '<tr class="state_' . (count ($vlanstats[$vlan_id]) ? 'T' : 'F');
 	//	echo '"><th class=tdright>' . $vlan_id . '</th>';
-
+		$singleElemOut['Domains'] = '';
 		foreach (array_keys ($domains) as $domain_id)
 		{
 				
@@ -6313,13 +6316,10 @@ function render8021QReport ()
 				$singleCell->setOutput("Cont", '&nbsp;');
 			//	echo '&nbsp;';
 			//echo '</td>';
-			$singleElemOut['Domains'] = '';
-			$singleElemOut['Domains'] = $singleElemOut['domains'] + $singleCell->run();
+			$singleElemOut['Domains'] = $singleElemOut['Domains'] . $singleCell->run();
 		}
 	//	echo '</tr>';
 		if ($tbc){
-			$singleElemOut['CountDom'] = count($domains);
-			$singleElemOut['Tbc'] = true;
 			$singleElemOut['TbcLine'] = $tplm->generateModule('TbcLineMod',true, array('CountDomains' => count ($domains)))->run();
 
 		//	echo '<tr class="state_A"><th>...</th><td colspan=' . count ($domains) . '>&nbsp;</td></tr>';
@@ -8202,17 +8202,16 @@ function renderFilesForEntity ($entity_id)
 			$fileOutArray = array();
 //			echo "<tr valign=top><td class=tdleft>";
 //			renderCell (spotEntity ('file', $file_id));
-			$fileOutArray['fileCell'] = renderCell (spotEntity ('file', $file_id));
-			$fileOutArray['comment'] = $file['comment'];
-			$fileOutArray['fileLink'] = $file['link_id'];
+			$fileOutArray['FileCell'] = renderCell (spotEntity ('file', $file_id));
+			$fileOutArray['Comment'] = $file['comment'];
 			
 //			echo "</td><td class=tdleft>${file['comment']}</td><td class=tdcenter>";
-			$fileOutArray['opLink'] = getOpLink (array('op'=>'unlinkFile', 'link_id'=>$file['link_id']), '', 'CUT', 'Unlink file');
+			$fileOutArray['OpLink'] = getOpLink (array('op'=>'unlinkFile', 'link_id'=>$file['link_id']), '', 'CUT', 'Unlink file');
 //			echo getOpLink (array('op'=>'unlinkFile', 'link_id'=>$file['link_id']), '', 'CUT', 'Unlink file');
 //			echo "</td></tr>\n";
 			$fileListOutArray[] = $fileOutArray;
 		}
-		$mod->setOutput("filelistsOutput", $fileListOutArray);
+		$mod->setOutput("FilelistsOutput", $fileListOutArray);
 			 
 //		echo "</table><br>\n";
 //		finishPortlet();
@@ -9508,7 +9507,8 @@ function render8021QOrderForm ($some_id)
 			//echo '<td>' . mkA ($vstlist[$item['vst_id']], 'vst', $item['vst_id']) . '</td>';
 		}
 		
-		$tplm->generateSubmodule('AllMinusLines', 'Render8021QOrderForm_MinusLine', $mod, false ,$singleMinusLine);
+		$singleLine = $tplm->generateSubmodule('AllMinusLines', 'Render8021QOrderForm_MinusLine', $mod, false ,$singleMinusLine);
+		$singleLine->setNamespace('vlandomain');
 		//echo "<td>${cutblock}</td></tr>";
 	}
 	

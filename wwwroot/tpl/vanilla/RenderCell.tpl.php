@@ -31,7 +31,8 @@
 			<?php $this->get("isoPermImg") ?>
 			</a>&nbsp;
 		<?php } ?>
-
+		<?php $this->fileSize ?>
+		</td></tr></table>
 	<?php } ?>
 
 	<?php if ($this->is("typeIPV4",true)) { ?>

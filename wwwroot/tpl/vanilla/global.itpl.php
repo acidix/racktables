@@ -182,7 +182,7 @@ $this->setInMemoryTemplate('FileSummaryDownloadLink',"<a href='?module=download&
 $this->setInMemoryTemplate("ReportsCounter","<tr><td class=tdright>{{Header}}:</td><td class=tdleft>{{Data}}</td></tr>");
 $this->setInMemoryTemplate("ReportsMessages","<tr class='msg_{{Class}}><td class=tdright>{{Header}}:</td><td class=tdleft>{{Text}}</td></tr>");
 $this->setInMemoryTemplate("ReportsCustom","<tr><td colspan=2>\n{{ItemCont}}\n</td></tr>");
-$this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{Title}:</td><td class=tdcenter>\n{{ProgressBar}}\n<br><small>{{IsMax}}</small></td></tr>");
+$this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{Title}}:</td><td class=tdcenter>\n{{ProgressBar}}\n<br><small>{{IsMax}}</small></td></tr>");
 
 
 /**
@@ -404,5 +404,14 @@ $this->setInMemoryTemplate("IPv6Separator","<tr class='tdleft {{Highlight}}'><td
 *
 **/
 $this->setInMemoryTemplate('SmallElement',"<small>{{Cont}}</small>");
+
+/**
+*	StdOptionTemplate: 
+*	Usage:  renderRackMultiSelect -> interface.php
+*
+**/
+//$this->setInMemoryTemplate('StdOptionTemplate',"<option value={{RackId}} {{IsSelected}}>{{RackName}}</option>");
+$this->setInMemoryTemplate('StdOptionTemplate',"<option >aksdfksdajf</option>");
+
 
 ?>

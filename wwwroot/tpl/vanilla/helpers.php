@@ -374,14 +374,12 @@ class TemplateHelperGetOpLink extends TemplateHelperAbstract
 		}
 
 		if (! empty ($comment)){
-			$mod->setOutput("showComment", true);
 			$mod->setOutput("htmlComment", htmlspecialchars ($comment, ENT_QUOTES));	
 		}
 	//		$ret .= ' title="' . htmlspecialchars ($comment, ENT_QUOTES) . '"';
 		$class = trim ($class);
 		
 		if (! empty ($class)){
-			$mod->setOutput("showClass", true);
 			$mod->setOutput("htmlClass", htmlspecialchars ($class, ENT_QUOTES));		 
 		}
 	//		$ret .= ' class="' . htmlspecialchars ($class, ENT_QUOTES) . '"';
