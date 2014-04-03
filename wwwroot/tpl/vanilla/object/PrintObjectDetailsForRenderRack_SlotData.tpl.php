@@ -1,9 +1,9 @@
 <?php if (defined("RS_TPL")) {?>
 	<td
-	<?php if (!$this->is("slotRows",null)) { ?>
+	<?php if ($this->is("slotRows")) { ?>
 		 rowspan=<?php $this->slotRows ?>
 	<?php } ?> 
-	<?php if (!$this->is("slotCols",null)) { ?>
+	<?php if ($this->is("slotCols")) { ?>
 		 rowspan=<?php $this->slotCols ?>
 	<?php } ?> 
 	 class=<?php $this->slotClass ?>'><?php $this->slotTitle ?>

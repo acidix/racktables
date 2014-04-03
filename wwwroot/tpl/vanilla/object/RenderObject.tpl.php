@@ -22,7 +22,7 @@
 	 		</table>
 	 	</div>
 	<?php } ?> 
-	<?php $this->switchportJS ?> 
+	<?php $this->switchportJS ?>
 	<?php $this->filesPortlet ?>
 	<?php if ($this->is("isInfoPorts",true)) { ?>
 		<div class=portlet>

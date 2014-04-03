@@ -1096,7 +1096,7 @@ function renderRack ($rack_id, $hl_obj_id = 0, $parent = null, $placeholder = "R
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderRack", $parent);
 	
-	$mod->setNamespace("object");
+	$mod->setNamespace("object", true);
 
 	//echo "<center><table border=0><tr valign=middle>";
 	//echo '<td><h2>' . mkA ($rackData['row_name'], 'row', $rackData['row_id']) . ' :</h2></td>';
@@ -1167,7 +1167,7 @@ function renderRack ($rack_id, $hl_obj_id = 0, $parent = null, $placeholder = "R
 			}
 
 			//echo '</td>';
-			$tplm->generateSubmodule('AllLocIdx','RenderRack_Loop_Location', $singleRow, $singleLocId);
+			$tplm->generateSubmodule('AllLocIdx','RenderRack_Loop_Location', $singleRow, false,$singleLocId);
 		}
 	//	echo "</tr>\n";
 	}
@@ -1407,7 +1407,7 @@ function renderEditObjectForm()
 					break;
 			}
 			//echo "</td></tr>\n";
-			$tplm->generateSubmodule('AllObjValues', 'RenderEditObjectForm_ObjValues', $mod, $singleVal);
+			$tplm->generateSubmodule('AllObjValues', 'RenderEditObjectForm_ObjValues', $mod, false, $singleVal);
 
 			$i++;
 		}
@@ -1973,7 +1973,7 @@ function renderObject ($object_id)
 
 	//renderSLBTriplets2 ($info);
 	//renderSLBTriplets ($info);
-	renderSLBTriplets2 ($info,FALSE, NULL, $mod, "slbTriplet2");
+	renderSLBTriplets2 ($info, FALSE, NULL, $mod, "slbTriplet2");
 	renderSLBTriplets ($info, $mod, "slbTriplet");
 	//echo "</td>\n";
 
@@ -2216,7 +2216,7 @@ function renderPortsForObject ($object_id)
 		//echo "<td>";
 		$singlePort['save_img'] = printImageHREF ('save', 'Save changes', TRUE);
 		//echo "</td></form></tr>\n";
-		$tplm->generateSubmodule('singlePorts', 'RenderPortsForObject_SinglePort', $mod, $singlePort);
+		$tplm->generateSubmodule('singlePorts', 'RenderPortsForObject_SinglePort', $mod, false, $singlePort);
 
 	}
 	
@@ -4445,7 +4445,7 @@ function renderNATv4ForObject ($object_id)
 		$singlePort['description'] = $pf['description'];
 
 		//Using loop array style paramter for output
-		$tplm->generateSubmodule('AllNatv4Ports','RenderNATv4ForObject_NATv4Port', $mod, $singlePort);
+		$tplm->generateSubmodule('AllNatv4Ports','RenderNATv4ForObject_NATv4Port', $mod, false, $singlePort);
 	}
 		 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
@@ -4846,7 +4846,7 @@ function renderSearchResults ($terms, $summary)
 	//				else
 	//					echo "<a href='index.php?page=ipaddress&tab=default&ip=${fmt}'>${fmt}</a></td>";
 	//				echo "<td class=tdleft>${addr['name']}</td></tr>";
-					$tplm->generateSubmodule('AllSearchAddrs','SearchIpv6address_Object', $foundIPVAddress, $singleAddr);
+					$tplm->generateSubmodule('AllSearchAddrs','SearchIpv6address_Object', $foundIPVAddress, false, $singleAddr);
 					$order = $nextorder[$order];
 
 				}
@@ -8108,7 +8108,7 @@ function renderFilesPortlet ($entity_type = NULL, $entity_id = 0, $parent = null
 		if($parent == null)
 			$mod = $tplm->generateModule("RenderFilesPortlet",  false);
 		else
-			$mod = $tplm->generateSubmodule($placeholder, "RenderFilesPortlet",  false, $parent);
+			$mod = $tplm->generateSubmodule($placeholder, "RenderFilesPortlet", $parent, false);
 
 //		startPortlet ('files (' . count ($files) . ')');
 		$mod->setOutput("countFiles", count($files));
@@ -9507,7 +9507,7 @@ function render8021QOrderForm ($some_id)
 			//echo '<td>' . mkA ($vstlist[$item['vst_id']], 'vst', $item['vst_id']) . '</td>';
 		}
 		
-		$tplm->generateSubmodule('AllMinusLines', 'Render8021QOrderForm_MinusLine', $mod ,$singleMinusLine);
+		$tplm->generateSubmodule('AllMinusLines', 'Render8021QOrderForm_MinusLine', $mod, false ,$singleMinusLine);
 		//echo "<td>${cutblock}</td></tr>";
 	}
 	
@@ -11470,7 +11470,7 @@ function renderDiscoveredNeighbors ($object_id)
 			//echo "</tr>";
 
 			//Using array generated for possible array
-			$tplm->generateSubmodule('AllNeighbors','RenderDiscoveredNeighbors_NeighborsMod', $mod, $singleNeighbor);
+			$tplm->generateSubmodule('AllNeighbors','RenderDiscoveredNeighbors_NeighborsMod', $mod, false, $singleNeighbor);
 		}
 	}
 		 
@@ -11996,12 +11996,12 @@ function switchportInfoJS($object_id, $parent = null, $placeholder = "switchport
 		$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
-		$mod = $tplm->generateModule("SwitchPortInfoJS",   IsInline);
+		$mod = $tplm->generateModule("SwitchPortInfoJS");
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "SwitchPortInfoJS", $parent);
 	
 	$mod->setNamespace("");
-	
+	$mod->setOutput('list', $list);
 	/*addJS ('js/jquery.thumbhover.js');
 	addCSS ('css/jquery.contextmenu.css');
 	addJS ('js/jquery.contextmenu.js');

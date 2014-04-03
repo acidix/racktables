@@ -4,7 +4,7 @@
 	<br><table cellspacing=0 cellpadding=5 align=center class=widetable>
 	<tr><th colspan=2>local port</th><th></th><th>remote device</th><th colspan=2>remote port</th><th><input type="checkbox" checked id="cb-toggle"></th></tr>
 	<?php $this->AllNeighbors ?>
-	<?php if (!$this->is("inputno",null)) { ?>
+	<?php if ($this->is("inputno")) { ?>
 	 	<input type=hidden name=nports value=<?php $this->inputno ?>>
 	 	<tr><td colspan=7 align=center><?php $this->getH("PrintImageHref", array('CREATE', 'import selected', TRUE)); ?></td></tr>
 	<?php } ?>  

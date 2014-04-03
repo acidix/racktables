@@ -334,9 +334,10 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 		$tplm->setTemplate("vanilla");
 
 	if($parent==null)	
-		$mod = $tplm->generateModule("RenderSLBTriplets2",  false);
+		$mod = $tplm->generateModule("RenderSLBTriplets2");
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderSLBTriplets2", $parent);
+	$mod->setNamespace('slb2_interface');
 
 	list ($realm1, $realm2) = array_values (array_diff (array ('object', 'ipvs', 'ipv4rspool'), array ($cell['realm'])));
 	if ($editable && getConfigVar ('ADDNEW_AT_TOP') == 'yes')
@@ -406,7 +407,6 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 	$order = 'odd';
 	$span = array();
 
-	$allTripletOutArray = array();
 	
 	foreach ($triplets as $slb)
 	{
@@ -522,10 +522,10 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 
 //		echo "</tr>\n";
 		$order = $nextorder[$order];
-		$allTripletOutArray[] = $tripletArray;
+		$tplm->generateSubmodule('AllTriplets', 'RenderSLBTriplets2_TripletLoop', $mod, false, $tripletArray);
 	}
 
-	$mod->setOutput("allTripletOutArray", $allTripletOutArray);
+
 //	if (count ($triplets))
 //	{
 //		echo "</table>\n";
@@ -534,6 +534,7 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 
 	if ($editable && getConfigVar ('ADDNEW_AT_TOP') != 'yes')
 		callHook ('renderNewTripletForm', $realm1, $realm2);
+	
 	if($parent == null)
 		return $mod->run();
 }
