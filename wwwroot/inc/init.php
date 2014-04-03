@@ -139,7 +139,7 @@ $op = '';
 
 
 //Initialize template functionality
-TemplateManager::intializeTemplate();
+TemplateManager::initalizeTemplate();
 
 //Adjust static dir to search within the template directory ./tpl/template/css etc.
 TemplateManager::changeStaticDir();

@@ -41,14 +41,14 @@ class TemplateManager
 	 * Default function to initialize template logic.
 	 * Uses $_SESSION to store the currently used template.
 	 */
-	public static function intializeTemplate()
+	public static function initalizeTemplate()
 	{
 		$tpl_to_use = '';
 
 		$template_list = self::getOrderedTemplateList();
+		//TODO Messy code fixit
 		$flipped = array_flip($template_list);
 
-		
 
 		if (!array_key_exists('RacktablesTemplate', $_COOKIE))
 		{
@@ -100,9 +100,10 @@ class TemplateManager
 	 */
 	public static function getOrderedTemplateList()
 	{
-		$arr = array('vanilla');
+		static $arr = array('vanilla');
 		//$arr = glob('../tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
 		sort($arr);
+
 		return $arr;
 	}
 	
