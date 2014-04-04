@@ -6424,8 +6424,8 @@ function renderReports ($what)
 	$itemContArr = array();
 	foreach ($what as $item)
 	{
-		$singleItemArr = array('title' => $item['title']);
-		$singleItemArr['cont'] = '';
+		$singleItemArr = array('Title' => $item['title']);
+		$singleItemArr['Cont'] = '';
 	//	echo "<tr><th colspan=2><h3>${item['title']}</h3></th></tr>\n";
 		switch ($item['type'])
 		{
@@ -6467,7 +6467,7 @@ function renderReports ($what)
 				{
 					$singleMod = $tplm->generateModule("ReportsMeters", true);
 					$singleMod->setOutput("Title", $meter['title']);
-					$singleMod->setOutput("ProgressBar", renderProgressBar ($meter['max'] ? $meter['current'] / $meter['max'] : 0));
+					$singleMod->setOutput("ProgressBar", getProgressBar ($meter['max'] ? $meter['current'] / $meter['max'] : 0));
 					$singleMod->setOutput("IsMax", ($meter['max'] ? $meter['current'] . '/' . $meter['max'] : '0'));
 					$singleItemArr['Cont'] .= $singleMod->run();
 
@@ -6478,7 +6478,7 @@ function renderReports ($what)
 				break;
 			case 'custom':
 				$singleMod = $tplm->generateModule("ReportsCustom", true);
-				$singleMod->setOutput("ItemCont", (string) $item['func']());
+				$singleMod->setOutput("ItemCont", "" . $item['func']());
 				$singleItemArr['Cont'] .= $singleMod->run();
 			//	echo "<tr><td colspan=2>";
 			//	$item['func']();
@@ -6521,6 +6521,7 @@ function renderTagStats ()
 		$singleTag = array('taginfo' => $taginfo['tag'], 'taginfoRefcnt' => $taginfo['refcnt']['total']);
 		//echo "<tr><td>${taginfo['tag']}</td><td>" . $taginfo['refcnt']['total'] . "</td>";
 		$singleTag['realms'] = '';
+
 		foreach (array ('object', 'ipv4net', 'ipv6net', 'rack', 'ipv4vs', 'ipv4rspool', 'user', 'file') as $realm)
 		{			
 			$realmMod = $tplm->generateModule('StdTableCell', true);
@@ -6530,10 +6531,10 @@ function renderTagStats ()
 				$realmMod->setOutput('cont', '&nbsp;');
 			//	echo '&nbsp;';
 			else
-			{
-				$realmLinkMod = $tplm->generateModule('RenderTagStatsALink', true, array('pagerealm' => $pagebyrealm[$realm], 
-					'taginfoID' => $taginfo['id'], 'taginfo'=> $taginfo['refcnt'][$realm]));
-				$realmMod->setOutput('cont', $realmLinkMod->run());
+			{	
+				$realmLinkMod = $tplm->generateSubmodule('cont', 'RenderTagStatsALink', $realmMod, true, array('Pagerealm' => $pagebyrealm[$realm], 
+					'TaginfoID' => $taginfo['id'], 'Taginfo' => $taginfo['refcnt'][$realm]));
+				//$realmMod->setOutput('cont', $realmLinkMod->run());
 				//echo "<a href='index.php?page=" . $pagebyrealm[$realm] . "&cft[]=${taginfo['id']}'>";
 				//echo $taginfo['refcnt'][$realm] . '</a>';
 			}
@@ -12414,8 +12415,8 @@ function renderExpirations ()
 			$singleSectOut['resOut'] = '';
 			foreach ($result as $row)
 			{
-				$res = $tplm->generateSubmodule("RenderExpirations_result");
-				$res->setNamespace("result");
+				$res = $tplm->generateModule("RenderExpirations_result");
+				$res->setNamespace("reports");
 
 				$date_value = datetimestrFromTimestamp ($row['uint_value']);
 
@@ -12436,7 +12437,7 @@ function renderExpirations ()
 			//	echo "<td>${date_value}</td>";
 			//	echo "</tr>\n";
 				
-				$singleSectOut['resOut'] += $res->run();
+				$singleSectOut['resOut'] .= $res->run();
 				$order = $nextorder[$order];
 				$count++;
 

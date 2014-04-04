@@ -180,7 +180,7 @@ $this->setInMemoryTemplate('FileSummaryDownloadLink',"<a href='?module=download&
 *
 **/
 $this->setInMemoryTemplate("ReportsCounter","<tr><td class=tdright>{{Header}}:</td><td class=tdleft>{{Data}}</td></tr>");
-$this->setInMemoryTemplate("ReportsMessages","<tr class='msg_{{Class}}><td class=tdright>{{Header}}:</td><td class=tdleft>{{Text}}</td></tr>");
+$this->setInMemoryTemplate("ReportsMessages","<tr class='msg_{{Class}}'><td class=tdright>{{Header}}:</td><td class=tdleft>{{Text}}</td></tr>");
 $this->setInMemoryTemplate("ReportsCustom","<tr><td colspan=2>\n{{ItemCont}}\n</td></tr>");
 $this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{Title}}:</td><td class=tdcenter>\n{{ProgressBar}}\n<br><small>{{IsMax}}</small></td></tr>");
 
@@ -233,7 +233,7 @@ $this->setInMemoryTemplate("StdTableHead","<th>{{Cont}}</th>");
 *	Usage:  interface.php
 *
 **/
-$this->setInMemoryTemplate("RenderTagStatsALink","<a href='index.php?page={{pagerealm}}&cft[]={{taginfoID}}>{{taginfo}}</a>");
+$this->setInMemoryTemplate("RenderTagStatsALink","<a href='index.php?page={{Pagerealm}}&cft[]={{TaginfoID}}'>{{Taginfo}}</a>");
 
 /**
  * FileSummaryComment
