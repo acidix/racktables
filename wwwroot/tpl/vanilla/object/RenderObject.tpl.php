@@ -32,6 +32,7 @@
 			<th class=tdleft>Interface</th><th class=tdleft>L2 address</th>
 			<th class=tdcenter colspan=2>Remote object and port</th>
 			<th class=tdleft>Cable ID</th></tr>
+			<?php $this->RenderedObjectPorts ?>
 			<?php if ($this->is("loadInplaceEdit", true)) { ?>
 				<?php $this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/inplace-edit.js")); ?>
 			<?php } ?>

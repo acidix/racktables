@@ -406,6 +406,13 @@ $this->setInMemoryTemplate("IPv6Separator","<tr class='tdleft {{Highlight}}'><td
 $this->setInMemoryTemplate('SmallElement',"<small>{{Cont}}</small>");
 
 /**
+*	StrongElement: 
+*	Usage:  getRenderedAlloc -> interface.php
+*
+**/
+$this->setInMemoryTemplate('StrongElement',"<strong>{{Cont}}</strong>");
+
+/**
 *	StdOptionTemplate: 
 *	Usage:  renderRackMultiSelect -> interface.php
 *
@@ -413,5 +420,20 @@ $this->setInMemoryTemplate('SmallElement',"<small>{{Cont}}</small>");
 //$this->setInMemoryTemplate('StdOptionTemplate',"<option value={{RackId}} {{IsSelected}}>{{RackName}}</option>");
 $this->setInMemoryTemplate('StdOptionTemplate',"<option >aksdfksdajf</option>");
 
+/**
+*	RenderedAlloc Templates: 
+*	Usage:  getRenderedAlloc -> interface.php
+*
+**/
+$this->setInMemoryTemplate("RenderedAllocTdIpNetInfo","<a name='{{Dottequad}}' class='{{IpClass}}' {{IpTitle}} href='{{Href}}'>{{Title}}</a>");
+$this->setInMemoryTemplate("RenderedAllocTdIpNoNetInfo","<span class='{{IpClass}}' {{IpTitle}}>{{Dottequad}}</span>");
+$this->setInMemoryTemplate("RenderedAllocTdIp","<td class='tdleft'>{{Info}}{{Aac}} {{NiftyStr}}</td>");
 
+$this->setInMemoryTemplate("RenderedAllocNetworkNoNetinfo","<td class='{{TdClass}} sparenetwork'>N/A</td>");
+$this->setInMemoryTemplate("RenderedAllocNetworkNetinfo","<td class='{{TdClass}}'>{{InfoCell}}</td>");
+
+$this->setInMemoryTemplate("RenderedAllocRoutedByOnly","<td class='{{TdClass}}'>&nbsp;</td>");
+
+$this->setInMemoryTemplate("RenderedAllocPeers","<td class='{{TdClass}}'>{{Prefix}}{{Strong}}{{LocPeers}}</td>");
+$this->setInMemoryTemplate("RenderedAllocLocPeers","{{Prefix}}<a href='{{href}}'>{{Osif}}{{LocPeer}</a>");
 ?>

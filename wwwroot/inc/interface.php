@@ -228,11 +228,15 @@ function getRenderedAlloc ($object_id, $alloc)
 	$dottedquad = $alloc['addrinfo']['ip'];
 	$ip_bin = $alloc['addrinfo']['ip_bin'];
 
+
 	$hl_ip_bin = NULL;
+	$tplm = TemplateManager::getInstance();
+
 	if (isset ($_REQUEST['hl_ip']))
 	{
 		$hl_ip_bin = ip_parse ($_REQUEST['hl_ip']);
-		addAutoScrollScript ("ip-" . $_REQUEST['hl_ip']);
+		//addAutoScrollScript ("ip-" . $_REQUEST['hl_ip']);
+		addAutoScrollScript ("ip-" . $_REQUEST['hl_ip'], $tplm->createMainModule(), 'Payload');
 	}
 
 	$ret['tr_class'] = $alloc['addrinfo']['class'];
@@ -257,13 +261,29 @@ function getRenderedAlloc ($object_id, $alloc)
 	// render IP address td
 	global $aac;
 	$netinfo = spotNetworkByIP ($ip_bin);
-	$ret['td_ip'] = "<td class='tdleft'>";
+	//$ret['td_ip'] = "<td class='tdleft'>";
+	$td_ip_mod = $tplm->generateModule('RenderedAllocTdIp', true);
+
 	if (isset ($netinfo))
 	{
 		$title = $dottedquad;
 		if (getConfigVar ('EXT_IPV4_VIEW') != 'yes')
 			$title .= '/' . $netinfo['mask'];
-		$ret['td_ip'] .= "<a name='ip-$dottedquad' class='$ip_class' $ip_title href='" .
+		
+		$tplm->generateSubmodule('Info', 'RenderedAllocTdIpNetInfo', $td_ip_mod, true,
+					 array( 'Dottequad' => $dottedquad,
+					 		'IpClass' => $ip_class,
+					 		'IpTitle' => $ip_title,
+					 		'Href' => makeHref (
+							array
+							(
+								'page' => 'ipaddress',
+								'hl_object_id' => $object_id,
+								'ip' => $dottedquad,
+							)),
+							'Title' => $title));
+	
+		/*$ret['td_ip'] .= "<a name='ip-$dottedquad' class='$ip_class' $ip_title href='" .
 			makeHref (
 				array
 				(
@@ -271,26 +291,41 @@ function getRenderedAlloc ($object_id, $alloc)
 					'hl_object_id' => $object_id,
 					'ip' => $dottedquad,
 				)
-			) . "'>$title</a>";
+			) . "'>$title</a>";*/
 	}
-	else
-		$ret['td_ip'] .= "<span class='$ip_class' $ip_title>$dottedquad</span>";
-	$ret['td_ip'] .= $aac[$alloc['type']];
+	else{
+		$tplm->generateSubmodule('Info', 'RenderedAllocTdIpNoNetInfo', $td_ip_mod, true,
+					 array( 'Dottequad' => $dottedquad,
+					 		'IpClass' => $ip_class,
+					 		'IpTitle' => $ip_title));
+	//	$ret['td_ip'] .= "<span class='$ip_class' $ip_title>$dottedquad</span>";
+	
+	}
+	$tp_ip_mod->setOutput('Aac', $aac[$alloc['type']] );
+
+	//$ret['td_ip'] .= $aac[$alloc['type']];
 	if (strlen ($alloc['addrinfo']['name']))
-		$ret['td_ip'] .= ' (' . niftyString ($alloc['addrinfo']['name']) . ')';
-	$ret['td_ip'] .= '</td>';
+		$tp_ip_mod->setOutput('NiftyStr',  '(' . niftyString ($alloc['addrinfo']['name']) . ')');
+	//	$ret['td_ip'] .= ' (' . niftyString ($alloc['addrinfo']['name']) . ')';
+	//$ret['td_ip'] .= '</td>';
+	$ret['td_ip'] = $tp_ip_mod->run();
 
 	// render network and routed_by tds
 	$td_class = 'tdleft';
 	if (! isset ($netinfo))
 	{
-		$ret['td_network'] = "<td class='$td_class sparenetwork'>N/A</td>";
+		$ret['td_network'] = $tplm->generateModule('RenderedAllocNetworkNoNetinfo', true, 
+							 array('TdClass' => $td_class))->run();
+		//$ret['td_network'] = "<td class='$td_class sparenetwork'>N/A</td>";
 		$ret['td_routed_by'] = $ret['td_network'];
 	}
 	else
 	{
-		$ret['td_network'] = "<td class='$td_class'>" .
-			getOutputOf ('renderCell', $netinfo) . '</td>';
+		/*$ret['td_network'] = "<td class='$td_class'>" .
+			getOutputOf ('renderCell', $netinfo) . '</td>'; */
+		$ret['td_network'] = $tplm->generateModule('RenderedAllocNetworkNetinfo', true, 
+							 array('TdClass' => $td_class,
+							 	   'InfoCell' => renderCell($netinfo)))->run();
 
 		// render "routed by" td
 		if ($display_routers = (getConfigVar ('IPV4_TREE_RTR_AS_CELL') == 'none'))
@@ -303,32 +338,44 @@ function getRenderedAlloc ($object_id, $alloc)
 				if ($router['id'] != $object_id)
 					$other_routers[] = $router;
 			if (count ($other_routers))
-				$ret['td_routed_by'] = getOutputOf ('printRoutersTD', $other_routers, $display_routers);
+				$ret['td_routed_by'] = printRoutersTD($other_routers, $display_routers);
+				//$ret['td_routed_by'] = getOutputOf ('printRoutersTD', $other_routers, $display_routers);
 			else
-				$ret['td_routed_by'] = "<td class='$td_class'>&nbsp;</td>";
+				$ret['td_routed_by'] = $tplm->generateModule('RenderedAllocRoutedByOnly', true, 
+										array('TdClass' => $td_class))->run();
+				//$ret['td_routed_by'] = "<td class='$td_class'>&nbsp;</td>";
 		}
 	}
 
 	// render peers td
-	$ret['td_peers'] = "<td class='$td_class'>";
+	//$ret['td_peers'] = "<td class='$td_class'>";
+	$td_peers_mod = $tplm->generateModule('RenderedAllocPeers', true, array('TdClass' => $td_class));
 	$prefix = '';
 	if ($alloc['addrinfo']['reserved'] == 'yes')
-	{
-		$ret['td_peers'] .= $prefix . '<strong>RESERVED</strong>';
+	{	
+		$td_peers_mod->addOutput('Prefix', $prefix);
+		$tplm->generateSubmodule('Strong', 'StrongElement', $td_peers_mod, true, array('Cont' => 'RESERVED'));
+		//$ret['td_peers'] .= $prefix . '<strong>RESERVED</strong>';
 		$prefix = '; ';
 	}
 	foreach ($alloc['addrinfo']['allocs'] as $allocpeer)
 	{
 		if ($allocpeer['object_id'] == $object_id)
 			continue;
-		$ret['td_peers'] .= $prefix . "<a href='" . makeHref (array ('page' => 'object', 'object_id' => $allocpeer['object_id'])) . "'>";
+		$singleLocPeer = $tplm->generateSubmodule('LocPeers', 'RenderedAllocLocPeers', $td_peers_mod, true, array(
+							'Prefix' => $prefix,
+							'Href' 	 => makeHref (array ('page' => 'object', 'object_id' => $allocpeer['object_id'])),
+							'LocPeer'=> $allocpeer['object_name']));
+		//$ret['td_peers'] .= $prefix . "<a href='" . makeHref (array ('page' => 'object', 'object_id' => $allocpeer['object_id'])) . "'>";
 		if (isset ($allocpeer['osif']) and strlen ($allocpeer['osif']))
-			$ret['td_peers'] .= $allocpeer['osif'] . '@';
-		$ret['td_peers'] .= $allocpeer['object_name'] . '</a>';
+			$singleLocPeer->addOutput('Osif', $allocpeer['osif'] . '@');
+		//	$ret['td_peers'] .= $allocpeer['osif'] . '@';
+		//$ret['td_peers'] .= $allocpeer['object_name'] . '</a>';
+
 		$prefix = '; ';
 	}
-	$ret['td_peers'] .= '</td>';
-
+	//$ret['td_peers'] .= '</td>';
+	$ret['td_peers'] = $td_peers_mod->run();
 	return $ret;
 }
 
@@ -1656,29 +1703,59 @@ function renderRackProblems ($rack_id)
 	renderGridForm ($rack_id, 'applyRackProblemMask', 'Rack problems', 'Mark unusable atoms', 'F', 'U');
 }
 
-function renderObjectPortRow ($port, $is_highlighted)
+function renderObjectPortRow ($port, $is_highlighted, $parent = null, $placeholder = "RenderedObjectPort")
 {
+	$tplm = TemplateManager::getInstance();
+	if($parent==null)
+		$tplm->setTemplate("vanilla");
+	
+	if($parent==null)	
+		$mod = $tplm->generateModule('RenderObjectPortRow');
+	else
+		$mod = $tplm->generateSubmodule($placeholder, 'RenderObjectPortRow', $parent);
+	
+	$mod->setNamespace('object');
+	
 	echo '<tr';
 	if ($is_highlighted)
-		echo ' class=highlight';
+		$mod->addOutput('IsHighlighted', true);
+			 
+	//	echo ' class=highlight';
 	$a_class = isEthernetPort ($port) ? 'port-menu' : '';
-	echo "><td class='tdleft' NOWRAP><a name='port-${port['id']}' class='interactive-portname nolink $a_class'>${port['name']}</a></td>";
-	echo "<td class=tdleft>${port['label']}</td>";
-	echo "<td class=tdleft>" . formatPortIIFOIF ($port) . "</td><td class=tdleft><tt>${port['l2address']}</tt></td>";
+	//echo "><td class='tdleft' NOWRAP><a name='port-${port['id']}' class='interactive-portname nolink $a_class'>${port['name']}</a></td>";
+	//echo "<td class=tdleft>${port['label']}</td>";
+	//echo "<td class=tdleft>" . formatPortIIFOIF ($port) . "</td><td class=tdleft><tt>${port['l2address']}</tt></td>";
+	$mod->addOutput('PortId', $port['id']);
+	$mod->addOutput('AClass', $a_class);
+	$mod->addOutput('PortLabel', $port['label']);
+	$mod->addOutput('PortName', $port['name']);
+	$mod->addOutput('PortL2address', $port['l2address']);
+	$mod->addOutput('FormatedPort', formatPortIIFOIF ($port));
+
 	if ($port['remote_object_id'])
 	{
-		echo "<td class=tdleft>" .
+		/*echo "<td class=tdleft>" .
 			formatPortLink ($port['remote_object_id'], $port['remote_object_name'], $port['remote_id'], NULL) .
 			"</td>";
 		echo "<td class=tdleft>" . formatLoggedSpan ($port['last_log'], $port['remote_name'], 'underline') . "</td>";
+		
+		echo "<td class=tdleft><span class='rsvtext $editable id-${port['id']} op-upd-reservation-cable'>${port['cableid']}</span></td>";*/
 		$editable = permitted ('object', 'ports', 'editPort')
 			? 'editable'
 			: '';
-		echo "<td class=tdleft><span class='rsvtext $editable id-${port['id']} op-upd-reservation-cable'>${port['cableid']}</span></td>";
+
+		$mod->addOutput('FormatedPortLink', formatPortLink ($port['remote_object_id'], $port['remote_object_name'], $port['remote_id'], NULL));
+		$mod->addOutput('FormatedLoggSpan', formatLoggedSpan ($port['last_log'], $port['remote_name'], 'underline'));
+		$mod->addOutput('Editable', $editable);
+		$mod->addOutput('PortCableId', $port['cableid']);
 	}
 	else
-		echo implode ('', formatPortReservation ($port)) . '<td></td>';
-	echo "</tr>";
+		$mod->addOutput('FormatedReservation', implode ('', formatPortReservation ($port)));
+	//	echo implode ('', formatPortReservation ($port)) . '<td></td>';
+	//echo "</tr>";
+
+	if($parent==null)
+		return $mod->run();
 }
 
 function renderObject ($object_id)
@@ -1817,7 +1894,8 @@ function renderObject ($object_id)
 		//echo '<th class=tdcenter colspan=2>Remote object and port</th>';
 		//echo '<th class=tdleft>Cable ID</th></tr>';
 		foreach ($info['ports'] as $port)
-			callHook ('renderObjectPortRow', $port, ($hl_port_id == $port['id']));
+		//	callHook ('renderObjectPortRow', $port, ($hl_port_id == $port['id']));
+			callHook ('renderObjectPortRow', $port, ($hl_port_id == $port['id']), $mod, 'RenderedObjectPorts');
 		if (permitted (NULL, 'ports', 'set_reserve_comment'))	
 		//	addJS ('js/inplace-edit.js'<);
 			$mod->addOutput("loadInplaceEdit", true);
@@ -1852,10 +1930,10 @@ function renderObject ($object_id)
 			$is_first_row = TRUE;
 			foreach ($alloclist as $alloc)
 			{
-				
+				$singlePort = array('tr_class' => $rendered_alloc['tr_class']);
 
 				$rendered_alloc = callHook ('getRenderedAlloc', $object_id, $alloc);
-				$singlePort = array('tr_class' => $rendered_alloc['tr_class']);
+				
 			//	echo "<tr class='${rendered_alloc['tr_class']}' valign=top>";
 
 				// display iface name, same values are grouped into single cell
@@ -8220,7 +8298,7 @@ function renderFilesForEntity ($entity_id)
 
 
 // Iterate over what findRouters() returned and output some text suitable for a TD element.
-function printRoutersTD ($rlist, $as_cell = 'yes', $parent, $placeholder)
+function printRoutersTD ($rlist, $as_cell = 'yes', $parent = null, $placeholder = 'RoutersTD')
 {
 	$rtrclass = 'tdleft';
 	foreach ($rlist as $rtr)
@@ -8234,7 +8312,10 @@ function printRoutersTD ($rlist, $as_cell = 'yes', $parent, $placeholder)
 	}
 	$tplm = TemplateManager::getInstance();
 	
-	$mod = $tplm->generateSubmodule($placeholder, 'IPSpaceRecordRouter', $parent);
+	if($parent == null)
+		$mod = $tplm->generateModule('IPSpaceRecordRouter');
+	else
+		$mod = $tplm->generateSubmodule($placeholder, 'IPSpaceRecordRouter', $parent);
 	if ($as_cell = 'yes')
 	{
 		$mod->addOutput('printCell', true);
@@ -8254,6 +8335,9 @@ function printRoutersTD ($rlist, $as_cell = 'yes', $parent, $placeholder)
 	}
 	$mod->addOutput('RouterList', $outarr);
 	//echo '</td>';
+
+	if($parent == null)
+		return $mod->run();
 }
 
 // Same as for routers, but produce two TD cells to lay the content out better.
