@@ -221,6 +221,12 @@ $this->setInMemoryTemplate("StdTableCell","<td>{{cont}}</td>");
 **/
 $this->setInMemoryTemplate("StdTableRow","<tr>{{cont}}</tr>");
 
+/**
+*	StdTableHead: 
+*	Usage: portletRSPoolSrv -> interface.php
+*
+**/
+$this->setInMemoryTemplate("StdTableHead","<th>{{Cont}}</th>");
 
 /**
 *	RenderTagStatsALink: 
@@ -436,4 +442,14 @@ $this->setInMemoryTemplate("RenderedAllocRoutedByOnly","<td class='{{TdClass}}'>
 
 $this->setInMemoryTemplate("RenderedAllocPeers","<td class='{{TdClass}}'>{{Prefix}}{{Strong}}{{LocPeers}}</td>");
 $this->setInMemoryTemplate("RenderedAllocLocPeers","{{Prefix}}<a href='{{href}}'>{{Osif}}{{LocPeer}</a>");
+
+/**
+*	RSPoolSrvPortlet Table Filed Templates: 
+*	Usage:  portletRSPoolSrv -> slb_interface.php
+*
+**/
+$this->setInMemoryTemplate("RSPoolSrvInservice","<td align=center>{{ImgCont}}</td>");
+$this->setInMemoryTemplate("RSPoolSrvRsconfig","<td class=slbconf>{{Cont}}</td>");
+$this->setInMemoryTemplate("RSPoolSrvDefault","<td class=tdleft>>{{Cont}}</td>");
+
 ?>

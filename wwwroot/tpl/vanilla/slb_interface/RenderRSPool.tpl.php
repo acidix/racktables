@@ -5,6 +5,7 @@
 		<?php } ?> 
 		<tr><td class=pcleft>
 		<?php $this->renderedEntity ?> 
+		<?php $this->RSPoolSrvPortlet ?>
 		</td><td class=pcright>
 		<?php $this->renderedSLBTrip2 ?> 
 		<?php $this->renderedSLBTrip ?> 
