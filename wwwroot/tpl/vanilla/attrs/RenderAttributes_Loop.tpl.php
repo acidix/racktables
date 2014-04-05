@@ -1,7 +1,7 @@
 <?php if (defined("RS_TPL")) {?>
-	<?php $this->startLoop('AllAppAtts'); ?>
-		<?php $this->Objtype ?>
-		<?php $this->dictCont ?>
+	<?php $this->startLoop('AllAppAttrs'); ?>
+		<?php $this->ObjType ?>
+		<?php $this->DictCont ?>
 		<br> 
 	<?php $this->endLoop(); ?> 
 <?php } else { ?>

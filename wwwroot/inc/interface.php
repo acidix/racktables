@@ -5940,22 +5940,22 @@ function renderAttributes ()
 		//echo "<td class=tdleft>" . $attrtypes[$attr['type']] . "</td>";
 		//echo '<td class=tdleft>';
 		if (count ($attr['application']) == 0)
-			$singleAttr['Application_set'] = '&nbsp;';
+			$singleAttr['ApplicationSet'] = '&nbsp;';
 			//echo '&nbsp;';
 		else{
 			$allAppAttrsOut = array();
 			foreach ($attr['application'] as $app){
-				$singleAppAttr = array('Objtype' => decodeObjectType ($app['objtype_id'], 'a'), 'Chapter_name' => $app['chapter_name']);
+				$singleAppAttr = array('ObjType' => decodeObjectType ($app['objtype_id'], 'a'), 'Chapter_name' => $app['chapter_name']);
 				
 				//Could be done in a inmemory template in need of change
 				if ($attr['type'] == 'dict')
-					$singleAppAttr['dictCont'] = " (values from '${app['chapter_name']}')";
+					$singleAppAttr['DictCont'] = " (values from '${app['chapter_name']}')";
 				//echo decodeObjectType ($app['objtype_id'], 'a') . " (values from '${app['chapter_name']}')<br>";
 				//else
 					//echo decodeObjectType ($app['objtype_id'], 'a') . '<br>';
 			 	$allAppAttrsOut[] = $singleAppAttr;
 			 }
-			 $applicationArrayMod = $tplm->generateModule('RenderAttributes_Loop', true, array('AllAppAtts' => $allAppAttrsOut));
+			 $applicationArrayMod = $tplm->generateModule('RenderAttributes_Loop', true, array('AllAppAttrs' => $allAppAttrsOut));
 
 			 $singleAttr['AllAppAttrsMod'] = $applicationArrayMod->run();		 	 
 		}
@@ -5985,7 +5985,7 @@ function renderEditAttributesForm ()
 		//printImageHREF ('create', 'Create attribute', TRUE);
 		//echo "</td><td><input type=text tabindex=100 name=attr_name></td><td>";
 		global $attrtypes;
-		$submod->addOutput('Getselect', getSelect($attrtypes, array ('name' => 'attr_type', 'tabindex' => 101), NULL));
+		$submod->addOutput('GetSelect', getSelect($attrtypes, array ('name' => 'attr_type', 'tabindex' => 101), NULL));
 		//echo '</td><td>';
 		//printImageHREF ('add', 'Create attribute', TRUE, 102);
 		//echo '</td></tr></form>';
@@ -5994,7 +5994,7 @@ function renderEditAttributesForm ()
 	//echo "<table cellspacing=0 cellpadding=5 align=center class=widetable>\n";
 	//echo '<tr><th>&nbsp;</th><th>Name</th><th>Type</th><th>&nbsp;</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR('Newtop');
+		printNewItemTR('NewTop');
 	$allAttrMapsOut = array();
 	foreach (getAttrMap() as $attr)
 	{
@@ -6024,7 +6024,7 @@ function renderEditAttributesForm ()
 	$mod->addOutput("AllAttrMaps", $allAttrMapsOut);
 		 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR('Newbottom');
+		printNewItemTR('NewBottom');
 	//echo "</table>\n";
 	//finishPortlet();
 }
@@ -12291,7 +12291,7 @@ function renderExpirations ()
 	{	
 		$mod = $tplm->generateSubmodule("Payload","RenderExpirations_main");
 		$mod->setNamespace("reports");
-		$mod->setOutput('attr_id', $attrmap[$attr_id]['name']);
+		$mod->setOutput('AttrId', $attrmap[$attr_id]['name']);
 		//startPortlet ($attrmap[$attr_id]['name']);
 		$allSectsOut = array();
 		foreach ($sections as $section)
@@ -12303,7 +12303,7 @@ function renderExpirations ()
 
 		//	echo '<table align=center width=60% border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
 		//	echo "<caption>${section['title']}</caption>\n";
-			$singleSectOut['title'] = $section['title'];
+			$singleSectOut['Title'] = $section['title'];
 
 			if (! count ($result))
 			{
@@ -12313,23 +12313,23 @@ function renderExpirations ()
 			}
 			//echo '<tr valign=top><th align=center>Count</th><th align=center>Name</th>';
 			//echo "<th align=center>Asset Tag</th><th align=center>OEM S/N 1</th><th align=center>Date Warranty <br> Expires</th></tr>\n";
-			$singleSectOut['resOut'] = '';
+			$singleSectOut['ResOut'] = '';
 			foreach ($result as $row)
 			{
 				$res = $tplm->generateSubmodule("RenderExpirations_result");
-				$res->setNamespace("result");
+				$res->setNamespace("report");
 
 				$date_value = datetimestrFromTimestamp ($row['uint_value']);
 
 				$object = spotEntity ('object', $row['object_id']);
 				$attributes = getAttrValues ($object['id']);
 				$oem_sn_1 = array_key_exists (1, $attributes) ? $attributes[1]['a_value'] : '&nbsp;';
-				$res->setOutput("classOrder", $section['class'] . $order );
-				$res->setOutput("count", $count );	
-				$res->setOutput("mkA", mkA ($object['dname'], 'object', $object['id']) );	 
-				$res->setOutput("asset_no", $object['asset_no'] );
-				$res->setOutput("oem_sn_1", $oem_sn_1 );
-				$res->setOutput("date_value", $date_value );
+				$res->setOutput("ClassOrder", $section['class'] . $order );
+				$res->setOutput("Count", $count );	
+				$res->setOutput("Mka", mkA ($object['dname'], 'object', $object['id']) );	 
+				$res->setOutput("AssetNo", $object['asset_no'] );
+				$res->setOutput("OemSn1", $oem_sn_1 );
+				$res->setOutput("DateValue", $date_value );
 			//	echo '<tr class=' . $section['class'] . $order . ' valign=top>';
 			//	echo "<td>${count}</td>";
 			//	echo '<td>' . mkA ($object['dname'], 'object', $object['id']) . '</td>';
@@ -12338,7 +12338,7 @@ function renderExpirations ()
 			//	echo "<td>${date_value}</td>";
 			//	echo "</tr>\n";
 				
-				$singleSectOut['resOut'] += $res->run();
+				$singleSectOut['ResOut'] += $res->run();
 				$order = $nextorder[$order];
 				$count++;
 
@@ -12347,7 +12347,7 @@ function renderExpirations ()
 			$allSectsOut[] = $singleSectOut;
 			//echo "</table><br>\n";
 		}
-		$mod->setOutput("allSects", $allSectsOut); 
+		$mod->setOutput("AllSects", $allSectsOut); 
 		//finishPortlet ();
 	}
 }
@@ -12491,14 +12491,14 @@ function renderMuninConfig()
 		
 	$servers = getMuninServers();
 	//startPortlet ('Munin servers (' . count ($servers) . ')');
-	$mod->addOutput("serverCount", count ($servers));
+	$mod->addOutput("ServerCount", count ($servers));
 		 
 	//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
 	//echo '<tr><th>base URL</th><th>graph(s)</th></tr>';
 	$allServersOut = array();
 	foreach ($servers as $server)
 	{
-		$allServersOut[] = array('niftyStr' => niftyString ($server['base_url']), 'num_graphs' => $server['num_graphs'] );
+		$allServersOut[] = array('NiftyStr' => niftyString ($server['base_url']), 'NumGraphs' => $server['num_graphs'] );
 		//echo '<tr align=left valign=top><td>' . niftyString ($server['base_url']) . '</td>';
 		//echo "<td class=tdright>${server['num_graphs']}</td></tr>";
 	}
@@ -12543,18 +12543,18 @@ function renderMuninServersEditor()
 	$allMuninServersOut = array();		 
 	foreach (getMuninServers() as $server)
 	{
-		$singleServer = array('formIntro' => printOpFormIntro ('upd', array ('id' => $server['id'])),
-								'specialCharSrv' => htmlspecialchars ($server['base_url'], ENT_QUOTES, 'UTF-8'),
-								'imageSave' => getImageHREF ('save', 'update this server', TRUE),
-								'num_graphs' => $server['num_graphs']);
+		$singleServer = array(  'FormIntro' => printOpFormIntro ('upd', array ('id' => $server['id'])),
+								'SpecialCharSrv' => htmlspecialchars ($server['base_url'], ENT_QUOTES, 'UTF-8'),
+								'ImageSave' => getImageHREF ('save', 'update this server', TRUE),
+								'NumGraphs' => $server['num_graphs']);
 
 	//	printOpFormIntro ('upd', array ('id' => $server['id']));
 	//	echo '<tr><td>';
 		if ($server['num_graphs'])
-			$singleServer['destroyImg'] = printImageHREF ('nodestroy', 'cannot delete, graphs exist');
+			$singleServer['DestroyImg'] = printImageHREF ('nodestroy', 'cannot delete, graphs exist');
 		//	printImageHREF ('nodestroy', 'cannot delete, graphs exist');
 		else
-			$singleServer['destroyImg'] = getOpLink (array ('op' => 'del', 'id' => $server['id']), '', 'destroy', 'delete this server');
+			$singleServer['DestroyImg'] = getOpLink (array ('op' => 'del', 'id' => $server['id']), '', 'destroy', 'delete this server');
 		//	echo getOpLink (array ('op' => 'del', 'id' => $server['id']), '', 'destroy', 'delete this server');
 		//echo '</td>';
 		//echo '<td><input type=text size=48 name=base_url value="' . htmlspecialchars ($server['base_url'], ENT_QUOTES, 'UTF-8') . '"></td>';
@@ -12631,7 +12631,7 @@ function renderDataIntegrityReport ()
 		$allChildrenOrphansOut = array();
 		foreach ($orphans as $orphan)
 		{	
-			$singleOrphanOut = array('order' => $order, 'realm_name' => $realm_name);
+			$singleOrphanOut = array('Order' => $order, 'RealmName' => $realm_name);
 
 			$realm_name = formatRealmName ($orphan['parent_entity_type']);
 			$parent = spotEntity ($orphan['parent_entity_type'], $orphan['parent_entity_id']);
@@ -12640,9 +12640,9 @@ function renderDataIntegrityReport ()
 		//	echo "<td>${orphan['child_entity_type']}</td>";
 		//	echo "<td>${orphan['child_entity_id']}</td>";
 		//	echo "</tr>\n";
-			$singleOrphanOut['elemName'] = $parent['name'];
-			$singleOrphanOut['entity_type'] = $orphan['child_entity_type'];
-			$singleOrphanOut['entity_id'] = $orphan['child_entity_id'];
+			$singleOrphanOut['ElemName'] = $parent['name'];
+			$singleOrphanOut['EntityType'] = $orphan['child_entity_type'];
+			$singleOrphanOut['EntityId'] = $orphan['child_entity_id'];
 			
 			$order = $nextorder[$order];
 			$allChildrenOrphansOut[] = $singleOrphanOut;
@@ -12732,15 +12732,15 @@ function renderDataIntegrityReport ()
 		$allAttrMapOrphansOut = array();
 		foreach ($orphans as $orphan)
 		{
-			$singleOrphanOut = array('order' => $order);
+			$singleOrphanOut = array('Order' => $order);
 		//	echo "<tr class=row_${order}>";
 		//	echo "<td>${orphan['attr_name']}</td>";
 		//	echo "<td>${orphan['chapter_name']}</td>";
 		//	echo "<td>${orphan['objtype_id']}</td>";
 		//	echo "</tr>\n";
-			$singleOrphanOut['attr_name'] = $orphan['attr_name'];
-			$singleOrphanOut['chapter_name'] = $orphan['chapter_name'];
-			$singleOrphanOut['objtype_id'] = $orphan['objtype_id'];
+			$singleOrphanOut['AttrName'] = $orphan['attr_name'];
+			$singleOrphanOut['ChapterName'] = $orphan['chapter_name'];
+			$singleOrphanOut['ObjtypeId'] = $orphan['objtype_id'];
 			$allAttrMapOrphansOut[] = $singleOrphanOut;
 			$order = $nextorder[$order];
 		}
@@ -12773,10 +12773,10 @@ function renderDataIntegrityReport ()
 		$allObjectsOut = array();
 		foreach ($orphans as $orphan)
 		{
-			$singleOrphanOut = array('order' => $order);
-			$singleOrphanOut['id'] = $orphan['id'];
-			$singleOrphanOut['name'] = $orphan['name'];
-			$singleOrphanOut['objtype_id'] = $orphan['objtype_id'];
+			$singleOrphanOut = array('Order' => $order);
+			$singleOrphanOut['Id'] = $orphan['id'];
+			$singleOrphanOut['Name'] = $orphan['name'];
+			$singleOrphanOut['ObjtypeId'] = $orphan['objtype_id'];
 			$allObjectsOut[] = $singleOrphanOut;
 	//		echo "<tr class=row_${order}>";
 	//		echo "<td>${orphan['id']}</td>";
@@ -12813,10 +12813,10 @@ function renderDataIntegrityReport ()
 		$allObjectHistsOut = array();
 		foreach ($orphans as $orphan)
 		{
-			$singleOrphanOut = array('order' => $order);
-			$singleOrphanOut['id'] = $orphan['id'];
-			$singleOrphanOut['name'] = $orphan['name'];
-			$singleOrphanOut['objtype_id'] = $orphan['objtype_id'];
+			$singleOrphanOut = array('Order' => $order);
+			$singleOrphanOut['Id'] = $orphan['id'];
+			$singleOrphanOut['Name'] = $orphan['name'];
+			$singleOrphanOut['ObjtypeId'] = $orphan['objtype_id'];
 			$allObjectHistsOut[] = $singleOrphanOut;
 		//	echo "<tr class=row_${order}>";
 		//	echo "<td>${orphan['id']}</td>";
@@ -12856,11 +12856,11 @@ function renderDataIntegrityReport ()
 		$allObjectParsOut = array();
 		foreach ($orphans as $orphan)
 		{
-			$singleOrphanOut = array('order' => $order);
-			$singleOrphanOut['parent_name'] = $orphan['parent_name'];
-			$singleOrphanOut['parent_objtype_id'] = $orphan['parent_objtype_id'];
-			$singleOrphanOut['child_name'] = $orphan['child_name'];
-			$singleOrphanOut['child_objtype_id'] = $orphan['child_objtype_id'];
+			$singleOrphanOut = array('Order' => $order);
+			$singleOrphanOut['ParentName'] = $orphan['parent_name'];
+			$singleOrphanOut['ParentObjtypeId'] = $orphan['parent_objtype_id'];
+			$singleOrphanOut['ChildName'] = $orphan['child_name'];
+			$singleOrphanOut['ChildObjtypeId'] = $orphan['child_objtype_id'];
 			$allObjectParsOut[] = $singleOrphanOut;
 		//	echo "<tr class=row_${order}>";
 		//	echo "<td>${orphan['parent_name']}</td>";
@@ -12900,11 +12900,11 @@ function renderDataIntegrityReport ()
 		$allPortCompsOut = array();
 		foreach ($orphans as $orphan)
 		{
-			$singleOrphanOut = array('order' => $order);
-			$singleOrphanOut['type1_name'] = $orphan['type1_name'];
-			$singleOrphanOut['type1'] = $orphan['type1'];
-			$singleOrphanOut['type2_name'] = $orphan['type2_name'];
-			$singleOrphanOut['type2'] = $orphan['type2'];
+			$singleOrphanOut = array('Order' => $order);
+			$singleOrphanOut['Type1Name'] = $orphan['type1_name'];
+			$singleOrphanOut['Type1'] = $orphan['type1'];
+			$singleOrphanOut['Type2Name'] = $orphan['type2_name'];
+			$singleOrphanOut['Type2'] = $orphan['type2'];
 			$allPortCompsOut[] = $singleOrphanOut;
 		//	echo "<tr class=row_${order}>";
 		//	echo "<td>${orphan['type1_name']}</td>";
@@ -12944,9 +12944,9 @@ function renderDataIntegrityReport ()
 		$allPortIntersOut = array();
 		foreach ($orphans as $orphan)
 		{	
-			$singleOrphanOut = array('order' => $order);
-			$singleOrphanOut['iif_name'] = $orphan['iif_name'];
-			$singleOrphanOut['oif_id'] = $orphan['oif_id'];
+			$singleOrphanOut = array('Order' => $order);
+			$singleOrphanOut['IifName'] = $orphan['iif_name'];
+			$singleOrphanOut['OifId'] = $orphan['oif_id'];
 			$allPortIntersOut[] = $singleOrphanOut;
 	//		echo "<tr class=row_${order}>";
 	//		echo "<td>${orphan['iif_name']}</td>";
@@ -12989,11 +12989,11 @@ function renderDataIntegrityReport ()
 		$allObjectParRulesOut = array();
 		foreach ($invalids as $invalid)
 		{
-			$singleOrphanOut = array('order' => $order);
-			$singleOrphanOut['child_name'] = $invalid['child_name'];
-			$singleOrphanOut['child_type'] = $invalid['child_type'];
-			$singleOrphanOut['parent_name'] = $invalid['parent_name'];
-			$singleOrphanOut['parent_type'] = $invalid['parent_type'];
+			$singleOrphanOut = array('Order' => $order);
+			$singleOrphanOut['ChildName'] = $invalid['child_name'];
+			$singleOrphanOut['Child_type'] = $invalid['child_type'];
+			$singleOrphanOut['ParentName'] = $invalid['parent_name'];
+			$singleOrphanOut['ParentType'] = $invalid['parent_type'];
 			$allObjectParRulesOut[] = $singleOrphanOut;
 	//		echo "<tr class=row_${order}>";
 	//		echo "<td>${invalid['child_name']}</td>";
@@ -13040,13 +13040,13 @@ function renderDataIntegrityReport ()
 		$allPortCompatRulesOut = array();
 		foreach ($invalids as $invalid)
 		{
-			$singleOrphanOut = array('order' => $order);
-			$singleOrphanOut['obja_name'] = $invalid['obja_name'];
-			$singleOrphanOut['porta_name'] = $invalid['porta_name'];
-			$singleOrphanOut['porta_type'] = $invalid['porta_type'];
-			$singleOrphanOut['objb_name'] = $invalid['objb_name'];
-			$singleOrphanOut['portb_name'] = $invalid['portb_name'];
-			$singleOrphanOut['portb_type'] = $invalid['portb_type'];
+			$singleOrphanOut = array('Order' => $order);
+			$singleOrphanOut['ObjaName'] = $invalid['obja_name'];
+			$singleOrphanOut['PortaName'] = $invalid['porta_name'];
+			$singleOrphanOut['PortaType'] = $invalid['porta_type'];
+			$singleOrphanOut['ObjbName'] = $invalid['objb_name'];
+			$singleOrphanOut['PortbName'] = $invalid['portb_name'];
+			$singleOrphanOut['PortbType'] = $invalid['portb_type'];
 			
 			$allPortCompatRulesOut[] = $singleOrphanOut;
 	/*		echo "<tr class=row_${order}>";
@@ -13110,10 +13110,10 @@ function renderDataIntegrityReport ()
 		foreach ($orphans as $orphan)
 		{
 			$realm_name = formatRealmName ($orphan['entity_realm']);
-			$singleOrphanOut = array('order' => $order);
-			$singleOrphanOut['realm_name'] = $realm_name;
-			$singleOrphanOut['tag'] = $orphan['tag'];
-			$singleOrphanOut['entity_id'] = $orphan['entity_id'];
+			$singleOrphanOut = array('Order' => $order);
+			$singleOrphanOut['RealmName'] = $realm_name;
+			$singleOrphanOut['Tag'] = $orphan['tag'];
+			$singleOrphanOut['EntityId'] = $orphan['entity_id'];
 						
 			$allTagStoragesOut[] = $singleOrphanOut;
 			/*echo "<tr class=row_${order}>";
@@ -13161,10 +13161,10 @@ function renderDataIntegrityReport ()
 		foreach ($orphans as $orphan)
 		{
 			$realm_name = formatRealmName ($orphan['entity_type']);
-			$singleOrphanOut = array('order' => $order);
-			$singleOrphanOut['name'] = $orphan['name'];
-			$singleOrphanOut['realm_name'] = $realm_name;
-			$singleOrphanOut['entity_id'] = $orphan['entity_id'];
+			$singleOrphanOut = array('Order' => $order);
+			$singleOrphanOut['Name'] = $orphan['name'];
+			$singleOrphanOut['RealmName'] = $realm_name;
+			$singleOrphanOut['EntityId'] = $orphan['entity_id'];
 						
 			$allFileLinksOut[] = $singleOrphanOut;
 	//		echo "<tr class=row_${order}>";
