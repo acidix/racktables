@@ -7,7 +7,6 @@
 			<tr class="state_<?php $this->CountStats ?>"><th class=tdright><?php $this->VlanId ?></th>
 			<?php $this->Domains; ?> 
 			</tr>
-
 			<?php $this->TbcLine ?>  
 		<?php $this->endLoop(); ?> 
 		</table>

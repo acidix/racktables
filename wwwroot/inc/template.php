@@ -1,6 +1,6 @@
 <?php
 //Use this to test wether a template was called within the main module or without it.
-define("TPL_DEBUG",true);
+//define("TPL_DEBUG",true);
 define("RS_TPL",true);
 
 /**
@@ -41,30 +41,57 @@ class TemplateManager
 	 * Default function to initialize template logic.
 	 * Uses $_SESSION to store the currently used template.
 	 */
-	public static function intializeTemplate()
+	public static function initalizeTemplate()
 	{
-		if (!array_key_exists('template', $_SESSION))
+		$tpl_to_use = '';
+
+		$template_list = self::getOrderedTemplateList();
+		//TODO Messy code fixit
+		$flipped = array_flip($template_list);
+
+
+		if (!array_key_exists('RacktablesTemplate', $_COOKIE))
 		{
-			$_SESSION['template'] = getConfigVar('default_template');
+			setcookie('RacktablesTemplate',$flipped['vanilla']);
+			$tpl_to_use = $flipped['vanilla'];
+			//$_COOKIE['RacktablesTemplate'] = getConfigVar('default_template');
+		}
+		else
+		{
+			$tpl_to_use = $_COOKIE['RacktablesTemplate'];
 		}
 		
-		if (!array_search($_SESSION['template'], self::getOrderedTemplateList()))
+		if (!array_key_exists($_COOKIE['RacktablesTemplate'], $template_list))
 		{
-			if (!array_search('vanilla', self::getOrderedTemplateList()))
+			if (!array_search('vanilla', $template_list))
 			{
-				throw new TemplateException('TplErr: Vanilla template is not installed, can\'t fall back to another template.');
+				throw new TemplateException('TplErr: Vanilla template is not installed, can\'t fall back to another template.' . $template_list);
 			}
 			else 
 			{
-				$_SESSION['template'] = 'vanilla';
+				setcookie('RacktablesTemplate',$flipped['vanilla']);
+				$tpl_to_use = $flipped['vanilla'];
+				//$_COOKIE['RacktablesTemplate'] = $flipped['vanilla'];
 			}
 		}
 		
 		$inst = self::getInstance();
 		
 		//@XXX escape string!!
-		$inst->setTemplate($_SESSION['template']);
+		$inst->setTemplate($template_list[$tpl_to_use]);
 		$inst->createMainModule('index');
+
+		//$inst->getMainModule()->addOutput('Payload',$template_list[$tpl_to_use] . '<br />');
+		
+	}
+	
+	public static function changeStaticDir()
+	{
+		$inst = self::getInstance();
+		
+		global $local_staticdir ;
+		
+		$local_staticdir = $inst->getTemplate();
 	}
 
 	/**
@@ -73,8 +100,10 @@ class TemplateManager
 	 */
 	public static function getOrderedTemplateList()
 	{
-		$arr = glob('./tpl/*' , GLOB_ONLYDIR);
+		static $arr = array('vanilla');
+		//$arr = glob('../tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
 		sort($arr);
+
 		return $arr;
 	}
 	
@@ -400,7 +429,7 @@ class TemplateManager
 		}
 		$this->requirements[] = $test;
 		self::log("Adding requirement: ".$placeholder . " on " . $name . " Namespace: " . $namespace . " InMemory: " . $inmemory . " Cont: ", $cont);
-		$mod = $this->generateSubmodule($placeholder, $name, null, $inmemory, $cont);
+		$mod = $this->generateSubmodule($placeholder, $name, $this->createMainModule(), $inmemory, $cont);
 		$mod->setNamespace($namespace);
 		$mod->setLock(true);
 	}
@@ -1147,7 +1176,7 @@ class TemplateInMemory extends TemplateModule
 		}
 		$code = $tplm->getInMemoryTemplate($this->module);
 		
-		$this->runModules($this->output);
+		$this->output = $this->runModules($this->output);
 		
 		$this->output["css"] = './tpl/' . $this->tpl . '/css/';
 		$this->output["img"] = './tpl/' . $this->tpl . '/img/';

@@ -323,7 +323,7 @@ function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $
 //	$ret .= '<select';
 	$selectedOutArray = array();
 	foreach ($select_attrs as $attr_name => $attr_value)
-		$selectedOutArray[] = array('attr_name' =>  $attr_name, "attr_val" => $attr_name );
+		$selectedOutArray[] = array('attr_name' =>  $attr_name, "attr_val" => $attr_value );
 //		$ret .= " ${attr_name}=${attr_value}";
 	$mod->setOutput("selectedList", $selectedOutArray);
 //	$ret .= '>';
@@ -416,7 +416,7 @@ function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree =
 		else
 			$mod = $tplm->generateSubmodule($placeholder, "GetNiftySelect", $parent);
 		
-		$mod->setNamespace("", true);
+		$mod->setNamespace("");
 	
 		if($tree){
 			$mod->setOutput("isTree", true);
@@ -942,21 +942,22 @@ function serializeTags ($chain, $baseurl = '', $parent = null, $placeholder = "S
 	$tplm->setTemplate("vanilla");
 
 	if($parent == null)
-		$globalPlc = $tplm->generateModule("GlobalPlaceholder", true);
+		$globalPlc = $tplm->generateModule('GlobalPlaceholder', true);
+
 	foreach ($chain as $nr => $taginfo)
 	{
 		if ($baseurl == ''){
 			if($parent == null)
-				$mod = $tplm->generateSubmodule('cont','SerializedTag',$globalPlc,true);
+				$mod = $tplm->generateSubmodule('Cont', 'SerializedTag', $globalPlc, true);
 			else
-				$mod = $tplm->generateSubmodule($placeholder, 'SerializedTag', true, $parent);
+				$mod = $tplm->generateSubmodule($placeholder, 'SerializedTag', $parent, true);
 		}
 		else
 		{
 			if($parent == null)
-				$mod = $tplm->generateSubmodule('cont','SerializedTagLink',$globalPlc,true);
+				$mod = $tplm->generateSubmodule('Cont', 'SerializedTagLink', $globalPlc, true);
 			else
-				$mod = $tplm->generateSubmodule($placeholder, 'SerializedTagLink', true, $parent);
+				$mod = $tplm->generateSubmodule($placeholder, 'SerializedTagLink', $parent, true);
 			$mod->addOutput('BaseUrl', $baseurl);
 			$mod->addOutput('ID', $taginfo['id']);
 			//$tag = 'a';
@@ -974,7 +975,7 @@ function serializeTags ($chain, $baseurl = '', $parent = null, $placeholder = "S
 		if (isset ($taginfo['id']))
 			$mod->addOutput('Class', getTagClassName($taginfo['id']));
 			//$class = 'class="' . getTagClassName ($taginfo['id']) . '"';
-
+		
 		//$href = '';
 		//if ($baseurl == '')
 		//	$tag = 'span';
@@ -984,11 +985,14 @@ function serializeTags ($chain, $baseurl = '', $parent = null, $placeholder = "S
 		//	$href = "href='${baseurl}cft[]=${taginfo['id']}'";
 		//}
 		//$tmp[] = "<$tag $href $title $class>" . $taginfo['tag'] . "</$tag>";
-		
+		$mod->addOutput('Tag', $taginfo['tag']);
+			 
+
 		if (array_key_exists($nr+1, $chain))
-			$mod->addOutput('Separator', '; ');
+			$mod->addOutput('Delimiter', '; ');
 		else
-			$mod->addOutput('Separator', '');
+			$mod->addOutput('Delimiter', '');
+		
 	}
 	
 	if($parent == null)
@@ -1059,7 +1063,7 @@ function renderEntitySummary ($cell, $title, $values = array(), $parent = null, 
 		$mod = $tplm->generateModule("RenderEntitySummary");
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderEntitySummary", $parent);
-
+	$mod->setNamespace('');
 	//startPortlet ($title);
 	$mod->setOutput("title", $title);
 	//echo "<table border=0 cellspacing=0 cellpadding=3 width='100%'>\n";
@@ -1068,6 +1072,8 @@ function renderEntitySummary ($cell, $title, $values = array(), $parent = null, 
 	foreach ($values as $name => $value)
 	{
 		$loopMod = $tplm->generateSubmodule("loopMod", "RenderEntitySummary_LoopCont" , $mod);
+		$loopMod->setNamespace("", true);
+
 		if (is_array ($value) and count ($value) == 1)
 		{
 			$value = array_shift ($value);
@@ -1144,14 +1150,12 @@ function getOpLink ($params, $title,  $img_name = '', $comment = '', $class = ''
 	}
 
 	if (! empty ($comment)){
-		$mod->setOutput("showComment", true);
 		$mod->setOutput("htmlComment", htmlspecialchars ($comment, ENT_QUOTES));	
 	}
 //		$ret .= ' title="' . htmlspecialchars ($comment, ENT_QUOTES) . '"';
 	$class = trim ($class);
 	
 	if (! empty ($class)){
-		$mod->setOutput("showClass", true);
 		$mod->setOutput("htmlClass", htmlspecialchars ($class, ENT_QUOTES));		 
 	}
 //		$ret .= ' class="' . htmlspecialchars ($class, ENT_QUOTES) . '"';

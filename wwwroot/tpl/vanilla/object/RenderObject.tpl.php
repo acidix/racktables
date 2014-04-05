@@ -9,7 +9,7 @@
 			<div class=commentblock><?php $this->comment_hrefs ?></div>
 		</div>
 	<?php } ?>
-	<?php if ($this->is("areLogrecords",true)) { ?>
+	<?php if ($this->is("areLogRecords",true)) { ?>
 	 	<div class=portlet>
 	 		<h2>log records</h2>
 	 		<table cellspacing=0 cellpadding=5 align=center class=widetable width='100%'>
@@ -22,7 +22,7 @@
 	 		</table>
 	 	</div>
 	<?php } ?> 
-	<?php $this->switchportJS ?> 
+	<?php $this->switchportJS ?>
 	<?php $this->filesPortlet ?>
 	<?php if ($this->is("isInfoPorts",true)) { ?>
 		<div class=portlet>
@@ -32,6 +32,7 @@
 			<th class=tdleft>Interface</th><th class=tdleft>L2 address</th>
 			<th class=tdcenter colspan=2>Remote object and port</th>
 			<th class=tdleft>Cable ID</th></tr>
+			<?php $this->RenderedObjectPorts ?>
 			<?php if ($this->is("loadInplaceEdit", true)) { ?>
 				<?php $this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/inplace-edit.js")); ?>
 			<?php } ?>

@@ -6,7 +6,7 @@
 					<h2>No objects exist</h2>
 				<?php } else { ?>
 				<div class=portlet>
-					<h2> Objects ( <?php $this->countObjs ?> ) </h2>
+					<h2> Objects (<?php $this->countObjs ?>) </h2>
 					<br><br><table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>
 					<tr><th>Common name</th><th>Visible label</th><th>Asset tag</th><th>Row/Rack or Container</th></tr>
 					<?php $this->startLoop("allObjects"); ?>	

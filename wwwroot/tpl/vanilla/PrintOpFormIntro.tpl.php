@@ -1,6 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
-	<form method=post id=<?php $this->opname ?>  name=<?php $this->opname ?> action='?module=redirect&page=<?php $this->pageno ?>
-		&tab=<?php $this->tabno ?>&op=<?php $this->opname ?>'
+	<form method=post id=<?php $this->opname ?>  name=<?php $this->opname ?> 
+		action='?module=redirect&page=<?php $this->pageno ?>&tab=<?php $this->tabno ?>&op=<?php $this->opname ?>'
 		<?php if ($this->is("isUpload",true)) { ?>
 			enctype='multipart/form-data'
 		<?php } ?> 

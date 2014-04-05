@@ -1,13 +1,11 @@
 <?php if (defined("RS_TPL")) {?>
 
-		<tr class=row_${order} valign=top>
+		<tr class=row_<?php $this->Order ?> valign=top>
 
 			<td class=tdleft><?php $this->Date; ?><br><?php $this->User; ?></td>
 			<td class="logentry"><?php $this->Hrefs; ?></td>
 			<td class=tdleft>
-			<?php 
-				$this->getH('GetOpLink', array(array('op'=>'del', 'log_id'=>$this->Id), '', 'DESTROY', 'Delete log entry'));
-			?>
+			<?php $this->getH('GetOpLink', array(array('op'=>'del', 'log_id'=>$this->_Id), '', 'DESTROY', 'Delete log entry')); ?>
 			</td>
 		</tr>
 

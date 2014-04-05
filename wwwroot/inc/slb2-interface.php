@@ -334,13 +334,15 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 		$tplm->setTemplate("vanilla");
 
 	if($parent==null)	
-		$mod = $tplm->generateModule("RenderSLBTriplets2",  false);
+		$mod = $tplm->generateModule("RenderSLBTriplets2");
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderSLBTriplets2", $parent);
+	$mod->setNamespace('slb2_interface');
 
 	list ($realm1, $realm2) = array_values (array_diff (array ('object', 'ipvs', 'ipv4rspool'), array ($cell['realm'])));
 	if ($editable && getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		callHook ('renderNewTripletForm', $realm1, $realm2);
+		renderNewTripletForm($realm1, $realm2, $mod, 'NewTripletFormTop');
+//		callHook ('renderNewTripletForm', $realm1, $realm2);
 
 	$fields = array
 	(
@@ -406,7 +408,6 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 	$order = 'odd';
 	$span = array();
 
-	$allTripletOutArray = array();
 	
 	foreach ($triplets as $slb)
 	{
@@ -522,10 +523,10 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 
 //		echo "</tr>\n";
 		$order = $nextorder[$order];
-		$allTripletOutArray[] = $tripletArray;
+		$tplm->generateSubmodule('AllTriplets', 'RenderSLBTriplets2_TripletLoop', $mod, false, $tripletArray);
 	}
 
-	$mod->setOutput("allTripletOutArray", $allTripletOutArray);
+
 //	if (count ($triplets))
 //	{
 //		echo "</table>\n";
@@ -533,7 +534,9 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 //	}
 
 	if ($editable && getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		callHook ('renderNewTripletForm', $realm1, $realm2);
+		renderNewTripletForm($realm1, $realm2, $mod, 'NewTripletFormBot');
+//		callHook ('renderNewTripletForm', $realm1, $realm2);
+	
 	if($parent == null)
 		return $mod->run();
 }
@@ -606,7 +609,7 @@ function getTripletConfigAJAX()
 	echo '<div class="slbconf" style="max-height: 500px; max-width: 600px; overflow: auto">' . htmlspecialchars (generateSLBConfig2 ($tr_list)) . '</div>';
 }
 
-function renderNewTripletForm ($realm1, $realm2)
+function renderNewTripletForm ($realm1, $realm2, $parent = null, $placehoder = 'NewTripletForm')
 {
 	function get_realm_data ($realm)
 	{
@@ -638,15 +641,35 @@ function renderNewTripletForm ($realm1, $realm2)
 
 	$realm1_data = get_realm_data ($realm1);
 	$realm2_data = get_realm_data ($realm2);
-	startPortlet ('Add new VS group');
+	
+	$tplm = TemplateManager::getInstance();
+	if($parent==null)
+		$tplm->setTemplate("vanilla");
+	
+	if($parent==null)	
+		$mod = $tplm->generateModule('NewTripletForm');
+	else
+		$mod = $tplm->generateSubmodule($placeholder, 'NewTripletForm', $parent);
+	
+	$mod->setNamespace('slb2_interface');
+	
+	
+	//startPortlet ('Add new VS group');
 	if (count ($realm1_data['list']) && count ($realm2_data['list']))
-		printOpFormIntro ('addLink');
-	echo "<table cellspacing=0 cellpadding=5 align=center>";
-	echo "<tr valign=top><th class=tdright>{$realm1_data['name']}</th><td class=tdleft>";
-	printSelect ($realm1_data['list'], $realm1_data['options']);
-	echo '</td><td class=tdcenter valign=middle rowspan=2>';
+		$mod->addOutput('printOpFormIntro', true);
+		 
+	//	printOpFormIntro ('addLink');
+	//echo "<table cellspacing=0 cellpadding=5 align=center>";
+	//echo "<tr valign=top><th class=tdright>{$realm1_data['name']}</th><td class=tdleft>";
+	$mod->addOutput('realm1Name', $realm1_data['name']);
+	//printSelect ($realm1_data['list'], $realm1_data['options']);
+	$mod->addOutput('realm1List', $realm1_data['list']);
+	$mod->addOutput('realm1Opt', $realm1_data['options']);
+	//echo '</td><td class=tdcenter valign=middle rowspan=2>';
+	
 	if (count ($realm1_data['list']) && count ($realm2_data['list']))
-		printImageHREF ('ADD', 'Configure LB', TRUE, 120);
+		$mod->addOutput('isAdd', true);
+	//	printImageHREF ('ADD', 'Configure LB', TRUE, 120);
 	else
 	{
 		$names = array();
@@ -656,13 +679,19 @@ function renderNewTripletForm ($realm1, $realm2)
 			$names[] = 'a ' . $realm2_data['name'];
 		$message = 'Please create ' . (implode (' and ', $names)) . '.';
 		showNotice ($message);
-		printImageHREF ('DENIED', $message, FALSE);
+		$mod->addOutput('message', $message);
+	//	printImageHREF ('DENIED', $message, FALSE);
 	}
-	echo "<tr valign=top><th class=tdright>{$realm2_data['name']}</th><td class=tdleft>";
-	printSelect ($realm2_data['list'], $realm2_data['options']);
-	echo "</td></tr>\n";
-	echo "</table></form>\n";
-	finishPortlet();
+	//echo "<tr valign=top><th class=tdright>{$realm2_data['name']}</th><td class=tdleft>";
+	$mod->addOutput('realm2Name', $realm2_data['name']);
+	$mod->addOutput('realm2List', $realm2_data['list']);
+	$mod->addOutput('realm2Opt', $realm2_data['options']);
+	//printSelect ($realm2_data['list'], $realm2_data['options']);
+	//echo "</td></tr>\n";
+	//echo "</table></form>\n";
+//	finishPortlet();
+	if($parent==null)
+		return $mod->run();
 }
 
 function getPopupSLBConfig ($row, TemplateModule $parent = null)

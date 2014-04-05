@@ -12,10 +12,8 @@
 			<tr><td class=sparenetwork>no name</td></tr>
 		<?php }?>
 		<td>
-
+			<?php $this->get('UserTags') ?>
 		</td></tr></table>
-		
-		<?php $this->get('userTags') ?>
 	<?php } ?>
 
 	<?php if ($this->is("typeFile",true)) { ?>
@@ -33,7 +31,8 @@
 			<?php $this->get("isoPermImg") ?>
 			</a>&nbsp;
 		<?php } ?>
-
+		<?php $this->fileSize ?>
+		</td></tr></table>
 	<?php } ?>
 
 	<?php if ($this->is("typeIPV4",true)) { ?>

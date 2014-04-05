@@ -48,6 +48,7 @@
 		</td></tr></form>
 		</table><br>
 	<?php } ?> 
+
 	<?php if ($this->is("isEnableMultiport",true)) { ?>
 		</div>
 		<div class=portlet>

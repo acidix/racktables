@@ -137,6 +137,13 @@ $virtual_obj_types = explode (',', getConfigVar ('VIRTUAL_OBJ_LISTSRC'));
 alterConfigWithUserPreferences();
 $op = '';
 
+
+//Initialize template functionality
+TemplateManager::initalizeTemplate();
+
+//Adjust static dir to search within the template directory ./tpl/template/css etc.
+TemplateManager::changeStaticDir();
+
 // load additional plugins
 ob_start();
 foreach (glob("$racktables_plugins_dir/*.php") as $filename)
@@ -144,7 +151,7 @@ foreach (glob("$racktables_plugins_dir/*.php") as $filename)
 // display plugins output if it contains something but newlines
 $tmp = ob_get_clean();
 if ($tmp != '' and ! preg_match ("/^\n+$/D", $tmp))
-	echo $tmp;
+	echo $tmp; //@TODO write output in 'payload'
 unset ($tmp);
 
 // These will be filled in by fixContext()

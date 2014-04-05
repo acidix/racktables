@@ -44,8 +44,6 @@ $indexlayout = array
 
 $page['index']['title'] = 'Main page';
 $page['index']['handler'] = 'renderIndex';
-$tabhandler['index']['settemplate'] = 'renderTemplateUpdate';
-$ophandler['index']['settemplate'] = 'updateCurrentTemplate';
 
 $page['rackspace']['title'] = 'Rackspace';
 $page['rackspace']['parent'] = 'index';
@@ -622,6 +620,7 @@ $tabhandler['myaccount']['qlinks'] = 'renderMyQuickLinks';
 $ophandler['myaccount']['mypassword']['changeMyPassword'] = 'changeMyPassword';
 $ophandler['myaccount']['interface']['upd'] = 'saveMyPreferences';
 $ophandler['myaccount']['interface']['reset'] = 'resetMyPreference';
+$ophandler['myaccount']['interface']['settemplate'] = 'updateCurrentTemplate';
 $ophandler['myaccount']['qlinks']['save'] = 'saveQuickLinks';
 
 $page['cacti']['title'] = 'Cacti';

@@ -6,7 +6,7 @@
 			<input type=text name=username value='<?php $this->Name; ?>' size=16>
 		</td>
 		<td>
-			<input type=text name=realname value='<?php $this->RealName; ?>}' size=24>
+			<input type=text name=realname value='<?php $this->RealName; ?>' size=24>
 		</td>
 		<td>
 			<input type=password name=password value='<?php $this->PwHash; ?>' size=40>

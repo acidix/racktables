@@ -90,10 +90,10 @@ $this->setInMemoryTemplate("NoSearchItemFound","<center><h2>Nothing found for {{
  * The four error messages.
  * Usage: interface.php (showMessageOrError)
  */
-$this->setInMemoryTemplate("MessageNeutral","<div class=msg_neutral'> {{Message}} </div>");
-$this->setInMemoryTemplate("MessageSuccess","<div class=msg_success'> {{Message}} </div>");
-$this->setInMemoryTemplate("MessageError","<div class=msg_error'> {{Message}} </div>");
-$this->setInMemoryTemplate("MessageWarning","<div class=msg_warning'> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageNeutral","<div class=msg_neutral> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageSuccess","<div class=msg_success> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageError","<div class=msg_error> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageWarning","<div class=msg_warning> {{Message}} </div>");
 
 /**
  * Text to render when no CellList elements are available.
@@ -102,7 +102,7 @@ $this->setInMemoryTemplate("MessageWarning","<div class=msg_warning'> {{Message}
 $this->setInMemoryTemplate("EmptyResults","<p>Please set a filter to display the corresponging {{Name}} <br> <a href=\"{{ShowAll}}\">Show all {{Name}}{{Suffix}}</a></p>");
 
 
-$this->setInMemoryTemplate("GetImageHrefDoInput", "<input type=image name=submit class=icon src={{SrcPath}} border=0 {{TabIndex}} {{Title}}>");
+$this->setInMemoryTemplate("GetImageHrefDoInput", "<input type=image name=submit class=icon src='{{SrcPath}}' border=0 {{TabIndex}} {{Title}}>");
 $this->setInMemoryTemplate("GetImageHrefNoInput", "<img src={{SrcPath}} width={{ImgWidth}} height={{ImgHeight}} border=0 {{Title}} >");
 
 
@@ -180,9 +180,9 @@ $this->setInMemoryTemplate('FileSummaryDownloadLink',"<a href='?module=download&
 *
 **/
 $this->setInMemoryTemplate("ReportsCounter","<tr><td class=tdright>{{Header}}:</td><td class=tdleft>{{Data}}</td></tr>");
-$this->setInMemoryTemplate("ReportsMessages","<tr class='msg_{{Class}}><td class=tdright>{{Header}}:</td><td class=tdleft>{{Text}}</td></tr>");
+$this->setInMemoryTemplate("ReportsMessages","<tr class='msg_{{Class}}'><td class=tdright>{{Header}}:</td><td class=tdleft>{{Text}}</td></tr>");
 $this->setInMemoryTemplate("ReportsCustom","<tr><td colspan=2>\n{{ItemCont}}\n</td></tr>");
-$this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{Title}:</td><td class=tdcenter>\n{{ProgressBar}}\n<br><small>{{IsMax}}</small></td></tr>");
+$this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{Title}}:</td><td class=tdcenter>\n{{ProgressBar}}\n<br><small>{{IsMax}}</small></td></tr>");
 
 
 /**
@@ -221,13 +221,19 @@ $this->setInMemoryTemplate("StdTableCell","<td>{{cont}}</td>");
 **/
 $this->setInMemoryTemplate("StdTableRow","<tr>{{cont}}</tr>");
 
+/**
+*	StdTableHead: 
+*	Usage: portletRSPoolSrv -> interface.php
+*
+**/
+$this->setInMemoryTemplate("StdTableHead","<th>{{Cont}}</th>");
 
 /**
 *	RenderTagStatsALink: 
 *	Usage:  interface.php
 *
 **/
-$this->setInMemoryTemplate("RenderTagStatsALink","<a href='index.php?page={{pagerealm}}&cft[]={{taginfoID}}>{{taginfo}}</a>");
+$this->setInMemoryTemplate("RenderTagStatsALink","<a href='index.php?page={{Pagerealm}}&cft[]={{TaginfoID}}'>{{Taginfo}}</a>");
 
 /**
  * FileSummaryComment
@@ -265,8 +271,8 @@ $this->setInMemoryTemplate('CellLink','<a href="{{Link}}">{{Title}}</a>');
  * Serialized Tag
  * Usage: serializeTags (interface-lib.php)
  */
-$this->setInMemoryTemplate('SerializedTagLink','<a href="{{BaseUrl}}cft[]={{ID}}" class="{{Class}} title="{{Title}}">{{Tag}}</a> {{Delimiter}}');
-$this->setInMemoryTemplate('SerializedTag','<span class="{{Class}} title="{{Title}}">{{Tag}}</span> {{Delimiter}}');
+$this->setInMemoryTemplate('SerializedTagLink','<a href="{{BaseUrl}}cft[]={{ID}}" class="{{Class}}" title="{{Title}}">{{Tag}}</a> {{Delimiter}}');
+$this->setInMemoryTemplate('SerializedTag','<span class="{{Class}}" title="{{Title}}">{{Tag}}</span> {{Delimiter}}');
 
 /**
  * FileSummaryComment
@@ -329,7 +335,7 @@ $this->setInMemoryTemplate("RenderSNMPPortFinder_NoExt","<div class=msg_error>Th
 *	Usage:  serializeTags -> interface-lib.php
 *
 **/
-$this->setInMemoryTemplate("GlobalPlaceholder","{{cont}}");
+$this->setInMemoryTemplate("GlobalPlaceholder","{{Cont}}");
 
 /**
 *	ETagsLine: 
@@ -397,4 +403,53 @@ $this->setInMemoryTemplate("IPv6SeparatorPlain","<tr><td colspan=4 class=tdleft>
 $this->setInMemoryTemplate("IPv6Separator","<tr class='tdleft {{Highlight}}'><td><a name='ip-{{FMT}}' href='{{Link'>{{FMT}}</a>" . 
 												"</td><td><span class='rsvtext {{Editable}} id-{{FMT}} op-upd-ip-name'></span></td>" .
 												"<td><span class='rsvtext {{Editable}} id-{{FMT}} op-upd-ip-comment'></span></td><td>&nbsp;</td></tr>");
+
+/**
+*	SmallElement: 
+*	Usage:  renderCell -> interface.php
+*
+**/
+$this->setInMemoryTemplate('SmallElement',"<small>{{Cont}}</small>");
+
+/**
+*	StrongElement: 
+*	Usage:  getRenderedAlloc -> interface.php
+*
+**/
+$this->setInMemoryTemplate('StrongElement',"<strong>{{Cont}}</strong>");
+
+/**
+*	StdOptionTemplate: 
+*	Usage:  renderRackMultiSelect -> interface.php
+*
+**/
+//$this->setInMemoryTemplate('StdOptionTemplate',"<option value={{RackId}} {{IsSelected}}>{{RackName}}</option>");
+$this->setInMemoryTemplate('StdOptionTemplate',"<option >aksdfksdajf</option>");
+
+/**
+*	RenderedAlloc Templates: 
+*	Usage:  getRenderedAlloc -> interface.php
+*
+**/
+$this->setInMemoryTemplate("RenderedAllocTdIpNetInfo","<a name='{{Dottequad}}' class='{{IpClass}}' {{IpTitle}} href='{{Href}}'>{{Title}}</a>");
+$this->setInMemoryTemplate("RenderedAllocTdIpNoNetInfo","<span class='{{IpClass}}' {{IpTitle}}>{{Dottequad}}</span>");
+$this->setInMemoryTemplate("RenderedAllocTdIp","<td class='tdleft'>{{Info}}{{Aac}} {{NiftyStr}}</td>");
+
+$this->setInMemoryTemplate("RenderedAllocNetworkNoNetinfo","<td class='{{TdClass}} sparenetwork'>N/A</td>");
+$this->setInMemoryTemplate("RenderedAllocNetworkNetinfo","<td class='{{TdClass}}'>{{InfoCell}}</td>");
+
+$this->setInMemoryTemplate("RenderedAllocRoutedByOnly","<td class='{{TdClass}}'>&nbsp;</td>");
+
+$this->setInMemoryTemplate("RenderedAllocPeers","<td class='{{TdClass}}'>{{Prefix}}{{Strong}}{{LocPeers}}</td>");
+$this->setInMemoryTemplate("RenderedAllocLocPeers","{{Prefix}}<a href='{{href}}'>{{Osif}}{{LocPeer}</a>");
+
+/**
+*	RSPoolSrvPortlet Table Filed Templates: 
+*	Usage:  portletRSPoolSrv -> slb_interface.php
+*
+**/
+$this->setInMemoryTemplate("RSPoolSrvInservice","<td align=center>{{ImgCont}}</td>");
+$this->setInMemoryTemplate("RSPoolSrvRsconfig","<td class=slbconf>{{Cont}}</td>");
+$this->setInMemoryTemplate("RSPoolSrvDefault","<td class=tdleft>>{{Cont}}</td>");
+
 ?>
