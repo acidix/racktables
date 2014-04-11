@@ -449,14 +449,57 @@ class TemplateHelperPrintSelect extends TemplateHelperAbstract
 	{
 		if(count($params) < 1)
 			return "";
+
 		$optList = $params[0];
 		$select_attrs = array();
 		$selected_id = NULL;
+
 		if(count($params) > 1)
 			$select_attrs = $params[1];
 		if(count($params) > 2)
 			$selected_id = $params[2];
-		echo getSelect($optList, $select_attrs, $selected_id);			
+		
+		//Original getSelect code 
+		if (!array_key_exists ('name', $select_attrs)){
+			echo '';
+			return;
+		}
+		// handle two corner cases in a specific way
+		if (count ($optList) == 0){
+			echo '(none)';
+			return;
+		}
+
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");
+
+		if (count ($optList) == 1)
+		{
+			foreach ($optList as $key => $value)
+				break;
+
+			$mod = $tplm->generateModule("GetSelectInLine",  true, array("selectName" => $select_attrs['name'], "keyValue" => $key, "value" => $value ));	
+
+			echo $mod->run();
+			return;
+		}
+		$mod = $tplm->generateModule("GetSelect");
+		
+		if (!array_key_exists ('id', $select_attrs))
+			$select_attrs['id'] = $select_attrs['name'];
+	
+		$selectedOutArray = array();
+		foreach ($select_attrs as $attr_name => $attr_value)
+			$selectedOutArray[] = array('attr_name' =>  $attr_name, "attr_val" => $attr_value );
+	
+		$mod->setOutput("selectedList", $selectedOutArray);
+	
+		$allOptionsArray = array();
+		foreach ($optList as $dict_key => $dict_value)
+			$allOptionsArray[] = array("dict_key" => $dict_key, "isSelected" =>  ($dict_key == $selected_id ? ' selected' : ''), "dict_val" => $dict_value );
+		$mod->setOutput("allOptions", $allOptionsArray);
+	
+		echo $mod->run();			
 	}
 }
 ?>

@@ -423,8 +423,8 @@ $this->setInMemoryTemplate('StrongElement',"<strong>{{Cont}}</strong>");
 *	Usage:  renderRackMultiSelect -> interface.php
 *
 **/
-//$this->setInMemoryTemplate('StdOptionTemplate',"<option value={{RackId}} {{IsSelected}}>{{RackName}}</option>");
-$this->setInMemoryTemplate('StdOptionTemplate',"<option >aksdfksdajf</option>");
+$this->setInMemoryTemplate('StdOptionTemplate',"<option value={{RackId}} {{IsSelected}}>{{RackName}}</option>\n");
+
 
 /**
 *	RenderedAlloc Templates: 

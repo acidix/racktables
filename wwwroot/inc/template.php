@@ -832,7 +832,12 @@ class TemplateModule
 			{
 				if (is_array($this->output[$name]))
 				{
-					$out = implode($this->output[$name]);
+					if(!$return)
+					{
+						$out = implode($this->output[$name]);
+					}
+					else
+						return $this->output[$name];					
 				}
 				else
 				{

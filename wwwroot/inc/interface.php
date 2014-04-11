@@ -2089,7 +2089,7 @@ function renderRackMultiSelect ($sname, $racks, $selected, $parent = null, $plac
 	}
 	
 	$tplm = TemplateManager::getInstance();
-	
+	$tplm->createMainModule();
 	if($parent==null)	
 		$mod = $tplm->generateModule("RenderRackMultiSelect");
 	else
@@ -2161,7 +2161,7 @@ function renderPortsForObject ($object_id)
 	$mod->setNamespace("object");
 
 	if (getConfigVar('ENABLE_MULTIPORT_FORM') == 'yes' || getConfigVar('ENABLE_BULKPORT_FORM') == 'yes' )
-		$mod->addOutput("isEnableMultiport", true);
+		$mod->setOutput("isEnableMultiport", true);
 			 
 	//	startPortlet ('Ports and interfaces');
 	//else
@@ -2327,8 +2327,11 @@ function renderPortsForObject ($object_id)
 	}
 	//if (getConfigVar('ENABLE_MULTIPORT_FORM') == 'yes')
 	//	finishPortlet();
-	if (getConfigVar('ENABLE_MULTIPORT_FORM') != 'yes'){
-		$mod->setOutput('isEnableMultiport', false);
+	if (getConfigVar('ENABLE_MULTIPORT_FORM') == 'yes'){
+		$mod->addOutput("isShowAddMultiPorts", true);
+	}
+	else{
+		$mod->addOutput("isShowAddMultiPorts", false);
 		return;
 	}
 
@@ -9552,6 +9555,7 @@ function render8021QOrderForm ($some_id)
 	foreach ($minuslines as $item_object_id => $item)
 	{
 		$ctx = getContext();
+		
 		if ($pageno != 'object')
 			spreadContext (spotEntity ('object', $item_object_id));
 		if ($pageno != 'vst')
@@ -9574,11 +9578,12 @@ function render8021QOrderForm ($some_id)
 		restoreContext ($ctx);
 		$singleMinusLine = array('cutblock' => $cutblock);
 		//echo '<tr>';
+
 		if ($pageno != 'object')
 		{
 			$singleMinusLine['isNoObject'] = true;
-			$singleMinusLine['objMkA'] = mkA ($object['dname'], 'object', $object['id']);
 			$object = spotEntity ('object', $item_object_id);
+			$singleMinusLine['objMkA'] = mkA ($object['dname'], 'object', $object['id']);
 			//echo '<td>' . mkA ($object['dname'], 'object', $object['id']) . '</td>';
 		}
 		if ($pageno != 'vlandomain'){
@@ -9597,7 +9602,7 @@ function render8021QOrderForm ($some_id)
 		//echo "<td>${cutblock}</td></tr>";
 	}
 	
-		 
+
 	if
 	(
 		getConfigVar ('ADDNEW_AT_TOP') != 'yes' and
@@ -9893,17 +9898,16 @@ function renderVLANDomain ($vdom_id)
 
 function renderVLANDomainVLANList ($vdom_id)
 {
-	function printNewItemTR ()
+	function printNewItemTR ($parent, $placeholder)
 	{
 		$tplm = TemplateManager::getInstance();
 		$tplm->setTemplate("vanilla");
 			
 		global $vtoptions;
 
-		$mod = $tplm->generateModule("RenderVLANDomainVLANList_printNew", false, array('vtoptions' => $vtoptions));
-		
-		$mod->setNamespace("NamespaceName");
-
+		$mod = $tplm->generateSubmodule($placeholder, "RenderVLANDomainVLANList_printNew", $parent, false, array('Vtoptions' => $vtoptions,
+						"PrintSel" => printSelect ($vtoptions, array ('name' => 'vlan_type', 'tabindex' => 102), 'ondemand')));
+		$mod->setNamespace("vlandomain");
 /**		printOpFormIntro ('add');
 		echo '<tr><td>';
 		printImageHREF ('create', 'add VLAN', TRUE, 110);
@@ -9916,7 +9920,7 @@ function renderVLANDomainVLANList ($vdom_id)
 		echo '</td><td>';
 		printImageHREF ('create', 'add VLAN', TRUE, 110);
 		echo '</td></tr></form>'; */
-		return $mod->run();
+		
 	}
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");
@@ -9928,7 +9932,7 @@ function renderVLANDomainVLANList ($vdom_id)
 	//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
 	//echo '<tr><th>&nbsp;</th><th>ID</th><th>propagation</th><th>description</th><th>&nbsp;</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		$mod->addOutput("AddNewTop", printNewItemTR());		 
+		printNewItemTR($mod, "AddNewTop");		 
 	//	printNewItemTR();
 	
 	global $vtoptions;
@@ -9960,7 +9964,7 @@ function renderVLANDomainVLANList ($vdom_id)
 	$mod->addOutput("allDomainVLANs", $allDomainVLANsOut);
 		 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		$mod->addOutput("AddNewBottom", printNewItemTR());		
+		printNewItemTR($mod, "AddNewBottom");
 //		printNewItemTR();
 //	echo '</table>';
 }
