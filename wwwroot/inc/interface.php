@@ -301,14 +301,15 @@ function getRenderedAlloc ($object_id, $alloc)
 	//	$ret['td_ip'] .= "<span class='$ip_class' $ip_title>$dottedquad</span>";
 	
 	}
-	$tp_ip_mod->setOutput('Aac', $aac[$alloc['type']] );
+
+	$td_ip_mod->setOutput('Aac', $aac[$alloc['type']] );
 
 	//$ret['td_ip'] .= $aac[$alloc['type']];
 	if (strlen ($alloc['addrinfo']['name']))
-		$tp_ip_mod->setOutput('NiftyStr',  '(' . niftyString ($alloc['addrinfo']['name']) . ')');
+		$td_ip_mod->setOutput('NiftyStr',  '(' . niftyString ($alloc['addrinfo']['name']) . ')');
 	//	$ret['td_ip'] .= ' (' . niftyString ($alloc['addrinfo']['name']) . ')';
 	//$ret['td_ip'] .= '</td>';
-	$ret['td_ip'] = $tp_ip_mod->run();
+	$ret['td_ip'] = $td_ip_mod->run();
 
 	// render network and routed_by tds
 	$td_class = 'tdleft';
@@ -1502,7 +1503,7 @@ function renderEditRackForm ($rack_id)
 	$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule('Payload', 'RackEditor');
-	$mod->setNamespace('rack',true);
+	$mod->setNamespace('rack');
 	
 	global $pageno;
 	$rack = spotEntity ('rack', $rack_id);
@@ -1597,6 +1598,8 @@ function renderEditRackForm ($rack_id)
 		//echo getOpLink (array ('op'=>'deleteRack'), '', 'destroy', 'Delete rack', 'need-confirmation');
 		//echo "&nbsp;</td></tr>\n";
 	}
+	$mod->addOutput("Rack_Comment", $rack['comment']);
+		 
 	//echo "<tr><td colspan=3><b>Comment:</b><br><textarea name=comment rows=10 cols=80>${rack['comment']}</textarea></td></tr>";
 	//echo "<tr><td class=submit colspan=3>";
 	//printImageHREF ('SAVE', 'Save changes', TRUE);
@@ -1616,6 +1619,7 @@ function renderRackInfoPortlet ($rackData, $parent = null, $placeholder = 'Paylo
 	$summary['Rack row'] = mkA ($rackData['row_name'], 'row', $rackData['row_id']);
 	$summary['Name'] = $rackData['name'];
 	$summary['Height'] = $rackData['height'];
+	
 	if (strlen ($rackData['asset_no']))
 		$summary['Asset tag'] = $rackData['asset_no'];
 	if ($rackData['has_problems'] == 'yes')
@@ -1640,7 +1644,7 @@ function renderRackInfoPortlet ($rackData, $parent = null, $placeholder = 'Paylo
 		$parent = $tplm->getMainModule();
 	}
 	
-	renderEntitySummary ($rackData, 'summary', $summary, $mod, $placeholder);
+	renderEntitySummary ($rackData, 'summary', $summary, $parent, $placeholder);
 }
 
 // This is a universal editor of rack design/waste.
@@ -1656,7 +1660,7 @@ function renderGridForm ($rack_id, $filter, $header, $submit, $state1, $state2)
 	$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule('Payload', 'GridForm');
-	$mod->setNamespace('rack',true);
+	$mod->setNamespace('rack');
 	
 	$mod->addOutput('Header', $header);
 	$mod->addOutput('Name', $rackData['name']);
@@ -1930,10 +1934,11 @@ function renderObject ($object_id)
 			$is_first_row = TRUE;
 			foreach ($alloclist as $alloc)
 			{
-				$singlePort = array('tr_class' => $rendered_alloc['tr_class']);
+				
 
 				$rendered_alloc = callHook ('getRenderedAlloc', $object_id, $alloc);
-				
+			
+				$singlePort = array('tr_class' => $rendered_alloc['tr_class']);
 			//	echo "<tr class='${rendered_alloc['tr_class']}' valign=top>";
 
 				// display iface name, same values are grouped into single cell
@@ -5167,6 +5172,7 @@ function renderAtomGrid ($data, $parent, $placeholder)
 		$trow->setNamespace("");
 		$trow->addOutput('RackId', $rack_id);
 		$trow->addOutput('UnitNo', $unit_no);
+		$trow->addOutput('Inversed', inverseRackUnit ($unit_no, $data));
 		
 		//echo "<tr><th><a href='javascript:;' onclick=\"toggleRowOfAtoms('${rack_id}','${unit_no}')\">" . inverseRackUnit ($unit_no, $data) . "</a></th>";
 		for ($locidx = 0; $locidx < 3; $locidx++)
@@ -5735,22 +5741,28 @@ function renderRackPage ($rack_id)
 {
 	$rackData = spotEntity ('rack', $rack_id);
 	amplifyCell ($rackData);
-	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0><tr>";
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule("Payload", "RenderRackPage");
+	
+	$mod->setNamespace("rack");
+	
+	//echo "<table border=0 class=objectview cellspacing=0 cellpadding=0><tr>";
 
 	// Left column with information.
-	echo "<td class=pcleft>";
-	renderRackInfoPortlet ($rackData);
-	renderFilesPortlet ('rack', $rack_id);
-	echo '</td>';
+	//echo "<td class=pcleft>";
+	renderRackInfoPortlet ($rackData, $mod, "InfoPortlet");
+	renderFilesPortlet ('rack', $rack_id, $mod, "FilesPortlet");
+	//echo '</td>';
 
 	// Right column with rendered rack.
-	echo '<td class=pcright>';
-	startPortlet ('Rack diagram');
-	renderRack ($rack_id);
-	finishPortlet();
-	echo '</td>';
+	//echo '<td class=pcright>';
+	//startPortlet ('Rack diagram');
+	renderRack ($rack_id, 0, $mod, "RenderedRack");
+	//finishPortlet();
+	//echo '</td>';
 
-	echo '</tr></table>';
+	//echo '</tr></table>';
 }
 
 function renderDictionary ()
@@ -8320,6 +8332,8 @@ function printRoutersTD ($rlist, $as_cell = 'yes', $parent = null, $placeholder 
 		$mod = $tplm->generateModule('IPSpaceRecordRouter');
 	else
 		$mod = $tplm->generateSubmodule($placeholder, 'IPSpaceRecordRouter', $parent);
+	$mod->setNamespace("ipspace");
+
 	if ($as_cell = 'yes')
 	{
 		$mod->addOutput('printCell', true);
@@ -8358,7 +8372,7 @@ function printIPNetInfoTDs ($netinfo, $decor = array(), $parent, $placeholder)
 	$tplm = TemplateManager::getInstance();
 	
 	$mod = $tplm->generateSubmodule($placeholder, 'IPSpaceRecordInfo', $parent);
-	
+	$mod->setNamespace("ipspace");
 	//echo '<td class="tdleft';
 	if (array_key_exists ('tdclass', $decor))
 		$mod->addOutput('TDClass', $decor['tdclass']);

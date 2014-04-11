@@ -49,7 +49,7 @@
                 <tr><th>OS interface</th><th>IP address</th><th>peers</th></tr>
 			<?php } ?>
 			<?php $this->startLoop("allPorts"); ?>	
-				<tr class='tr_class' valign=top>
+				<tr class='<?php $this->tr_class ?>' valign=top>
 				<?php $this->FristMod ?>
 				<?php $this->td_ip ?>
 				<?php $this->td_network ?>

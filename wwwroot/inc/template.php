@@ -556,7 +556,8 @@ abstract class TemplateHelperAbstract
 		}
 		$ret = array();
 		foreach ($params as $i => $val) {
-			if(substr($val,0,2)=="%%")
+
+			if(is_string($val) && substr($val,0,2)=="%%")
 			{
 				$ret[$i] = $parent->get(substr($val,2),true);
 			}

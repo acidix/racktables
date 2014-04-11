@@ -1,10 +1,10 @@
 <?php if (defined("RS_TPL")) { ?>
-	<td class='atom state_<?php $this->State; ?>' <?php $this->Hl; ?>>
-	<input type=checkbox id=<?php $this->Name; ?> 
+	<td class='atom state_<?php $this->State; ?><?php $this->Hl; ?>'>
+	<input id=<?php $this->Name; ?> type=checkbox
 		<?php if ($this->is('Disabled')) { ?>
-			disabled >
+			 disabled >
 		<?php } else { ?>
-			name='<?php $this->Name; ?>' <?php $this->Checked; ?> >
+			name=<?php $this->Name; ?> <?php $this->Checked; ?> >
 		<?php } ?>
 	</td>
 <?php } else { ?>

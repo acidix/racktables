@@ -309,7 +309,7 @@ function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $
 			break;
 
 		$mod = $tplm->generateModule("GetSelectInLine",  true, array("selectName" => $select_attrs['name'], "keyValue" => $key, "value" => $value ));	
-
+		$mod->setNamespace("");
 //		return "<input type=hidden name=${select_attrs['name']} id=${select_attrs['name']} value=${key}>" . $value;
 		return $mod->run();
 	}
@@ -317,6 +317,7 @@ function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $
 		$mod = $tplm->generateModule("GetSelect");
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "GetSelect", $parent);
+	$mod->setNamespace("");
 
 	if (!array_key_exists ('id', $select_attrs))
 		$select_attrs['id'] = $select_attrs['name'];

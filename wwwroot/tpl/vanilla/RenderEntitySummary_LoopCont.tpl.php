@@ -2,8 +2,8 @@
 	<?php if($this->is("singleVal", true)){ ?>
 		<?php $this->val ?>
 	<?php } else {?>
-		<?php if($this->is("showTags", true)) { ?>
-			<?php $this->getH("PrintTagTRs", array( $this->_cell, $this->baseurl));  ?> 
+		<?php if($this->is("showTags")) { ?>
+			<?php $this->getH("PrintTagTRs", array( $this->_cell, $this->_baseurl));  ?> 
 		<?php } else {?>
 			<tr><th width='50%' class='<?php $this->class ?>'><?php $this->name ?></th><td class=tdleft><?php $this->val ?></td></tr> 
 		<?php } ?>
