@@ -7974,12 +7974,13 @@ function renderFileSummary ($file, $parent = null, $placeholder = 'FileSummary')
 	renderEntitySummary ($file, 'summary', $summary, $parent, $placeholder);
 }
 
-function renderFileLinks ($links,$parent,$placeholder)
+function renderFileLinks ($links, $parent, $placeholder)
 {
 	$tplm = TemplateManager::getInstance();
 	$mod = $tplm->generateSubmodule($placeholder, 'FileLinks', $parent);
 	$mod->setNamespace('file');
-	
+	$mod->addOutput("Count", count ($links));
+		 
 	//startPortlet ('Links (' . count ($links) . ')');
 	//echo "<table cellspacing=0 cellpadding='5' align='center' class='widetable'>\n";
 	
@@ -8042,7 +8043,7 @@ function renderFile ($file_id)
 	if (count ($links))
 		callHook ('renderFileLinks', $links, $mod, 'FileLinks');
 
-	echo "</td>";
+	//echo "</td>";
 
 	if (isolatedPermission ('file', 'download', $file)) //and '' != ($pcode = getFilePreviewCode ($file)))
 	{
