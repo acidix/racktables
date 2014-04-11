@@ -30,8 +30,7 @@
 			<a href='?module=download&file_id=<?php $this->get("cellID") ?>'>
 			<?php $this->get("isoPermImg") ?>
 			</a>&nbsp;
-		<?php } ?>
-		<?php $this->fileSize ?>
+		<?php } ?><?php $this->fileSize ?>
 		</td></tr></table>
 	<?php } ?>
 

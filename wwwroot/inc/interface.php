@@ -5221,7 +5221,7 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 	
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");	
-	if($parent == null){	
+	if($parent === NULL){	
 		$mod = $tplm->generateModule("CellList");
 	}
 	else{
@@ -8028,7 +8028,7 @@ function renderFile ($file_id)
 	$tplm = TemplateManager::getInstance();
 	
 	$mod = $tplm->generateSubmodule('Payload', 'File');
-	$mod->setNamespace('file',true);
+	$mod->setNamespace('file');
 	
 	$mod->addOutput('Name', htmlspecialchars ($file['name']));
 	
@@ -8114,7 +8114,9 @@ function renderFileProperties ($file_id)
 
 function renderFileBrowser ()
 {
-	renderCellList ('file', 'Files', TRUE, NULL, NULL, 'Payload');
+	$tplm = TemplateManageR::getInstance();
+
+	renderCellList ('file', 'Files', TRUE, NULL, $tplm->createMainModule(), 'Payload');
 }
 
 // Like renderFileBrowser(), but with the option to delete files
@@ -8167,15 +8169,20 @@ function renderFileManager ()
 		foreach ($files as $file)
 		{
 			$smod = $tplm->generateSubmodule('Content', 'FileManagerRow', $mod);
+			$smod->setNamespace('files');
+
 			$smod->addOutput('Count',count ($file['links']));
+			$smod->addOutput('Order',$order);
+			
 			//printf("<tr class=row_%s valign=top><td class=tdleft>", $order);
-			renderCell ($file, $smod, 'Cell');
+			$smod->addOutput('Cell', renderCell ($file));
+			//	 renderCell ($file);
 			// Don't load links data earlier to enable special processing.
 			amplifyCell ($file);
 			//echo '</td><td class=tdleft>';
 			$smod->addOutput('Links', serializeFileLinks ($file['links'], TRUE));
-			$smod->addOutput('Count',count ($file['links']));
-			$smod->addOutput('Id', $file['id']);
+			$smod->setOutput('Count',count ($file['links']));
+			$smod->setOutput('Id', $file['id']);
 			
 			//echo serializeFileLinks ($file['links'], TRUE);
 			//echo '</td><td class=tdcenter valign=middle>';
