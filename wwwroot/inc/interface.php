@@ -12446,7 +12446,7 @@ function renderExpirations ()
 				$count++;
 
 	
-			}*/
+			}
 
 			$allSectsOut[] = $singleSectOut;
 			//echo "</table><br>\n";
