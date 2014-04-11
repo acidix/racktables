@@ -12402,17 +12402,18 @@ function renderExpirations ()
 
 		//	echo '<table align=center width=60% border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>';
 		//	echo "<caption>${section['title']}</caption>\n";
-			$singleSectOut['title'] = $section['title'];
+			$singleSectOut['Title'] = $section['title'];
 
 			if (! count ($result))
 			{
 				$singleSectOut['CountMod'] = $tplm->generateModule('ExpirationsNoSection', true)->run();
 			//	echo "<tr><td colspan=4>(none)</td></tr></table><br>\n";
+				$allSectsOut[] = $singleSectOut;
 				continue;
 			}
 			//echo '<tr valign=top><th align=center>Count</th><th align=center>Name</th>';
 			//echo "<th align=center>Asset Tag</th><th align=center>OEM S/N 1</th><th align=center>Date Warranty <br> Expires</th></tr>\n";
-			$singleSectOut['resOut'] = '';
+			$singleSectOut['ResOut'] = '';
 			foreach ($result as $row)
 			{
 				$res = $tplm->generateModule("RenderExpirations_result");
@@ -12441,12 +12442,14 @@ function renderExpirations ()
 				$order = $nextorder[$order];
 				$count++;
 
+	
+			}*/
 
-			}
 			$allSectsOut[] = $singleSectOut;
 			//echo "</table><br>\n";
 		}
-		$mod->setOutput("allSects", $allSectsOut); 
+		$mod->addOutput("allSects", $allSectsOut); 
+	
 		//finishPortlet ();
 	}
 }
