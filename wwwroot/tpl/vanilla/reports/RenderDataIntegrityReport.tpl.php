@@ -5,10 +5,10 @@
 			<table cellpadding=5 cellspacing=0 align=center class=cooltable>
 			<tr><th>Parent</th><th>Child Type</th><th>Child ID</th></tr>
 			<?php $this->startLoop("ChildrenOrphans"); ?>	
-				<tr class=row_<?php $this->order ?>>
-				<td><?php $this->elemName ?> : <?php $this->parentName ?></td>
-				<td><?php $this->entity_type ?> </td>
-				<td><?php $this->entity_id ?> </td>
+				<tr class=row_<?php $this->Order; ?>>
+				<td><?php $this->RealmName; ?> : <?php $this->ElemName ?></td>
+				<td><?php $this->EntityType ?> </td>
+				<td><?php $this->EntityId ?> </td>
 			<?php $this->endLoop(); ?> 
 			</table>
 		</div>
@@ -33,10 +33,10 @@
 			<table cellpadding=5 cellspacing=0 align=center class=cooltable>
 			<tr><th>Attribute</th><th>Chapter</th><th>Object TypeID</th></tr>
 			<?php $this->startLoop("AttrMapOrphans"); ?>	
-				<tr class=row_<?php $this->order ?>>
-				<td><?php $this->attr_name ?> </td>
-				<td><?php $this->chapter_name ?> </td>
-				<td><?php $this->objtype_id ?> </td>
+				<tr class=row_<?php $this->Order ?>>
+				<td><?php $this->AttrName ?> </td>
+				<td><?php $this->ChapterName ?> </td>
+				<td><?php $this->ObjtypeId ?> </td>
 			<?php $this->endLoop(); ?> 
 			</table>
 		</div>
@@ -47,10 +47,10 @@
 			<table cellpadding=5 cellspacing=0 align=center class=cooltable>
 			<tr><th>ID</th><th>Name</th><th>Type ID</th></tr>
 			<?php $this->startLoop("AllObjectsOrphans"); ?>	
-				<tr class=row_<?php $this->order ?>>
-				<td><?php $this->id ?> </td>
-				<td><?php $this->name ?> </td>
-				<td><?php $this->objtype_id ?> </td>
+				<tr class=row_<?php $this->Order ?>>
+				<td><?php $this->Id ?> </td>
+				<td><?php $this->Name ?> </td>
+				<td><?php $this->ObjtypeId ?> </td>
 			<?php $this->endLoop(); ?> 
 			</table>
 		</div>
@@ -61,10 +61,10 @@
 			<table cellpadding=5 cellspacing=0 align=center class=cooltable>
 			<tr><th>ID</th><th>Name</th><th>Type ID</th></tr>
 			<?php $this->startLoop("AllObjectHistsOrphans"); ?>	
-				<tr class=row_<?php $this->order ?>>
-				<td><?php $this->id ?> </td>
-				<td><?php $this->name ?> </td>
-				<td><?php $this->objtype_id ?> </td>
+				<tr class=row_<?php $this->Order ?>>
+				<td><?php $this->Id ?> </td>
+				<td><?php $this->Name ?> </td>
+				<td><?php $this->ObjtypeId ?> </td>
 			<?php $this->endLoop(); ?> 
 			</table>
 		</div>
@@ -75,11 +75,11 @@
 			<table cellpadding=5 cellspacing=0 align=center class=cooltable>
 			<tr><th>From</th><th>From Type ID</th><th>To</th><th>To Type ID</th></tr>
 			<?php $this->startLoop("AllObjectParsOrphans"); ?>	
-				<tr class=row_<?php $this->order ?>>
-				<td><?php $this->parent_name ?> </td>
-				<td><?php $this->parent_objtype_id ?> </td>
-				<td><?php $this->child_name ?> </td>
-				<td><?php $this->child_objtype_id ?> </td>
+				<tr class=row_<?php $this->Order ?>>
+				<td><?php $this->ParentName ?> </td>
+				<td><?php $this->ParentObjtypeId ?> </td>
+				<td><?php $this->ChildName ?> </td>
+				<td><?php $this->ChildObjtypeId ?> </td>
 			<?php $this->endLoop(); ?> 
 			</table>
 		</div>
@@ -90,11 +90,11 @@
 			<table cellpadding=5 cellspacing=0 align=center class=cooltable>
 			<tr><th>From</th><th>From Type ID</th><th>To</th><th>To Type ID</th></tr>
 			<?php $this->startLoop("AllPortCompsOrphans"); ?>	
-				<tr class=row_<?php $this->order ?>>
-				<td><?php $this->type1_name ?> </td>
-				<td><?php $this->type1 ?> </td>
-				<td><?php $this->type2_name ?> </td>
-				<td><?php $this->type2 ?> </td>
+				<tr class=row_<?php $this->Order ?>>
+				<td><?php $this->Type1Name ?> </td>
+				<td><?php $this->Type1 ?> </td>
+				<td><?php $this->Type2Name ?> </td>
+				<td><?php $this->Type2 ?> </td>
 			<?php $this->endLoop(); ?> 
 			</table>
 		</div>
@@ -105,9 +105,9 @@
 			<table cellpadding=5 cellspacing=0 align=center class=cooltable>
 			<tr><th>Inner Interface</th><th>Outer Interface ID</th></tr>
 			<?php $this->startLoop("AllPortIntersOrphans"); ?>	
-				<tr class=row_<?php $this->order ?>>
-				<td><?php $this->iif_name ?> </td>
-				<td><?php $this->oif_id ?> </td>
+				<tr class=row_<?php $this->Order ?>>
+				<td><?php $this->IifName ?> </td>
+				<td><?php $this->OifId ?> </td>
 			<?php $this->endLoop(); ?> 
 			</table>
 		</div>
@@ -118,11 +118,11 @@
 			<table cellpadding=5 cellspacing=0 align=center class=cooltable>
 			<tr><th>Contained Obj Name</th><th>Contained Obj Type</th><th>Container Obj Name</th><th>Container Obj Type</th></tr>
 			<?php $this->startLoop("AllObjectParRulesOrphans"); ?>	
-				<tr class=row_<?php $this->order ?>>
-				<td><?php $this->child_name ?> </td>
-				<td><?php $this->child_type ?> </td>
-				<td><?php $this->parent_name ?> </td>
-				<td><?php $this->parent_type ?> </td>
+				<tr class=row_<?php $this->Order ?>>
+				<td><?php $this->ChildName ?> </td>
+				<td><?php $this->ChildType ?> </td>
+				<td><?php $this->ParentName ?> </td>
+				<td><?php $this->ParentType ?> </td>
 			<?php $this->endLoop(); ?> 
 			</table>
 		</div>
@@ -133,10 +133,10 @@
 			<table cellpadding=5 cellspacing=0 align=center class=cooltable>
 			<tr><th>Tag</th><th>Parent Type</th><th>Parent ID</th></tr>
 			<?php $this->startLoop("AllTagStoragesOrphans"); ?>	
-				<tr class=row_<?php $this->order ?>>
-				<td><?php $this->tag ?> </td>
-				<td><?php $this->realm_name ?> </td>
-				<td><?php $this->entity_id ?> </td>
+				<tr class=row_<?php $this->Order ?>>
+				<td><?php $this->Tag ?> </td>
+				<td><?php $this->RealmName ?> </td>
+				<td><?php $this->EntityId ?> </td>
 			<?php $this->endLoop(); ?> 
 			</table>
 		</div>
@@ -147,10 +147,10 @@
 			<table cellpadding=5 cellspacing=0 align=center class=cooltable>
 			<tr><th>File</th><th>Parent Type</th><th>Parent ID</th></tr>
 			<?php $this->startLoop("AllFileLinksOrphans"); ?>	
-				<tr class=row_<?php $this->order ?>>
-				<td><?php $this->name ?> </td>
-				<td><?php $this->realm_name ?> </td>
-				<td><?php $this->entity_id ?> </td>
+				<tr class=row_<?php $this->Order ?>>
+				<td><?php $this->Name ?> </td>
+				<td><?php $this->RealmName ?> </td>
+				<td><?php $this->EntityId ?> </td>
 			<?php $this->endLoop(); ?> 
 			</table>
 		</div>

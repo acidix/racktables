@@ -10,7 +10,7 @@
 		<td class=tdleft><?php $this->Name; ?></td>
 		<td class=tdleft><?php $this->Type; ?></td>
 		<td class=tdleft>
-		<?php $this->Application_set ?>
+		<?php $this->ApplicationSet ?>
 		<?php $this->AllAppAttrsMod ?>
 	<?php $this->endLoop() ?> 
 	</table><br></div>

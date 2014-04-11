@@ -3,13 +3,13 @@
 	<tr><th>&nbsp;</th><th>base URL</th><th>graph(s)</th><th>&nbsp;</th></tr>
 	<?php $this->AddNewTop ?>
 	<?php $this->startLoop("allMuninServers"); ?>	
-		<?php $this->formIntro ?>
+		<?php $this->FormIntro ?>
 		<tr><td>
-		<?php $this->destroyImg ?>
+		<?php $this->DestroyImg ?>
 		</td>
-		<td><input type=text size=48 name=base_url value="<?php $this->specialCharSrv ?>"></td>
-		<td class=tdright><?php $this->num_graphs ?></td>
-		<td><?php $this->imageSave ?></td>
+		<td><input type=text size=48 name=base_url value="<?php $this->SpecialCharSrv ?>"></td>
+		<td class=tdright><?php $this->NumGraphs ?></td>
+		<td><?php $this->ImageSave ?></td>
 		</tr></form>
 	<?php $this->endLoop(); ?> 
 	<?php $this->AddNewBottom ?>
