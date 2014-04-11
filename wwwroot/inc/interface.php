@@ -2366,7 +2366,7 @@ function renderIPForObject ($object_id)
 		$tplm = TemplateManager::getInstance();
 		$tplm->setTemplate("vanilla");
 		
-		$mod = $tplm->generateSubmodule($placeholder,"RenderIPForObject_newItem", $parent);
+		$mod = $tplm->generateSubmodule($placeholder,"RenderIPForObject_printNew", $parent);
 		$mod->setNamespace("object");
 			
 		/*printOpFormIntro ('add');
@@ -2766,8 +2766,6 @@ function renderRackSpaceForObject ($object_id)
 			$parentRacks[] = $parentData['entity_id'];
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderRackSpaceForObject");
 	$mod->setNamespace("object");
@@ -3241,7 +3239,8 @@ function renderIPSpaceRecords ($tree, $baseurl, $target = 0, $level = 1, $parent
 		if (isset ($item['id']))
 		{
 			$mod = $tplm->generateSubmodule($placeholder, 'IPSpaceRecord', $parent);
-			
+			$mod->setNamespace('ipspace');
+				
 			$decor = array ('indent' => $level);
 			if ($item['symbol'] == 'node-collapsed')
 				$decor['symbolurl'] = "${baseurl}&eid=${item['id']}&hl_net=1";
@@ -3297,7 +3296,7 @@ function renderIPSpace()
 	
 	$tplm = TemplateManager::getInstance();
 	$mod = $tplm->generateSubmodule('Payload', 'IPSpace');
-	$mod->setNamespace('ipspace',true);
+	$mod->setNamespace('ipspace');
 
 	// expand request can take either natural values or "ALL". Zero means no expanding.
 	$eid = isset ($_REQUEST['eid']) ? $_REQUEST['eid'] : 0;
@@ -3325,6 +3324,8 @@ function renderIPSpace()
 		if (! renderEmptyResults($cellfilter, 'IP nets', count($tree),$mod,'EmptyResults'))
 		{
 			$mod->addOutput('hasResults', true);
+			$mod->addOutput("NetCount", $netcount);
+				 
 			//startPortlet ("networks (${netcount})");
 			//echo '<h4>';
 			//$all = "<a href='".makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'eid'=>'ALL')) .
@@ -3333,13 +3334,14 @@ function renderIPSpace()
 			//		$cellfilter['urlextra'] . "'>collapse&nbsp;all</a>";
 			//$auto = "<a href='".makeHref(array('page'=>$pageno, 'tab'=>$tabno)) .
 			//	$cellfilter['urlextra'] . "'>auto-collapse</a>";
-			
+			$mod->addOutput("TreeThreshold", getConfigVar ('TREE_THRESHOLD'));
 			$mod->addOutput('ExpandAll', makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'eid'=>'ALL')) . $cellfilter['urlextra']);
 			$mod->addOutput('CollapseAll', makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'eid'=>'NONE')) .	$cellfilter['urlextra']);
 			$mod->addOutput('CollapseAuto', makeHref(array('page'=>$pageno, 'tab'=>$tabno)) . $cellfilter['urlextra']);
 			
 			if ($eid === 0)
 				$mod->addOutput('CollapseExpandOptions', 'allnone');
+
 				//echo 'auto-collapsing at threshold ' . getConfigVar ('TREE_THRESHOLD') . " ($all / $none)";
 			elseif ($eid === 'ALL')
 				$mod->addOutput('CollapseExpandOptions', 'all');
@@ -3362,14 +3364,14 @@ function renderIPSpace()
 				//echo "<th>routed by</th>";
 			//echo "</tr>\n";
 			$baseurl = makeHref(array('page'=>$pageno, 'tab'=>$tabno)) . $cellfilter['urlextra'];
-			renderIPSpaceRecords ($tree, $baseurl, $eid, $mod, 'IPRecords');
+			renderIPSpaceRecords ($tree, $baseurl, $eid, 1, $mod, 'IPRecords');
 			//echo "</table>\n";
 			//finishPortlet();
 		}
 	}
 
 	//echo '</td><td class=pcright>';
-	renderCellFilterPortlet ($cellfilter, $realm, $netlist, $mod, 'CellFilter');
+	renderCellFilterPortlet ($cellfilter, $realm, $netlist, array(), $mod, 'CellFilter');
 	//echo "</td></tr></table>\n";
 }
 
@@ -3420,6 +3422,7 @@ function renderIPSpaceEditor()
 			$singleNetinfo['ipnetCap'] = getRenderedIPNetCapacity ($netinfo);
 	//		echo getRenderedIPNetCapacity ($netinfo);
 	//		echo '</tr>';
+			$allNetinfoOut[] = $singleNetinfo;
 		}
 		$mod->addOutput("allNetinfo", $allNetinfoOut);
 			 
@@ -3576,7 +3579,7 @@ function renderIPNetwork ($id)
 	{
 		$summary['Routed by'] = '';
 		foreach ($routers as $rtr)
-			$summary['Routed by'] .= renderRouterCell( $rtr['ip_bin'], $rtr['iface'], spotEntity ('object', $rtr['id']));
+			$summary['Routed by'] .= renderRouterCell($rtr['ip_bin'], $rtr['iface'], spotEntity ('object', $rtr['id']));
 	}
 	$summary['tags'] = '';
 	//renderEntitySummary ($range, 'summary', $summary);
@@ -8332,11 +8335,14 @@ function printRoutersTD ($rlist, $as_cell = 'yes', $parent = null, $placeholder 
 		$mod = $tplm->generateModule('IPSpaceRecordRouter');
 	else
 		$mod = $tplm->generateSubmodule($placeholder, 'IPSpaceRecordRouter', $parent);
+	
 	$mod->setNamespace("ipspace");
+	$mod->addOutput("TRClass", $rtrclass);
+		 
 
-	if ($as_cell = 'yes')
+	if ($as_cell == 'yes')
 	{
-		$mod->addOutput('printCell', true);
+		$mod->setOutput('printCell', true);
 	}
 	//echo "<td class='${rtrclass}'>";
 	//$pfx = '';
@@ -8659,7 +8665,7 @@ function renderRouterCell ($ip_bin, $ifname, $cell, $parent = null, $placeholder
 		$mod = $tplm->generateSubmodule($placeholder, 'RouterCell', $parent);
 	
 	$mod->setNamespace('ipnetwork');
-	$mod->setLock();
+	//$mod->setLock();
 	
 	$mod->addOutput('IP', $dottedquad);
 	
@@ -8685,7 +8691,9 @@ function renderRouterCell ($ip_bin, $ifname, $cell, $parent = null, $placeholder
 		echo '<small>' . serializeTags ($cell['etags']) . '</small>';
 	echo "</td></tr></table>";*/
 	
-	if ($parent === null) { return $mod->run(); }
+	if ($parent === null) { 
+		return $mod->run(); 
+	}
 }
 
 // Return HTML code necessary to show a preview of the file give. Return an empty string,

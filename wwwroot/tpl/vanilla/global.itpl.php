@@ -431,7 +431,7 @@ $this->setInMemoryTemplate('StdOptionTemplate',"<option value={{RackId}} {{IsSel
 *	Usage:  getRenderedAlloc -> interface.php
 *
 **/
-$this->setInMemoryTemplate("RenderedAllocTdIpNetInfo","<a name='{{Dottequad}}' class='{{IpClass}}' {{IpTitle}} href='{{Href}}'>{{Title}}</a>");
+$this->setInMemoryTemplate("RenderedAllocTdIpNetInfo","<a name='ip-{{Dottequad}}' class='{{IpClass}}' {{IpTitle}} href='{{Href}}'>{{Title}}</a>");
 $this->setInMemoryTemplate("RenderedAllocTdIpNoNetInfo","<span class='{{IpClass}}' {{IpTitle}}>{{Dottequad}}</span>");
 $this->setInMemoryTemplate("RenderedAllocTdIp","<td class='tdleft'>{{Info}}{{Aac}} {{NiftyStr}}</td>");
 
