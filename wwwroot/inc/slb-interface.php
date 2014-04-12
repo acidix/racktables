@@ -10,8 +10,6 @@ function renderSLBDefConfig()
 {
 	$defaults = getSLBDefaults();
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderSLBDefConfig");
 	$mod->setNamespace("ipv4slb");
@@ -37,7 +35,7 @@ function renderSLBEntityCell ($cell, $highlighted = FALSE, TemplateModule $paren
 	//TODO Remove after change to config
 	if($parent==null){
 		$tplm->setTemplate("vanilla");
-		$mod = $tplm->generateModule("RenderSLBEntityCell",  false);
+		$mod = $tplm->generateModule("RenderSLBEntityCell");
 	}
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderSLBEntityCell", $parent);
@@ -843,7 +841,10 @@ function renderNewVSForm ()
 		 
 	global $vs_proto;
 	$vs_keys = array_keys ($vs_proto);
-	printSelect ($vs_proto, array ('name' => 'proto'), array_shift ($vs_keys));
+	$mod->setOutput("vs_proto", $vs_proto);
+	$mod->setOutput("vs_keys", array_shift ($vs_keys));
+	
+	//printSelect ($vs_proto, array ('name' => 'proto'), array_shift ($vs_keys));
 	//echo '</td><td><input type=text name=name tabindex=104></td><td>';
 	//printImageHREF ('CREATE', 'create virtual service', TRUE, 105);
 	//echo "</td><td rowspan=3>";

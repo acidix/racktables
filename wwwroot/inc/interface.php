@@ -3767,7 +3767,8 @@ function renderIPv4NetworkAddresses ($range, $parent, $placeholder)
 		$history_class = '';
 		
 		$smod = $tplm->generateSubmodule('IPList', 'IPNetworkAddress');
-
+		$smod->setNamespace('ipnetwork');
+		
 		if (isset ($addr['last_log']))
 		{
 			$smod->addOutput('Title', htmlspecialchars ($addr['last_log']['user'] . ', ' . formatAge ($addr['last_log']['time']) , ENT_QUOTES));
@@ -7999,7 +8000,7 @@ function renderFileLinks ($links, $parent, $placeholder)
 			case 'ipv4vs':
 			case 'ipv4rspool':
 			case 'object':
-				$tplm->generateSubmodule('Links','FileLinksDefLink',$mod,true,array('Content'=>renderCell ($cell)));
+				$tplm->generateSubmodule('Links','FileLinksDefLink',$mod,true, array('Content'=>renderCell ($cell)));
 				break;
 			default:
 				$tplm->generateSubmodule('Links', 'FileLinksObjLink', $mod, true, array('Name'=>formatRealmName ($link['entity_type']),'Link'=>mkCellA ($cell)));

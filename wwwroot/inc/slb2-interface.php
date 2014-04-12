@@ -41,9 +41,9 @@ function formatVSIP ($vip, $plain_text = FALSE)
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");
 	
-	$mod = $tplm->generateModule("FormatVSIPInMemory", true, array("href" => makeHref (array ('page' => 'ipaddress', 'ip' => $fmt_ip)), 
+	$mod = $tplm->generateModule("FormatVSIPInMem", true, array("href" => makeHref (array ('page' => 'ipaddress', 'ip' => $fmt_ip)), 
 		   "fmt_ip" => $fmt_ip));
-	
+
 //	$ret = '<a href="' . makeHref (array ('page' => 'ipaddress', 'ip' => $fmt_ip)) . '">' . $fmt_ip . '</a>';
 	return $mod->run();
 }
@@ -523,7 +523,8 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 
 //		echo "</tr>\n";
 		$order = $nextorder[$order];
-		$tplm->generateSubmodule('AllTriplets', 'RenderSLBTriplets2_TripletLoop', $mod, false, $tripletArray);
+		$smod = $tplm->generateSubmodule('AllTriplets', 'RenderSLBTriplets2_TripletLoop', $mod, false, $tripletArray);
+		$smod->setNamespace('slb2_interface');
 	}
 
 
