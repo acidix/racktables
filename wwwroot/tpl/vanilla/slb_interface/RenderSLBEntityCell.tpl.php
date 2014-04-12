@@ -5,13 +5,13 @@
 		<tr><td><a class='<?php $this->get("aClass") ?>' 
 			href='index.php?page=object&object_id=<?php $this->cellID ?>'><?php $this->cellDName ?></a>
 			</td></tr><tr><td>
-			<?php $this->getH("PrintImageHref","LB") ?>
+			<?php $this->getH("PrintImageHref",array('LB'));?>
 			</td></tr>
 	<?php } ?>
 
 	<?php if ($this->is("typeIPV4s",true)) { ?>
 		<tr><td rowspan=3 width='5%'>
-		<?php $this->getH("PrintImageHref","VS");?>
+		<?php $this->getH("PrintImageHref",array('VS'));?>
 		</td><td>
 		<a class='<?php $this->aClass ?>' href='index.php?page=ipv4vs&vs_id=<?php $this->cellID ?>'>
 		<?php $this->get("cellDName")?> </a></td></tr><tr><td>
@@ -20,7 +20,7 @@
 	
 	<?php if ($this->is("typeIPVs",true)) { ?>
 		<tr><td rowspan=3 width='5%'>
-		<?php $this->getH("PrintImageHref","VS");?>
+		<?php $this->getH("PrintImageHref",array('VS'));?>
 		</td><td>
 		<a class='<?php $this->aClass ?>' href='index.php?page=ipvs&vs_id=<?php $this->cellID ?>'>
 		<?php $this->get("cellName")?> </a></td></tr>
@@ -33,7 +33,7 @@
 		<?php $this->get("cellName");?>
 		</a></td></tr><tr><td>
 
-		<?php $this->getH("PrintImageHref","RS pool");?>
+		<?php $this->getH("PrintImageHref",array("RS pool"));?>
 
 		<?php if ($this->is("showRSCount",true)) { ?>
 			<small>(<?php $this->get("cellRSCount") ?>)</small>

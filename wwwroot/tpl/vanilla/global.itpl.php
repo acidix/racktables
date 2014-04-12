@@ -142,7 +142,7 @@ $this->setInMemoryTemplate("MkAInMemory","<a href='{{link}}'>{{text}}</a>");
 *	Usage: slb2-interface.php
 *
 **/
-$this->setInMemoryTemplate("formatVSPortInMemory"," <span title={{name}}> {{srv}} </span>");
+$this->setInMemoryTemplate("formatVSPortInMemory"," <span title={{name}}>{{srv}}</span>");
 
 /**
 *	FormatVSIP: 
@@ -299,7 +299,7 @@ $this->setInMemoryTemplate('RenderedIPPortPair','<a href="{{href}}">{{ip}}</a>{{
 *	Usage:  ajax-interface.php
 *
 **/
-$this->setInMemoryTemplate("FormatLoggedSpan","<span{{class}}{title}}>{{text}}</span>");
+$this->setInMemoryTemplate("FormatLoggedSpan","<span {{class}} {title}}>{{text}}</span>");
 
 /**
 *	FullWidthTable: 
@@ -450,6 +450,13 @@ $this->setInMemoryTemplate("RenderedAllocLocPeers","{{Prefix}}<a href='{{href}}'
 **/
 $this->setInMemoryTemplate("RSPoolSrvInservice","<td align=center>{{ImgCont}}</td>");
 $this->setInMemoryTemplate("RSPoolSrvRsconfig","<td class=slbconf>{{Cont}}</td>");
-$this->setInMemoryTemplate("RSPoolSrvDefault","<td class=tdleft>>{{Cont}}</td>");
+$this->setInMemoryTemplate("RSPoolSrvDefault","<td class=tdleft>{{Cont}}</td>");
+
+/**
+*	StdSpan: 
+*	Usage:  renderSLBTriplets2 ->  slb2_interface.php
+*
+**/
+$this->setInMemoryTemplate("StdSpan","<span class='{{Class}}'>{{Cont}}</span>");
 
 ?>

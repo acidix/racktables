@@ -29,19 +29,16 @@ function renderSLBDefConfig()
 	//finishPortlet();
 }
 
-function renderSLBEntityCell ($cell, $highlighted = FALSE, TemplateModule $parent = null, $placheolder = 'RenderedSLBEntityCell')
+function renderSLBEntityCell ($cell, $highlighted = FALSE, $parent = null, $placeholder = 'RenderedSLBEntityCell')
 {
 	$tplm = TemplateManager::getInstance();
-	//TODO Remove after change to config
 	if($parent==null){
-		$tplm->setTemplate("vanilla");
 		$mod = $tplm->generateModule("RenderSLBEntityCell");
 	}
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderSLBEntityCell", $parent);
-
-
 	$mod->setNamespace("slb_interface");
+
 
 	$class = "slbcell realm-${cell['realm']} id-${cell['id']}";
 	$a_class = $highlighted ? 'highlight' : '';
@@ -111,7 +108,7 @@ function renderSLBEntityCell ($cell, $highlighted = FALSE, TemplateModule $paren
 //	echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
 //	echo "</td></tr></table>";
 
-	if($parent==null)
+	if($parent === null)
 		return $mod->run();
 }
 
@@ -432,11 +429,10 @@ function renderRSPool ($pool_id)
 	$summary['VS configuration'] = '<div class="dashed slbconf">' . htmlspecialchars ($poolInfo['vsconfig']) . '</div>';
 	$summary['RS configuration'] = '<div class="dashed slbconf">' . htmlspecialchars ($poolInfo['rsconfig']) . '</div>';
 //	renderEntitySummary ($poolInfo, 'Summary', $summary);
-	$mod->setOutput("renderedEntity", renderEntitySummary ($poolInfo, 'Summary', $summary));
+	renderEntitySummary ($poolInfo, 'Summary', $summary, $mod, 'renderedEntity');
 		 
-	//callHook ('portletRSPoolSrv', $pool_id);
-	portletRSPoolSrv( $pool_id, $mod, 'RSPoolSrvPortlet');
-
+	callHook ('portletRSPoolSrv', $pool_id, $mod, 'RSPoolSrvPortlet');
+	
 //	echo "</td><td class=pcright>\n";
 	$mod->setOutput("renderedSLBTrip2", renderSLBTriplets2 ($poolInfo));
 	$mod->setOutput("renderedSLBTrip", renderSLBTriplets ($poolInfo));	
@@ -495,15 +491,19 @@ function portletRSPoolSrv ($pool_id, $parent = null, $placeholder = 'RSPoolSrvPo
 						//	printImageHREF ('notinservice', 'NOT in service');
 						break;
 					case 'rsip':
-						$field_mod = $tplm->generateModule('RSPoolSrvDefault', true, array('Cont' => mkA ($rs[$field], 'ipaddress', $rs[$field])));
+						$field_mod = $tplm->generateModule('RSPoolSrvDefault',
+						 true, array('Cont' => mkA ($rs[$field], 'ipaddress', $rs[$field])));
 						//echo '<td class=tdleft>' . mkA ($rs[$field], 'ipaddress', $rs[$field]);
 						break;
 					case 'rsconfig':
 						//echo "<td class=slbconf>";
+						$field_mod = $tplm->generateModule('RSPoolSrvRsconfig',
+						 true, array('Cont' => $rs[$field]));
 						//echo $rs[$field];
 						break;
 					default:
-					$field_mod = $tplm->generateModule('RSPoolSrvDefault', true, array('Cont' => mkA ($rs[$field], 'ipaddress', $rs[$field])));
+						$field_mod = $tplm->generateModule('RSPoolSrvDefault',
+						 true, array('Cont' =>  $rs[$field]));
 						//echo "<td class=tdleft>";
 						//echo $rs[$field];
 						break;
@@ -520,7 +520,6 @@ function portletRSPoolSrv ($pool_id, $parent = null, $placeholder = 'RSPoolSrvPo
 	//	finishPortlet();
 		if($parent==null)
 			return $mod->run();	
-
 	}
 }
 

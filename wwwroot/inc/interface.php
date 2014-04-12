@@ -4150,13 +4150,14 @@ function renderIPAddress ($ip_bin)
 	$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule('Payload', 'IPAddress');
-	$mod->setNamespace('ipaddress',true);
+	$mod->setNamespace('ipaddress');
 	
 	global $aat, $nextorder;
 	$address = getIPAddress ($ip_bin);
 	//echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
 	//echo "<tr><td colspan=2 align=center><h1>${address['ip']}</h1></td></tr>\n";
-
+	$mod->addOutput('IP', $address['ip']);
+		 
 	//echo "<tr><td class=pcleft>";
 
 	$summary = array();
@@ -4179,22 +4180,25 @@ function renderIPAddress ($ip_bin)
 		if (! empty ($address['vsglist']))
 		{
 			//printf ("<h2>virtual service groups (%d):</h2>", count ($address['vsglist']));
+			$mod->addOutput('VSGListCount', count ($address['vsglist']));				 
 			foreach ($address['vsglist'] as $vsg_id)
-				renderSLBEntityCell (spotEntity ('ipvs', $vsg_id),$mod,'SLBPortlet1');
+				renderSLBEntityCell (spotEntity ('ipvs', $vsg_id), FALSE, $mod, 'SLBPortlet1');
 		}
 
 		if (! empty ($address['vslist']))
 		{
 			//printf ("<h2>virtual services (%d):</h2>", count ($address['vslist']));
+			$mod->addOutput('VSListCount', count ($address['vslist']));				 
 			foreach ($address['vslist'] as $vs_id)
-				renderSLBEntityCell (spotEntity ('ipv4vs', $vs_id),$mod,'SLBPortlet2');
+				renderSLBEntityCell (spotEntity ('ipv4vs', $vs_id), FALSE, $mod, 'SLBPortlet2');
 		}
 
 		if (! empty ($address['rsplist']))
 		{
 			//printf ("<h2>RS pools (%d):</h2>", count ($address['rsplist']));
+			$mod->addOutput('RSPListCount', count ($address['rsplist']));				 
 			foreach ($address['rsplist'] as $rsp_id)
-				renderSLBEntityCell (spotEntity ('ipv4rspool', $rsp_id),'SLBPortlet3');
+				renderSLBEntityCell (spotEntity ('ipv4rspool', $rsp_id), FALSE, $mod, 'SLBPortlet3');
 		}
 		//finishPortlet();
 	}
