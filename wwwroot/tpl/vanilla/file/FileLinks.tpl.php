@@ -2,9 +2,7 @@
 	<div class=portlet>
 		<h2>Links (<?php $this->Count; ?>)</h2>
 		<table cellspacing=0 cellpadding='5' align='center' class='widetable'>
-			<?php $this->startLoop('Links'); ?>
-				<tr><td class=tdleft><?php $this->Content; ?></td></tr>
-			<?php $this->endLoop(); ?>
+		<?php $this->Links ?>
 		</table>
 	</div>		
 <?php } else { ?>

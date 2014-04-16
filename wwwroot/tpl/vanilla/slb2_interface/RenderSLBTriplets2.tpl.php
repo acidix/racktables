@@ -1,17 +1,15 @@
 <?php if (defined("RS_TPL")) {?>
-
 	<?php 	$this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/slb_editor.js"));
 		 	$this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/jquery.thumbhover.js"));?>
   	<?php $this->NewTripletFormTop ?>
 	<?php if($this->is("showTriplets", true)){?>
 		<div class=portlet>
-			<h2> VS group instances ( <?php $this->countTriplets ?> ) </h2>
+			<h2> VS group instances (<?php $this->countTriplets ?>) </h2>
 
-			<table cellspacing=0 cellpadding=5 align=center class=widetable><tr><th></th>"
+			<table cellspacing=0 cellpadding=5 align=center class=widetable><tr><th></th>
 			<?php $this->startLoop("headersArray") ?>
 				<th> <?php $this->header ?> </th>
 			<?php $this->endLoop() ?>
-			
 			<th>Ports</th>
 			<th>VIPs</th>
 			</tr>

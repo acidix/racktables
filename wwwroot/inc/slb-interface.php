@@ -10,8 +10,6 @@ function renderSLBDefConfig()
 {
 	$defaults = getSLBDefaults();
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderSLBDefConfig");
 	$mod->setNamespace("ipv4slb");
@@ -31,19 +29,16 @@ function renderSLBDefConfig()
 	//finishPortlet();
 }
 
-function renderSLBEntityCell ($cell, $highlighted = FALSE, TemplateModule $parent = null, $placheolder = 'RenderedSLBEntityCell')
+function renderSLBEntityCell ($cell, $highlighted = FALSE, $parent = null, $placeholder = 'RenderedSLBEntityCell')
 {
 	$tplm = TemplateManager::getInstance();
-	//TODO Remove after change to config
 	if($parent==null){
-		$tplm->setTemplate("vanilla");
-		$mod = $tplm->generateModule("RenderSLBEntityCell",  false);
+		$mod = $tplm->generateModule("RenderSLBEntityCell");
 	}
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderSLBEntityCell", $parent);
-
-
 	$mod->setNamespace("slb_interface");
+
 
 	$class = "slbcell realm-${cell['realm']} id-${cell['id']}";
 	$a_class = $highlighted ? 'highlight' : '';
@@ -113,7 +108,7 @@ function renderSLBEntityCell ($cell, $highlighted = FALSE, TemplateModule $paren
 //	echo count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;';
 //	echo "</td></tr></table>";
 
-	if($parent==null)
+	if($parent === null)
 		return $mod->run();
 }
 
@@ -433,11 +428,12 @@ function renderRSPool ($pool_id)
 	$summary['VS configuration'] = '<div class="dashed slbconf">' . htmlspecialchars ($poolInfo['vsconfig']) . '</div>';
 	$summary['RS configuration'] = '<div class="dashed slbconf">' . htmlspecialchars ($poolInfo['rsconfig']) . '</div>';
 //	renderEntitySummary ($poolInfo, 'Summary', $summary);
-	$mod->setOutput("RenderedEntity", renderEntitySummary ($poolInfo, 'Summary', $summary));
-		 
-	//callHook ('portletRSPoolSrv', $pool_id);
-	portletRSPoolSrv( $pool_id, $mod, 'RSPoolSrvPortlet');
 
+	$mod->setOutput("RenderedEntity", renderEntitySummary ($poolInfo, 'Summary', $summary));
+
+		 
+	callHook ('portletRSPoolSrv', $pool_id, $mod, 'RSPoolSrvPortlet');
+	
 //	echo "</td><td class=pcright>\n";
 	$mod->setOutput("RenderedSLBTrip2", renderSLBTriplets2 ($poolInfo));
 	$mod->setOutput("RenderedSLBTrip", renderSLBTriplets ($poolInfo));	
@@ -496,15 +492,19 @@ function portletRSPoolSrv ($pool_id, $parent = null, $placeholder = 'RSPoolSrvPo
 						//	printImageHREF ('notinservice', 'NOT in service');
 						break;
 					case 'rsip':
-						$field_mod = $tplm->generateModule('RSPoolSrvDefault', true, array('Cont' => mkA ($rs[$field], 'ipaddress', $rs[$field])));
+						$field_mod = $tplm->generateModule('RSPoolSrvDefault',
+						 true, array('Cont' => mkA ($rs[$field], 'ipaddress', $rs[$field])));
 						//echo '<td class=tdleft>' . mkA ($rs[$field], 'ipaddress', $rs[$field]);
 						break;
 					case 'rsconfig':
 						//echo "<td class=slbconf>";
+						$field_mod = $tplm->generateModule('RSPoolSrvRsconfig',
+						 true, array('Cont' => $rs[$field]));
 						//echo $rs[$field];
 						break;
 					default:
-					$field_mod = $tplm->generateModule('RSPoolSrvDefault', true, array('Cont' => mkA ($rs[$field], 'ipaddress', $rs[$field])));
+						$field_mod = $tplm->generateModule('RSPoolSrvDefault',
+						 true, array('Cont' =>  $rs[$field]));
 						//echo "<td class=tdleft>";
 						//echo $rs[$field];
 						break;
@@ -521,7 +521,6 @@ function portletRSPoolSrv ($pool_id, $parent = null, $placeholder = 'RSPoolSrvPo
 	//	finishPortlet();
 		if($parent==null)
 			return $mod->run();	
-
 	}
 }
 
@@ -842,7 +841,10 @@ function renderNewVSForm ()
 		 
 	global $vs_proto;
 	$vs_keys = array_keys ($vs_proto);
-	printSelect ($vs_proto, array ('name' => 'proto'), array_shift ($vs_keys));
+	$mod->setOutput("vs_proto", $vs_proto);
+	$mod->setOutput("vs_keys", array_shift ($vs_keys));
+	
+	//printSelect ($vs_proto, array ('name' => 'proto'), array_shift ($vs_keys));
 	//echo '</td><td><input type=text name=name tabindex=104></td><td>';
 	//printImageHREF ('CREATE', 'create virtual service', TRUE, 105);
 	//echo "</td><td rowspan=3>";

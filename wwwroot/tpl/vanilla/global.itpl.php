@@ -142,7 +142,7 @@ $this->setInMemoryTemplate("MkAInMemory","<a href='{{link}}'>{{text}}</a>");
 *	Usage: slb2-interface.php
 *
 **/
-$this->setInMemoryTemplate("formatVSPortInMemory"," <span title={{name}}> {{srv}} </span>");
+$this->setInMemoryTemplate("formatVSPortInMemory"," <span title={{name}}>{{srv}}</span>");
 
 /**
 *	FormatVSIP: 
@@ -299,7 +299,7 @@ $this->setInMemoryTemplate('RenderedIPPortPair','<a href="{{href}}">{{ip}}</a>{{
 *	Usage:  ajax-interface.php
 *
 **/
-$this->setInMemoryTemplate("FormatLoggedSpan","<span{{class}}{title}}>{{text}}</span>");
+$this->setInMemoryTemplate("FormatLoggedSpan","<span {{class}} {title}}>{{text}}</span>");
 
 /**
 *	FullWidthTable: 
@@ -423,15 +423,15 @@ $this->setInMemoryTemplate('StrongElement',"<strong>{{Cont}}</strong>");
 *	Usage:  renderRackMultiSelect -> interface.php
 *
 **/
-//$this->setInMemoryTemplate('StdOptionTemplate',"<option value={{RackId}} {{IsSelected}}>{{RackName}}</option>");
-$this->setInMemoryTemplate('StdOptionTemplate',"<option >aksdfksdajf</option>");
+$this->setInMemoryTemplate('StdOptionTemplate',"<option value={{RackId}} {{IsSelected}}>{{RackName}}</option>\n");
+
 
 /**
 *	RenderedAlloc Templates: 
 *	Usage:  getRenderedAlloc -> interface.php
 *
 **/
-$this->setInMemoryTemplate("RenderedAllocTdIpNetInfo","<a name='{{Dottequad}}' class='{{IpClass}}' {{IpTitle}} href='{{Href}}'>{{Title}}</a>");
+$this->setInMemoryTemplate("RenderedAllocTdIpNetInfo","<a name='ip-{{Dottequad}}' class='{{IpClass}}' {{IpTitle}} href='{{Href}}'>{{Title}}</a>");
 $this->setInMemoryTemplate("RenderedAllocTdIpNoNetInfo","<span class='{{IpClass}}' {{IpTitle}}>{{Dottequad}}</span>");
 $this->setInMemoryTemplate("RenderedAllocTdIp","<td class='tdleft'>{{Info}}{{Aac}} {{NiftyStr}}</td>");
 
@@ -450,6 +450,13 @@ $this->setInMemoryTemplate("RenderedAllocLocPeers","{{Prefix}}<a href='{{href}}'
 **/
 $this->setInMemoryTemplate("RSPoolSrvInservice","<td align=center>{{ImgCont}}</td>");
 $this->setInMemoryTemplate("RSPoolSrvRsconfig","<td class=slbconf>{{Cont}}</td>");
-$this->setInMemoryTemplate("RSPoolSrvDefault","<td class=tdleft>>{{Cont}}</td>");
+$this->setInMemoryTemplate("RSPoolSrvDefault","<td class=tdleft>{{Cont}}</td>");
+
+/**
+*	StdSpan: 
+*	Usage:  renderSLBTriplets2 ->  slb2_interface.php
+*
+**/
+$this->setInMemoryTemplate("StdSpan","<span class='{{Class}}'>{{Cont}}</span>");
 
 ?>

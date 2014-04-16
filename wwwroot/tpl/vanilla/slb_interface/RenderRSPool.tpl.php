@@ -1,7 +1,9 @@
 <?php if (defined("RS_TPL")) {?>
 	<table border=0 class=objectview cellspacing=0 cellpadding=0>
+
 		<?php if ($this->is("PoolInfo")) { ?>
 			<tr><td colspan=2 align=center><h1>{<?php $this->PoolInfo ?> }</h1></td></tr>
+
 		<?php } ?> 
 		<tr><td class=pcleft>
 		<?php $this->renderedEntity ?> 

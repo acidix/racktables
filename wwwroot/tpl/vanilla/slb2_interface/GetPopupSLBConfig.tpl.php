@@ -13,7 +13,7 @@
 
 	</div>
 
-	<?php if ($this->is("jsloaded", true)) { ?>
+	<?php if ($this->is("loadjs", true)) { ?>
 		<?php $this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/jquery.thumbhover.js")); ?>
 		<?php $this->addRequirement("Header","HeaderJsInline",array("code"=>"
 		$(document).ready (function () {

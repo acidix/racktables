@@ -2,7 +2,7 @@
 	<?php $this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/live_validation.js")); ?>
 	<?php $this->addRequirement("Header","HeaderJsInline",array("code"=>"<<<END
 		$(document).ready(function () {
-			$('form#add' input[name="range"]).attr('match', '$regexp');
+			$('form#add' input[name='range']).attr('match', '$regexp');
 			Validate.init();
 		});
 		END")); ?>
