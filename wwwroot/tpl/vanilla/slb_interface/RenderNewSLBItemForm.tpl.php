@@ -6,7 +6,7 @@
 			<?php $this->getH("PrintOpFormIntro", array('addLB')); ?>
 		<?php } ?> 
 		
-		<tr valign=top><th class=tdright>{<?php $this->realm1Name ?>}</th><td class=tdleft>
+		<tr valign=top><th class=tdright><?php $this->realm1Name ?></th><td class=tdleft>
 		<?php $this->getH("PrintSelect", array( $this->_realm1List, $this->_realm1Opt)); ?>
 		</td><td class=tdcenter valign=middle rowspan=2>
 
@@ -15,7 +15,7 @@
 		<?php } else { ?> 
 			<?php $this->getH("PrintImageHref", array('DENIED', $this->_Message, FALSE)); ?>
 		<?php } ?>
-		<tr valign=top><th class=tdright>{<?php $this->realm2Name ?>}</th><td class=tdleft>
+		<tr valign=top><th class=tdright><?php $this->realm2Name ?></th><td class=tdleft>
 		<?php $this->getH("PrintSelect", array( $this->_realm2List, $this->_realm2Opt)); ?>
 		</td></tr>
 		<tr><th class=tdright>VS config</th><td colspan=2><textarea tabindex=110 name=vsconfig rows=10 cols=80></textarea></td></tr>
