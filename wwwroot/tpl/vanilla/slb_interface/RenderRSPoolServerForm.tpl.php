@@ -1,9 +1,9 @@
 <?php if (defined("RS_TPL")) {?>
 	<div class=portlet>
-		<h2> Manage RS list (<?php $this->poolinfoRSCount ?> )</h2>
-		<?php $this->renderedRSList ?> 
+		<h2> Manage RS list (<?php $this->PoolInfoRSCount ?> )</h2>
+		<?php $this->RenderedRSList ?> 
 	</div>
-	<?php $this->renderedAddManyPortlet ?> 
+	<?php $this->RenderedAddManyPortlet ?> 
 	
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />

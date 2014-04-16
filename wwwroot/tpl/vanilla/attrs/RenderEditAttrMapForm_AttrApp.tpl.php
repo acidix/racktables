@@ -1,16 +1,16 @@
 <?php if (defined("RS_TPL")) {?>
-	<?php if ($this->is('sticky', 'yes')) { ?>
+	<?php if ($this->is('Sticky', 'yes')) { ?>
 		<?php $this->getH("PrintImageHref", array('nodelete', 'system mapping')); ?>	
-	<?php } elseif ($this->is('refcnt', true) ){ ?>
-		<?php $this->getH("PrintImageHref", array('nodelete', $this->_refcnt . ' value(s) stored for objects')); ?> 
+	<?php } elseif ($this->is('RefCnt', true) ){ ?>
+		<?php $this->getH("PrintImageHref", array('nodelete', $this->_RefCnt . ' value(s) stored for objects')); ?> 
 	<?php } else { ?>
-		<?php $this->getH("GetOpLink", array(array('op'=>'del', 'attr_id'=>$this->_id, 'objtype_id'=>$this->_obj_id, '', 'delete', 'Remove mapping')); ?>
+		<?php $this->getH("GetOpLink", array(array('op'=>'del', 'attr_id'=>$this->_Id, 'objtype_id'=>$this->_ObjId), '', 'delete', 'Remove mapping')); ?>
 	<?php } ?>
-	<?php $this->dec_obj ?>
-	<?php if ($this->is("type",'dict')) { ?>
-		(values from '<?php $this->chapter_name ?>')
+	<?php $this->DecObj ?>
+	<?php if ($this->is("Type",'dict')) { ?>
+		(values from '<?php $this->ChapterName ?>')
 	<?php } ?><br>
-	<?php $this->decodedObj ?>
+	<?php $this->DecObj ?>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

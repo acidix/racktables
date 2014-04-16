@@ -17,7 +17,7 @@
 			<td>
 				<div class=portlet>
 					<h2>details</h2>
-					<?php $this->Addresslist; ?>
+					<?php $this->AddressList; ?>
 				</div>
 			</td>
 		</tr>

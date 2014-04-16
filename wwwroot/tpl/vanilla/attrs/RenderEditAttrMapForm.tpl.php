@@ -4,15 +4,9 @@
 		<tr><th class=tdleft>Attribute name</th><th class=tdleft>Attribute type</th><th class=tdleft>Applies to</th></tr>
 		
 		<?php 
-		$this->Newtop;
-		$this->startLoop('Looparray');
-		?>
-			<tr class=row_<?php $this->Order; ?>><td class=tdleft><?php $this->Name; ?></td>
-				<td class=tdleft><?php $this->Attrtypes; ?></td><td colspan=2 class=tdleft>
-				<?php $this->AllAttrApps ?>		 
-			</td></tr>
-		<?php	$this->endLoop();
-			$this->Newbottom; ?>
+		$this->NewTop;
+		$this->AttributeRows;	
+		$this->NewBottom; ?>
 
 			</table></div>
 

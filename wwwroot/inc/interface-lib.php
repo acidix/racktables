@@ -1065,20 +1065,20 @@ function renderEntitySummary ($cell, $title, $values = array(), $parent = null, 
 		$mod = $tplm->generateSubmodule($placeholder, "RenderEntitySummary", $parent);
 	$mod->setNamespace('');
 	//startPortlet ($title);
-	$mod->setOutput("title", $title);
+	$mod->setOutput("Title", $title);
 	//echo "<table border=0 cellspacing=0 cellpadding=3 width='100%'>\n";
 
 	
 	foreach ($values as $name => $value)
 	{
-		$loopMod = $tplm->generateSubmodule("loopMod", "RenderEntitySummary_LoopCont" , $mod);
+		$loopMod = $tplm->generateSubmodule("LoopMod", "RenderEntitySummary_LoopCont" , $mod);
 		$loopMod->setNamespace("", true);
 
 		if (is_array ($value) and count ($value) == 1)
 		{
 			$value = array_shift ($value);
-			$loopMod->setOutput("val", $value);
-			$loopMod->setOutput("singleValue", true);
+			$loopMod->setOutput("Val", $value);
+			$loopMod->setOutput("SingleValue", true);
 			//echo $value;
 			continue;
 		}
@@ -1097,20 +1097,20 @@ function renderEntitySummary ($cell, $title, $values = array(), $parent = null, 
 			$name = $m[2];
 		}
 
-		$loopMod->setOutput("class", $class);
-		$loopMod->setOutput("name", $name);
-		$loopMod->setOutput("val", $value);
+		$loopMod->setOutput("Class", $class);
+		$loopMod->setOutput("Name", $name);
+		$loopMod->setOutput("Val", $value);
 	
 		if ($name == 'tags:')
 		{
-			$loopMod->setOutput("showTags", true);	 
+			$loopMod->setOutput("ShowTags", true);	 
 	
 			$baseurl = '';
 			if (isset ($page_by_realm[$cell['realm']]))
 				$baseurl = makeHref(array('page'=>$page_by_realm[$cell['realm']], 'tab'=>'default'))."&";
 			
-			$loopMod->setOutput("cell", $cell);
-			$loopMod->setOutput("baseurl", $baseurl);
+			$loopMod->setOutput("Cell", $cell);
+			$loopMod->setOutput("BaseUrl", $baseurl);
 	//		printTagTRs ($cell, $baseurl);
 		}
 	//	else

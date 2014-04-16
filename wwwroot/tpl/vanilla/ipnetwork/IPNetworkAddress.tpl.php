@@ -12,7 +12,7 @@
 				<?php $this->Type; ?>
 				<a href='<?php $this->Link; ?>'>
 					<?php $this->Name; ?>
-				</a> ;
+				</a> 
 				<?php $this->endLoop(); ?>
 			<?php } ?>
 			<?php if ($this->is('VSList')) { ?>

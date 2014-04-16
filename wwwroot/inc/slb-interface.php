@@ -420,8 +420,7 @@ function renderRSPool ($pool_id)
 
 // 	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
 	if (strlen ($poolInfo['name'])){
-		$mod->setOutput("isPoolInfo", true);
-		$mod->setOutput("poolInfo", $poolInfo['name']);
+		$mod->setOutput("PoolInfo", $poolInfo['name']);
 	}
 //	echo "<tr><td colspan=2 align=center><h1>{$poolInfo['name']}</h1></td></tr>";
 //	echo "<tr><td class=pcleft>\n";
@@ -434,15 +433,15 @@ function renderRSPool ($pool_id)
 	$summary['VS configuration'] = '<div class="dashed slbconf">' . htmlspecialchars ($poolInfo['vsconfig']) . '</div>';
 	$summary['RS configuration'] = '<div class="dashed slbconf">' . htmlspecialchars ($poolInfo['rsconfig']) . '</div>';
 //	renderEntitySummary ($poolInfo, 'Summary', $summary);
-	$mod->setOutput("renderedEntity", renderEntitySummary ($poolInfo, 'Summary', $summary));
+	$mod->setOutput("RenderedEntity", renderEntitySummary ($poolInfo, 'Summary', $summary));
 		 
 	//callHook ('portletRSPoolSrv', $pool_id);
 	portletRSPoolSrv( $pool_id, $mod, 'RSPoolSrvPortlet');
 
 //	echo "</td><td class=pcright>\n";
-	$mod->setOutput("renderedSLBTrip2", renderSLBTriplets2 ($poolInfo));
-	$mod->setOutput("renderedSLBTrip", renderSLBTriplets ($poolInfo));	
-	$mod->setOutput("renderedFiles", renderFilesPortlet ('ipv4rspool', $pool_id)); 
+	$mod->setOutput("RenderedSLBTrip2", renderSLBTriplets2 ($poolInfo));
+	$mod->setOutput("RenderedSLBTrip", renderSLBTriplets ($poolInfo));	
+	$mod->setOutput("RenderedFiles", renderFilesPortlet ('ipv4rspool', $pool_id)); 
 //	renderSLBTriplets2 ($poolInfo);
 //	renderSLBTriplets ($poolInfo);
 //	echo "</td></tr><tr><td colspan=2>\n";
@@ -665,14 +664,14 @@ function renderRSPoolServerForm ($pool_id)
 
 	$mod = $tplm->generateSubmodule("Payload","RenderRSPoolServerForm");
 	$mod->setNamespace("slb_interface");
-	$mod->setOutput("poolinfoRSCount", $poolinfo['rscount']);
-	$mod->setOutput("renderedRSList", renderEditRSList (getRSListInPool ($pool_id)) );	 
+	$mod->setOutput("PoolInfoRSCount", $poolinfo['rscount']);
+	$mod->setOutput("RenderedRSList", renderEditRSList (getRSListInPool ($pool_id)) );	 
 //	startPortlet ("Manage RS list (${poolInfo['rscount']})");
 //	renderEditRSList (getRSListInPool ($pool_id));
 //	finishPortlet();
 
 //	portletRSPoolAddMany ($pool_id);
-	$mod->setOutput("renderedAddManyPortlet", portletRSPoolAddMany ($pool_id));
+	$mod->setOutput("RenderedAddManyPortlet", portletRSPoolAddMany ($pool_id));
 
 }
 
@@ -865,9 +864,9 @@ function renderEditRSPool ($pool_id)
 	$mod = $tplm->generateSubmodule("Payload", "RenderEditRSPool");
 	$mod->setNamespace("slb_interface");
 
-	$mod->setOutput("poolinfoName", $poolinfo['name']);
-	$mod->setOutput("poolinfoVSConfig", $poolinfo['vsconfig']);
-	$mod->setOutput("poolinfoRSConfig", $poolinfo['rsconfig']);
+	$mod->setOutput("PoolInfoName", $poolinfo['name']);
+	$mod->setOutput("PoolInfoVSConfig", $poolinfo['vsconfig']);
+	$mod->setOutput("PoolInfoRSConfig", $poolinfo['rsconfig']);
 			 	 		 
 //	printOpFormIntro ('updIPv4RSP');
 //	echo '<table border=0 align=center>';
@@ -881,7 +880,7 @@ function renderEditRSPool ($pool_id)
 
 	// clone link
 //	echo '<p class="centered">';
-	$mod->setOutput("poolinfoID", $poolinfo['id']);
+	$mod->setOutput("PoolInfoID", $poolinfo['id']);
 //	echo getOpLink (array	('op' => 'cloneIPv4RSP', 'pool_id' => $poolinfo['id']), 'Clone RS pool', 'copy'	);
 //	echo '</p>';
 
@@ -889,8 +888,7 @@ function renderEditRSPool ($pool_id)
 //	echo '<p class="centered">';
 	if ($poolinfo['refcnt'] > 0){
 //		echo getOpLink (NULL, 'Delete RS pool', 'nodestroy', "Could not delete: there are ${poolinfo['refcnt']} LB links");
-		$mod->setOutput("isPoolinfoRefcnt", true);
-		$mod->setOutput("poolinfoRefcnt", $poolinfo['refcnt']);
+		$mod->setOutput("PoolInfoRefcnt", $poolinfo['refcnt']);
 	}
 //	else
 //		echo getOpLink (array	('op' => 'del', 'id' => $poolinfo['id']), 'Delete RS pool', 'destroy');

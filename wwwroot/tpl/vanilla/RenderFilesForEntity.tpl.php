@@ -12,13 +12,13 @@
 		</table><br>
 	</div>
 
-	<?php if ($this->is("showFiles",true)) { ?>
+	<?php if ($this->is("ShowFiles",true)) { ?>
 		<div class=portlet>
-			<h2>Link existing (<?php $this->countFiles ?>)</h2>
+			<h2>Link existing (<?php $this->CountFiles ?>)</h2>
 			<?php $this->getH("PrintOpFormIntro", array('linkFile')); ?> 
 			<table border=0 cellspacing=0 cellpadding='5' align='center'>
 			<tr><td class=tdleft>
-			<?php $this->printedSelect ?> 
+			<?php $this->PrintedSelect ?> 
 			</td><td class=tdleft>
 			<?php $this->getH("PrintImageHref", array('ATTACH', 'Link file', TRUE)); ?> 
 			</td></tr></table>
@@ -26,9 +26,9 @@
 		</div>
 	<?php } ?>
 
-	 <?php if ($this->is("showFilelist",true)) { ?>
+	 <?php if ($this->is("ShowFileList",true)) { ?>
 		<div class=portlet>
-			<h2>Manage linked (<?php $this->countFilelist ?>)</h2>
+			<h2>Manage linked (<?php $this->CountFileList ?>)</h2>
 			<table border=0 cellspacing=0 cellpadding='5' align='center' class='widetable'>
 			<tr><th>File</th><th>Comment</th><th>Unlink</th></tr>
 			<?php $this->startLoop("FilelistsOutput"); ?>	

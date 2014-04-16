@@ -3587,7 +3587,7 @@ function renderIPNetwork ($id)
 
 	//echo "<td class=pcright>";
 	//startPortlet ('details');
-	renderIPNetworkAddresses ($range, $mod, 'Addresslist');
+	renderIPNetworkAddresses ($range, $mod, 'AddressList');
 	//finishPortlet();
 	//echo "</td></tr></table>\n";
 }
@@ -3913,7 +3913,7 @@ function renderIPv6NetworkAddresses ($netinfo, $parent, $placeholder)
 				$pagesarray[] = array(
 						'B' => '<b>',
 						'BEnd' => '</b>',
-						'i' => $i,
+						'I' => $i,
 						'Link' => makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $netinfo['id'], 'pg' => $i))
 				);
 			}
@@ -3921,7 +3921,7 @@ function renderIPv6NetworkAddresses ($netinfo, $parent, $placeholder)
 			else
 			{
 				$pagesarray[] = array(
-						'i' => $i,
+						'I' => $i,
 						'Link' => makeHref (array ('page' => $pageno, 'tab' => $tabno, 'id' => $netinfo['id'], 'pg' => $i))
 				);
 			}
@@ -6171,26 +6171,35 @@ function renderEditAttrMapForm ()
 	// echo "<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>";
 	// echo '<tr><th class=tdleft>Attribute name</th><th class=tdleft>Attribute type</th><th class=tdleft>Applies to</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR ('Newtop', $attrMap);
+		printNewItemTR ('NewTop', $attrMap);
+
+
 	foreach ($attrMap as $attr)
 	{
-		if (!count ($attr['application']))
-			//continue;
-		$mod->addOutput('Looparray', array('Attrtypes' => $attrtypes[$attr['type']], 'Name' => $attr['name'], 'Order' => $attr['order'] ));
+		$submod = $tplm->generateSubmodule('AttributeRows', 'AttributeRow', $mod);
+
+		if (!count ($attr['application'])){
+			continue;
+		}
 		
+
 		// echo "<tr class=row_${order}><td class=tdleft>${attr['name']}</td>";
 		// echo "<td class=tdleft>" . $attrtypes[$attr['type']] . "</td><td colspan=2 class=tdleft>";
 
+		$submod->addOutput('AttrTypes', $attrtypes[$attr['type']]);						
+		$submod->addOutput('Name', $attr['name']);
+		$submod->addOutput('Order', $attr['order']);
+
 		foreach ($attr['application'] as $app)
 		{
-			$singleAttrApp = $tplm->generateSubmodule('AllAttrApps', 'RenderEditAttrMapForm_AttrApp', $mod,
-													  array('sticky' => $app['sticky'],
-													  		'refcnt' => $app['refcnt'],
-													  		'id' => $attr['id'],
-													  		'obj_id' => $app['objtype_id'],
-													  		'type' => $attr['type'],
-													  		'chapter_name' => $app['chapter_name'],
-													  		'dec_obj' => decodeObjectType ($app['objtype_id'], 'o')));
+			$singleAttrApp = $tplm->generateSubmodule('AllAttrApps', 'RenderEditAttrMapForm_AttrApp', $submod,
+													  array('Sticky' => $app['sticky'],
+													  		'RefCnt' => $app['refcnt'],
+													  		'Id' => $attr['id'],
+													  		'ObjId' => $app['objtype_id'],
+													  		'Type' => $attr['type'],
+													  		'ChapterName' => $app['chapter_name'],
+													  		'DecObj' => decodeObjectType ($app['objtype_id'], 'o')));
 
 			//if ($app['sticky'] == 'yes')
 				// printImageHREF ('nodelete', 'system mapping');
@@ -6209,7 +6218,7 @@ function renderEditAttrMapForm ()
 		// $order = $nextorder[$order];
 	}
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR ('Newbottom', $attrMap);
+		printNewItemTR ('NewBottom', $attrMap);
 	// echo "</table>\n";
 	// finishPortlet();
 }
@@ -6776,15 +6785,16 @@ function renderLivePTR ($id)
 		{
 			$smod = $tplm->generateSubmodule('Pages', 'IPNetworkAddressesPager');
 			$smod->addOutput('B', '<b>');
-			$smod->addOutput('B', '</b>');
-			$smod->addOutput('i', $i);
+			// TODO: fix redundant placholder name B
+			$smod->addOutput('B', '</b>');  
+			$smod->addOutput('I', $i);
 			$smod->addOutput('Link', makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'id'=>$id, 'pg'=>$i)));
 		}
 		//$rendered_pager .= "<b>$i</b> ";
 		else
 		{
 			$smod = $tplm->generateSubmodule('Pages', 'IPNetworkAddressesPager');
-			$smod->addOutput('i', $i);
+			$smod->addOutput('I', $i);
 			$smod->addOutput('Link', makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'id'=>$id, 'pg'=>$i)));
 		}
 	}
@@ -6887,7 +6897,7 @@ function renderLivePTR ($id)
 	$mod->addOutput('Match', $cnt_match);
 	$mod->addOutput('Missing', $cnt_missing);
 	if ($cnt_mismatch)
-		$mod->addOutput('Mismatch', $cnt_mismatch);
+		$mod->addOutput('MisMatch', $cnt_mismatch);
 	/** startPortlet ('stats');
 	echo "<table border=0 width='100%' cellspacing=0 cellpadding=2>";
 	echo "<tr class=trok><th class=tdright>Exact matches:</th><td class=tdleft>${cnt_match}</td></tr>\n";
@@ -7310,7 +7320,7 @@ function renderEntityTags ($entity_id)
 			$js_code .= "\n});\n$(document).ready(tag_cb.compactTreeMode);";
 			//addJS ('js/tag-cb.js');
 			//addJS ($js_code, TRUE);
-			$mod->setOutput("jsCode", $js_code);
+			$mod->setOutput("JsCode", $js_code);
 				 
 		}
 	}
@@ -8250,9 +8260,9 @@ function renderFilesForEntity ($entity_id)
 	$files = getAllUnlinkedFiles ($entity_type, $entity_id);
 	if (count ($files))
 	{	
-		$mod->setOutput("showFiles", true);
-		$mod->setOutput("countFiles", count ($files));
-		$mod->setOutput("printedSelect", printSelect ($files, array ('name' => 'file_id')));
+		$mod->setOutput("ShowFiles", true);
+		$mod->setOutput("CountFiles", count ($files));
+		$mod->setOutput("PrintedSelect", printSelect ($files, array ('name' => 'file_id')));
 			 	 	 	 	 	 	 
 	/*	startPortlet ('Link existing (' . count ($files) . ')');
 		printOpFormIntro ('linkFile');
@@ -8269,8 +8279,8 @@ function renderFilesForEntity ($entity_id)
 	$filelist = getFilesOfEntity ($entity_type, $entity_id);
 	if (count ($filelist))
 	{
-		$mod->setOutput("showFilelist", true);
-		$mod->setOutput("countFilelist", count ($filelist));
+		$mod->setOutput("ShowFileList", true);
+		$mod->setOutput("CountFileList", count ($filelist));
 
 	/*	startPortlet ('Manage linked (' . count ($filelist) . ')');
 		echo "<table border=0 cellspacing=0 cellpadding='5' align='center' class='widetable'>\n";
@@ -9299,12 +9309,12 @@ function renderIIFOIFCompat()
 			$order = $nextorder[$order];
 			$last_iif_id = $record['iif_id'];
 		}
-		$singleRecord = array('order' => $order, 'iif_name' => $record['iif_name'], 'iif_id' => $record['iif_id'],
-						'oif_name' => $record['oif_name'], 'oif_id' => $record['oif_id']);
+		$singleRecord = array('Order' => $order, 'IifName' => $record['iif_name'], 'IifId' => $record['iif_id'],
+						'OifName' => $record['oif_name'], 'OifId' => $record['oif_id']);
 		//echo "<tr class=row_${order}><td class=tdleft>${record['iif_name']}</td><td>${record['iif_id']}</td><td class=tdleft>${record['oif_name']}</td><td>${record['oif_id']}</td></tr>";
 		$allRecordsOut[] = $singleRecord;
 	}
-	$mod->addOutput("allRecords", $allRecordsOut);
+	$mod->addOutput("AllRecords", $allRecordsOut);
 		 
 	//echo '</table>';
 }
@@ -9345,9 +9355,9 @@ function renderIIFOIFCompatEditor()
 	$allWDM_PacksOut = array();
 	foreach ($wdm_packs as $codename => $packinfo)
 	{
-		$singlePack = array('packinfo' => $packinfo['title']);
+		$singlePack = array('PackInfo' => $packinfo['title']);
 		//echo "<tr><th>&nbsp;</th><th colspan=2>${packinfo['title']}</th></tr>";
-		$singlePack['iif_cont'] = '';
+		$singlePack['IifCont'] = '';
 		foreach ($packinfo['iif_ids'] as $iif_id)
 		{
 			$iif_id_mod = $tplm->generateModule("RenderIIFOIFCompatEditor_Iif_id");
@@ -9368,7 +9378,7 @@ function renderIIFOIFCompatEditor()
 		}
 		$allWDM_PacksOut[] = $singlePack;
 	}
-	$mod->addOutput("allWDM_Packs", $allWDM_PacksOut);
+	$mod->addOutput("AllWDMPacks", $allWDM_PacksOut);
 			 
 	//echo '</table>';
 	//finishPortlet();
@@ -9390,16 +9400,16 @@ function renderIIFOIFCompatEditor()
 			$order = $nextorder[$order];
 			$last_iif_id = $record['iif_id'];
 		}
-		$singleInterface = array('order' => $order);
+		$singleInterface = array('Order' => $order);
 		//echo "<tr class=row_${order}><td>";
-		$singleInterface['opLink'] = getOpLink (array ('op' => 'del', 'iif_id' => $record['iif_id'], 'oif_id' => $record['oif_id']), '', 'delete', 'remove pair');
+		$singleInterface['OpLink'] = getOpLink (array ('op' => 'del', 'iif_id' => $record['iif_id'], 'oif_id' => $record['oif_id']), '', 'delete', 'remove pair');
 		//echo getOpLink (array ('op' => 'del', 'iif_id' => $record['iif_id'], 'oif_id' => $record['oif_id']), '', 'delete', 'remove pair');
-		$singleInterface['iif_name'] = $record['iif_name'];
-		$singleInterface['oif_name'] = $record['oif_name'];
+		$singleInterface['IifName'] = $record['iif_name'];
+		$singleInterface['OifName'] = $record['oif_name'];
 		//echo "</td><td class=tdleft>${record['iif_name']}</td><td class=tdleft>${record['oif_name']}</td></tr>";
 		$allInterfacesOut[] = $singleInterface;
 	}
-	$mod->addOutput("allInterfaces", $allInterfacesOut);	 
+	$mod->addOutput("AllInterfaces", $allInterfacesOut);	 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
 		printNewitemTR($mod, "AddNewBottom");
 	//	printNewitemTR();
@@ -10540,7 +10550,7 @@ function renderVLANIPLinks ($some_id)
 		
 		if (!count ($options))
 			return;
-		$mod->addOutput("optionTree", getOptionTree ($sname, $options, array ('tabindex' => 101)));
+		$mod->addOutput("OptionTree", getOptionTree ($sname, $options, array ('tabindex' => 101)));
 			 
 	//	printOpFormIntro ('bind', $extra);
 	//	echo '<tr><td>' . getOptionTree ($sname, $options, array ('tabindex' => 101));
@@ -10566,7 +10576,7 @@ function renderVLANIPLinks ($some_id)
 	switch ($pageno)
 	{
 	case 'vlan':
-		$mod->addOutput("isVLAN", true);
+		$mod->addOutput("IsVLAN", true);
 			 
 		$ip_ver = $tabno == 'ipv6' ? 'ipv6' : 'ipv4';
 		//echo '<th>' . getImageHREF ('net') . '</th>';
@@ -10594,7 +10604,7 @@ function renderVLANIPLinks ($some_id)
 		break;
 	case 'ipv4net':
 	case 'ipv6net':
-		$mod->addOutput("isIpv6Net", true);
+		$mod->addOutput("IsIpv6Net", true);
 
 		//echo '<th>VLAN</th>';
 		$netinfo = spotEntity ($pageno, $some_id);
@@ -10637,24 +10647,24 @@ function renderVLANIPLinks ($some_id)
 		switch ($pageno)
 		{
 		case 'vlan':
-			$singleMinusLine['renderedCell'] = renderCell (spotEntity ($ip_ver . 'net', $item['net_id']));
+			$singleMinusLine['RenderedCell'] = renderCell (spotEntity ($ip_ver . 'net', $item['net_id']));
 			//renderCell (spotEntity ($ip_ver . 'net', $item['net_id']));
 			break;
 		case 'ipv4net':
 		case 'ipv6net':
 			$vlaninfo = getVLANInfo ($item['domain_id'] . '-' . $item['vlan_id']);
-			$singleMinusLine['vlanRichTxt'] = formatVLANAsRichText ($vlaninfo);
+			$singleMinusLine['VlanRichTxt'] = formatVLANAsRichText ($vlaninfo);
 			//echo formatVLANAsRichText ($vlaninfo);
 			break;
 		}
 		//echo '</td><td>';
 		//echo getOpLink (array ('id' => $some_id, 'op' => 'unbind', 'id' => $item['net_id'], 'vlan_ck' => $item['domain_id'] . '-' . $item['vlan_id']), '', 'Cut', 'unbind');
-		$singleMinusLine['opLink'] = getOpLink (array ('id' => $some_id, 'op' => 'unbind', 'id' => $item['net_id'], 
+		$singleMinusLine['OpLink'] = getOpLink (array ('id' => $some_id, 'op' => 'unbind', 'id' => $item['net_id'], 
 			'vlan_ck' => $item['domain_id'] . '-' . $item['vlan_id']), '', 'Cut', 'unbind');
 		//echo '</td></tr>';
 		$allMinuslinesOut[] = $singleMinusLine;
 	}
-	$mod->addOutput("allMinuslines", $allMinuslinesOut);
+	$mod->addOutput("AllMinusLines", $allMinuslinesOut);
 		 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
 		$mod->addOutput("AddNewBottom", printNewItemTR ($select_name, $plusoptions, $extra));
