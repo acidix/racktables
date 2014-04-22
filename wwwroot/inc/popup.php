@@ -271,7 +271,13 @@ function handlePopupPortLink()
 		}
 		else
 			$js_table .= "POIFC['${pair['type1']}-${pair['type2']}'] = 1;\n";
-
+	
+		
+	$tplm = TemplateManager::getInstance();
+		
+	$mod = $tplm->generateSubmodule('Payload', 'PortLink');
+	$mod->setNamespace('Popup',true);
+	
 	if ($matches)
 	{
 		if ($port_info['oif_id'] != $type_local)
@@ -288,18 +294,20 @@ function handlePopupPortLink()
 				formatPort ($remote_port_info),
 			)
 		);
-		//TODO port / remove  addJS
-		addJS (<<<END
+		//TODO port / remove  addJS - Now used within template
+		/** addJS (<<<END
 window.opener.location.reload(true);
 window.close();
 END
-		, TRUE);
-		backupLogMessages();
+		, TRUE); */
+		$mod->addOutput('Close', true);
+		backupLogMessages(); 
 	}
 	else
 	{
 		// JS code to display port compatibility hint
-		addJS (<<<END
+		$mod->addOutput('JSTable', $js_table);
+		/** addJS (<<<END
 POIFC = {};
 $js_table
 $(document).ready(function () {
@@ -342,35 +350,52 @@ END
 		echo '<input type=hidden name="remote_port" value="' . $remote_port_info['id'] . '">';
 		echo '<input type=hidden name="cable" value="' . htmlspecialchars ($_REQUEST['cable'], ENT_QUOTES) . '">';
 		echo '<p>The ports you have selected are not compatible. Please select a compatible transceiver pair.';
-		echo '<p>';
-		echo formatPort ($port_info) . ' ';
+		echo '<p>'; */
+		
+		$mod->addOutput('ID', $port_info['id']);
+		$mod->addOutput('RemoteID', $remote_port_info['id']);
+		$mod->addOutput('Cable', htmlspecialchars ($_REQUEST['cable'], ENT_QUOTES));
+		$mod->addOutput('Port', formatPort ($port_info));
+		
+		//echo formatPort ($port_info) . ' ';
 		if ($port_info['iif_id'] == 1)
 		{
-			echo formatPortIIFOIF ($port_info);
-			echo '<input type=hidden name="port_type" value="' . $port_info['oif_id'] . '">';
+			$mod->addOutput('IIFOIF', formatPortIIFOIF ($port_info));
+			$mod->addOutput('OIFID', $port_info['oif_id']);
+			//echo formatPortIIFOIF ($port_info);
+			//echo '<input type=hidden name="port_type" value="' . $port_info['oif_id'] . '">';
 		}
 		else
 		{
-			echo '<label>' . $port_info['iif_name'] . ' ';
-			printSelect (getExistingPortTypeOptions ($port_info['id']), array ('class' => 'porttype', 'name' => 'port_type'), $type_local);
-			echo '</label>';
+			$mod->addOutput('IIFName', $port_info['iif_name']);
+			$mod->addOutput('PortTypeOptions', getSelect (getExistingPortTypeOptions ($port_info['id']), array ('class' => 'porttype', 'name' => 'port_type'), $type_local));
+			
+			//echo '<label>' . $port_info['iif_name'] . ' ';
+			//printSelect (getExistingPortTypeOptions ($port_info['id']), array ('class' => 'porttype', 'name' => 'port_type'), $type_local);
+			//echo '</label>';
 		}
 		echo ' &mdash; ';
 		if ($remote_port_info['iif_id'] == 1)
 		{
-			echo formatPortIIFOIF ($remote_port_info);
-			echo '<input type=hidden name="remote_port_type" value="' . $remote_port_info['oif_id'] . '">';
+			$mod->addOutput('RemoteIIFOIF', formatPortIIFOIF ($remote_port_info));
+			$mod->addOutput('RemoteOIFID', $remote_port_info['oif_id']);
+			//echo formatPortIIFOIF ($remote_port_info);
+			//echo '<input type=hidden name="remote_port_type" value="' . $remote_port_info['oif_id'] . '">';
 		}
 		else
 		{
-			echo '<label>' . $remote_port_info['iif_name'] . ' ';
-			printSelect (getExistingPortTypeOptions ($remote_port_info['id']), array ('class' => 'porttype', 'name' => 'remote_port_type'), $type_remote);
-			echo '</label>';
+			$mod->addOutput('RemoteIIFName', $remote_port_info['iif_name']);
+			$mod->addOutput('RemotePortTypeOptions', getSelect (getExistingPortTypeOptions ($remote_port_info['id']), array ('class' => 'porttype', 'name' => 'remote_port_type'), $type_remote));
+			
+			//echo '<label>' . $remote_port_info['iif_name'] . ' ';
+			//printSelect (getExistingPortTypeOptions ($remote_port_info['id']), array ('class' => 'porttype', 'name' => 'remote_port_type'), $type_remote);
+			//echo '</label>';
 		}
-		echo ' ' . formatPort ($remote_port_info);
-		echo '<p class="compat-hint" id="hint-not-compat">&#10005; Not compatible port types</p>';
-		echo '<p class="compat-hint" id="hint-compat">&#10004; Compatible port types</p>';
-		echo '<p><input type=submit name="do_link" value="Link">';
+		$mod->addOutput('RemotePort', formatPort ($remote_port_info));
+		//echo ' ' . formatPort ($remote_port_info);
+		//echo '<p class="compat-hint" id="hint-not-compat">&#10005; Not compatible port types</p>';
+		//echo '<p class="compat-hint" id="hint-compat">&#10004; Compatible port types</p>';
+		//echo '<p><input type=submit name="do_link" value="Link">';
 	}
 }
 

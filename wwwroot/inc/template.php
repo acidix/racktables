@@ -82,7 +82,6 @@ class TemplateManager
 		$inst->createMainModule('index');
 
 		//$inst->getMainModule()->addOutput('Payload',$template_list[$tpl_to_use] . '<br />');
-		
 	}
 	
 	public static function changeStaticDir()
@@ -162,7 +161,7 @@ class TemplateManager
 	
 	/**
 	 * Tries to load an unknown in-memory template.
-	 * $name might consist of a path without file ending: "thisisanexample/template"
+	 * $name should be a path without file ending: "thisisanexample/template"
 	 * Checks:
 	 * thisisanexample/template.itpl.php
 	 * globals.itpl.php
@@ -591,13 +590,7 @@ class TemplateModule
 	 * @var string
 	 */
 	protected $module = "";
-	
-	/**
-	 * Contains all submodules of this module.
-	 * @var string
-	 */
-	protected $submodules = array();
-	
+		
 	/**
 	 * Defines a path where the module will search for it's template (for example: Namespace="rackspace" and name="RackspaceOverview"
 	 * will result in "rackspace/RackspaceOverview.tpl.php as path for template"
@@ -652,6 +645,29 @@ class TemplateModule
 	 */
 	protected $islevel = 0;
 	
+	/**
+	 * Used to store a reference to the current output, instead of using the global output array
+	 * @var unknown
+	 */
+	protected $output_reference ;
+	
+	/**
+	 * True when the referenced var in output_reference should be used instead of the main output
+	 * @var unknown
+	 */
+	protected $use_reference = false ;
+	
+	/**
+	 * Used to store the next key to use with step
+	 * @var unknown
+	 */
+	protected $reference_next = 0;
+
+	/**
+	 * Used when reference, dereference and step are used to use an array
+	 * @var unknown
+	 */
+	protected $reference_origin ;
 	/**
 	 * Constructor
 	 * 
@@ -782,9 +798,9 @@ class TemplateModule
 		
 		$this->output = $this->runModules($this->output);
 		
-		$this->output["css"] = './tpl/' . $this->tpl . '/css/';
-		$this->output["img"] = './tpl/' . $this->tpl . '/img/';
-		$this->output["js"] = './tpl/' . $this->tpl . '/js/';
+		$this->output["CSS"] = './tpl/' . $this->tpl . '/css/';
+		$this->output["IMG"] = './tpl/' . $this->tpl . '/img/';
+		$this->output["JS"] = './tpl/' . $this->tpl . '/js/';
 		
 		if ($this->namespace !=  "")
 		{
@@ -829,20 +845,15 @@ class TemplateModule
 		}
 		else
 		{
-			if(array_key_exists($name, $this->output))
+			if ($this->use_reference === true && array_key_exists($name, $this->output_reference))
 			{
-				if (is_array($this->output[$name]))
+				if (is_array($this->output_reference[$name]) && !$return)
 				{
-					if(!$return)
-					{
-						$out = implode($this->output[$name]);
-					}
-					else
-						return $this->output[$name];					
+					$out = implode($this->output_reference[$name]);
 				}
 				else
 				{
-					$out = $this->output[$name];
+					$out = $this->output_reference[$name];
 				}
 				if ($return)
 				{
@@ -850,6 +861,26 @@ class TemplateModule
 				}
 				echo $out;
 				return "";
+			}
+			else
+			{
+				if(array_key_exists($name, $this->output))
+				{
+					if (is_array($this->output[$name]) && !$return)
+					{
+						$out = implode($this->output[$name]);
+					}
+					else
+					{
+						$out = $this->output[$name];
+					}
+					if ($return)
+					{
+						return $out;
+					}
+					echo $out;
+					return "";
+				}
 			}
 		}
 	}
@@ -962,7 +993,10 @@ class TemplateModule
 	 * 
 	 * InMemory Templates don't support loops yet.
 	 * 
+	 * Don't use loops any more, use the reference system to implement new features.
+	 * 
 	 * @param string $placeholder
+	 * @deprecated
 	 */
 	protected function startLoop($placeholder)
 	{
@@ -978,6 +1012,7 @@ class TemplateModule
 	 * Used to end a loop started with startLoop. For use in templates.
 	 * 
 	 * @throws TemplateException
+	 * @deprecated
 	 */
 	protected function endLoop()
 	{
@@ -1116,9 +1151,14 @@ class TemplateModule
 	 */
 	public function is($placeholder,$value=null)
 	{
-		if (array_key_exists($placeholder, $this->output))
+		$var = 'output';
+		if ($this->use_reference === true)
 		{
-			if ($value !== null && $this->output[$placeholder] == $value)
+			$var .= '_reference';
+		}
+		if (array_key_exists($placeholder, $this->$var))
+		{
+			if ($value !== null && $this->$var[$placeholder] == $value)
 			{
 				return true;
 			}
@@ -1138,12 +1178,70 @@ class TemplateModule
 	}
 	
 	/**
-	 * Sets the namespace to "" (root-dir) and locks the template. Usefull for oftenly used templates.
+	 * Sets the namespace to "" (root-dir) and locks the template. Usefull for global templates and default portlets.
 	 */
 	public function defNamespace()
 	{
 		$this->setNamespace("");
 		$this->setLock();
+	}
+	
+	/**
+	 * Used to use the referenced placeholder to search for output instead of using the output array
+	 * for the whole module, can be used to implement better loops.
+	 * 
+	 * @param string $placeholder
+	 * @param boolean $whole
+	 */
+	public function reference($placeholder, $usefirst = true, $first = 0)
+	{
+		if (array_key_exists($name, $this->output))
+		{
+			if ($usefirst && is_array($this->output[$placeholder]) && array_key_exists($first, $this->output[$placeholder]))
+			{
+				$this->reference_origin = $placeholder;
+				$this->reference_next = $first + 1;
+				$this->output_reference = &$this->output[$placeholder][$first];
+			}
+			else
+			{
+				$this->output_reference = &$this->output[$placeholder];
+			}
+			$this->use_reference = true ;
+		}
+		else
+		{
+			$this->use_reference = false;
+			return false;
+		}
+	}
+	
+	/**
+	 * Stop using the reference array
+	 */
+	public function derefence()
+	{
+		$this->use_reference = false;
+	}
+	
+	public function step($deref = true)
+	{
+		if ($this->use_reference == false)
+		{
+			return false; 
+		}
+		if (array_key_exists($this->reference_next, $this->output[$this->reference_origin]))
+		{
+			$this->output_reference = &$this->output[$this->reference_origin][$this->reference_next];
+			$this->reference_next++ ;
+			return true;
+		}
+		else 
+		{
+			if ($deref)
+				$this->use_reference = false;
+			return false;
+		}
 	}
 }
 
