@@ -41,7 +41,7 @@ class TemplateManager
 	 * Default function to initialize template logic.
 	 * Uses $_SESSION to store the currently used template.
 	 */
-	public static function initalizeTemplate()
+	public static function initalizeTemplate($mainmod = 'index')
 	{
 		$tpl_to_use = '';
 
@@ -79,7 +79,7 @@ class TemplateManager
 		
 		//@XXX escape string!!
 		$inst->setTemplate($template_list[$tpl_to_use]);
-		$inst->createMainModule('index');
+		$inst->createMainModule($mainmod);
 
 		//$inst->getMainModule()->addOutput('Payload',$template_list[$tpl_to_use] . '<br />');
 	}

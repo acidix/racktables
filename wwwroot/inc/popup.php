@@ -230,17 +230,25 @@ function sortObjectAddressesAndNames ($a, $b)
 function renderPopupObjectSelector()
 {
 	$object_id = getBypassValue();
-	echo '<div style="background-color: #f0f0f0; border: 1px solid #3c78b5; padding: 10px; height: 100%; text-align: center; margin: 5px;">';
-	echo '<h2>Choose a container:</h2>';
-	echo '<form action="javascript:;">';
+	//echo '<div style="background-color: #f0f0f0; border: 1px solid #3c78b5; padding: 10px; height: 100%; text-align: center; margin: 5px;">';
+	//echo '<h2>Choose a container:</h2>';
+	//echo '<form action="javascript:;">';
 	$parents = findObjectParentCandidates($object_id);
 	printSelect ($parents, array ('name' => 'parents', 'size' => getConfigVar ('MAXSELSIZE')));
-	echo '<br>';
-	echo "<input type=submit value='Proceed' onclick='".
-		"if (getElementById(\"parents\").value != \"\") {".
-		"	opener.location=\"?module=redirect&page=object&tab=edit&op=linkEntities&object_id=${object_id}&child_entity_type=object&child_entity_id=${object_id}&parent_entity_type=object&parent_entity_id=\"+getElementById(\"parents\").value; ".
-		"	window.close();}'>";
-	echo '</form></div>';
+	
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'PortSelector');
+	$mod->setNamespace('popup',true);
+	
+	$mod->addOutput('ObjectSelect', getSelect ($parents, array ('name' => 'parents', 'size' => getConfigVar ('MAXSELSIZE'))));
+	$mod->addOutput('ObjectID', $object_id);
+	//echo '<br>';
+	//echo "<input type=submit value='Proceed' onclick='".
+	//	"if (getElementById(\"parents\").value != \"\") {".
+	//	"	opener.location=\"?module=redirect&page=object&tab=edit&op=linkEntities&object_id=${object_id}&child_entity_type=object&child_entity_id=${object_id}&parent_entity_type=object&parent_entity_id=\"+getElementById(\"parents\").value; ".
+	//	"	window.close();}'>";
+	//echo '</form></div>';
 }
 
 function handlePopupPortLink()
@@ -374,7 +382,7 @@ END
 			//printSelect (getExistingPortTypeOptions ($port_info['id']), array ('class' => 'porttype', 'name' => 'port_type'), $type_local);
 			//echo '</label>';
 		}
-		echo ' &mdash; ';
+		//echo ' &mdash; ';
 		if ($remote_port_info['iif_id'] == 1)
 		{
 			$mod->addOutput('RemoteIIFOIF', formatPortIIFOIF ($remote_port_info));
@@ -443,64 +451,105 @@ function renderPopupPortSelector()
 		$spare_ports = findSparePorts ($port_info, $filter);
 
 	// display search form
-	echo 'Link ' . formatPort ($port_info) . ' to...';
-	echo '<form method=GET>';
-	startPortlet ('Port list filter');
-	echo '<input type=hidden name="module" value="popup">';
-	echo '<input type=hidden name="helper" value="portlist">';
-	echo '<input type=hidden name="port" value="' . $port_id . '">';
-	echo '<table align="center" valign="bottom"><tr>';
-	echo '<td class="tdleft"><label>Object name:<br><input type=text size=8 name="filter-obj" value="' . htmlspecialchars ($filter['objects'], ENT_QUOTES) . '"></label></td>';
-	echo '<td class="tdleft"><label>Asset tag:<br><input type=text size=8 name="filter-asset_no" value="' . htmlspecialchars ($filter['asset_no'], ENT_QUOTES) . '"></label></td>';
-	echo '<td class="tdleft"><label>Port name:<br><input type=text size=6 name="filter-port" value="' . htmlspecialchars ($filter['ports'], ENT_QUOTES) . '"></label></td>';
-	echo '<td class="tdleft" valign="bottom"><label><input type=checkbox name="in_rack"' . ($in_rack ? ' checked' : '') . '>Nearest racks</label></td>';
-	echo '<td valign="bottom"><input type=submit value="show ports"></td>';
-	echo '</tr></table>';
-	finishPortlet();
+	//echo 'Link ' . formatPort ($port_info) . ' to...';
+	
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'PortSelector');
+	$mod->setNamespace('popup', true);
+	
+	$mod->addOutput('Port', formatPort ($port_info));
+	$mod->addOutput('PortID', $port_id);
+	$mod->addOutput('ObjectName', htmlspecialchars ($filter['objects'], ENT_QUOTES));
+	$mod->addOutput('AssetTag', htmlspecialchars ($filter['asset_no'], ENT_QUOTES));
+	$mod->addOutput('PortName', htmlspecialchars ($filter['ports'], ENT_QUOTES));
+	$mod->addOutput('RackChecked', ($in_rack ? 'checked' : ''));
+	//$mod->addOutput('', $cont)
+	
+	//echo '<form method=GET>';
+	//startPortlet ('Port list filter');
+	//echo '<input type=hidden name="module" value="popup">';
+	//echo '<input type=hidden name="helper" value="portlist">';
+	//echo '<input type=hidden name="port" value="' . $port_id . '">';
+	//echo '<table align="center" valign="bottom"><tr>';
+	//echo '<td class="tdleft"><label>Object name:<br><input type=text size=8 name="filter-obj" value="' . htmlspecialchars ($filter['objects'], ENT_QUOTES) . '"></label></td>';
+	//echo '<td class="tdleft"><label>Asset tag:<br><input type=text size=8 name="filter-asset_no" value="' . htmlspecialchars ($filter['asset_no'], ENT_QUOTES) . '"></label></td>';
+	//echo '<td class="tdleft"><label>Port name:<br><input type=text size=6 name="filter-port" value="' . htmlspecialchars ($filter['ports'], ENT_QUOTES) . '"></label></td>';
+	//echo '<td class="tdleft" valign="bottom"><label><input type=checkbox name="in_rack"' . ($in_rack ? ' checked' : '') . '>Nearest racks</label></td>';
+	//echo '<td valign="bottom"><input type=submit value="show ports"></td>';
+	//echo '</tr></table>';
+	//finishPortlet();
 
 	// display results
-	startPortlet ('Compatible spare ports');
-	if (empty ($spare_ports))
-		echo '(nothing found)';
-	else
+	//startPortlet ('Compatible spare ports');
+	if (!empty ($spare_ports))
+		//echo '(nothing found)';
+	//else
 	{
-		echo getSelect ($spare_ports, array ('name' => 'remote_port', 'size' => getConfigVar ('MAXSELSIZE')), NULL, FALSE);
-		echo "<p>Cable ID: <input type=text id=cable name=cable>";
-		echo "<p><input type='submit' value='Link' name='do_link'>";
+		$mod->addOutput('Select', getSelect ($spare_ports, array ('name' => 'remote_port', 'size' => getConfigVar ('MAXSELSIZE')), NULL, FALSE));
+		//echo getSelect ($spare_ports, array ('name' => 'remote_port', 'size' => getConfigVar ('MAXSELSIZE')), NULL, FALSE);
+		//echo "<p>Cable ID: <input type=text id=cable name=cable>";
+		//echo "<p><input type='submit' value='Link' name='do_link'>";
 	}
-	finishPortlet();
-	echo '</form>';
+	//finishPortlet();
+	//echo '</form>';
 }
 
 function renderPopupIPv4Selector()
 {
-	echo '<div style="background-color: #f0f0f0; border: 1px solid #3c78b5; padding: 10px; height: 100%; text-align: center; margin: 5px;">';
-	echo '<h2>Choose a port:</h2><br><br>';
-	echo '<form action="javascript:;">';
-	echo '<input type=hidden id=ip>';
-	echo '<select size=' . getConfigVar ('MAXSELSIZE') . ' id=addresses>';
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'IPv4Selector');
+	$mod->setNamespace('popup',true);
+	
+	$mod->addOutput('MaxElSize', getConfigVar ('MAXSELSIZE'));
+	//echo '<div style="background-color: #f0f0f0; border: 1px solid #3c78b5; padding: 10px; height: 100%; text-align: center; margin: 5px;">';
+	//echo '<h2>Choose a port:</h2><br><br>';
+	//echo '<form action="javascript:;">';
+	//echo '<input type=hidden id=ip>';
+	//echo '<select size=' . getConfigVar ('MAXSELSIZE') . ' id=addresses>';
 	$addresses = getAllIPv4Allocations();
 	usort ($addresses, 'sortObjectAddressesAndNames');
+	$outarr = array();
 	foreach ($addresses as $address)
-		echo "<option value='${address['ip']}' onclick='getElementById(\"ip\").value=\"${address['ip']}\";'>" .
-		"${address['object_name']} ${address['name']} ${address['ip']}</option>\n";
-	echo '</select><br><br>';
-	echo "<input type=submit value='Proceed' onclick='".
-		"if (getElementById(\"ip\")!=\"\") {".
-		" opener.document.getElementById(\"remoteip\").value=getElementById(\"ip\").value;".
-		" window.close();}'>";
-	echo '</form></div>';
+	{
+		$outarr[] = array('IP' => $address['ip'], 'ObjectName'=> $address['object_name'], 'Name', $address['name']);
+	}
+	if (count($outarr))
+	{
+		$mod->addOutput('PortOptions', $outarr);
+	}
+	
+	//	echo "<option value='${address['ip']}' onclick='getElementById(\"ip\").value=\"${address['ip']}\";'>" .
+	//	"${address['object_name']} ${address['name']} ${address['ip']}</option>\n";
+	//echo '</select><br><br>';
+	//echo "<input type=submit value='Proceed' onclick='".
+	//	"if (getElementById(\"ip\")!=\"\") {".
+	//	" opener.document.getElementById(\"remoteip\").value=getElementById(\"ip\").value;".
+	//	" window.close();}'>";
+	//echo '</form></div>';
 }
 
 function renderPopupHTML()
 {
 	global $pageno, $tabno;
-header ('Content-Type: text/html; charset=UTF-8');
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" style="height: 100%;">
-<?php
+	header ('Content-Type: text/html; charset=UTF-8');
+	
+	//Initialize template functionality
+	TemplateManager::initalizeTemplate('PopUp');
+	
+	//Adjust static dir to search within the template directory ./tpl/template/css etc.
+	TemplateManager::changeStaticDir();
+//<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+//<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" style="height: 100%;">
 	assertStringArg ('helper');
-	$text = '';
+	//$text = '';
+	
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->getMainModule();
+	$mod->setNamespace('popup',true);
+	
 	switch ($_REQUEST['helper'])
 	{
 		case 'objlist':
@@ -508,34 +557,38 @@ header ('Content-Type: text/html; charset=UTF-8');
 			$tabno = 'default';
 			fixContext();
 			assertPermission();
-			$text .= getOutputOf ('renderPopupObjectSelector');
+			renderPopupObjectSelector();
+			//$text .= getOutputOf ('renderPopupObjectSelector');
 			break;
 		case 'portlist':
 			$pageno = 'depot';
 			$tabno = 'default';
 			fixContext();
 			assertPermission();
-			$text .= '<div style="background-color: #f0f0f0; border: 1px solid #3c78b5; padding: 10px; height: 100%; text-align: center; margin: 5px;">';
+			//$text .= '<div style="background-color: #f0f0f0; border: 1px solid #3c78b5; padding: 10px; height: 100%; text-align: center; margin: 5px;">';
 			if (isset ($_REQUEST['do_link']))
-				$text .= getOutputOf ('callHook', 'handlePopupPortLink');
+				callHook('handlePopupPortLink');
+				//$text .= getOutputOf ('callHook', 'handlePopupPortLink');
 			else
-				$text .= getOutputOf ('callHook' , 'renderPopupPortSelector');
-			$text .= '</div>';
+				callHook('renderPopupPortSelector');
+				//$text .= getOutputOf ('callHook' , 'renderPopupPortSelector');
+			//$text .= '</div>';
 			break;
 		case 'inet4list':
 			$pageno = 'ipv4space';
 			$tabno = 'default';
 			fixContext();
 			assertPermission();
-			$text .= getOutputOf ('renderPopupIPv4Selector');
+			renderPopupIPv4Selector();
+			//$text .= getOutputOf ('renderPopupIPv4Selector');
 			break;
 		default:
 			throw new InvalidRequestArgException ('helper', $_REQUEST['helper']);
 	}
-	echo '<head><title>RackTables pop-up</title>';
-	printPageHeaders();
-	echo '</head>';
-	echo '<body style="height: 100%;">' . $text . '</body>';
+	//echo '<head><title>RackTables pop-up</title>';
+	//printPageHeaders();
+	//echo '</head>';
+	//echo '<body style="height: 100%;">' . $text . '</body>';
 ?>
 </html>
 <?php
