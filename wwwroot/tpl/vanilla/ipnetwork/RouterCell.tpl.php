@@ -1,12 +1,12 @@
 <?php if (defined("RS_TPL")) {?>
 	<table class=slbcell>
 		<tr>
-			<td rowspan=3><?php $this->IP; ?> <?php $this->ifname; ?> </td>
+			<td rowspan=3><?php $this->IP; ?><?php $this->ifname; ?></td>
 			<td><a href='index.php?page=object&object_id=<?php $this->Id; ?>&hl_ip=<?php $this->IP; ?>'><strong><?php $this->Name; ?></strong></a></td>
 		</tr>
 		<tr>
 			<td colspan=2>
-				<?php $this->getH('PrintImageHREF','router'); ?>
+				<?php $this->getH('PrintImageHref', array('router')); ?>
 			</td>
 		</tr>
 		<tr>

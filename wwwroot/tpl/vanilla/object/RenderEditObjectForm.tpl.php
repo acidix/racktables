@@ -32,12 +32,12 @@
 		<?php } ?> 
 		<input type=hidden name=num_attrs value=<?php $this->i ?>>
 		<tr><td>&nbsp;</td><th class=tdright>Has problems:</th><td class=tdleft><input type=checkbox name=object_has_problems
-		<?php if ($this->is("hasProblems",treu)) { ?>
+		<?php if ($this->is("hasProblems",true)) { ?>
 			 checked
 		<?php } ?> 
 		></td></tr>
 		<tr><td>&nbsp;</td><th class=tdright>Actions:</th><td class=tdleft>
-		<?php $this->deleteObjLink ?>&nbsp;<?php $this->addObjLink ?>
+		<?php $this->deleteObjLink ?>&nbsp;<?php $this->resObjLink ?>
 		</td></tr>
 		<tr><td colspan=3><b>Comment:</b><br><textarea name=object_comment rows=10 cols=80><?php $this->object_comment ?></textarea></td></tr>
 		<tr><th class=submit colspan=3>

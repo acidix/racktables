@@ -1,20 +1,20 @@
 <?php if (defined("RS_TPL")) {?>
 	<table cellspacing=0 cellpadding=5 align=center class=widetable>
 	<tr>
-	<?php if ($this->is("isVLAN", true)) { ?>
+	<?php if ($this->is("IsVLAN", true)) { ?>
 		<th><?php $this->getH("PrintImageHref", array('net')); ?></th>
 	<?php } ?> 
-	<?php if ($this->is("isIpv6Net",true)) { ?>
+	<?php if ($this->is("IsIpv6Net",true)) { ?>
 		<th>VLAN</th>
 	<?php } ?> 
 	<th>&nbsp;</th></tr>
 	<?php $this->AddNewTop ?>
-	<?php $this->startLoop("allMinuslines"); ?>	
+	<?php $this->startLoop("AllMinusLines"); ?>	
 		<tr class=<?php $this->domainclass ?>><td>
-		<?php $this->renderedCell ?>
-		<?php $this->vlanRichTxt ?>
+		<?php $this->RenderedCell ?>
+		<?php $this->VlanRichTxt ?>
 		</td><td>
-		<?php $this->opLink ?>
+		<?php $this->OpLink ?>
 		</td></tr>
 	<?php $this->endLoop(); ?> 
 	<?php $this->AddNewBottom ?>

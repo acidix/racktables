@@ -4,7 +4,7 @@
 	<tr><td>
 	<?php $this->getH('PrintImageHref', array('create', 'Create attribute', TRUE)); ?>
 	</td><td><input type=text tabindex=100 name=attr_name></td><td>
-	<?php $this->Getselect; ?>
+	<?php $this->GetSelect; ?>
 	</td><td>
 	<?php $this->getH('PrintImageHref', array('add', 'Create attribute', TRUE, 102)); ?>
 	</td></tr></form>

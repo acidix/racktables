@@ -30,8 +30,8 @@
 			<a href='?module=download&file_id=<?php $this->get("cellID") ?>'>
 			<?php $this->get("isoPermImg") ?>
 			</a>&nbsp;
-		<?php } ?>
-
+		<?php } ?><?php $this->fileSize ?>
+		</td></tr></table>
 	<?php } ?>
 
 	<?php if ($this->is("typeIPV4",true)) { ?>

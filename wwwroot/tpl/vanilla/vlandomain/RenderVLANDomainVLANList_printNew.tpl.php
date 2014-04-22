@@ -5,7 +5,7 @@
 	</td><td>
 	<input type=text name=vlan_id size=4 tabindex=101>
 	</td><td>
-	<?php $this->getH("PrintSelect", array( $this->_vtoptions,  array ('name' => 'vlan_type', 'tabindex' => 102), 'ondemand')); ?>
+	<?php $this->getH("PrintSelect", array( $this->_Vtoptions,  array ('name' => 'vlan_type', 'tabindex' => 102), 'ondemand')); ?>
 	</td><td>
 	<input type=text size=48 name=vlan_descr tabindex=103>
 	</td><td>

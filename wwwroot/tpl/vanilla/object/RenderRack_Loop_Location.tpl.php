@@ -1,12 +1,9 @@
 <?php if (defined("RS_TPL")) {?>
-	<td class='atom state_<?php $this->state ?>
-	<?php if (!$this->is("rackHL", null)) { ?>
-		<?php $this->rackHL ?>
-	<?php } ?>'
-	<?php if (!$this->is("colspan", null)) { ?>
+	<td class='atom state_<?php $this->state ?><?php $this->rackHL ?>'
+	<?php if ($this->is("colspan")) { ?>
 		 colspan=<?php $this->colspan ?>
 	<?php } ?> 
-	<?php if (!$this->is("rowspan", null)) { ?>
+	<?php if ($this->is("rowspan")) { ?>
 		 rowspan=<?php $this->rowspan ?>
 	<?php } ?>>
 	<?php if ($this->is("state","T")) { ?>

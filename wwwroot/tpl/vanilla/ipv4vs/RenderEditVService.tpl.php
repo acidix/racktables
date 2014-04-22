@@ -21,7 +21,7 @@
 	
 	<p class="centered">
 	
-	<?php $this->getH('GetOpLink', $this->_Refcnt > 0 ? array(NULL, 'Delete virtual service', 'nodestroy', "Could not delete: there are $this->Refcnt LB links") : array( array ('op' => 'del', 'id' => $this->Id), 'Delete virtual service', 'destroy')); ?>
+	<?php $this->getH('GetOpLink', $this->_Refcnt > 0 ? array(NULL, 'Delete virtual service', 'nodestroy', "Could not delete: there are $this->Refcnt LB links") : array( array ('op' => 'del', 'id' => $this->_Id), 'Delete virtual service', 'destroy')); ?>
 	
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />

@@ -2,7 +2,7 @@
 	<div class=portlet>
 		<h2>SLB default configs</h2>
 		<table cellspacing=0 cellpadding=5 align=center>
-		<?php $this->getH("PrintOpFromIntro", array('save')); ?>
+		<?php $this->getH("PrintOpFormIntro", array('save')); ?>
 		<tr><th class=tdright>VS config</th><td colspan=2><textarea tabindex=103 name=vsconfig rows=10 cols=80><?php $this->htmlspecVSconfig ?></textarea></td>
 		<td rowspan=2>
 		<?php $this->getH("PrintImageHref", array('SAVE', 'Save changes', TRUE)); ?>

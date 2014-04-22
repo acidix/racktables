@@ -48,7 +48,8 @@
 		</td></tr></form>
 		</table><br>
 	<?php } ?> 
-	<?php if ($this->is("isEnableMultiport",true)) { ?>
+
+	<?php if ($this->is("isShowAddMultiPorts",true)) { ?>
 		</div>
 		<div class=portlet>
 			<h2>Add/update multiple ports</h2>

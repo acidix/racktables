@@ -4,17 +4,17 @@
 	<tr>
 		<td class=pcleft>
 			<?php $this->EntitySummary; ?>
-			<?php if($this->is('SLBPortlet1')||$this->is('SLBPortlet2')||$this->is('SLBPortlet3')) { ?>
+			<?php if($this->is('VSGListCount')||$this->is('VSListCount')||$this->is('RSPListCount')) { ?>
 				<div class=portlet>
-					<?php if ($this->is('SLBPortlet1')) { ?>
+					<?php if ($this->is('VSGListCount')) { ?>
 						<h2>virtual service groups (<?php $this->VSGListCount; ?>):</h2>
 						<?php $this->SLBPortlet1; ?>
 					<?php } ?>
-					<?php if ($this->is('SLBPortlet2')) { ?>
-						<h2><h2>virtual services (<?php $this->VSListCount; ?>):</h2>
+					<?php if ($this->is('VSListCount')) { ?>
+						<h2>virtual services (<?php $this->VSListCount; ?>):</h2>
 						<?php $this->SLBPortlet2; ?>
 					<?php } ?>
-					<?php if ($this->is('SLBPortlet3')) { ?>
+					<?php if ($this->is('RSPListCount')) { ?>
 						<h2>RS pools (<?php $this->RSPListCount; ?>):</h2>
 						<?php $this->SLBPortlet3; ?>
 					<?php } ?>

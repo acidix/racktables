@@ -1,11 +1,12 @@
 <?php if (defined("RS_TPL")) {?>
 	<div class=portlet>
-		<h2>Munin servers (<?php $this->ServerCount ?>)</h2>
+		<h2>Real servers (<?php $this->RsCount ?>)</h2>
 		<table cellspacing=0 cellpadding=5 align=center class=widetable>
-		<tr><th>base URL</th><th>graph(s)</th></tr>
-		<?php $this->startLoop("allServers"); ?>	
-			<tr align=left valign=top><td><?php $this->NiftyStr ?></td>
-			<td class=tdright><?php $this->NumGraphs ?></td></tr>
+		<tr>
+			<?php $this->TableHeads ?>
+		</tr>
+		<?php $this->startLoop('AllRowsCont'); ?>	
+			<tr valign=top><?php $this->RowCont ?></tr>
 		<?php $this->endLoop(); ?> 
 		</table>
 	</div>

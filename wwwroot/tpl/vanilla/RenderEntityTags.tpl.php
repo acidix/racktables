@@ -2,7 +2,7 @@
 
 	<table border=0 width="100%"><tr>
 		<?php $this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/tag-cb.js")); ?>
-		<?php $this->addRequirement("Header","HeaderJsInline",array("code"=>$this->_jsCode)); ?>
+		<?php $this->addRequirement("Header","HeaderJsInline",array("code"=>$this->_JsCode)); ?>
 		<td class=pcright>
 		<?php $this->RenderedEnityTags; ?> 
 		</td>

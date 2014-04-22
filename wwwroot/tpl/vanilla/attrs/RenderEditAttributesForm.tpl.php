@@ -3,7 +3,7 @@
 	<div class=portlet><h2>Optional attributes</h2>
 	<table cellspacing=0 cellpadding=5 align=center class=widetable>
 	<tr><th>&nbsp;</th><th>Name</th><th>Type</th><th>&nbsp;</th></tr>
-	<?php $this->Newtop; ?>
+	<?php $this->NewTop; ?>
 	<?php	$this->startLoop('AllAttrMaps'); ?>
 		<?php $this->OpFormIntro ?>
 		<tr><td>	
@@ -13,7 +13,7 @@
 		<?php $this->SaveImg ?>
 		</td></tr></form>
 	<?php $this->endLoop(); ?>
-	<?php $this->Newbottom; ?>
+	<?php $this->NewBottom; ?>
 	</table></div>
 		
 <?php } else { ?>

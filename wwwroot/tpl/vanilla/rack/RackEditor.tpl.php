@@ -40,7 +40,7 @@
 					</td>
 				</tr>
 			<?php } ?>
-			<tr><td colspan=3><b>Comment:</b><br><textarea name=comment rows=10 cols=80><?php $this->Comment; ?></textarea></td></tr>
+			<tr><td colspan=3><b>Comment:</b><br><textarea name=comment rows=10 cols=80><?php $this->Rack_Comment; ?></textarea></td></tr>
 			<tr>
 				<td class=submit colspan=3>
 					<?php $this->getH('PrintImageHREF',array('SAVE','Save changes',TRUE)) ; ?>

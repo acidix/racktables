@@ -11,7 +11,7 @@
 	<?php } ?>
 	<?php if($this->is('ID')) { ?>
 		<a name='net-<?php $this->ID; ?>' href='index.php?page=ipv<?php $this->IPVersion; ?>net&id=<?php $this->ID; ?>'>
-	<?php ?>
+	<?php } ?>
 		<?php $this->Formatted; ?>
 	<?php if($this->is('ID')) { ?>
 		</a>
@@ -34,6 +34,7 @@
 		<?php } ?>
 	<?php } ?>
 	</td>
+
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

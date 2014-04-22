@@ -69,7 +69,7 @@ class TemplateHelperForm extends TemplateHelperAbstract
 class TemplateHelperPrintImageHref extends TemplateHelperAbstract
 {
 	protected function generate($params){
-		if (count($params) == 0||$params[0]=="")
+		if (count($params) == 0 || $params[0]=="")
 		{
 			echo "";
 		}
@@ -104,10 +104,9 @@ class TemplateHelperPrintImageHref extends TemplateHelperAbstract
 		$img['path'] = '?module=chrome&uri=' . $img['path'];
 
 		//Loading and rendering small module in memory and returning the
-		if ($do_input == TRUE){
-			$tplm = TemplateManager::getInstance();
-			$tplm->setTemplate("vanilla");
-			
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");	
+		if ($do_input == TRUE){		
 			$mod = $tplm->generateModule( "GetImageHrefDoInput", true, 
 					array( "SrcPath" => $img['path'],  "TabIndex" => ($tabindex ? "tabindex=${tabindex}" : ''),
 							"Title" => (!strlen ($title) ? '' : " title='${title}'") ));
@@ -115,8 +114,6 @@ class TemplateHelperPrintImageHref extends TemplateHelperAbstract
 			echo $mod->run();
 		}
 		else{
-			$tplm = TemplateManager::getInstance();
-			$tplm->setTemplate("vanilla");
 
 			$mod = $tplm->generateModule("GetImageHrefNoInput", true, 
 					array( "SrcPath" => $img['path'],  "ImgWidth" => $img['width'], "ImgHeight" => $img['height'] ,
@@ -333,7 +330,7 @@ class TemplateHelperPrintOpFormIntro extends TemplateHelperAbstract
 			$loopArray[] = array("name" => htmlspecialchars ($inputname, ENT_QUOTES), "val" => htmlspecialchars ($inputvalue, ENT_QUOTES));
 	//		printf ('<input type=hidden name="%s" value="%s">', htmlspecialchars ($inputname, ENT_QUOTES), htmlspecialchars ($inputvalue, ENT_QUOTES));
 		$mod->setOutput("loopArray", $loopArray);
-		$mod->run();
+		echo $mod->run();
 	}
 
 }
@@ -377,14 +374,12 @@ class TemplateHelperGetOpLink extends TemplateHelperAbstract
 		}
 
 		if (! empty ($comment)){
-			$mod->setOutput("showComment", true);
 			$mod->setOutput("htmlComment", htmlspecialchars ($comment, ENT_QUOTES));	
 		}
 	//		$ret .= ' title="' . htmlspecialchars ($comment, ENT_QUOTES) . '"';
 		$class = trim ($class);
 		
 		if (! empty ($class)){
-			$mod->setOutput("showClass", true);
 			$mod->setOutput("htmlClass", htmlspecialchars ($class, ENT_QUOTES));		 
 		}
 	//		$ret .= ' class="' . htmlspecialchars ($class, ENT_QUOTES) . '"';
@@ -406,7 +401,7 @@ class TemplateHelperGetOpLink extends TemplateHelperAbstract
 		$mod->setOutput("title", $title);
 	//	$ret .= $title . '</a>';
 	//	return $ret;
-		return $mod->run();
+		echo $mod->run();
 	}
 } 
 
@@ -454,14 +449,57 @@ class TemplateHelperPrintSelect extends TemplateHelperAbstract
 	{
 		if(count($params) < 1)
 			return "";
+
 		$optList = $params[0];
 		$select_attrs = array();
 		$selected_id = NULL;
+
 		if(count($params) > 1)
 			$select_attrs = $params[1];
 		if(count($params) > 2)
 			$selected_id = $params[2];
-		return getSelect($optList, $select_attrs, $selected_id);			
+		
+		//Original getSelect code 
+		if (!array_key_exists ('name', $select_attrs)){
+			echo '';
+			return;
+		}
+		// handle two corner cases in a specific way
+		if (count ($optList) == 0){
+			echo '(none)';
+			return;
+		}
+
+		$tplm = TemplateManager::getInstance();
+		$tplm->setTemplate("vanilla");
+
+		if (count ($optList) == 1)
+		{
+			foreach ($optList as $key => $value)
+				break;
+
+			$mod = $tplm->generateModule("GetSelectInLine",  true, array("selectName" => $select_attrs['name'], "keyValue" => $key, "value" => $value ));	
+
+			echo $mod->run();
+			return;
+		}
+		$mod = $tplm->generateModule("GetSelect");
+		
+		if (!array_key_exists ('id', $select_attrs))
+			$select_attrs['id'] = $select_attrs['name'];
+	
+		$selectedOutArray = array();
+		foreach ($select_attrs as $attr_name => $attr_value)
+			$selectedOutArray[] = array('attr_name' =>  $attr_name, "attr_val" => $attr_value );
+	
+		$mod->setOutput("selectedList", $selectedOutArray);
+	
+		$allOptionsArray = array();
+		foreach ($optList as $dict_key => $dict_value)
+			$allOptionsArray[] = array("dict_key" => $dict_key, "isSelected" =>  ($dict_key == $selected_id ? ' selected' : ''), "dict_val" => $dict_value );
+		$mod->setOutput("allOptions", $allOptionsArray);
+	
+		echo $mod->run();			
 	}
 }
 ?>

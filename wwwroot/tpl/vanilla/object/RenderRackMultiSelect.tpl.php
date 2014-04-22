@@ -1,9 +1,9 @@
 <?php if (defined("RS_TPL")) {?>
 	<select name=<?php $this->sname ?> multiple size=<?php $this->maxselsize ?> onchange='getElementsByName(\"updateObjectAllocation\")[0].submit()'>
 	<?php $this->startLoop("allRowData"); ?>	
-		<option value=<?php $this->rack_id ?>
-		<?php $this->selectTxt ?>
-		><?php $this->rack_name ?></option>
+		<optgroup label='<?php $this->GroupLabel ?>'>
+		<?php $this->RackEntries ?>
+		
 	<?php $this->endLoop(); ?> 
 	</select>
 <?php } else { ?>

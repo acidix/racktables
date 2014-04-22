@@ -20,7 +20,7 @@ END
 		<center>
 			<h3><?php $this->NumPages; ?> pages:</h3>
 			<?php $this->startLoop('Pages'); ?>
-				<?php $this->B; ?><a href='<?php $this->Link(); ?>'><?php $this->i; ?></a><?php $this->BEnd; ?>
+				<?php $this->B; ?><a href='<?php $this->Link(); ?>'><?php $this->I; ?></a><?php $this->BEnd; ?>
 			<?php $this->endLoop(); ?>
 		</center>
 	<?php } ?>

@@ -41,14 +41,14 @@ class TemplateManager
 	 * Default function to initialize template logic.
 	 * Uses $_SESSION to store the currently used template.
 	 */
-	public static function intializeTemplate()
+	public static function initalizeTemplate()
 	{
 		$tpl_to_use = '';
 
 		$template_list = self::getOrderedTemplateList();
+		//TODO Messy code fixit
 		$flipped = array_flip($template_list);
 
-		
 
 		if (!array_key_exists('RacktablesTemplate', $_COOKIE))
 		{
@@ -99,9 +99,10 @@ class TemplateManager
 	 */
 	public static function getOrderedTemplateList()
 	{
-		$arr = array('vanilla');
+		static $arr = array('vanilla');
 		//$arr = glob('../tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
 		sort($arr);
+
 		return $arr;
 	}
 	
@@ -427,7 +428,7 @@ class TemplateManager
 		}
 		$this->requirements[] = $test;
 		self::log("Adding requirement: ".$placeholder . " on " . $name . " Namespace: " . $namespace . " InMemory: " . $inmemory . " Cont: ", $cont);
-		$mod = $this->generateSubmodule($placeholder, $name, null, $inmemory, $cont);
+		$mod = $this->generateSubmodule($placeholder, $name, $this->createMainModule(), $inmemory, $cont);
 		$mod->setNamespace($namespace);
 		$mod->setLock(true);
 	}
@@ -554,7 +555,8 @@ abstract class TemplateHelperAbstract
 		}
 		$ret = array();
 		foreach ($params as $i => $val) {
-			if(substr($val,0,2)=="%%")
+
+			if(is_string($val) && substr($val,0,2)=="%%")
 			{
 				$ret[$i] = $parent->get(substr($val,2),true);
 			}
@@ -845,7 +847,7 @@ class TemplateModule
 		{
 			if ($this->use_reference === true && array_key_exists($name, $this->output_reference))
 			{
-				if (is_array($this->output_reference[$name]))
+				if (is_array($this->output_reference[$name]) && !$return)
 				{
 					$out = implode($this->output_reference[$name]);
 				}
@@ -864,7 +866,7 @@ class TemplateModule
 			{
 				if(array_key_exists($name, $this->output))
 				{
-					if (is_array($this->output[$name]))
+					if (is_array($this->output[$name]) && !$return)
 					{
 						$out = implode($this->output[$name]);
 					}

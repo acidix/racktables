@@ -309,7 +309,7 @@ function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $
 			break;
 
 		$mod = $tplm->generateModule("GetSelectInLine",  true, array("selectName" => $select_attrs['name'], "keyValue" => $key, "value" => $value ));	
-
+		$mod->setNamespace("");
 //		return "<input type=hidden name=${select_attrs['name']} id=${select_attrs['name']} value=${key}>" . $value;
 		return $mod->run();
 	}
@@ -317,13 +317,14 @@ function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $
 		$mod = $tplm->generateModule("GetSelect");
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "GetSelect", $parent);
+	$mod->setNamespace("");
 
 	if (!array_key_exists ('id', $select_attrs))
 		$select_attrs['id'] = $select_attrs['name'];
 //	$ret .= '<select';
 	$selectedOutArray = array();
 	foreach ($select_attrs as $attr_name => $attr_value)
-		$selectedOutArray[] = array('attr_name' =>  $attr_name, "attr_val" => $attr_name );
+		$selectedOutArray[] = array('attr_name' =>  $attr_name, "attr_val" => $attr_value );
 //		$ret .= " ${attr_name}=${attr_value}";
 	$mod->setOutput("selectedList", $selectedOutArray);
 //	$ret .= '>';
@@ -416,7 +417,7 @@ function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree =
 		else
 			$mod = $tplm->generateSubmodule($placeholder, "GetNiftySelect", $parent);
 		
-		$mod->setNamespace("", true);
+		$mod->setNamespace("");
 	
 		if($tree){
 			$mod->setOutput("isTree", true);
@@ -1063,20 +1064,24 @@ function renderEntitySummary ($cell, $title, $values = array(), $parent = null, 
 		$mod = $tplm->generateModule("RenderEntitySummary");
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderEntitySummary", $parent);
-
+	$mod->setNamespace('');
 	//startPortlet ($title);
-	$mod->setOutput("title", $title);
+	$mod->setOutput("Title", $title);
 	//echo "<table border=0 cellspacing=0 cellpadding=3 width='100%'>\n";
 
 	
 	foreach ($values as $name => $value)
 	{
-		$loopMod = $tplm->generateSubmodule("loopMod", "RenderEntitySummary_LoopCont" , $mod);
+
+		$loopMod = $tplm->generateSubmodule("LoopMod", "RenderEntitySummary_LoopCont" , $mod);
+		$loopMod->setNamespace("", true);
+
+
 		if (is_array ($value) and count ($value) == 1)
 		{
 			$value = array_shift ($value);
-			$loopMod->setOutput("val", $value);
-			$loopMod->setOutput("singleValue", true);
+			$loopMod->setOutput("Val", $value);
+			$loopMod->setOutput("SingleValue", true);
 			//echo $value;
 			continue;
 		}
@@ -1095,20 +1100,20 @@ function renderEntitySummary ($cell, $title, $values = array(), $parent = null, 
 			$name = $m[2];
 		}
 
-		$loopMod->setOutput("class", $class);
-		$loopMod->setOutput("name", $name);
-		$loopMod->setOutput("val", $value);
+		$loopMod->setOutput("Class", $class);
+		$loopMod->setOutput("Name", $name);
+		$loopMod->setOutput("Val", $value);
 	
 		if ($name == 'tags:')
 		{
-			$loopMod->setOutput("showTags", true);	 
+			$loopMod->setOutput("ShowTags", true);	 
 	
 			$baseurl = '';
 			if (isset ($page_by_realm[$cell['realm']]))
 				$baseurl = makeHref(array('page'=>$page_by_realm[$cell['realm']], 'tab'=>'default'))."&";
 			
-			$loopMod->setOutput("cell", $cell);
-			$loopMod->setOutput("baseurl", $baseurl);
+			$loopMod->setOutput("Cell", $cell);
+			$loopMod->setOutput("BaseUrl", $baseurl);
 	//		printTagTRs ($cell, $baseurl);
 		}
 	//	else
@@ -1148,14 +1153,12 @@ function getOpLink ($params, $title,  $img_name = '', $comment = '', $class = ''
 	}
 
 	if (! empty ($comment)){
-		$mod->setOutput("showComment", true);
 		$mod->setOutput("htmlComment", htmlspecialchars ($comment, ENT_QUOTES));	
 	}
 //		$ret .= ' title="' . htmlspecialchars ($comment, ENT_QUOTES) . '"';
 	$class = trim ($class);
 	
 	if (! empty ($class)){
-		$mod->setOutput("showClass", true);
 		$mod->setOutput("htmlClass", htmlspecialchars ($class, ENT_QUOTES));		 
 	}
 //		$ret .= ' class="' . htmlspecialchars ($class, ENT_QUOTES) . '"';

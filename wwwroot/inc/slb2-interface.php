@@ -41,9 +41,9 @@ function formatVSIP ($vip, $plain_text = FALSE)
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate("vanilla");
 	
-	$mod = $tplm->generateModule("FormatVSIPInMemory", true, array("href" => makeHref (array ('page' => 'ipaddress', 'ip' => $fmt_ip)), 
+	$mod = $tplm->generateModule("FormatVSIPInMem", true, array("href" => makeHref (array ('page' => 'ipaddress', 'ip' => $fmt_ip)), 
 		   "fmt_ip" => $fmt_ip));
-	
+
 //	$ret = '<a href="' . makeHref (array ('page' => 'ipaddress', 'ip' => $fmt_ip)) . '">' . $fmt_ip . '</a>';
 	return $mod->run();
 }
@@ -99,17 +99,17 @@ function renderTripletForm ($bypass_id)
 }
 
 // either $port of $vip argument should be NULL
-function renderPopupTripletForm ($triplet, $port, $vip, $row, TemplateModule $parent = null)
+function renderPopupTripletForm ($triplet, $port, $vip, $row, TemplateModule $parent = NULL, $placeholder = "RenderedPopupTripletForm")
 {
 	//Port to template engine
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
+	if($parent === NULL)
 		$tplm->setTemplate("vanilla");
 
-	if($parent==null)	
+	if($parent === NULL)	
 		$mod = $tplm->generateModule("RenderPopupTripletForm",  false);
 	else
-		$mod = $tplm->generateSubmodule("RenderedPopupTripletForm", "RenderPopupTripletForm", $parent);
+		$mod = $tplm->generateSubmodule($placeholder, "RenderPopupTripletForm", $parent);
 	$mod->setNamespace("slb2_interface");
 
 	$mod->setOutput("opFormIntroPara", (isset ($port) ? 'updPort' : 'updIp'));
@@ -150,7 +150,7 @@ function renderPopupTripletForm ($triplet, $port, $vip, $row, TemplateModule $pa
 //	echo '<p align=center>' . getImageHREF ('SAVE', 'Save changes', TRUE);
 	//Ends form created bys FormIntro
 //	echo '</form>';
-	if($parent == null)
+	if($parent === NULL)
 		return $mod->run();
 }
 
@@ -334,13 +334,15 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 		$tplm->setTemplate("vanilla");
 
 	if($parent==null)	
-		$mod = $tplm->generateModule("RenderSLBTriplets2",  false);
+		$mod = $tplm->generateModule("RenderSLBTriplets2");
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderSLBTriplets2", $parent);
+	$mod->setNamespace('slb2_interface');
 
 	list ($realm1, $realm2) = array_values (array_diff (array ('object', 'ipvs', 'ipv4rspool'), array ($cell['realm'])));
 	if ($editable && getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		callHook ('renderNewTripletForm', $realm1, $realm2);
+//		renderNewTripletForm($realm1, $realm2, $mod, 'NewTripletFormTop');
+		callHook ('renderNewTripletForm', $realm1, $realm2, $mod, 'NewTripletFormTop');
 
 	$fields = array
 	(
@@ -406,7 +408,6 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 	$order = 'odd';
 	$span = array();
 
-	$allTripletOutArray = array();
 	
 	foreach ($triplets as $slb)
 	{
@@ -453,17 +454,18 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 		$portOutputArray = array();
 		foreach ($vs_cell['ports'] as $port)
 		{
-			$portOutputArray[] = array("row_Class" => ((($row = isPortEnabled ($port, $slb['ports'])) ? 'enabled' : 'disabled')));
+			$singlePort = array("Row_Class" => ((($row = isPortEnabled ($port, $slb['ports'])) ? 'enabled' : 'disabled')));
 
 //			echo '<li class="' . (($row = isPortEnabled ($port, $slb['ports'])) ? 'enabled' : 'disabled') . '">';
 //			echo formatVSPort ($port) . getPopupSLBConfig ($row);
-			$portOutputArray["formatedVSPort"] = formatVSPort ($port);
-			$portOutputArray["popupSLBConfig"] = getPopupSLBConfig ($row);
+			$singlePort["formatedVSPort"] = formatVSPort ($port);
+			$singlePort["popupSLBConfig"] = getPopupSLBConfig ($row);
 			
 			if ($editable)
 //				renderPopupTripletForm ($slb, $port, NULL, $row);
-				$portOutputArray["tripletForm"] = renderPopupTripletForm ($slb, $port, NULL, $row);
+				$singlePort["tripletForm"] = renderPopupTripletForm ($slb, $port, NULL, $row);
 //			echo '</li>';
+			$portOutputArray[] = $singlePort;
 		}
 		$tripletArray["portOutputArray"] = $portOutputArray;		
 //		echo '</ul></td>';
@@ -486,16 +488,20 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 
 			if (is_array ($row) && !empty ($row['prio']))
 			{
-				$vipOutput["rowIsTrue"] = true;
-				$prio_class = 'slb-prio slb-prio-' . preg_replace ('/\s.*/', '', $row['prio']);
-				$vipOutput["prioClass"] = htmlspecialchars ($prio_class, ENT_QUOTES);
-				$vipOutput["rowPrio"] = htmlspecialchars($row['prio']);
+				$prio_class 			= 'slb-prio slb-prio-' . preg_replace ('/\s.*/', '', $row['prio']);
+				$vipOutput["FormatedPrioSpan"] = $tplm->generateModule('StdSpan', true, array(
+						'Class' => htmlspecialchars ($prio_class, ENT_QUOTES),
+						'Cont'  => htmlspecialchars($row['prio'])))->run();
 //				echo '<span class="' . htmlspecialchars ($prio_class, ENT_QUOTES) . '">' . htmlspecialchars($row['prio']) . '</span>';
 			}
+			
+		
 			$vipOutput["popupSLBConfig"] = getPopupSLBConfig ($row);
 //			echo getPopupSLBConfig ($row);
 			if ($editable)
 				$vipOutput["tripletForm"] = renderPopupTripletForm ($slb, NULL, $vip, $row);
+			else
+				$vipOutput["tripletForm"] = '';
 //			echo '</li>';
 			$vipAllOutput[] = $vipOutput;
 		}
@@ -522,10 +528,11 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 
 //		echo "</tr>\n";
 		$order = $nextorder[$order];
-		$allTripletOutArray[] = $tripletArray;
+		$smod = $tplm->generateSubmodule('AllTriplets', 'RenderSLBTriplets2_TripletLoop', $mod, false, $tripletArray);
+		$smod->setNamespace('slb2_interface');
 	}
 
-	$mod->setOutput("allTripletOutArray", $allTripletOutArray);
+
 //	if (count ($triplets))
 //	{
 //		echo "</table>\n";
@@ -533,7 +540,9 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 //	}
 
 	if ($editable && getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		callHook ('renderNewTripletForm', $realm1, $realm2);
+		renderNewTripletForm($realm1, $realm2, $mod, 'NewTripletFormBot');
+//		callHook ('renderNewTripletForm', $realm1, $realm2);
+	
 	if($parent == null)
 		return $mod->run();
 }
@@ -606,7 +615,7 @@ function getTripletConfigAJAX()
 	echo '<div class="slbconf" style="max-height: 500px; max-width: 600px; overflow: auto">' . htmlspecialchars (generateSLBConfig2 ($tr_list)) . '</div>';
 }
 
-function renderNewTripletForm ($realm1, $realm2)
+function renderNewTripletForm ($realm1, $realm2, $parent = null, $placehoder = 'NewTripletForm')
 {
 	function get_realm_data ($realm)
 	{
@@ -638,15 +647,35 @@ function renderNewTripletForm ($realm1, $realm2)
 
 	$realm1_data = get_realm_data ($realm1);
 	$realm2_data = get_realm_data ($realm2);
-	startPortlet ('Add new VS group');
+	
+	$tplm = TemplateManager::getInstance();
+	if($parent==null)
+		$tplm->setTemplate("vanilla");
+	
+	if($parent==null)	
+		$mod = $tplm->generateModule('NewTripletForm');
+	else
+		$mod = $tplm->generateSubmodule($placeholder, 'NewTripletForm', $parent);
+	
+	$mod->setNamespace('slb2_interface');
+	
+	
+	//startPortlet ('Add new VS group');
 	if (count ($realm1_data['list']) && count ($realm2_data['list']))
-		printOpFormIntro ('addLink');
-	echo "<table cellspacing=0 cellpadding=5 align=center>";
-	echo "<tr valign=top><th class=tdright>{$realm1_data['name']}</th><td class=tdleft>";
-	printSelect ($realm1_data['list'], $realm1_data['options']);
-	echo '</td><td class=tdcenter valign=middle rowspan=2>';
+		$mod->addOutput('printOpFormIntro', true);
+		 
+	//	printOpFormIntro ('addLink');
+	//echo "<table cellspacing=0 cellpadding=5 align=center>";
+	//echo "<tr valign=top><th class=tdright>{$realm1_data['name']}</th><td class=tdleft>";
+	$mod->addOutput('realm1Name', $realm1_data['name']);
+	//printSelect ($realm1_data['list'], $realm1_data['options']);
+	$mod->addOutput('realm1List', $realm1_data['list']);
+	$mod->addOutput('realm1Opt', $realm1_data['options']);
+	//echo '</td><td class=tdcenter valign=middle rowspan=2>';
+	
 	if (count ($realm1_data['list']) && count ($realm2_data['list']))
-		printImageHREF ('ADD', 'Configure LB', TRUE, 120);
+		$mod->addOutput('isAdd', true);
+	//	printImageHREF ('ADD', 'Configure LB', TRUE, 120);
 	else
 	{
 		$names = array();
@@ -656,16 +685,22 @@ function renderNewTripletForm ($realm1, $realm2)
 			$names[] = 'a ' . $realm2_data['name'];
 		$message = 'Please create ' . (implode (' and ', $names)) . '.';
 		showNotice ($message);
-		printImageHREF ('DENIED', $message, FALSE);
+		$mod->addOutput('message', $message);
+	//	printImageHREF ('DENIED', $message, FALSE);
 	}
-	echo "<tr valign=top><th class=tdright>{$realm2_data['name']}</th><td class=tdleft>";
-	printSelect ($realm2_data['list'], $realm2_data['options']);
-	echo "</td></tr>\n";
-	echo "</table></form>\n";
-	finishPortlet();
+	//echo "<tr valign=top><th class=tdright>{$realm2_data['name']}</th><td class=tdleft>";
+	$mod->addOutput('realm2Name', $realm2_data['name']);
+	$mod->addOutput('realm2List', $realm2_data['list']);
+	$mod->addOutput('realm2Opt', $realm2_data['options']);
+	//printSelect ($realm2_data['list'], $realm2_data['options']);
+	//echo "</td></tr>\n";
+	//echo "</table></form>\n";
+//	finishPortlet();
+	if($parent==null)
+		return $mod->run();
 }
 
-function getPopupSLBConfig ($row, TemplateModule $parent = null)
+function getPopupSLBConfig ($row, TemplateModule $parent = null, $placeholder = "GetPopupSLBConfig")
 {
 	$do_vs = (isset ($row) && isset ($row['vsconfig']) && strlen ($row['vsconfig']));
 	$do_rs = (isset ($row) && isset ($row['rsconfig']) && strlen ($row['rsconfig']));
@@ -677,9 +712,9 @@ function getPopupSLBConfig ($row, TemplateModule $parent = null)
 		$tplm->setTemplate("vanilla");
 
 	if($parent==null)	
-		$mod = $tplm->generateModule("getPopupSLBConfig",  false);
+		$mod = $tplm->generateModule("GetPopupSLBConfig");
 	else
-		$mod = $tplm->generateSubmodule("GetPopupSLBConfig", "getPopupSLBConfig", $parent);
+		$mod = $tplm->generateSubmodule($placeholder, "GetPopupSLBConfig", $parent);
 
 	$mod->setNamespace("slb2_interface");
 

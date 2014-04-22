@@ -37,7 +37,7 @@
 					<tr class=trok><th class=tdright>Exact matches:</th><td class=tdleft><?php $this->Matches; ?></td></tr>
 					<tr class=trwarning><th class=tdright>Missing from DB/DNS:</th><td class=tdleft><?php $this->Missing; ?></td></tr>
 					<?php if($this->is('Mismatch')) { ?>
-						<tr class=trerror><th class=tdright>Mismatches:</th><td class=tdleft><?php $this->Mismatch; ?></td></tr>
+						<tr class=trerror><th class=tdright>Mismatches:</th><td class=tdleft><?php $this->MisMatch; ?></td></tr>
 					<?php } ?>
 				</table>
 			</div>

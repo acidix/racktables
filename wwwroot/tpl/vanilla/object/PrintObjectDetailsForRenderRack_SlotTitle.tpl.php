@@ -1,10 +1,10 @@
 <?php if (defined("RS_TPL")) {?>
-	<?php if ($this->is("asset_no",null)) { ?>
+	<?php if ($this->is("asset_no", null)) { ?>
 		<div title='no asset tag
 	<?php } else { ?>
 		<div title='<?php $this->asset_no ?>
 	<?php } ?> 
-	<?php if (!$this->is("label",null)) { ?>
+	<?php if ($this->is("label")) { ?>
 		, visible label is "<?php $this->label ?>"
 	<?php } ?>'>
 <?php } else { ?>

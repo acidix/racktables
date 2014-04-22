@@ -4,9 +4,10 @@
 		<?php $this->getH("PrintOpFormIntro", array('add')); ?>
 		<table border=0 cellpadding=10 cellspacing=0 align=center>
 		<tr valign=bottom><td>&nbsp;</td><th>VIP</th><th>port</th><th>proto</th><th>name</th><th>&nbsp;</th><th>Assign tags</th></tr>
-		<tr valign=top><td><td>&nbsp;</td>
+		<tr valign=top><td>&nbsp;</td>
 		<td><input type=text name=vip tabindex=101></td>
 		<td><input type=text name=vport size=5 value='<?php $this->default_port ?>' tabindex=102></td><td>
+		<?php $this->getH('PrintSelect',array( $this->_vs_proto, array ('name' => 'proto'), $this->_vs_keys )) ?>
 		</td><td><input type=text name=name tabindex=104></td><td>
 		<?php $this->getH("PrintImageHref", array('CREATE', 'create virtual service', TRUE, 105)); ?>
 		</td><td rowspan=3>
