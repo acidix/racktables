@@ -7535,7 +7535,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 			$mod->setOutput("EnableApply", false); 
 		else
 			//printImageHREF ('setfilter', 'set filter', TRUE);
-			$mod->setOUtput("EnableApply", true);
+			$mod->setOutput("EnableApply", true);
 		//echo '</form>';
 		if ($enable_textify)
 		{
@@ -9715,7 +9715,7 @@ function render8021QStatus ()
 			//	echo '<td>' . $stats[$cname] . '</td>';
 			//echo '</tr>';
 		}
-		$mod->setOutput("vdListOut", $allVDListOut);
+		$mod->setOutput("TotalColumnOut", $allColumsOut);
 	//	echo '</table>';
 	}
 //	finishPortlet();
@@ -9745,7 +9745,7 @@ function render8021QStatus ()
 			//	echo '<br><small>' . serializeTags ($vst_info['etags']) . '</small>';
 			//echo '</td>';
 			$singleVST_ID['rulec'] = $vst_info['rulec'];
-			$singleVST_ID['switch'] = $vst_info['switchc'];
+			$singleVST_ID['switchc'] = $vst_info['switchc'];
 			//echo "<td>${vst_info['rulec']}</td><td>${vst_info['switchc']}</td></tr>";
 			$vstlistOut[] = $singleVST_ID;
 		}
@@ -11147,6 +11147,7 @@ function renderVSTListEditor()
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
 		printNewItemTR('NewTop', $mod);
 		//printNewItemTR();
+	foreach (listCells ('vst') as $vst_id => $vst_info)
 	{	
 		$submod = $tplm->generateSubmodule('Merge', 'RenderVSTListEditor_CreateRow', $mod);
 		$submod->setOutput('Vst_id', $vst_id);
@@ -12612,12 +12613,14 @@ function renderCactiServersEditor()
 	{
 		$smod = $tplm->generateSubmodule('List', 'CactiConfigEditorRow', $mod);
 		//printOpFormIntro ('upd', array ('id' => $server['id']));
+		$smod->addOutput('Id', $server['id']);
 		//echo '<tr><td>';
 		//if ($server['num_graphs'])
 			//$smod->addOutput('NumGraphs', true);
 			//printImageHREF ('nodestroy', 'cannot delete, graphs exist');
 		//else
-			//$smod->addOutput('NumGraphs', false);
+			
+			//echo getOpLink (array ('op' => 'del', 'id' => $server['id']), '', 'destroy', 'delete this server');
 		$smod->addOutput('NumGraphs', $server['num_graphs']);
 		$smod->addOutput('BaseUrl', htmlspecialchars ($server['base_url'], ENT_QUOTES, 'UTF-8'));
 		$smod->addOutput('Username', htmlspecialchars ($server['username'], ENT_QUOTES, 'UTF-8'));
