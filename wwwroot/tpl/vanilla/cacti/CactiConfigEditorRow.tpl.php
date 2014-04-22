@@ -3,10 +3,11 @@
 	<input type="hidden" name="id" value="<?php $this->Id; ?>">
 	<tr>
 		<td>
-			<?php if($this->is("NumGraphs",true)) { ?>
+			<?php if($this->is("NumGraphs", true)) { ?>
 				<img width="16" border="0" height="16" title="cannot delete, graphs exist" src="?module=chrome&uri=pix/tango-user-trash-16x16-gray.png"></img>
 			<?php } else { ?>
-				<a title="delete this server" href="?module=redirect&op=del&id=3&page=cacti&tab=servers">
+
+				<a title="delete this server" href="?module=redirect&op=del&id=<?php $this->Id ?>&page=cacti&tab=servers">
     				<img width="16" border="0" height="16" title="delete this server" src="?module=chrome&uri=pix/tango-user-trash-16x16.png"></img>
 				</a>
 			<?php }?>

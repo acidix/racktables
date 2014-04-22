@@ -7535,7 +7535,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 			$mod->setOutput("EnableApply", false); 
 		else
 			//printImageHREF ('setfilter', 'set filter', TRUE);
-			$mod->setOUtput("EnableApply", true);
+			$mod->setOutput("EnableApply", true);
 		//echo '</form>';
 		if ($enable_textify)
 		{
@@ -12613,12 +12613,14 @@ function renderCactiServersEditor()
 	{
 		$smod = $tplm->generateSubmodule('List', 'CactiConfigEditorRow', $mod);
 		//printOpFormIntro ('upd', array ('id' => $server['id']));
+		$smod->addOutput('Id', $server['id']);
 		//echo '<tr><td>';
 		//if ($server['num_graphs'])
 			//$smod->addOutput('NumGraphs', true);
 			//printImageHREF ('nodestroy', 'cannot delete, graphs exist');
 		//else
-			//$smod->addOutput('NumGraphs', false);
+			
+			//echo getOpLink (array ('op' => 'del', 'id' => $server['id']), '', 'destroy', 'delete this server');
 		$smod->addOutput('NumGraphs', $server['num_graphs']);
 		$smod->addOutput('BaseUrl', htmlspecialchars ($server['base_url'], ENT_QUOTES, 'UTF-8'));
 		$smod->addOutput('Username', htmlspecialchars ($server['username'], ENT_QUOTES, 'UTF-8'));

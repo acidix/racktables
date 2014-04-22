@@ -13,7 +13,7 @@
 						<?php if ($this->is("EnableApply",true)) { ?>
 							<input class="icon" type="image" border="0" title="set filter" src="?module=chrome&uri=pix/pgadmin3-viewfiltereddata.png" name="submit"></input>
 						<?php } ?>
-						<?php if ($this->is("EnableAppply",false)) { ?>
+						<?php if ($this->is("EnableApply",false)) { ?>
 							<img src="pix/pgadmin3-viewfiltereddata-grayscale.png" width=32 height=32 border=0>
 						<?php }?>
 						<?php $this->Textify; ?>
