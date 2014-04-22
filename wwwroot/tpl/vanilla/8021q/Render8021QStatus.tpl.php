@@ -13,12 +13,12 @@
 			<?php $this->getH("PrintImageHref", array( 'net')); ?></th><th>ports</th></tr>
 			<?php $this->startLoop("vdListOut"); ?>	
 				<tr align=left><td><?php $this->mkA ?></td>
-				<?php $this->columOut ?>
+				<?php $this->columnOut ?>
 				</tr>  
 			<?php $this->endLoop(); ?> 
 			<?php if ($this->is("isVDList",true)) { ?>
 				<tr align=left><td>total:</td>
-				<?php $this->startLoop("columnsOut"); ?>	
+				<?php $this->startLoop("TotalColumnOut"); ?>	
 					<td><?php $this->cName ?> </td>
 				<?php $this->endLoop(); ?> 
 				</tr>
