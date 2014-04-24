@@ -6169,8 +6169,9 @@ function renderEditAttrMapForm ()
 		$shortType['dict'] = 'D';
 		$shortType['date'] = 'T';
 		$allAttrMapsOut = array();
+		//TODO ???
 		foreach ($attrMap as $attr)
-			$allAttrMapsOut[] =  array('Id' => $attr['id'], 'Shorttype' => $shortType[$attr['type']], 'Name' => $attr['name']);
+			$allAttrMapsOut[] = array('Id' => $attr['id'], 'Shorttype' => $shortType[$attr['type']], 'Name' => $attr['name']);
 		$mod->addOutput("AllAttrMaps", $allAttrMapsOut);
 			 
 			// echo "<option value=${attr['id']}>[" . $shortType[$attr['type']] . "] ${attr['name']}</option>";
@@ -6220,7 +6221,7 @@ function renderEditAttrMapForm ()
 
 		$submod->addOutput('AttrTypes', $attrtypes[$attr['type']]);						
 		$submod->addOutput('Name', $attr['name']);
-		$submod->addOutput('Order', $attr['order']);
+		$submod->addOutput('Order', $order);
 
 		foreach ($attr['application'] as $app)
 		{
@@ -6247,7 +6248,7 @@ function renderEditAttrMapForm ()
 			// 	echo decodeObjectType ($app['objtype_id'], 'o') . '<br>';
 		}
 		// echo "</td></tr>";
-		// $order = $nextorder[$order];
+		$order = $nextorder[$order];
 	}
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
 		printNewItemTR ('NewBottom', $mod, $attrMap);
@@ -7037,7 +7038,8 @@ function renderTagRowForEditor ($taginfo, $level = 0, $parent, $placeholder)
 	$tplm = TemplateManager::getInstance();
 	
 	$mod = $tplm->generateSubmodule($placeholder, 'TagtreeEditorElement', $parent);
-	
+	$mod->setNamespace('tagtree');
+
 	if (!count ($taginfo['kids']))
 		$level++; // Idem
 	
@@ -7123,6 +7125,7 @@ END
 		$tplm = TemplateManager::getInstance();
 		
 		$mod = $tplm->generateSubmodule($placeholder, 'TagtreeEditorNew', $parent);
+		$mod->setNamespace('tagtree');
 		$mod->addOutput('Select', getSelect ($options, array ('name' => 'parent_id', 'tabindex' => 110)));
 		//printOpFormIntro ('createTag');
 		//echo '<tr>';
@@ -7143,7 +7146,8 @@ END
 	$tplm = TemplateManager::getInstance();
 	
 	$mod = $tplm->generateSubmodule('Payload', 'TagtreeEditor');
-	
+	$mod->setNamespace('tagtree');
+
 	$otags = getOrphanedTags();
 	if (count ($otags))
 	{
@@ -7153,6 +7157,7 @@ END
 		foreach ($otags as $taginfo)
 		{
 			$smod = $tplm->generateSubmodule('OTags', 'TagtreeEdiorOrphaned', $mod);
+			$smod->setNamespace('tagtree');
 			$smod->addOutput('Name', $taginfo['tag']);
 			$smod->addOutput('ID', $taginfo['id']);
 			$smod->addOutput('Select', getSelect ($options, array ('name' => 'parent_id'), $taglist[$taginfo['id']]['parent_id']));
@@ -7177,7 +7182,7 @@ END
 		printNewItemTR ($options, $mod, 'NewBottom');
 	
 	foreach ($tagtree as $taginfo)
-		renderTagRowForEditor ($taginfo);
+		renderTagRowForEditor ($taginfo, 0, $mod, 'Taglist');
 	//if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
 	//	printNewItemTR ($options);
 	//echo '</table>';

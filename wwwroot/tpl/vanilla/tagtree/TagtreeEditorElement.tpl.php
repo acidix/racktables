@@ -15,8 +15,9 @@
 	<?php } else { ?>
 		<?php $this->getH('GetOpLink',array(array ('op' => 'destroyTag', 'tag_id' => $this->_ID), '', 'destroy', 'Delete tag')); ?>	
 	<?php } ?>
+	</td><td>
 	<?php $this->getH('PrintOpFormIntro',array('updateTag', array ('tag_id' => $this->_ID))) ; ?>
-		<input type=text size=48 name=tag_name value="<?php $this->Tag; ?>">
+	<input type=text size=48 name=tag_name value="<?php $this->Tag; ?>">
 	</td>
 	<td class=tdleft>
 		<select name='is_assignable'>

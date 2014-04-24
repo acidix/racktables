@@ -1,4 +1,5 @@
 <?php if (defined("RS_TPL")) {?>
+
 	<?php if ($this->is('Sticky', 'yes')) { ?>
 		<?php $this->getH("PrintImageHref", array('nodelete', 'system mapping')); ?>	
 	<?php } elseif ($this->is('RefCnt', true) ){ ?>
@@ -10,7 +11,6 @@
 	<?php if ($this->is("Type",'dict')) { ?>
 		(values from '<?php $this->ChapterName ?>')
 	<?php } ?><br>
-	<?php $this->DecObj ?>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />
