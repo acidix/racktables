@@ -9420,7 +9420,7 @@ function renderIIFOIFCompatEditor()
 			//echo '</td><td>';
 			//echo getOpLink (array ('op' => 'delPack', 'standard' => $codename, 'iif_id' => $iif_id), '', 'delete');
 			//echo '</td></tr>';
-			$singlePack['iif_cont'] .= $iif_id_mod->run();
+			$singlePack['IifCont'] .= $iif_id_mod->run();
 			$order = $nextorder[$order];
 		}
 		$allWDM_PacksOut[] = $singlePack;
