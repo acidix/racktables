@@ -12,7 +12,7 @@
 		   <select name=chapter_no tabindex=102><option value=0>-- dictionary chapter for [D] attributes --</option>
 			<?php $this->startLoop('AllChapters'); ?>
 				<option value='<?php $this->Id; ?>'><?php $this->Name; ?></option>
-			<?php } $this->endLoop(); ?>
+			<?php $this->endLoop(); ?>
 				</select></td></tr></form>
 
 <?php } else { ?>

@@ -8,7 +8,7 @@
 	else{?>
 	<br><table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>
 	<tr><th colspan=4><?php $this->recordCount ?> record(s)</th></tr>
-	"<tr><th>Origin</th><th>Key</th><th>Refcnt</th><th>Word</th></tr>
+	<tr><th>Origin</th><th>Key</th><th>Refcnt</th><th>Word</th></tr>
 	<?php $this->tableContent ?>
 	</table><br>
 	<?php } ?>

@@ -6,9 +6,9 @@
 
 			<?php $this->startLoop('Looparray'); ?> 
 			<tr class=row_<?php $this->Order; ?>><td class=tdleft><?php $this->Title; ?></td><td>
-			<?php $this->getH('GetOpLink', array( array ('op' => 'addPack', 'standard' => $codename), '', 'add')); ?>
+			<?php $this->getH('GetOpLink', array( array ('op' => 'addPack', 'standard' => $this->_Codename), '', 'add')); ?>
 			</td><td>
-			<?php $this->getH('GetOpLink', array( array ('op' => 'delPack', 'standard' => $codename), '', 'delete')); ?>
+			<?php $this->getH('GetOpLink', array( array ('op' => 'delPack', 'standard' => $this->_Codename), '', 'delete')); ?>
 			</td><tr>
 			<?php $this->endLoop(); ?>
 			</table>

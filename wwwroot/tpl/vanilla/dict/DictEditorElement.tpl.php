@@ -9,7 +9,7 @@
 				<?php } ?>
 			</td>
 			<td><input type=text name=chapter_name value='<?php $this->Name; ?>' <?php $this->Disabled; ?>></td>
-			<td> class=tdleft><?php  $this->Wordcount; ?></td>
+			<td class=tdleft><?php  $this->Wordcount; ?></td>
 			<td>
 			<?php if ($this->is('Sticky',true)) { ?>
 				&nbsp;

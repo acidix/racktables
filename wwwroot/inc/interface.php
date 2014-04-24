@@ -5376,7 +5376,7 @@ function renderOIFCompatViewer()
 
 		// echo "<tr class=row_${order}><td>${pair['type1name']}</td><td>${pair['type2name']}</td></tr>";
 	}
-	$mod->addOutput("allPortCompat", $allPortCompatOut);
+	$mod->addOutput("AllPortCompat", $allPortCompatOut);
 		 
 	// echo '</table>';
 }
@@ -5392,13 +5392,14 @@ function renderOIFCompatEditor()
 	$mod->setNamespace("portmap",true);
 
 
-	function printNewitemTR($placeholder)
+	function printNewitemTR($placeholder, $mod)
 	{
 		$tplm = TemplateManager::getInstance();
 	
 		$tplm->setTemplate("vanilla");
 		$tplm->createMainModule();
 		$submod = $tplm->generateSubmodule($placeholder, 'RenderOIFCompatEditor_PrintNewItem', $mod);
+		$submod->setNamespace("portmap",true);
 		// printOpFormIntro ('add');
 		// echo '<tr><th class=tdleft>';
 		// printImageHREF ('add', 'add pair', TRUE);
@@ -5437,7 +5438,7 @@ function renderOIFCompatEditor()
 	// echo '<br><table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>';
 	// echo '<tr><th>&nbsp;</th><th>From Interface</th><th>To Interface</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewitemTR('Newtop');
+		printNewitemTR('Newtop', $mod);
 	foreach (getPortOIFCompat() as $pair)
 	{
 		if ($last_left_oif_id != $pair['type1'])
@@ -5499,13 +5500,15 @@ function renderObjectParentCompatEditor()
 	$tplm->setTemplate("vanilla");
 	$tplm->createMainModule();
 	
-	$mod = $tplm->generateSubmodule("Payload", "RenderObjectParentCompatEditor");
-	$mod->setNamespace("parentmap",true);
+	$mod = $tplm->generateSubmodule("Payload", "RenderObjectCompatEditor");
+	$mod->setNamespace("parentmap");
 
-	function printNewitemTR($placeholder)
+	function printNewitemTR($placeholder, $mod)
 	{
-		$submod = $tplm->generateSubmodule($placeholder, 'RenderObjectParentCompatEditor_PrintNewItem', $mod);
+		$tplm = TemplateManager::getInstance();
 
+		$submod = $tplm->generateSubmodule($placeholder, 'RenderObjectParentCompatEditor_PrintNewItem', $mod);
+		$submod->setNamespace("parentmap");
 		// printOpFormIntro ('add');
 		// echo '<tr><th class=tdleft>';
 		// printImageHREF ('add', 'add pair', TRUE);
@@ -5528,7 +5531,8 @@ function renderObjectParentCompatEditor()
 	// echo '<br><table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>';
 	// echo '<tr><th>&nbsp;</th><th>Parent</th><th>Child</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewitemTR('Newtop');
+		printNewitemTR('Newtop', $mod);
+
 	foreach (getObjectParentCompat() as $pair)
 	{
 		if ($last_left_parent_id != $pair['parent_objtype_id'])
@@ -5556,7 +5560,7 @@ function renderObjectParentCompatEditor()
 		// echo "</td><td class=tdleft>${pair['parent_name']}</td><td class=tdleft>${pair['child_name']}</td></tr>\n";
 	}
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewitemTR('Newbottom');
+		printNewitemTR('Newbottom', $mod);
 	// echo '</table>';
 }
 
@@ -5950,6 +5954,7 @@ function renderChaptersEditor ()
 		$tplm = TemplateManager::getInstance();
 		
 		$mod = $tplm->generateSubmodule($placeholder, 'DictEditorNew', $parent);
+		$mod->setNamespace('dict');
 		/**printOpFormIntro ('add');
 		echo '<tr><td>';
 		printImageHREF ('create', 'Add new', TRUE);
@@ -5982,7 +5987,7 @@ function renderChaptersEditor ()
 		$sticky = $chapter['sticky'] == 'yes';
 		
 		$submod = $tplm->generateSubmodule('DictList','DictEditorElement', $mod);
-		
+		$submod->setNamespace('dict');
 		//printOpFormIntro ('upd', array ('chapter_no' => $chapter_id));
 		//echo '<tr>';
 		//echo '<td>';
@@ -6064,8 +6069,8 @@ function renderAttributes ()
 					//echo decodeObjectType ($app['objtype_id'], 'a') . '<br>';
 			 	$allAppAttrsOut[] = $singleAppAttr;
 			 }
-			 $applicationArrayMod = $tplm->generateModule('RenderAttributes_Loop', true, array('AllAppAttrs' => $allAppAttrsOut));
-
+			 $applicationArrayMod = $tplm->generateModule('RenderAttributes_Loop', false, array('AllAppAttrs' => $allAppAttrsOut));
+			 $applicationArrayMod->setNamespace('attrs');
 			 $singleAttr['AllAppAttrsMod'] = $applicationArrayMod->run();		 	 
 		}
 		//echo '</td></tr>';
@@ -6086,9 +6091,11 @@ function renderEditAttributesForm ()
 	$mod = $tplm->generateSubmodule('Payload', 'RenderEditAttributesForm');
 	$mod->setNamespace('attrs', true);
 	
-	function printNewItemTR ($placeholder)
+	function printNewItemTR ($placeholder, $mod)
 	{
-		$submod = $tplm->generateSubmodule($placeholder, 'RenderEditAttributesForm_PrintNewItem', $mod);
+		$tplm = TemplateManager::getInstance();
+		$submod = $tplm->generateSubmodule($placeholder, 'RenderEditAttrMapForm_PrintNewItem', $mod);
+		$submod->setNamespace('attrs', true);
 		//printOpFormIntro ('add');
 		//echo '<tr><td>';
 		//printImageHREF ('create', 'Create attribute', TRUE);
@@ -6103,7 +6110,7 @@ function renderEditAttributesForm ()
 	//echo "<table cellspacing=0 cellpadding=5 align=center class=widetable>\n";
 	//echo '<tr><th>&nbsp;</th><th>Name</th><th>Type</th><th>&nbsp;</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR('NewTop');
+		printNewItemTR('NewTop', $mod);
 	$allAttrMapsOut = array();
 	foreach (getAttrMap() as $attr)
 	{
@@ -6133,7 +6140,7 @@ function renderEditAttributesForm ()
 	$mod->addOutput("AllAttrMaps", $allAttrMapsOut);
 		 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR('NewBottom');
+		printNewItemTR('NewBottom', $mod);
 	//echo "</table>\n";
 	//finishPortlet();
 }
@@ -6148,10 +6155,11 @@ function renderEditAttrMapForm ()
 	$mod->setNamespace('attrs', true);
 
 
-	function printNewItemTR ($placeholder, $attrMap)
+	function printNewItemTR ($placeholder, $mod, $attrMap)
 	{
+		$tplm = TemplateManager::getInstance();
 		$submod = $tplm->generateSubmodule($placeholder, 'RenderEditAttrMapForm_PrintNewItemTR', $mod);
-
+		$submod->setNamespace('attrs', true);
 		//printOpFormIntro ('add');
 		//echo '<tr><td colspan=2 class=tdleft>';
 		//echo '<select name=attr_id tabindex=100>';
@@ -6172,12 +6180,13 @@ function renderEditAttrMapForm ()
 		$objtypes = readChapter (CHAP_OBJTYPE, 'o');
 		unset ($objtypes[1561]); // attributes may not be assigned to rows yet
 		$groupList = cookOptgroups ($objtypes);
-		$submod->addOutput('Getselect', $getSelect ($groupList['other'], array ('name' => 'objtype_id', 'tabindex' => 101), NULL));	
+		$submod->addOutput('Getselect', getSelect ($groupList['other'], array ('name' => 'objtype_id', 'tabindex' => 101), NULL));	
 
 		// printNiftySelect (cookOptgroups ($objtypes), array ('name' => 'objtype_id', 'tabindex' => 101));
 		// echo ' <select name=chapter_no tabindex=102><option value=0>-- dictionary chapter for [D] attributes --</option>';
 		$allChaptersOut = array();
-		foreach (getChapterList() as $chapter){ 
+		foreach (getChapterList() as $chapter)
+		{ 
 			if ($chapter['sticky'] != 'yes')
 				$allChaptersOut[] = array('Id' => $chapter['id'], 'Name' => $chapter['name']);
 			// if ($chapter['sticky'] != 'yes')
@@ -6194,7 +6203,7 @@ function renderEditAttrMapForm ()
 	// echo "<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>";
 	// echo '<tr><th class=tdleft>Attribute name</th><th class=tdleft>Attribute type</th><th class=tdleft>Applies to</th></tr>';
 	if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-		printNewItemTR ('NewTop', $attrMap);
+		printNewItemTR ('NewTop', $mod, $attrMap);
 
 
 	foreach ($attrMap as $attr)
@@ -6215,7 +6224,7 @@ function renderEditAttrMapForm ()
 
 		foreach ($attr['application'] as $app)
 		{
-			$singleAttrApp = $tplm->generateSubmodule('AllAttrApps', 'RenderEditAttrMapForm_AttrApp', $submod,
+			$singleAttrApp = $tplm->generateSubmodule('AllAttrApps', 'RenderEditAttrMapForm_AttrApp', $submod, false,
 													  array('Sticky' => $app['sticky'],
 													  		'RefCnt' => $app['refcnt'],
 													  		'Id' => $attr['id'],
@@ -6241,7 +6250,7 @@ function renderEditAttrMapForm ()
 		// $order = $nextorder[$order];
 	}
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		printNewItemTR ('NewBottom', $attrMap);
+		printNewItemTR ('NewBottom', $mod, $attrMap);
 	// echo "</table>\n";
 	// finishPortlet();
 }
@@ -6961,13 +6970,13 @@ function renderAutoPortsForm ($object_id)
 	echo "</table></form>";*/
 }
 
-function renderTagRowForViewer ($taginfo, $level = 0, $parent, $placeholder = 'Taglist')
+function renderTagRowForViewer ($taginfo, $level = 0, $parent, $placeholder = 'TagList')
 {
 	$self = __FUNCTION__;
 	
 	$tplm = TemplateManager::getInstance();
 	
-	$mod = $tplm->generateSubmodule("TagList", "TagtreeElement");
+	$mod = $tplm->generateSubmodule("TagList", "TagtreeElement", $parent);
 	$mod->setNamespace("tagtree",true);
 	$mod->setLock();
 	
