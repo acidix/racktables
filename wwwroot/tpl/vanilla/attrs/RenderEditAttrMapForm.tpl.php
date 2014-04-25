@@ -8,7 +8,7 @@
 		$this->AttributeRows;	
 		$this->NewBottom; ?>
 
-			</table></div>
+	</table></div>
 
 		<?php } else { ?>
 		Don't use this page directly, it's supposed <br />

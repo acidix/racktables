@@ -3,7 +3,7 @@
 		<h2>WDM standard by interface</h2>
 		<table border=0 align=center cellspacing=0 cellpadding=5>
 		<?php $this->startLoop("AllWDMPacks"); ?>	
-			<tr><th>&nbsp;</th><th colspan=2><?php $this->Packinfo ?> </th></tr>
+			<tr><th>&nbsp;</th><th colspan=2><?php $this->PackInfo ?></th></tr>
 			<?php $this->IifCont ?> 
 		<?php $this->endLoop(); ?> 
 		</table>
