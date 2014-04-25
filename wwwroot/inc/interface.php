@@ -2112,19 +2112,20 @@ function renderRackMultiSelect ($sname, $racks, $selected, $parent = null, $plac
 	foreach ($row_names as $optgroup)
 	{
 	//	echo "<optgroup label='${optgroup}'>";
-		$allRowDataOut[] = array('GroupLabel' => $optgroup);
-
+		$singleOptGroup = array('GroupLabel' => $optgroup);
+		$singleOptGroup['RackEntries'] = '';
 		foreach ($rdata[$optgroup] as $rack_id => $rack_name)
 		{
-			$tplm->generateSubmodule('RackEntries', 'StdOptionTemplate', $mod, true, 
+			$singleOptGroup['RackEntries'] .= $tplm->generateModule('StdOptionTemplate', true, 
 					array(	'RackId' => $rack_id,
 							'IsSelected' => ((array_search ($rack_id, $selected) === FALSE) ? '' : 'selected'),
-							'RackName' => $rack_name));	
+							'RackName' => $rack_name))->run();	
 		//	echo "<option value=${rack_id}";
 		//	if (!(array_search ($rack_id, $selected) === FALSE))		
 		//		echo ' selected';
 		//	echo">${rack_name}</option>\n";
 		}
+		$allRowDataOut[] = $singleOptGroup;
 	}
 
 	$mod->addOutput("allRowData", $allRowDataOut);
@@ -2824,7 +2825,7 @@ function renderRackSpaceForObject ($object_id)
 	foreach (array_keys ($workingRacksData) as $rackId)
 		applyObjectMountMask ($workingRacksData[$rackId], $object_id);
 	//printOpFormIntro ('updateObjectAllocation');
-	renderRackMultiSelect ('rackmulti[]', $allRacksData, array_keys ($workingRacksData), $mod, "rackMultiSet");
+	renderRackMultiSelect ('rackmulti[]', $allRacksData, array_keys ($workingRacksData), $mod, "RackMultiSet");
 	//echo "<br><br>";
 	//finishPortlet();
 	//echo "</td>";
@@ -2858,8 +2859,10 @@ function renderRackSpaceForObject ($object_id)
 		if (isset ($_REQUEST['rackmulti'][0])) // is an update
 			mergeGridFormToRack ($rackData);
 
-		$singleDataSet = array('name' => $rackData['name'], 'rack_id' => $rack_id, 
-							   'height' => $rackData['height'] );
+		$singleDataSet = array('name' => $rackData['name'],
+							'rack_id' => $rack_id, 
+							'height' => $rackData['height'],
+							'AtomGrid' => renderAtomGrid ($rackData) );
 		/*echo "<td valign=top>";
 		echo "<center>\n<h2>${rackData['name']}</h2>\n";
 		echo "<table class=rack id=selectableRack border=0 cellspacing=0 cellpadding=1>\n";
@@ -2867,7 +2870,7 @@ function renderRackSpaceForObject ($object_id)
 		echo "<th width='20%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('${rack_id}', '0', ${rackData['height']})\">Front</a></th>";
 		echo "<th width='50%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('${rack_id}', '1', ${rackData['height']})\">Interior</a></th>";
 		echo "<th width='20%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('${rack_id}', '2', ${rackData['height']})\">Back</a></th></tr>\n";*/
-		renderAtomGrid ($rackData, $mod, 'atomGrid');
+		//renderAtomGrid ($rackData);
 		/*echo "<tr><th width='10%'>&nbsp;</th>";
 		echo "<th width='20%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('${rack_id}', '0', ${rackData['height']})\">Front</a></th>";
 		echo "<th width='50%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('${rack_id}', '1', ${rackData['height']})\">Interior</a></th>";
@@ -5168,15 +5171,22 @@ function renderSearchResults ($terms, $summary)
 // for adding rack problem:            printAtomGrid ($data, 'F', 'U')
 // for adding object problem:          printAtomGrid ($data, 'T', 'W')
 
-function renderAtomGrid ($data, $parent, $placeholder)
+function renderAtomGrid ($data, $parent = null, $placeholder = 'AtomGrid')
 {
 	$rack_id = $data['id'];
 	
 	$tplm = TemplateManager::getInstance();
 	//addJS ('js/racktables.js');
+	if($parent == null)
+		$output = '';
+
 	for ($unit_no = $data['height']; $unit_no > 0; $unit_no--)
 	{
-		$trow = $tplm->generateSubmodule($placeholder, 'GridRow', $parent);
+		if($parent == null)
+			$trow = $tplm->generateModule('GridRow');
+		else
+			$trow = $tplm->generateSubmodule($placeholder, 'GridRow', $parent);
+		
 		$trow->setNamespace("");
 		$trow->addOutput('RackId', $rack_id);
 		$trow->addOutput('UnitNo', $unit_no);
@@ -5206,8 +5216,12 @@ function renderAtomGrid ($data, $parent, $placeholder)
 				//echo "<input type=checkbox" . $data[$unit_no][$locidx]['checked'] . " name=${name} id=${name}>";
 			//echo '</td>';
 		}
+		if($parent == null)
+			$output .= $trow->run();
 		//echo "</tr>\n";
 	}
+	if($parent == null)
+		return $output;
 }
 
 function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $celllist = NULL, $parent = NULL, $placeholder = "CellList")
@@ -7121,12 +7135,11 @@ END
 	function printNewItemTR ($options, $parent, $placeholder)
 	{
 		global $taglist;
-		//TODO =????
 		$tplm = TemplateManager::getInstance();
 		
 		$mod = $tplm->generateSubmodule($placeholder, 'TagtreeEditorNew', $parent);
 		$mod->setNamespace('tagtree');
-		$mod->setOutput('Select', getSelect ($options, array ('name' => 'parent_id', 'tabindex' => 110)));
+		$mod->setOutput('Options', $options);
 		//printOpFormIntro ('createTag');
 		//echo '<tr>';
 		//echo '<td align=left style="padding-left: 16px;">' . getImageHREF ('create', 'Create tag', TRUE) . '</td>';
@@ -11777,7 +11790,7 @@ function addAutoScrollScript ($anchor_name, $parent = null, $placeholder = "auto
 		$mod = $tplm->generateSubmodule($placeholder, "AddAutoScrollScript", $parent);
 	
 	$mod->setNamespace("");
-	
+	$mod->setOutput('AnchorName', $anchor_name);
 	if($parent==null)
 		return $mod->run();
 /*

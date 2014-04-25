@@ -7,7 +7,7 @@
 			(filtered by <span class='filter-text'><?php $this->filter_text ?></span>, <a href='<?php $this->href_show_all ?>'>show all</a>)<p>
 		<?php } ?> 
 		<?php $this->getH("PrintOpFormIntro", array('updateObjectAllocation')); ?>
-		<?php $this->rackMultiSet ?>
+		<?php $this->RackMultiSet ?>
 		<br><br>
 	</div>
 	</td>
@@ -35,7 +35,7 @@
 			<th width='20%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('<?php $this->rack_id ?>', '0', <?php $this->height ?>)\">Front</a></th>
 			<th width='50%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('<?php $this->rack_id ?>', '1', <?php $this->height ?>)\">Interior</a></th>
 			<th width='20%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('<?php $this->rack_id ?>', '2', <?php $this->height ?>)\">Back</a></th></tr>
-			<?php $this->atomGrid ?>
+			<?php $this->AtomGrid ?>
 			<tr><th width='10%'>&nbsp;</th>
 			<th width='20%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('<?php $this->rack_id ?>', '0', <?php $this->height ?>)\">Front</a></th>
 			<th width='50%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('<?php $this->rack_id ?>', '1', <?php $this->height ?>)\">Interior</a></th>
