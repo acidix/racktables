@@ -8,10 +8,10 @@ function renderVSGList ()
 {
 	//renderCellList ('ipvs', 'VS groups');
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$main = $tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$main = $tplm->createMainModule("index");
 		
-	renderCellList ('ipvs', 'VS groups', FALSE, NULL, $main, "Payload");
+	renderCellList ('ipvs', 'VS groups', FALSE, NULL, $tplm->getMainModule(), "Payload");
 }
 
 function formatVSPort ($port, $plain_text = FALSE)
@@ -24,7 +24,7 @@ function formatVSPort ($port, $plain_text = FALSE)
 
 	if (!$plain_text && FALSE !== $srv){
 		$tplm = TemplateManager::getInstance();
-		$tplm->setTemplate("vanilla");
+		//$tplm->setTemplate("vanilla");
 		$mod = $tplm->generateModule("formatVSPortInMemory",  true, array("name" => $name, "srv" => $srv));
 		return $mod->run();
 	}
@@ -39,7 +39,7 @@ function formatVSIP ($vip, $plain_text = FALSE)
 	if ($plain_text)
 		return $fmt_ip;
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
+	//$tplm->setTemplate("vanilla");
 	
 	$mod = $tplm->generateModule("FormatVSIPInMem", true, array("href" => makeHref (array ('page' => 'ipaddress', 'ip' => $fmt_ip)), 
 		   "fmt_ip" => $fmt_ip));
@@ -91,11 +91,11 @@ function renderTripletForm ($bypass_id)
 	$cell = spotEntity ($etype_by_pageno[$pageno], $bypass_id);
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$main = $tplm->createMainModule();
+	//$tplm->setTemplate("vanilla");
+	//$main = $tplm->createMainModule();
 
 	//renderSLBTriplets2 ($cell, TRUE);
-	renderSLBTriplets2 ($cell, TRUE, NULL, $main, 'Payload');
+	renderSLBTriplets2 ($cell, TRUE, NULL, $tplm->getMainModule(), 'Payload');
 }
 
 // either $port of $vip argument should be NULL
@@ -103,8 +103,8 @@ function renderPopupTripletForm ($triplet, $port, $vip, $row, TemplateModule $pa
 {
 	//Port to template engine
 	$tplm = TemplateManager::getInstance();
-	if($parent === NULL)
-		$tplm->setTemplate("vanilla");
+	//if($parent === NULL)
+	//	$tplm->setTemplate("vanilla");
 
 	if($parent === NULL)	
 		$mod = $tplm->generateModule("RenderPopupTripletForm",  false);
@@ -330,8 +330,8 @@ function groupTriplets ($tr_list)
 function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateModule $parent = null , $placeholder = "RenderedSLBTriplets2")
 {
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
+	//if($parent==null)
+	//	$tplm->setTemplate("vanilla");
 
 	if($parent==null)	
 		$mod = $tplm->generateModule("RenderSLBTriplets2");
@@ -649,8 +649,8 @@ function renderNewTripletForm ($realm1, $realm2, $parent = null, $placehoder = '
 	$realm2_data = get_realm_data ($realm2);
 	
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
+	//if($parent==null)
+	//	$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
 		$mod = $tplm->generateModule('NewTripletForm');
@@ -708,8 +708,8 @@ function getPopupSLBConfig ($row, TemplateModule $parent = null, $placeholder = 
 		return;
 	
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
+	//if($parent==null)
+	//	$tplm->setTemplate("vanilla");
 
 	if($parent==null)	
 		$mod = $tplm->generateModule("GetPopupSLBConfig");
@@ -810,8 +810,8 @@ function renderIPVSConvert ($vs_id)
 function renderNewVSGForm ()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderNewVSGForm");
 	$mod->setNamespace("ipv4slb");

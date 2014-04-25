@@ -158,8 +158,8 @@ function renderNewSLBItemForm ($realm1, $realm2, $parent = null, $placeholder = 
 	$realm2_data = get_realm_data ($realm2);
 
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
+	//if($parent==null)
+	//	$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
 		$mod = $tplm->generateModule("RenderNewSLBItemForm");
@@ -221,8 +221,8 @@ function renderSLBTriplets ($cell, TemplateModule $parent = null, $placeholder =
 	if (count ($triplets))
 	{
 		$tplm = TemplateManager::getInstance();
-		if($parent==null)
-			$tplm->setTemplate("vanilla");
+		//if($parent==null)
+		//	$tplm->setTemplate("vanilla");
 
 		if($parent==null)	
 			$mod = $tplm->generateModule("RenderSLBTriplets",  false);
@@ -310,8 +310,8 @@ function renderSLBTripletsEdit ($cell)
 	list ($realm1, $realm2) = array_values (array_diff (array ('object', 'ipv4vs', 'ipv4rspool'), array ($cell['realm'])));
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderSLBTripletsEdit");
 	$mod->setNamespace("slb_interface");
@@ -396,10 +396,10 @@ function renderLBList ()
 		$cells[$object['id']] = $object;
 	//renderCellList ('object', 'items', FALSE, $cells);
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$main = $tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$main = $tplm->createMainModule("index");
 		
-	renderCellList ('object', 'items', FALSE, $cells, $main, "Payload");
+	renderCellList ('object', 'items', FALSE, $cells, $tplm->getMainModule(), "Payload");
 }
 
 function renderRSPool ($pool_id)
@@ -407,8 +407,8 @@ function renderRSPool ($pool_id)
 	$poolInfo = spotEntity ('ipv4rspool', $pool_id);
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 
 	$mod = $tplm->generateSubmodule("Payload","RenderRSPool");
 	$mod->setNamespace("slb_interface");
@@ -452,8 +452,8 @@ function portletRSPoolSrv ($pool_id, $parent = null, $placeholder = 'RSPoolSrvPo
 	if ($poolInfo['rscount'])
 	{
 		$tplm = TemplateManager::getInstance();
-		if($parent==null)
-			$tplm->setTemplate("vanilla");
+		//if($parent==null)
+		//	$tplm->setTemplate("vanilla");
 		
 		if($parent==null)	
 			$mod = $tplm->generateModule('PortletRSPoolSrv');
@@ -553,8 +553,8 @@ function renderEditRSList ($rs_list, TemplateModule $parent = null)
 {
 	global $nextorder;
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
+	//if($parent==null)
+	//	$tplm->setTemplate("vanilla");
 
 	if($parent==null)	
 		$mod = $tplm->generateModule("RenderEditRSList",  false);
@@ -622,8 +622,8 @@ function renderEditRSList ($rs_list, TemplateModule $parent = null)
 function portletRSPoolAddMany ($pool_id, TemplateModule $parent = null)
 {
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
+	//if($parent==null)
+	//	$tplm->setTemplate("vanilla");
 
 	if($parent==null)	
 		$mod = $tplm->generateModule("PortletRSPoolAddMany",  false);
@@ -658,8 +658,8 @@ function renderRSPoolServerForm ($pool_id)
 {
 	$poolInfo = spotEntity ('ipv4rspool', $pool_id);
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 
 	$mod = $tplm->generateSubmodule("Payload","RenderRSPoolServerForm");
 	$mod->setNamespace("slb_interface");
@@ -689,10 +689,10 @@ function renderRSPoolList ()
 {
 	//renderCellList ('ipv4rspool', 'RS pools');
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$main = $tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$main = $tplm->createMainModule("index");
 		
-	renderCellList('ipv4rspool', 'RS pools', FALSE, NULL, $main, "Payload");
+	renderCellList('ipv4rspool', 'RS pools', FALSE, NULL, $tplm->getMainModule(), "Payload");
 }
 
 function renderRealServerList ()
@@ -702,8 +702,8 @@ function renderRealServerList ()
 	$pool_list = listCells ('ipv4rspool');
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderRealServerList");
 	$mod->setNamespace("ipv4slb");
@@ -749,8 +749,8 @@ function renderRealServerList ()
 function renderNewRSPoolForm ()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderNewRSPoolForm");
 	$mod->setNamespace("ipv4slb");
@@ -775,8 +775,8 @@ function renderNewRSPoolForm ()
 function renderVirtualService ($vsid)
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	//$tplm->setTemplate('vanilla');
+	////$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'RenderVirtualServices');
 	$mod->setNamespace('ipv4vs', true);
 	
@@ -812,17 +812,17 @@ function renderVSList ()
 {
 //	renderCellList ('ipv4vs', 'Virtual services');
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$main = $tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$main = $tplm->createMainModule("index");
 		
-	renderCellList ('ipv4vs', 'Virtual services', FALSE, NULL, $main, "Payload");
+	renderCellList ('ipv4vs', 'Virtual services', FALSE, NULL, $tplm->getMainModule(), "Payload");
 }
 
 function renderNewVSForm ()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderNewVSForm");
 	$mod->setNamespace("ipv4slb");
@@ -860,8 +860,8 @@ function renderEditRSPool ($pool_id)
 {
 	$poolinfo = spotEntity ('ipv4rspool', $pool_id);
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload", "RenderEditRSPool");
 	$mod->setNamespace("slb_interface");
@@ -901,8 +901,8 @@ function renderEditRSPool ($pool_id)
 function renderEditVService ($vsid)
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule();
 	
 	$mod = $tplm->generateSubmodule("Payload", "RenderEditVService");
 	$mod->setNamespace("ipv4vs", true);
@@ -947,8 +947,8 @@ function renderEditVService ($vsid)
 function renderLVSConfig ($object_id)
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderLVSConfig");
 	$mod->setNamespace("object");

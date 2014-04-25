@@ -1,27 +1,101 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <!-- Template taken from: interface.php:94 -->
-<head><title><?php $this->get("page_title"); //echo getTitle ($pageno); ?></title>
+
+<head>
+	<!-- jQuery -->
+	<script src="js/jquery-1.10.2.min.js"></script>
+	<!-- Bootstrap JavaScript -->
+	<script src="js/bootstrap.min.js"></script>		
+		<title><?php $this->get("page_title"); //echo getTitle ($pageno); ?></title>
 	<!-- This is the bootstrap template -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Bootstrap CSS -->
-	<link href="tpl/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<!-- Sidebar stylesheet -->
-	<link href="tpl/bootstrap/css/simple-sidebar.css" rel="stylesheet">
+	<link href="/css/simple-sidebar.css" rel="stylesheet">
 
 	<?php $this->get("Header"); //printPageHeaders(); ?>
 </head>
 <body>
 
-	<!-- jQuery -->
-	<script src="tpl/bootstrap/js/jquery-1.10.2.min.js"></script>
-	<!-- Bootstrap JavaScript -->
-	<script src="tpl/bootstrap/js/bootstrap.min.js"></script>		
+	
 
-	<div class="wrapper">
 
+  <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="collapse navbar-collapse">
+    	<button type="button" class="btn btn-primary navbar-left nav-menu-trigger-selector" href="javascript:$.pageslide({ direction: 'right', href='#nav-menu-fadeout' })">
+    		<i class="glyphicon glyphicon-list"></i>
+    	</button>
+        <a class="navbar-brand" href="index.php?page=myaccount&tab=default"><?php $this->RemoteDisplayname; ?></a>
+        <a class="navbar-brand" href="#"><?php $this->get("Enterprise"); ?></a>
+             <ul class="nav navbar-nav">
+            	 <li><a href="index.php?page=rackspace">Rackspace</a></li>
+            	 <li><a href="index.php?page=depot">Objects</a></li>
+            	 <li><a href="index.php?page=ipv4space">IPv4&nbsp;space</a></li>
+                 <li><a href="index.php?page=objectlog">Log&nbsp;records</a></li>          
+             </ul>
+          <form class="navbar-form navbar-right" name="search" method="get">
+      			<input type=hidden name=page value=search>
+      			<input type=hidden name=last_page value=<?php $this->PageNo; ?>>
+				<input type=hidden name=last_tab value=<?php $this->TabNo; ?>>
+      			<input class="form-control" type="text" name="q" placeholder="Search" tabindex="1000" value="<?php $this->SearchValue; ?>">
+          </form>
+        </div><!--/.navbar-collapse -->
+
+        <div style='float: right'>
+			<form method=post id=TplSelect name=TplSelect action='?module=redirect&page=myaccount&tab=interface&op=settemplate'>
+				<?php $this->getH('TplSelect') ;?>	
+				<input class="icon" type="image" border="0" title="set template" src="?module=chrome&uri=pix/tango-document-save-16x16.png" name="submit"></input>
+			</form>
+		</div>
+
+		<div id="nav-menu-fadeout">
+    		<ul id="nav-menu-list" class="list-group" > 
+      	  		<a class="list-group-item" href="index.php?page=rackspace">Rackspace</a>
+      	  		<a class="list-group-item" href="index.php?page=depot">Objects</a>
+      	  		<a class="list-group-item" href="index.php?page=ipv4space">IPv4&nbsp;space</a>
+      	  		<a class="list-group-item" href="index.php?page=ipv6space">IPv6&nbsp;space</a>
+      	  		<a class="list-group-item" href="index.php?page=files">Files</a>
+      	  		<a class="list-group-item" href="index.php?page=reports">Reports</a>
+      	  		<a class="list-group-item" href="index.php?page=ipv4slb">IP&nbsp;SLB</a>
+      	  		<a class="list-group-item" href="index.php?page=8021q">802.1Q</a>
+      	  		<a class="list-group-item" href="index.php?page=config">Configuration</a>
+      	  		<a class="list-group-item" href="index.php?page=objectlog">Log&nbsp;records</a>
+      	  		<a class="list-group-item" href="index.php?page=virtual">Virtual&nbsp;Resources</a>
+      	  		<a class="list-group-item" href="?logout">Log Out</a>
+        	</ul>
+    	</div>
+
+    	<div class="row">
+        	<div class="col-md-12">
+				<ul class="breadcrumb"><input type=hidden name=last_page value=index><input type=hidden name=last_tab value=default><li><span class="divider"><a href="index.php?page=index&tab=default">Main page</a></li></li><div style="float: right" class=greeting><a href="index.php?page=myaccount&tab=default"><i class="glyphicon glyphicon-user"></i>&nbsp;RackTables Administrator</a></div></ul>        
+			</div>
+   		</div>
+
+  		<div class="row">
+        		<div class="col-md-12">
+        		</div>
+   		</div>
+
+    	<div class="row">
+        		<div class="col-md-12">
+                </div>
+   		</div>
+
+
+
+
+      </div>
+    </div>  
+
+
+
+
+	
 		<!-- Sidebar -->
-		<div class="sidebar-wrapper" id="sideBarMenu" data-spy="affix" style="display: none;"> 
+	<!-- 	<div class="sidebar-wrapper" id="sideBarMenu" data-spy="affix" style="display: none;"> 
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href='index.php?page=myaccount&tab=default'><?php $this->DisplayName; ?></a></li>
 				<li><a class="navbar-brand" href="#"><?php $this->get("Enterprise"); ?></a>	</li>
@@ -41,7 +115,7 @@
 				<li role="presentation" class="divider"></li>
 				<li><a href="?logout"> <strong> Logout</strong> </a></li>
 			</ul>
-		</div>
+		</div> -->
 
 		<!-- Navigation bar -->
 		<nav class="navbar navbar-inverse navbar-fixed-top" style="width: 100%;">
@@ -109,9 +183,9 @@
 			<div class="msgbar" ><?php $this->get("Message"); //showMessageOrError(); ?></div>
 			<div class="pagebar" style="padding-top: 20px;"><?php $this->get("Payload"); //echo $payload; ?></div>
 		</div>
-	</div>
+	</
 
-	<!-- Doing Ã�nitalscripts here --> 
+	<!-- Doing Initalscripts here --> 
 	<script type="text/javascript">
 		$("#showSideMenuButton").click(function (){
 			if($('#sideBarMenu').css('display') == "none"){
