@@ -7043,10 +7043,11 @@ function renderTagRowForEditor ($taginfo, $level = 0, $parent, $placeholder)
 	if (!count ($taginfo['kids']))
 		$level++; // Idem
 	
-	$mod->addOutput('assignable', $taginfo['is_assignable'] == 'yes' ? true : false);
+	$mod->addOutput('Assignable', $taginfo['is_assignable'] == 'yes' ? true : false);
+	$mod->addOutput('AssignableInfo', $taginfo['is_assignable']);
 	$mod->addOutput('hasChildren', $taginfo['kidc'] ? true : false);
 	$mod->addOutput('hasReferences', ($taginfo['refcnt']['total'] > 0 || $taginfo['kidc']));
-	
+	$mod->setOutput('Level', $level);
 	//$trclass = $taginfo['is_assignable'] == 'yes' ? '' : ($taginfo['kidc'] ? ' class=trnull' : ' class=trwarning');
 	//echo "<tr${trclass}><td align=left style='padding-left: " . ($level * 16) . "px;'>";
 	//if ($taginfo['kidc'])
@@ -7082,7 +7083,7 @@ function renderTagRowForEditor ($taginfo, $level = 0, $parent, $placeholder)
 
 	//echo '</td><td>' . getImageHREF ('save', 'Save changes', TRUE) . '</form></td></tr>';
 	foreach ($taginfo['kids'] as $kid)
-		$self ($kid, $level + 1);
+		$self ($kid, $level + 1, $mod, 'SubLeafs');
 }
 
 function renderTagTree ()
@@ -7120,13 +7121,12 @@ END
 	function printNewItemTR ($options, $parent, $placeholder)
 	{
 		global $taglist;
-		//Todo
-		
+		//TODO =????
 		$tplm = TemplateManager::getInstance();
 		
 		$mod = $tplm->generateSubmodule($placeholder, 'TagtreeEditorNew', $parent);
 		$mod->setNamespace('tagtree');
-		$mod->addOutput('Select', getSelect ($options, array ('name' => 'parent_id', 'tabindex' => 110)));
+		$mod->setOutput('Select', getSelect ($options, array ('name' => 'parent_id', 'tabindex' => 110)));
 		//printOpFormIntro ('createTag');
 		//echo '<tr>';
 		//echo '<td align=left style="padding-left: 16px;">' . getImageHREF ('create', 'Create tag', TRUE) . '</td>';
@@ -7135,7 +7135,6 @@ END
 		//echo '<td>' . getSelect ($options, array ('name' => 'parent_id', 'tabindex' => 110)) . '</td>';
 		//echo '<td>' . getImageHREF ('create', 'Create tag', TRUE, 120) . '</td>';
 		//echo '</tr></form>';
-		//EndTodo
 	}
 	global $taglist, $tagtree;
 
@@ -7929,9 +7928,9 @@ function renderMyAccount ()
 	
 	$mod->setOutput('UserName', $remote_username);
 	$mod->setOutput('DisplayName', $remote_displayname);
-	$mod->setOutput('Serialize1', serializeTags (getExplicitTagsOnly ($expl_tags)));
-	$mod->setOutput('Serialize2', serializeTags ($impl_tags));
-	$mod->setOutput('Serialize3', serializeTags ($auto_tags));
+	$mod->setOutput('Serialize1', getExplicitTagsOnly ($expl_tags));
+	$mod->setOutput('Serialize2', $impl_tags);
+	$mod->setOutput('Serialize3', $auto_tags);
 
 	
 
