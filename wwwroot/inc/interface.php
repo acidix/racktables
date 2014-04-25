@@ -90,7 +90,7 @@ function renderQuickLinks()
 
 
 	$tplm = TemplateManager::getInstance();
-	//$tplm->createMainModule("index");
+	////$tplm->createMainModule("index");
 	$mod = $tplm->generateSubmodule("Quicklinks_Table", "Quicklinks");
 //	$mod = $tplm->getMainModule(); 
 	//if($mod == null)
@@ -153,8 +153,8 @@ function renderIndex()
 	global $indexlayout;
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 
 	$mod = $tplm->generateSubmodule("Payload", "RenderIndex");
 	$mod->setNamespace("index");
@@ -236,7 +236,7 @@ function getRenderedAlloc ($object_id, $alloc)
 	{
 		$hl_ip_bin = ip_parse ($_REQUEST['hl_ip']);
 		//addAutoScrollScript ("ip-" . $_REQUEST['hl_ip']);
-		addAutoScrollScript ("ip-" . $_REQUEST['hl_ip'], $tplm->createMainModule(), 'Payload');
+		addAutoScrollScript ("ip-" . $_REQUEST['hl_ip'], $tplm->getMainModule(), 'Payload');
 	}
 
 	$ret['tr_class'] = $alloc['addrinfo']['class'];
@@ -530,8 +530,8 @@ function renderRackspace ()
 	
 	//Added by AK, loading TPLM
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 
 	
 	$mod = $tplm->generateSubmodule("Payload", "RackspaceOverview");
@@ -777,8 +777,8 @@ JSTXT;
 	addJS($js, TRUE	);*/
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload", "RackspaceLocationEditor");
 	$mod->setNamespace('rackspace',true);
@@ -835,8 +835,8 @@ function renderRackspaceRowEditor ()
 	
 	$tplm = TemplateManager::getInstance();
 	
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload", "RackspaceRowEditor");
 	$mod->setNamespace("rackspace",true);
@@ -877,8 +877,8 @@ function renderRow ($row_id)
 	// Main layout starts.
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate('vanilla');
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule('Payload', 'Row');
 	$mod->setNamespace('row',true);
@@ -959,8 +959,8 @@ function printObjectDetailsForRenderRack ($object_id, $hl_obj_id = 0, $parent = 
 {
 	// Dont use again might better use helper function
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
+	//if($parent==null)
+	//	$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
 		$mod = $tplm->generateModule("PrintObjectDetailsForRenderRack");
@@ -1136,8 +1136,8 @@ function renderRack ($rack_id, $hl_obj_id = 0, $parent = null, $placeholder = "R
 	$next_id = getNextIDforRack ($rackData['row_id'], $rack_id);
 
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
+	//if($parent==null)
+	//	$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
 		$mod = $tplm->generateModule("RenderRack");
@@ -1294,8 +1294,8 @@ function renderNewRackForm ($row_id)
 	
 	$tplm = TemplateManager::getInstance();
 	
-	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate('vanilla');
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule('Payload', 'NewRackForm');
 	$mod->setNamespace('row',true);
@@ -1340,8 +1340,8 @@ function renderEditObjectForm()
 	$object = spotEntity ('object', $object_id);
 	$tplm = TemplateManager::getInstance();
 	
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderEditObjectForm");
 	$mod->setNamespace("object");
@@ -1499,8 +1499,8 @@ function renderEditObjectForm()
 function renderEditRackForm ($rack_id)
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate('vanilla');
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule('Payload', 'RackEditor');
 	$mod->setNamespace('rack');
@@ -1639,8 +1639,8 @@ function renderRackInfoPortlet ($rackData, $parent = null, $placeholder = 'Paylo
 	
 	if ($parent == null)
 	{
-		$tplm->setTemplate('vanilla');
-		$tplm->createMainModule();
+		//$tplm->setTemplate('vanilla');
+		//$tplm->createMainModule();
 		$parent = $tplm->getMainModule();
 	}
 	
@@ -1656,8 +1656,8 @@ function renderGridForm ($rack_id, $filter, $header, $submit, $state1, $state2)
 	$filter ($rackData);
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate('vanilla');
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule('Payload', 'GridForm');
 	$mod->setNamespace('rack');
@@ -1710,8 +1710,8 @@ function renderRackProblems ($rack_id)
 function renderObjectPortRow ($port, $is_highlighted, $parent = null, $placeholder = "RenderedObjectPort")
 {
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
+	//if($parent==null)
+	//	$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
 		$mod = $tplm->generateModule('RenderObjectPortRow');
@@ -1769,8 +1769,8 @@ function renderObject ($object_id)
 	amplifyCell ($info);
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderObject");
 	$mod->setNamespace("object");
@@ -2094,7 +2094,7 @@ function renderRackMultiSelect ($sname, $racks, $selected, $parent = null, $plac
 	}
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->createMainModule();
+	//$tplm->createMainModule();
 	if($parent==null)	
 		$mod = $tplm->generateModule("RenderRackMultiSelect");
 	else
@@ -2141,8 +2141,8 @@ function renderPortsForObject ($object_id)
 	function printNewItemTR ($prefs, $parent, $placeholder)
 	{
 		$tplm = TemplateManager::getInstance();
-		$tplm->setTemplate("vanilla");
-		$tplm->createMainModule("index");
+		//$tplm->setTemplate("vanilla");
+		//$tplm->createMainModule("index");
 		
 		$mod = $tplm->generateSubmodule($placeholder,"RenderPortsForObject_printNew", $parent);
 		$mod->setNamespace("object");
@@ -2159,8 +2159,8 @@ function renderPortsForObject ($object_id)
 	//	echo "</td></tr></form>";
 	}
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderPortsForObject");
 	$mod->setNamespace("object");
@@ -2364,7 +2364,7 @@ function renderIPForObject ($object_id)
 	{
 		global $aat;
 		$tplm = TemplateManager::getInstance();
-		$tplm->setTemplate("vanilla");
+		//$tplm->setTemplate("vanilla");
 		
 		$mod = $tplm->generateSubmodule($placeholder,"RenderIPForObject_printNew", $parent);
 		$mod->setNamespace("object");
@@ -2389,8 +2389,8 @@ function renderIPForObject ($object_id)
 	global $aat;
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderIPForObject");
 	$mod->setNamespace("object");
@@ -2635,8 +2635,8 @@ function renderPortsInfo($object_id)
 	}
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderPortsInfo");
 	$mod->setNamespace("object");
@@ -2947,8 +2947,8 @@ function renderDepot ()
 	$objects_count = getEntitiesCount ('object');
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload", "RenderDepot");
 	$mod->setNamespace("depot",true);
@@ -3041,8 +3041,8 @@ function renderEmptyResults($cellfilter, $entities_name, $count = NULL, $pmod = 
 	$href_show_all .= htmlspecialchars('&show_all_objects=1');
 	
 	$tplm = TemplateManager::getInstance();
-	if($pmod==null)
-		$tplm->setTemplate("vanilla");
+	//if($pmod==null)
+	//	$tplm->setTemplate("vanilla");
 	
 	if($pmod==null)	
 		$mod = $tplm->generateModule("EmptyResults",   true);
@@ -3153,8 +3153,8 @@ function renderRackspaceHistory ()
 	
 	$tplm = TemplateManager::getInstance();
 	
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RackspaceHistory");
 	$mod->setNamespace("rackspace",true);
@@ -3383,8 +3383,8 @@ function renderIPSpaceEditor()
 	$addrspaceList = listCells ($realm);
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderIPSpaceEditor");
 	$mod->setNamespace("ipspace");
@@ -3446,8 +3446,8 @@ function renderIPNewNetForm ()
 		$regexp = '^(\d{1,3}\.){3}\d{1,3}/\d{1,2}$';
 	}
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderIPNewNetForm");
 	$mod->setNamespace("ipspace");
@@ -4147,7 +4147,7 @@ function renderIPAddress ($ip_bin)
 {
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule("index");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule('Payload', 'IPAddress');
 	$mod->setNamespace('ipaddress');
@@ -4298,7 +4298,7 @@ function renderIPAddressProperties ($ip_bin)
 	
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule("index");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule('Payload', 'IPAddressProperties');
 	$mod->setNamespace('ipaddress',true);
@@ -4365,8 +4365,8 @@ function renderIPAddressAllocations ($ip_bin)
 	$address = getIPAddress ($ip_bin);
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule('index');
+	//$tplm->setTemplate('vanilla');
+	//$tplm->createMainModule('index');
 	
 	$mod = $tplm->generateSubmodule('Payload', 'IPAddressAllocation');
 	$mod->setNamespace('ipaddress',true);
@@ -4454,8 +4454,8 @@ function renderNATv4ForObject ($object_id)
 	}
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderNATv4ForObject");
 	$mod->setNamespace("object");
@@ -4605,8 +4605,8 @@ function renderAddMultipleObjectsForm ()
 	$tabindex = 100;
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule('index');
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule('index');
 
 	$mod = $tplm->generateSubmodule("Payload","AddMultipleObjects");
 	$mod->setNamespace("depot");
@@ -4697,8 +4697,8 @@ function renderSearchResults ($terms, $summary)
 	//Changed for template engine 
 	//Initalising
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	// calculate the number of found objects
 	
 
@@ -5225,7 +5225,7 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 	$celllist = filterCellList ($celllist, $cellfilter['expression']);
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");	
+	//$tplm->setTemplate("vanilla");	
 	if($parent === NULL){	
 		$mod = $tplm->generateModule("CellList");
 	}
@@ -5278,8 +5278,8 @@ function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $
 function renderUserList ()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");	
-	$main = $tplm->createMainModule();
+	//$tplm->setTemplate("vanilla");	
+	$main = $tplm->getMainModule();
 
 	renderCellList ('user', 'User accounts',FALSE, NULL, $main, 'Payload');
 }
@@ -5310,8 +5310,8 @@ function renderUserListEditor ()
 	}
 	$tplm = TemplateManager::getInstance();
 	
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule();
 	
 	$mod = $tplm->generateSubmodule("Payload", "UserListEditor");
 	$mod->setNamespace("userlist");
@@ -5351,8 +5351,8 @@ function renderOIFCompatViewer()
 {
 	$tplm = TemplateManager::getInstance();
 	
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule();
 	
 	$mod = $tplm->generateSubmodule("Payload", "RenderOIFCompatViewer");
 	$mod->setNamespace("portmap",true);
@@ -5385,8 +5385,8 @@ function renderOIFCompatEditor()
 {
 	$tplm = TemplateManager::getInstance();
 	
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule();
 	
 	$mod = $tplm->generateSubmodule("Payload", "RenderOIFCompatEditor");
 	$mod->setNamespace("portmap",true);
@@ -5396,8 +5396,8 @@ function renderOIFCompatEditor()
 	{
 		$tplm = TemplateManager::getInstance();
 	
-		$tplm->setTemplate("vanilla");
-		$tplm->createMainModule();
+		//$tplm->setTemplate("vanilla");
+		//$tplm->createMainModule();
 		$submod = $tplm->generateSubmodule($placeholder, 'RenderOIFCompatEditor_PrintNewItem', $mod);
 		$submod->setNamespace("portmap",true);
 		// printOpFormIntro ('add');
@@ -5466,8 +5466,8 @@ function renderOIFCompatEditor()
 function renderObjectParentCompatViewer()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule();
 	
 	$mod = $tplm->generateSubmodule("Payload", "RenderObjectParentCompatViewer");
 	$mod->setNamespace("parentmap",true);
@@ -5497,8 +5497,8 @@ function renderObjectParentCompatViewer()
 function renderObjectParentCompatEditor()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule();
 	
 	$mod = $tplm->generateSubmodule("Payload", "RenderObjectCompatEditor");
 	$mod->setNamespace("parentmap");
@@ -5570,8 +5570,8 @@ function renderObjectParentCompatEditor()
 function renderConfigMainpage ()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule();
 	
 	$mod = $tplm->generateSubmodule("Payload", "RenderConfigMainPage");
 	$mod->setNamespace("config",true);
@@ -5593,8 +5593,8 @@ function renderConfigMainpage ()
 function renderLocationPage ($location_id)
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule();
 	
 	$mod = $tplm->generateSubmodule("Payload", "RenderLocationPage");
 	$mod->setNamespace("location",true);
@@ -5652,8 +5652,8 @@ function renderLocationPage ($location_id)
 function renderEditLocationForm ($location_id)
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule();
 	
 	$mod = $tplm->generateSubmodule("Payload", "RenderEditLocationForm");
 	$mod->setNamespace("location",true);
@@ -5781,8 +5781,8 @@ function renderDictionary ()
 {
 	$tplm = TemplateManager::getInstance();
 	
-	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	//$tplm->setTemplate('vanilla');
+	//$tplm->createMainModule();
 	
 	$mod = $tplm->generateSubmodule('Payload', 'DictList');
 	
@@ -5800,8 +5800,8 @@ function renderDictionary ()
 function renderChapter ($tgt_chapter_no)
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	//$tplm->setTemplate('vanilla');
+	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'Chapter');
 	$mod->setNamespace('chapter', true);
 	global $nextorder;
@@ -5890,8 +5890,8 @@ function renderChapterEditor ($tgt_chapter_no)
 	}
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	//$tplm->setTemplate('vanilla');
+	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'ChapterEditor');
 	$mod->setNamespace('chapter', true);
 	
@@ -6029,8 +6029,8 @@ function renderAttributes ()
 {
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	//$tplm->setTemplate('vanilla');
+	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'RenderAttributes');
 	$mod->setNamespace('attrs', true);
 	
@@ -6086,8 +6086,8 @@ function renderAttributes ()
 function renderEditAttributesForm ()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	//$tplm->setTemplate('vanilla');
+	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'RenderEditAttributesForm');
 	$mod->setNamespace('attrs', true);
 	
@@ -6149,8 +6149,8 @@ function renderEditAttrMapForm ()
 {
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	//$tplm->setTemplate('vanilla');
+	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'RenderEditAttrMapForm');
 	$mod->setNamespace('attrs', true);
 
@@ -6361,8 +6361,8 @@ function render8021QReport ()
 {
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	////$tplm->createMainModule("index");
 	
 	if (!count ($domains = getVLANDomainOptions()))
 	{	
@@ -6457,8 +6457,8 @@ function renderReports ($what)
 		return;
 	//echo "<table align=center>\n";
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderReports");
 	$mod->setNamespace("reports");
@@ -6619,7 +6619,7 @@ function dragon ()
 function renderConfigVarName ($v)
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
+	//$tplm->setTemplate("vanilla");
 	
 	$mod = $tplm->generateModule("RenderConfigVarName",   true);
 	
@@ -6635,9 +6635,9 @@ function renderUIConfig ()
 {
 	global $nextorder;
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
+	//$tplm->setTemplate("vanilla");
 	
-	$tplm->createMainModule();
+	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule("Payload","RenderUiConfig");
 	$mod->setNamespace("ui");
 
@@ -6670,8 +6670,8 @@ function renderUIConfig ()
 function renderSNMPPortFinder ($object_id)
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 
 	if (!extension_loaded ('snmp'))
 	{
@@ -6760,8 +6760,8 @@ function renderSNMPPortFinder ($object_id)
 function renderUIResetForm()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderUiResetForm");
 	$mod->setNamespace("ui");	
@@ -6949,8 +6949,8 @@ function renderAutoPortsForm ($object_id)
 	$ptlist = readChapter (CHAP_PORTTYPE, 'a');
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderAutoPortsForm");
 	$mod->setNamespace("object");
@@ -7093,8 +7093,8 @@ function renderTagTree ()
 	$tplm = TemplateManager::getInstance();
 	
 	//@TODO Remove after global initialization is finished
-	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	//$tplm->setTemplate('vanilla');
+	//$tplm->createMainModule();
 	
 	$mod = $tplm->generateSubmodule('Payload', 'TagtreeConfig');
 	$mod->setNamespace('tagtree',true);
@@ -7293,8 +7293,8 @@ function printTagCheckboxTable ($input_name, $preselect, $neg_preselect, $taglis
 function renderEntityTagsPortlet ($title, $tags, $preselect, $realm, TemplateModule $parent = null, $placeholder = "RenderedEntityTagsPortlet")
 {
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
+	//if($parent==null)
+	//	$tplm->setTemplate("vanilla");
 
 	if($parent==null)	
 		$mod = $tplm->generateModule("RenderEntityTagsPortlet");
@@ -7332,8 +7332,8 @@ function renderEntityTags ($entity_id)
 	global $tagtree, $taglist, $target_given_tags, $pageno, $etype_by_pageno;
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	$mod = $tplm->generateSubmodule("Payload", "RenderEntityTags");
 		
 //	echo '<table border=0 width="100%"><tr>';
@@ -7387,7 +7387,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	$tplm = TemplateManager::getInstance();
 
 	if($parent == null){
-		$tplm->createMainModule();
+		//$tplm->createMainModule();
 		$mod = $tplm->generateModule("CellFilterPortlet");
 	}
 	else
@@ -7655,8 +7655,8 @@ function renderTagRollerForRow ($row_id)
 	$sum = $a + $b;
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	//$tplm->setTemplate('vanilla');
+	//$tplm->createMainModule();
 	
 	$mod = $tplm->generateSubmodule('Payload', 'TagRoller');
 	$mod->setNamespace('row',true);
@@ -7682,8 +7682,8 @@ function renderTagRollerForRow ($row_id)
 function renderRackCodeViewer ()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderRackCodeViewer");
 	$mod->setNamespace("perms");
@@ -7790,8 +7790,8 @@ $(document).ready(function() {
 });
 ENDJAVASCRIPT;
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderRackCodeEditor");
 	$mod->setNamespace("perms");
@@ -7824,7 +7824,7 @@ function renderUser ($user_id)
 	$summary['tags'] = '';
 	
 	$tplm = TemplateManager::getInstance();
-	$main = $tplm->createMainModule();
+	//$main = $tplm->createMainModule();
 	
 	
 	renderEntitySummary ($userinfo, 'summary', $summary, $tplm->getMainModule(), 'Payload');
@@ -7835,8 +7835,8 @@ function renderUser ($user_id)
 function renderMyPasswordEditor ()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	$mod = $tplm->generateSubmodule("Payload", "RenderMyPasswordEditor");
 	$mod->setNamespace("myaccount");
 
@@ -7856,8 +7856,8 @@ function renderConfigEditor ()
 	global $configCache;
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule();
 	
 	$mod = $tplm->generateSubmodule("Payload", "RenderConfigEditor");
 	
@@ -7917,8 +7917,8 @@ function renderConfigEditor ()
 function renderMyAccount ()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	$mod = $tplm->generateSubmodule("Payload", "RenderMyAccount");
 	$mod->setNamespace("myaccount", true);
 		
@@ -7948,8 +7948,8 @@ function renderMyAccount ()
 function renderMyQuickLinks ()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	$mod = $tplm->generateSubmodule("Payload", "RenderMyQuickLinks");
 	$mod->setNamespace("myaccount");
 
@@ -8145,7 +8145,7 @@ function renderFileBrowser ()
 {
 	$tplm = TemplateManageR::getInstance();
 
-	renderCellList ('file', 'Files', TRUE, NULL, $tplm->createMainModule(), 'Payload');
+	renderCellList ('file', 'Files', TRUE, NULL, $tplm->getMainModule(), 'Payload');
 }
 
 // Like renderFileBrowser(), but with the option to delete files
@@ -8176,8 +8176,8 @@ function renderFileManager ()
 	}
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->createMainModule();
-	$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule();
+	////$tplm->setTemplate("vanilla");
 
 	$mod = $tplm->generateSubmodule('Payload', 'FileManager');
 	$mod->setNamespace('files');
@@ -8237,7 +8237,7 @@ function renderFilesPortlet ($entity_type = NULL, $entity_id = 0, $parent = null
 	if (count ($files))
 	{
 		$tplm = TemplateManager::getInstance();
-		$tplm->setTemplate("vanilla");
+		//$tplm->setTemplate("vanilla");
 	
 		if($parent == null)
 			$mod = $tplm->generateModule("RenderFilesPortlet",  false);
@@ -8284,8 +8284,8 @@ function renderFilesForEntity ($entity_id)
 	// Now derive entity_type from pageno.
 	$entity_type = $etype_by_pageno[$pageno];
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderFilesForEntity");
 
@@ -8490,8 +8490,8 @@ function renderCell ($cell)
 
 	//Use TemplateEngine
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");		
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");		
 
 	$mod = $tplm->generateModule("RenderCell");
 	
@@ -9342,8 +9342,8 @@ function renderIIFOIFCompat()
 {
 	global $nextorder;
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderIIFOIFCompat");
 	$mod->setNamespace("portifcompat");
@@ -9375,7 +9375,7 @@ function renderIIFOIFCompatEditor()
 	function printNewitemTR($parent, $placeholder)
 	{
 		$tplm = TemplateManager::getInstance();
-		$tplm->setTemplate("vanilla");
+		//$tplm->setTemplate("vanilla");
 		
 		$mod = $tplm->generateSubmodule($placeholder,"RenderIIFOIFCompatEditor_PrintNew", $parent);
 		$mod->setNamespace("portifcompat");
@@ -9392,8 +9392,8 @@ function renderIIFOIFCompatEditor()
 		//echo '</th></tr></form>';
 	}
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderIIFOIFCompatEditor");
 	$mod->setNamespace("portifcompat");
@@ -9488,7 +9488,7 @@ function render8021QOrderForm ($some_id)
 			$focus[$hint_code] = NULL;
 		
 		$tplm = TemplateManager::getInstance();
-		$tplm->setTemplate("vanilla");
+		//$tplm->setTemplate("vanilla");
 		
 		$mod = $tplm->generateModule("Render8021QOrderForm_PrintNew");
 		$mod->setNamespace("vlandomain");
@@ -9542,8 +9542,8 @@ function render8021QOrderForm ($some_id)
 	}
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","Render8021QOrderForm");
 	$mod->setNamespace("vlandomain");
@@ -9674,8 +9674,8 @@ function render8021QOrderForm ($some_id)
 function render8021QStatus ()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","Render8021QStatus");
 	$mod->setNamespace("8021q");
@@ -9798,7 +9798,7 @@ function renderVLANDomainListEditor ()
 	function printNewItemTR ()
 	{
 		$tplm = TemplateManager::getInstance();
-		$tplm->setTemplate("vanilla");
+		//$tplm->setTemplate("vanilla");
 		
 		$mod = $tplm->generateModule("RenderVLANDomainListEditor_printNewItemTR");
 		$mod->setNamespace("8021q");
@@ -9816,8 +9816,8 @@ function renderVLANDomainListEditor ()
 	//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
 	//echo '<tr><th>&nbsp;</th><th>description</th><th>&nbsp</th></tr>';
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderVLANDomainListEditor");
 	$mod->setNamespace("8021q");
@@ -9867,8 +9867,8 @@ function renderVLANDomainListEditor ()
 function renderVLANDomain ($vdom_id)
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderVLANDomain");
 	$mod->setNamespace("vlandomain");
@@ -9959,7 +9959,7 @@ function renderVLANDomainVLANList ($vdom_id)
 	function printNewItemTR ($parent, $placeholder)
 	{
 		$tplm = TemplateManager::getInstance();
-		$tplm->setTemplate("vanilla");
+		//$tplm->setTemplate("vanilla");
 			
 		global $vtoptions;
 
@@ -9981,8 +9981,8 @@ function renderVLANDomainVLANList ($vdom_id)
 		
 	}
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderVLANDomainVLANList");
 	$mod->setNamespace("vlandomain");
@@ -10414,8 +10414,8 @@ function renderVLANInfo ($vlan_ck)
 	$vlan = getVLANInfo ($vlan_ck);
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderVLANInfo");
 	$mod->setNamespace("vlan");
@@ -10595,7 +10595,7 @@ function renderVLANIPLinks ($some_id)
 	function printNewItemTR ($sname, $options, $extra = array())
 	{
 		$tplm = TemplateManager::getInstance();
-		$tplm->setTemplate("vanilla");
+		//$tplm->setTemplate("vanilla");
 		
 		$mod = $tplm->generateModule("RenderVLANIPLinks_printNewItem", false, array('extra' => $extra));
 		$mod->setNamespace("vlan");
@@ -10612,8 +10612,8 @@ function renderVLANIPLinks ($some_id)
 	global $pageno, $tabno;
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderVLANIPLinks");
 	$mod->setNamespace("vlan");
@@ -10753,8 +10753,8 @@ function renderObject8021QSync ($object_id)
 	}
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderObject8021QSync");
 	$mod->setNamespace("object", TRUE);	
@@ -10798,8 +10798,8 @@ function renderObject8021QSync ($object_id)
 function renderObject8021QSyncSchedule ($object, $vswitch, $maxdecisions, $placeholder, $parent)
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule($placeholder , "RenderObject8021QSyncSchedule", $parent);
 
@@ -10848,8 +10848,8 @@ function renderObject8021QSyncSchedule ($object, $vswitch, $maxdecisions, $place
 function renderObject8021QSyncPreview ($object, $vswitch, $plan, $C, $R, $maxdecisions, $placeholder, $parent)
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule($placeholder , "RenderObject8021QSyncPreview", $parent);
 
@@ -11099,7 +11099,7 @@ function renderObject8021QSyncPreview ($object, $vswitch, $plan, $C, $R, $maxdec
 function renderObject8021QSyncPorts ($object, $D, $placeholder, $parent)
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
+	//$tplm->setTemplate("vanilla");
 	
 	$mod = $tplm->generateSubmodule($placeholder ,"RenderObject8021QSyncPorts", $parent);
 
@@ -11137,7 +11137,7 @@ function renderVSTListEditor()
 {
 	$tplm  =TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'RenderVSTListEditor');
 	$mod->setNamespace('vst', TRUE);
 	
@@ -11145,7 +11145,7 @@ function renderVSTListEditor()
 	{
 		$tplm  =TemplateManager::getInstance();
 		$tplm->setTemplate('vanilla');
-		$tplm->createMainModule();	
+		//$tplm->createMainModule();	
 		$submod = $tplm->generateSubmodule($placeholder, 'RenderVSTListEditor_PrintNewItem', $parent);
 		
 		//printOpFormIntro ('add');
@@ -11188,7 +11188,7 @@ function renderVSTRules ($rules, $title = NULL)
 	
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'RenderVSTRules');
 	$mod->setNamespace('vst', TRUE);
 	
@@ -11229,7 +11229,7 @@ function renderVSTRules ($rules, $title = NULL)
 {
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'RenderVST');
 	$mod->setNamespace('vst', true);
 	
@@ -11284,7 +11284,7 @@ function renderVSTRulesEditor ($vst_id)
 	
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
-	$tplm->createMainmodule();
+	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'VstRulesEditor');
 	$mod->addOutput('Nifty', niftyString ($vst['description']));
 	
@@ -11367,8 +11367,8 @@ function renderDeployQueue()
 	$allq = get8021QDeployQueues();
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	////$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 		
 	
 	foreach ($allq as $qcode => $data)
@@ -11441,8 +11441,8 @@ function renderDiscoveredNeighbors ($object_id)
 	}
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderDiscoveredNeighbors");
 	$mod->setNamespace("object");
@@ -11768,8 +11768,8 @@ function formatAttributeValue ($record)
 function addAutoScrollScript ($anchor_name, $parent = null, $placeholder = "autoScrollScript")
 {
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
+	//if($parent==null)
+	//	$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
 		$mod = $tplm->generateModule("AddAutoScrollScript");
@@ -11798,9 +11798,9 @@ function renderObjectLogEditor ()
 {
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
-	$main = $tplm->createMainModule();
+	//$main = //$tplm->createMainModule();
 		
-	$mod = $tplm->generateSubmodule('Payload', 'RenderObjectLogEditor', $main);
+	$mod = $tplm->generateSubmodule('Payload', 'RenderObjectLogEditor');
 	$mod->setNamespace('location',true);
 
 	global $nextorder;
@@ -11880,8 +11880,8 @@ function renderObjectLogEditor ()
 function allObjectLogs ()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	////$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 
 	$logs = getLogRecords ();
 
@@ -11958,8 +11958,8 @@ function renderVirtualResourcesSummary ()
 {
 	global $pageno, $nextorder;
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	////$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderVirtualResourcesSummary");
 	$mod->setNamespace("", true);
@@ -12140,8 +12140,8 @@ function switchportInfoJS($object_id, $parent = null, $placeholder = "switchport
 	$list = trim ($list, ", ");
 
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
+	//if($parent==null)
+		//$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
 		$mod = $tplm->generateModule("SwitchPortInfoJS");
@@ -12198,7 +12198,7 @@ function renderIPAddressLog ($ip_bin)
 	
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	//$tplm->createMainModule();
 	
 	$mod = $tplm->generateSubmodule('Payload', 'IPAddressLog');
 	$mod->setNamespace('ipaddress',true);
@@ -12245,8 +12245,8 @@ function renderObjectCactiGraphs ($object_id)
 	}	
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderObjectCactiGraphs");
 	$mod->setNamespace("object", TRUE);
@@ -12314,8 +12314,8 @@ function renderObjectMuninGraphs ($object_id)
 
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderObjectMuninGraphs");
 	$mod->setNamespace("object", TRUE);
@@ -12368,8 +12368,8 @@ function renderEditVlan ($vlan_ck)
 	$vlan = getVLANInfo ($vlan_ck);
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderEditVlan");
 	$mod->setNamespace("vlan");
@@ -12446,8 +12446,8 @@ function renderExpirations ()
 	$attrmap = getAttrMap();
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 			
 	foreach ($breakdown as $attr_id => $sections)
 	{	
@@ -12539,8 +12539,8 @@ function formatPortReservation ($port)
 function renderEditUCSForm()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule("Payload", "RenderEditUCSForm");
 	$mod->setNamespace("object",true);
 
@@ -12566,8 +12566,8 @@ function renderCactiConfig()
 	$servers = getCactiServers();
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule("Payload", "CactiConfig");
 	$mod->setNamespace("cacti",true);
 	$mod->setLock();
@@ -12614,7 +12614,7 @@ function renderCactiServersEditor()
 	
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
-	$tplm->createMainModule();
+	//$tplm->createMainModule();
 	
 	$mod = $tplm->generateSubmodule('Payload', 'CactiConfigEditor');
 	$mod->setNamespace('cacti',true);
@@ -12653,8 +12653,8 @@ function renderCactiServersEditor()
 function renderMuninConfig()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderMuninConfig");
 	$mod->setNamespace("munin");
@@ -12683,7 +12683,7 @@ function renderMuninServersEditor()
 	function printNewItemTR()
 	{
 		$tplm = TemplateManager::getInstance();
-		$tplm->setTemplate("vanilla");
+		//$tplm->setTemplate("vanilla");
 		
 		$mod = $tplm->generateModule("RenderMuninServersEditor_NewItem");
 		$mod->setNamespace("munin");
@@ -12698,8 +12698,8 @@ function renderMuninServersEditor()
 		//echo '</tr></form>';
 	}
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderMuninServersEditor");
 	$mod->setNamespace("munin");
@@ -12755,9 +12755,9 @@ function renderDataIntegrityReport ()
 	$violations = FALSE;
 
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
-	$tplm->createMainModule();
+	//if($parent==null)
+		//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule();
 
 	$mod = $tplm->generateSubmodule("Payload", "RenderDataIntegrityReport");
 	

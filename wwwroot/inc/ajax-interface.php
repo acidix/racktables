@@ -107,7 +107,7 @@ function formatLoggedSpan ($log_item, $text, $html_class = '')
 	}
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
+	//$tplm->setTemplate("vanilla");
 	
 	$mod = $tplm->generateModule("FormatLoggedSpan", true);
 	$mod->addOutput("class", (strlen ($html_class) ? " class='$html_class'" : ''));

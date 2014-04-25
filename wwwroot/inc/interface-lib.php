@@ -301,7 +301,7 @@ function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $
 		return '(none)';
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
+	//$tplm->setTemplate("vanilla");
 
 	if (count ($optionList) == 1 && $treat_single_special)
 	{
@@ -511,8 +511,8 @@ function getOptionTree ($tree_name, $tree_options, $tree_config = array(), $pare
 
 	
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
+	//if($parent==null)
+	//	$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
 		$mod = $tplm->generateModule("GetOptionTree");
@@ -545,7 +545,7 @@ function getImageHREF ($tag, $title = '', $do_input = FALSE, $tabindex = 0)
 	//Loading and rendering small module in memory and returning the
 	if ($do_input == TRUE){
 		$tplm = TemplateManager::getInstance();
-		$tplm->setTemplate("vanilla");
+		//$tplm->setTemplate("vanilla");
 		
 		$mod = $tplm->generateModule( "GetImageHrefDoInput", true, 
 				array( "SrcPath" => $img['path'],  "TabIndex" => ($tabindex ? "tabindex=${tabindex}" : ''),
@@ -562,7 +562,7 @@ function getImageHREF ($tag, $title = '', $do_input = FALSE, $tabindex = 0)
 	}
 	else{
 		$tplm = TemplateManager::getInstance();
-		$tplm->setTemplate("vanilla");
+		//$tplm->setTemplate("vanilla");
 
 		$mod = $tplm->generateModule("GetImageHrefNoInput", true, 
 				array( "SrcPath" => $img['path'],  "ImgWidth" => $img['width'], "ImgHeight" => $img['height'] ,
@@ -863,8 +863,8 @@ function getRenderedIPv6NetCapacity ($range)
 	
 	//Use TemplateEngine 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
-	$tplm->createMainModule("index");	
+	//$tplm->setTemplate("vanilla");
+	//$tplm->createMainModule("index");	
 
 	$mod = $tplm->generateModule("RenderedIPv6NetCapacity", true);
 	$mod->setOutput("class", $class);
@@ -940,7 +940,7 @@ function serializeTags ($chain, $baseurl = '', $parent = null, $placeholder = "S
 	usort ($chain, 'cmpTags');
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
+	//$tplm->setTemplate("vanilla");
 
 	if($parent == null)
 		$globalPlc = $tplm->generateModule('GlobalPlaceholder', true);
@@ -1059,7 +1059,7 @@ function renderEntitySummary ($cell, $title, $values = array(), $parent = null, 
 	
 	//Initalize TemplateManager
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
+	//$tplm->setTemplate("vanilla");
 	if($parent == null)
 		$mod = $tplm->generateModule("RenderEntitySummary");
 	else
@@ -1132,7 +1132,7 @@ function getOpLink ($params, $title,  $img_name = '', $comment = '', $class = ''
 {
 	//Initiate TemplateManager
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
+	//$tplm->setTemplate("vanilla");
 	
 	if($parent == null)
 		$mod = $tplm->generateModule("GetOpLink");
@@ -1206,8 +1206,8 @@ function getProgressBar ($percentage = 0, $theme = '', $inline = FALSE, $parent 
 
 
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
+	//if($parent==null)
+	//	$tplm->setTemplate("vanilla");
 		
 	if($parent==null)	
 		$mod = $tplm->generateModule("GetProgressBar", true);
@@ -1243,8 +1243,8 @@ function renderNetVLAN ($cell)
 function includeJQueryUI ($do_css = TRUE, $parent = null, $placeholder = "jqueryUI")
 {
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
+	//if($parent==null)
+	//	$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
 		$mod = $tplm->generateModule("IncludeJQueryUI");
@@ -1265,8 +1265,8 @@ function includeJQueryUI ($do_css = TRUE, $parent = null, $placeholder = "jquery
 function getRenderedIPPortPair ($ip, $port = NULL, $parent = null, $placeholder = "RenderedIPPortPair")
 {
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
+	//if($parent==null)
+	//	$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
 		$mod = $tplm->generateModule("RenderedIPPortPair", true );
@@ -1293,7 +1293,7 @@ function printOpFormIntro ($opname, $extra = array(), $upload = FALSE)
 {
 	global $pageno, $tabno, $page;
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
+	//$tplm->setTemplate("vanilla");
 	
 	$mod = $tplm->generateModule("PrintOpFormIntro",  false, array("opname" => $opname, "pageno" => $pageno, "tabno" => $tabno));
 

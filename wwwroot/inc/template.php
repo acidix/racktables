@@ -429,7 +429,7 @@ class TemplateManager
 		}
 		$this->requirements[] = $test;
 		self::log("Adding requirement: ".$placeholder . " on " . $name . " Namespace: " . $namespace . " InMemory: " . $inmemory . " Cont: ", $cont);
-		$mod = $this->generateSubmodule($placeholder, $name, $this->createMainModule(), $inmemory, $cont);
+		$mod = $this->generateSubmodule($placeholder, $name, $this->getMainModule(), $inmemory, $cont);
 		$mod->setNamespace($namespace);
 		$mod->setLock(true);
 	}

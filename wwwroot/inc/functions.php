@@ -2718,7 +2718,7 @@ function mkA ($text, $nextpage, $bypass = NULL, $nexttab = NULL, $parent = null,
 
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate("vanilla");
+	//$tplm->setTemplate("vanilla");
 		
 	if($parent == null)
 		$mod = $tplm->generateModule( "MkAInMemory", true,
@@ -4514,8 +4514,8 @@ function formatPortLink($host_id, $hostname, $port_id, $portname, $a_class = '',
 		$text_items[] = $portname;
 
 	$tplm = TemplateManager::getInstance();
-	if($parent==null)
-		$tplm->setTemplate("vanilla");
+	//if($parent==null)
+	//	$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
 		$mod = $tplm->generateModule("FormatPortLink",   true);
