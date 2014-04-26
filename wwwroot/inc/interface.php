@@ -291,7 +291,7 @@ function getRenderedAlloc ($object_id, $alloc)
 					'hl_object_id' => $object_id,
 					'ip' => $dottedquad,
 				)
-			) . "'>$title</a>";*/
+			) . "'>$title</a>"; */
 	}
 	else{
 		$tplm->generateSubmodule('Info', 'RenderedAllocTdIpNoNetInfo', $td_ip_mod, true,
@@ -326,7 +326,7 @@ function getRenderedAlloc ($object_id, $alloc)
 			getOutputOf ('renderCell', $netinfo) . '</td>'; */
 		$ret['td_network'] = $tplm->generateModule('RenderedAllocNetworkNetinfo', true, 
 							 array('TdClass' => $td_class,
-							 	   'InfoCell' => renderCell($netinfo)))->run();
+							 	   'InfoCell' => renderCell($netinfo)))->run(); 
 
 		// render "routed by" td
 		if ($display_routers = (getConfigVar ('IPV4_TREE_RTR_AS_CELL') == 'none'))
@@ -376,7 +376,7 @@ function getRenderedAlloc ($object_id, $alloc)
 		$prefix = '; ';
 	}
 	//$ret['td_peers'] .= '</td>';
-	$ret['td_peers'] = $td_peers_mod->run();
+	$ret['td_peers'] = $td_peers_mod->run(); 
 	return $ret;
 }
 
@@ -1720,7 +1720,7 @@ function renderObjectPortRow ($port, $is_highlighted, $parent = null, $placehold
 	
 	$mod->setNamespace('object');
 	
-	echo '<tr';
+	//echo '<tr';
 	if ($is_highlighted)
 		$mod->addOutput('IsHighlighted', true);
 			 
@@ -1915,8 +1915,7 @@ function renderObject ($object_id)
 		//startPortlet ('IP addresses');
 		//echo "<table cellspacing=0 cellpadding='5' align='center' class='widetable'>\n";
 		if (getConfigVar ('EXT_IPV4_VIEW') == 'yes')
-			$mod->addOutput("isExt_ipv4_view", true);
-				 
+			$mod->addOutput("isExt_ipv4_view", true);		 
 		//	echo "<tr><th>OS interface</th><th>IP address</th><th>network</th><th>routed by</th><th>peers</th></tr>\n";
 		//else
 		//	echo "<tr><th>OS interface</th><th>IP address</th><th>peers</th></tr>\n";
@@ -1934,8 +1933,6 @@ function renderObject ($object_id)
 			$is_first_row = TRUE;
 			foreach ($alloclist as $alloc)
 			{
-				
-
 				$rendered_alloc = callHook ('getRenderedAlloc', $object_id, $alloc);
 			
 				$singlePort = array('tr_class' => $rendered_alloc['tr_class']);

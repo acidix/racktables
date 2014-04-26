@@ -1,7 +1,7 @@
 <?php if (defined("RS_TPL")) {?>
 	<?php $this->addRequirement("Header","HeaderJsInline",array("code"=>"<<<END
 $(document).ready(function() {
-	var anchor = document.getElementsByName('<?php $this->AnchorName ?>')[0];
+	var anchor = document.getElementsByName('<?php $this->_AnchorName ?>')[0];
 	if (anchor)
 		anchor.scrollIntoView(false);
 });
