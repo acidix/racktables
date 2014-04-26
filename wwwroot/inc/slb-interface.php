@@ -270,7 +270,7 @@ function renderSLBTriplets ($cell, TemplateModule $parent = null, $placeholder =
 				$cells[] = $slb->$field;
 			$tripletArray["order"] = $order;
 //			echo "<tr valign=top class='row_${order} triplet-row'>";
-			$cellsOutputArray = array();
+			$cellsCont = '';
 			foreach ($cells as $slb_cell)
 			{
 //				echo "<td class=tdleft>";
@@ -279,12 +279,13 @@ function renderSLBTriplets ($cell, TemplateModule $parent = null, $placeholder =
 					$slb_cell['realm'] == 'ipv4vs' && $slb->vs['vip_bin'] == $cell['ip_bin'] ||
 					$slb_cell['realm'] == 'ipv4rspool' && $slb->vs['vip_bin'] != $cell['ip_bin']
 				);
-				$cellsOutputArray[] = array("renderedEntityCell" => renderSLBEntityCell ($slb_cell, $highlighted));
+				$cellsCont .= $tplm->generateModule('TDLeftCell',true, array('cont' => renderSLBEntityCell ($slb_cell, $highlighted)))->run();
 //				renderSLBEntityCell ($slb_cell, $highlighted);
 //				echo "</td>";
 			}
-			$tripletArray["cellsOutputArray"] = $cellsOutputArray;
-			array_merge($tripletArray, array("vsconfig" => htmlspecialchars ($slb->slb['vsconfig']),
+			$tripletArray["cellsOutput"] = $cellsCont;
+
+			$tripletArray = array_merge($tripletArray, array("vsconfig" => htmlspecialchars ($slb->slb['vsconfig']),
 											 "rsconfig" => htmlspecialchars ($slb->slb['rsconfig']),
 											 "prio" => htmlspecialchars ($slb->slb['prio'])));
 //			echo "<td class=slbconf>" . htmlspecialchars ($slb->slb['vsconfig']) . "</td>";
@@ -429,9 +430,8 @@ function renderRSPool ($pool_id)
 	$summary['RS configuration'] = '<div class="dashed slbconf">' . htmlspecialchars ($poolInfo['rsconfig']) . '</div>';
 //	renderEntitySummary ($poolInfo, 'Summary', $summary);
 
-	$mod->setOutput("RenderedEntity", renderEntitySummary ($poolInfo, 'Summary', $summary));
-
-		 
+	renderEntitySummary ($poolInfo, 'Summary', $summary, $mod, 'RenderedEntity');
+ 
 	callHook ('portletRSPoolSrv', $pool_id, $mod, 'RSPoolSrvPortlet');
 	
 //	echo "</td><td class=pcright>\n";
@@ -477,6 +477,7 @@ function portletRSPoolSrv ($pool_id, $parent = null, $placeholder = 'RSPoolSrvPo
 		foreach ($rs_table['rows'] as $rs)
 		{
 			//echo "<tr valign=top>";
+			$rowCont = '';
 			foreach (array_keys ($rs_table['columns']) as $field)
 			{
 				switch ($field)
@@ -510,9 +511,10 @@ function portletRSPoolSrv ($pool_id, $parent = null, $placeholder = 'RSPoolSrvPo
 						break;
 				}
 
-				$allRowsContOut[] = array('RowCont' => $field_mod->run());
+				$rowCont .= $field_mod->run();
 				//echo '</td>';
 			}
+			$allRowsContOut[] = array('RowCont' => $rowCont);
 			//echo '</tr>';
 		}
 		$mod->addOutput("AllRowsCont", $allRowsContOut);
