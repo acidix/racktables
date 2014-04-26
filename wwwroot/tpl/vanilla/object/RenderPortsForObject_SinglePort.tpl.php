@@ -14,10 +14,11 @@
 		</label>
 	<?php } ?>
 	</td>
+
 	<td><input type=text name=l2address value='<?php $this->l2address ?>' size=18 maxlength=24></td>
 	<?php if ($this->is("isRemoteObj",true)) { ?>
 		<td><?php $this->logged_span_rem_obj_id ?></td>
-		<td><?php $this->logged_span_rem_name ?><<input type=hidden name=reservation_comment value=''></td>
+		<td><?php $this->logged_span_rem_name ?><input type=hidden name=reservation_comment value=''></td>
 		<td><input type=text name=cable value='<?php $this->calbeid ?>'></td>
 		<td class=tdcenter><?php $this->unlink_op_link ?></td>
 	<?php } elseif ($this->is("hasReservation_comment",true)) { ?>

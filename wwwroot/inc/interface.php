@@ -2231,7 +2231,7 @@ function renderPortsForObject ($object_id)
 			$singlePort['iif_name'] = $port['iif_name'];
 		//	echo '<label>' . $port['iif_name'] . ' ';
 		//printSelect (getExistingPortTypeOptions ($port['id']), array ('name' => 'port_type_id'), $port['oif_id']);
-		printSelect (getExistingPortTypeOptions ($port['id']), array ('name' => 'port_type_id'), $port['oif_id'], false, $mod, 'printSelExType');
+		$singlePort['printSelExType'] = printSelect (getExistingPortTypeOptions ($port['id']), array ('name' => 'port_type_id'), $port['oif_id'], false);
 		//if ($port['iif_id'] != 1)
 		//	echo '</label>';
 		//echo '</td>';

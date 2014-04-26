@@ -4518,12 +4518,12 @@ function formatPortLink($host_id, $hostname, $port_id, $portname, $a_class = '',
 	//	$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
-		$mod = $tplm->generateModule("FormatPortLink",   true);
+		$mod = $tplm->generateModule("FormatPortLink", true);
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "FormatPortLink", $parent, true);
 	
 	$mod->addOutput("href", $href);
-	$mod->addOutput("text_items", $text_items);	 
+	$mod->addOutput("text_items",  implode(' ', $text_items));	 
 
 	if($parent==null)
 		return $mod->run();
