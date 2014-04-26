@@ -11196,13 +11196,16 @@ function renderVSTListEditor()
 	//echo '</table>';
 }
 
-function renderVSTRules ($rules, $title = NULL)
+function renderVSTRules ($rules, $title = NULL, $parent = null, $placeholder = 'Payload')
 {
 	
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
 	//$tplm->createMainModule();
-	$mod = $tplm->generateSubmodule('Payload', 'RenderVSTRules');
+	if($parent == null)
+		$mod = $tplm->generateSubmodule($placeholder, 'RenderVSTRules');
+	else
+		$mod = $tplm->generateSubmodule($placeholder, 'RenderVSTRules', $parent);
 	$mod->setNamespace('vst', TRUE);
 	
 	if (!count ($rules)){
@@ -11235,7 +11238,7 @@ function renderVSTRules ($rules, $title = NULL)
 		}
 		//echo '</table>';
 	}
-	finishPortlet();
+	//finishPortlet();
 }
 
  function renderVST ($vst_id)
@@ -11254,9 +11257,9 @@ function renderVSTRules ($rules, $title = NULL)
 	//echo '<tr><td colspan=2 align=center><h1>' . niftyString ($vst['description'], 0) . '</h1><h2>';
 	//echo "<tr><td class=pcleft width='50%'>";
 
-	renderEntitySummary ($vst, 'summary', array ('tags' => ''));
+	renderEntitySummary ($vst, 'summary', array ('tags' => ''), $mod, 'EntitySummary');
 
-	renderVSTRules ($vst['rules']);
+	renderVSTRules ($vst['rules'], $mod, 'VstRules');
 	//echo '</td><td class=pcright>';
 	if (!count ($vst['switches']))
 		$mod->addOutput('EmptySwitches', true);
@@ -11301,14 +11304,7 @@ function renderVSTRulesEditor ($vst_id)
 	$mod = $tplm->generateSubmodule('Payload', 'VstRulesEditor');
 	$mod->addOutput('Nifty', niftyString ($vst['description']));
 	
-	
-	
-	
-	
-	
 	//echo '<center><h1>' . niftyString ($vst['description']) . '</h1></center>';
-	
-	
 	
 	if (count ($source_options))
 	{
@@ -11363,7 +11359,7 @@ function renderVSTRulesEditor ($vst_id)
 	if (isset ($_SESSION['vst_edited']))
 	{
 		// draw current template
-		renderVSTRules ($vst['rules'], 'currently saved tamplate');
+		renderVSTRules ($vst['rules'], 'currently saved tamplate', $mod, 'VstRules');
 		unset ($_SESSION['vst_edited']);
 	}
 	session_commit();

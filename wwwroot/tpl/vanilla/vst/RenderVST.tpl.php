@@ -3,6 +3,8 @@
 <table border=0 class=objectview cellspacing=0 cellpadding=0>
 <tr><td colspan=2 align=center><h1><?php $this->getH('NiftyString', array($this->_vst['description'], 0)) ?></h1><h2>
 <tr><td class=pcleft width='50%'>
+<?php $this->EntitySummary ?>
+<?php $this->VstRules ?>
 </td><td class=pcright>
 
 <?php if($this->is('EmptySwitches', true)) {?> <div class=portlet><h2>no orders</h2> <?php } 

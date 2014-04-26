@@ -1,5 +1,5 @@
 <?php if (defined("RS_TPL")) {?>
-	<?php $this->getH("PrintOpFormIntro" , $this->opFormIntroPara); ?> 
+	<?php $this->getH("PrintOpFormIntro" , $this->_opFormIntroPara); ?> 
 	
 	<input type=hidden name=object_id value="<?php $this->object_id ?>">
 	<input type=hidden name=vs_id value="<?php $this->vs_id ?>">
