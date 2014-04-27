@@ -44,6 +44,9 @@
           </form>
         </div><!--/.navbar-collapse -->
 
+
+
+
         <div style='float: right'>
 			<form method=post id=TplSelect name=TplSelect action='?module=redirect&page=myaccount&tab=interface&op=settemplate'>
 				<?php $this->getH('TplSelect') ;?>	
@@ -118,7 +121,7 @@
 		</div> -->
 
 		<!-- Navigation bar -->
-		<nav class="navbar navbar-inverse navbar-fixed-top" style="width: 100%;">
+		<!-- <nav class="navbar navbar-inverse navbar-fixed-top" style="width: 100%;">
 			<div class="container">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavbar">
@@ -133,8 +136,8 @@
 				<div class="collapse navbar-collapse" id="mainNavbar">
 
 					<form class="navbar-form navbar-left" >
-					<!--	<button id="showSideMenuButton" type="button" class="btn btn-navbar btn-primary" data-toggle="collapse" 
-					data-target="#sideBarMenu"> -->
+						<button id="showSideMenuButton" type="button" class="btn btn-navbar btn-primary" data-toggle="collapse" 
+					data-target="#sideBarMenu"> 
 					<button id="showSideMenuButton" type="button" class="btn btn-navbar btn-primary">
 						<span class='glyphicon glyphicon-align-justify'></span></button>	
 					</form>
@@ -147,11 +150,11 @@
 					</ul>
 					<?php $this->get("QuicklinksTable") ?>
 
-					<!--
+					
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href='index.php?page=myaccount&tab=default'><?php $this->Displayname; ?></a></li>
 						<li><a href='?logout'> <strong>Logout</strong></a></li>
-					</ul> -->
+					</ul> 
 					<form class="navbar-form navbar-right" role="search">
 
 						<div class="form-group">
@@ -164,10 +167,10 @@
 						<button type="submit" class="btn btn-default"><span class='glyphicon glyphicon-search'></span></button>
 					</form>
 
-				</div> <!-- navbar collapsable -->
+				</div> 
 			</div>
 		</nav>
-
+ -->
 
 
 
@@ -183,7 +186,7 @@
 			<div class="msgbar" ><?php $this->get("Message"); //showMessageOrError(); ?></div>
 			<div class="pagebar" style="padding-top: 20px;"><?php $this->get("Payload"); //echo $payload; ?></div>
 		</div>
-	</
+	
 
 	<!-- Doing Initalscripts here --> 
 	<script type="text/javascript">
