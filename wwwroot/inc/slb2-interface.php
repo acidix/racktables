@@ -854,7 +854,7 @@ function renderIPVSConvert ($vs_id)
 		$arr = array();
 		foreach ($list as $vsinfo)
 		{
-			$arr[] = array('ID'=>htmlspecialchars ($vsinfo['id'], ENT_QUOTES, 'SLBEntityCell'=>renderSLBEntityCell ($vsinfo));
+			$arr[] = array('ID'=>htmlspecialchars ($vsinfo['id'], ENT_QUOTES), 'SLBEntityCell'=>renderSLBEntityCell ($vsinfo));
 			//echo '<tr><td><input type=checkbox name="vs_list[]" checked value="' . htmlspecialchars ($vsinfo['id'], ENT_QUOTES) . '"></td><td>';
 			//renderSLBEntityCell ($vsinfo);
 			//echo '</td></tr>';
