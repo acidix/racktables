@@ -5434,7 +5434,7 @@ function renderOIFCompatEditor()
 		$mod->addOutput('Looparray', array(
 											'Order' => $order,
 											'Title' => $packinfo['title'],
-											'Codename' => $codename));
+											'Codename' => $codename)); //@XXX XXX XXX No helpers within old loops
 		// echo "<tr class=row_${order}><td class=tdleft>" . $packinfo['title'] . '</td><td>';
 		// echo getOpLink (array ('op' => 'addPack', 'standard' => $codename), '', 'add');
 		// echo '</td><td>';
@@ -7650,7 +7650,8 @@ function renderNewEntityTags ($for_realm = '', $parent = null , $placeholder = "
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderNewEntityTags", $parent);
 
-	$mod->setNamespace('');
+	$mod->setNamespace('',true);
+	$mod->setLock(true);
  	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm, $mod, "checkbox");
 //	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm);
 //	echo '</table></div>';
