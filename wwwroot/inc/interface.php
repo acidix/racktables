@@ -11340,7 +11340,7 @@ function renderVSTRulesEditor ($vst_id)
 	
 	foreach (isset ($_SESSION['vst_edited']) ? $_SESSION['vst_edited'] : $vst['rules'] as $item)
 	{
-		$mod->setOutput('Itemarray', array('Rule_no' => $item['rule_no'], 'Port_pcre' => $item['port_pcre'], 'Getselect' => getSelect ($port_role_options, array ('name' => 'port_role'), $item['port_role']), 'Wrt_vlans' => $item['wrt_vlans'], 'Description' => $item['description']));
+		$mod->addOutput('ItemArray', array('RuleNo' => $item['rule_no'], 'PortPCRE' => htmlspecialchars($item['port_pcre'], ENT_QUOTES), 'AccessSelect' => getSelect ($port_role_options, array ('name' => 'port_role'), $item['port_role']), 'WRTVlans' => $item['wrt_vlans'], 'Description' => $item['description']));
 		/*$mod->setOutput('Rule_no', $item['rule_no']);
 		$mod->setOutput('Port_pcre', $item['port_pcre']);
 		$mod->setOutput('Getselect', getSelect ($port_role_options, array ('name' => 'port_role'), $item['port_role']));   
@@ -11364,7 +11364,7 @@ function renderVSTRulesEditor ($vst_id)
 	session_commit();
 
 	if (count ($source_options))
-		$mod->addOutput('Count_source_option', TRUE);
+		$mod->addOutput('CountSourceOption', TRUE);
 }
 
 function renderDeployQueue()
