@@ -9,10 +9,10 @@
 	<tr><th></th><th>
 	<?php $this->getH('PrintImageHREF',array('SAVE','Save changes', true)); ?>
 	<span style="margin-left: 2em"></span>
-	<?php if ($this->is('Deletable')) { ?>
-		<?php $this->getH('GetOPLink',array(NULL, '', 'NODESTROY', "Could not delete: there are " . count ($triplets) . " LB links")); ?>
+	<?php if (!$this->is('Deletable')) { ?>
+		<?php $this->getH('GetOPLink',array(NULL, '', 'NODESTROY', "Could not delete: there are " . $this->_TripletCount . " LB links")); ?>
 	<?php } else { ?>
-		<?php $this->getH('GetOPLink',array(array ('op' => 'del', 'id' => $vsinfo['id']), '', 'DESTROY', 'Delete', 'need-confirmation')); ?>
+		<?php $this->getH('GetOPLink',array(array ('op' => 'del', 'id' => $this->_ID), '', 'DESTROY', 'Delete', 'need-confirmation')); ?>
 	<?php } ?>
 	</th>
 	</tr>
