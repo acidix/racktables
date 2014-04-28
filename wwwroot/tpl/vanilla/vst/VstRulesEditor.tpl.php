@@ -39,7 +39,7 @@
 	<?php } ?>
 	</table>
 	<input type=hidden name="template_json">	
-	<input type=hidden name="mutex_rev" value=" <?php $this->Mutex_rev; ?> ">
+	<input type=hidden name="mutex_rev" value=" <?php $this->MutexRev; ?> ">
 	<center> <?php $this->getH('PrintImageHref', array('SAVE', 'Save template', TRUE)); ?> </center>
 	</form>
 	<?php $this->VstRules; ?>

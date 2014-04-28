@@ -11337,10 +11337,10 @@ function renderVSTRulesEditor ($vst_id)
 	//addJS ("var new_vst_row = '" . addslashes (sprintf ($row_html, '', '', getSelect ($port_role_options, array ('name' => 'port_role'), 'anymode'), '', '')) . "';", TRUE);
 	@session_start();
 	
-	
+	$arr = array();
 	foreach (isset ($_SESSION['vst_edited']) ? $_SESSION['vst_edited'] : $vst['rules'] as $item)
 	{
-		$mod->addOutput('ItemArray', array('RuleNo' => $item['rule_no'], 'PortPCRE' => htmlspecialchars($item['port_pcre'], ENT_QUOTES), 'AccessSelect' => getSelect ($port_role_options, array ('name' => 'port_role'), $item['port_role']), 'WRTVlans' => $item['wrt_vlans'], 'Description' => $item['description']));
+		$arr[] = array('RuleNo' => $item['rule_no'], 'PortPCRE' => htmlspecialchars($item['port_pcre'], ENT_QUOTES), 'AccessSelect' => getSelect ($port_role_options, array ('name' => 'port_role'), $item['port_role']), 'WRTVlans' => $item['wrt_vlans'], 'Description' => $item['description']));
 		/*$mod->setOutput('Rule_no', $item['rule_no']);
 		$mod->setOutput('Port_pcre', $item['port_pcre']);
 		$mod->setOutput('Getselect', getSelect ($port_role_options, array ('name' => 'port_role'), $item['port_role']));   
@@ -11349,7 +11349,8 @@ function renderVSTRulesEditor ($vst_id)
 		
 	//	printf ('<tr>' . $row_html . '</tr>', $item['rule_no'], htmlspecialchars ($item['port_pcre'], ENT_QUOTES),  getSelect ($port_role_options, array ('name' => 'port_role'), $item['port_role']), $item['wrt_vlans'], $item['description']);
 	};
-	$mod->addOutput('Mutex_rev', $vst['mutex_rev']);
+	$mod->addOutput('ItemArray',$arr);
+	$mod->addOutput('MutexRev', $vst['mutex_rev']);
 	//echo '</table>';
 	//echo '<input type=hidden name="template_json">';
 	//echo '<input type=hidden name="mutex_rev" value="' . $vst['mutex_rev'] . '">';
