@@ -26,9 +26,9 @@
 	$row_html .= '<td><input type=text name=description value="%s"></td>';
 	$row_html .= '<td><a href="#" class="vst-add-rule"> <img width="16" height="16" border="0" title="Duplicate rule" src="?module=chrome&uri=pix/tango-list-add.png"> </a></td>'; 
 	$this->addJS("var new_vst_row = '" . addslashes($row_html) . "';", TRUE); 
-	$this->startLoop('Itemarray');?>
-	<tr> <?php echo $row_html ?> </tr> <?php $this->Rule_no; htmlspecialchars($this->_Port_pcre, ENT_QUOTES); $this->Getselect; $this->Wrt_vlans; $this->Description; 
-	$this->endLoop(); ?>
+	while($this->refLoop('Itemarray')) { ?>
+	<tr> <?php echo $row_html ?> </tr> <?php $this->Rule_no; echo htmlspecialchars($this->_Port_pcre, ENT_QUOTES); $this->Getselect; $this->Wrt_vlans; $this->Description; 
+	} ?>
 	</table>
 	<input type=hidden name="template_json">	
 	<input type=hidden name="mutex_rev" value=" <?php $this->Mutex_rev; ?> ">
