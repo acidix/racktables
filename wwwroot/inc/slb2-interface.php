@@ -103,9 +103,7 @@ function renderTripletForm ($bypass_id)
 	$cell = spotEntity ($etype_by_pageno[$pageno], $bypass_id);
 
 	$tplm = TemplateManager::getInstance();
-	//$tplm->setTemplate("vanilla");
-	//$main = $tplm->createMainModule();
-
+	
 	//renderSLBTriplets2 ($cell, TRUE);
 	renderSLBTriplets2 ($cell, TRUE, NULL, $tplm->getMainModule(), 'Payload');
 }
@@ -119,9 +117,10 @@ function renderPopupTripletForm ($triplet, $port, $vip, $row, TemplateModule $pa
 	//	$tplm->setTemplate("vanilla");
 
 	if($parent === NULL)	
-		$mod = $tplm->generateModule("RenderPopupTripletForm",  false);
+		$mod = $tplm->generateModule("RenderPopupTripletForm");
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderPopupTripletForm", $parent);
+
 	$mod->setNamespace("slb2_interface");
 
 	$mod->setOutput("opFormIntroPara", (isset ($port) ? 'updPort' : 'updIp'));
@@ -162,7 +161,7 @@ function renderPopupTripletForm ($triplet, $port, $vip, $row, TemplateModule $pa
 //	echo '<p align=center>' . getImageHREF ('SAVE', 'Save changes', TRUE);
 	//Ends form created bys FormIntro
 //	echo '</form>';
-	if($parent === NULL)
+	if($parent == NULL)
 		return $mod->run();
 }
 
@@ -345,15 +344,15 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 	//if($parent==null)
 	//	$tplm->setTemplate("vanilla");
 
-	if($parent==null)	
+	if($parent == null)	
 		$mod = $tplm->generateModule("RenderSLBTriplets2");
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderSLBTriplets2", $parent);
 	$mod->setNamespace('slb2_interface');
 
 	list ($realm1, $realm2) = array_values (array_diff (array ('object', 'ipvs', 'ipv4rspool'), array ($cell['realm'])));
+	
 	if ($editable && getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-//		renderNewTripletForm($realm1, $realm2, $mod, 'NewTripletFormTop');
 		callHook ('renderNewTripletForm', $realm1, $realm2, $mod, 'NewTripletFormTop');
 
 	$fields = array
@@ -466,7 +465,7 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 		$portOutputArray = array();
 		foreach ($vs_cell['ports'] as $port)
 		{
-			$singlePort = array("Row_Class" => ((($row = isPortEnabled ($port, $slb['ports'])) ? 'enabled' : 'disabled')));
+			$singlePort = array("Row_Class" => ($row = isPortEnabled ($port, $slb['ports']) ? 'enabled' : 'disabled'));
 
 //			echo '<li class="' . (($row = isPortEnabled ($port, $slb['ports'])) ? 'enabled' : 'disabled') . '">';
 //			echo formatVSPort ($port) . getPopupSLBConfig ($row);
@@ -552,8 +551,7 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 //	}
 
 	if ($editable && getConfigVar ('ADDNEW_AT_TOP') != 'yes')
-		renderNewTripletForm($realm1, $realm2, $mod, 'NewTripletFormBot');
-//		callHook ('renderNewTripletForm', $realm1, $realm2);
+		callHook ('renderNewTripletForm', $realm1, $realm2, $mod, 'NewTripletFormBot');
 	
 	if($parent == null)
 		return $mod->run();
@@ -627,7 +625,7 @@ function getTripletConfigAJAX()
 	echo '<div class="slbconf" style="max-height: 500px; max-width: 600px; overflow: auto">' . htmlspecialchars (generateSLBConfig2 ($tr_list)) . '</div>';
 }
 
-function renderNewTripletForm ($realm1, $realm2, $parent = null, $placehoder = 'NewTripletForm')
+function renderNewTripletForm ($realm1, $realm2, $parent = null, $placeholder = 'NewTripletForm')
 {
 	function get_realm_data ($realm)
 	{
@@ -665,16 +663,16 @@ function renderNewTripletForm ($realm1, $realm2, $parent = null, $placehoder = '
 	//	$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
-		$mod = $tplm->generateModule('NewTripletForm');
+		$mod = $tplm->generateModule('RenderNewTripletForm');
 	else
-		$mod = $tplm->generateSubmodule($placeholder, 'NewTripletForm', $parent);
+		$mod = $tplm->generateSubmodule($placeholder, 'RenderNewTripletForm', $parent);
 	
 	$mod->setNamespace('slb2_interface');
 	
 	
 	//startPortlet ('Add new VS group');
 	if (count ($realm1_data['list']) && count ($realm2_data['list']))
-		$mod->addOutput('printOpFormIntro', true);
+		$mod->addOutput('isPrintOpFormIntro', true);
 		 
 	//	printOpFormIntro ('addLink');
 	//echo "<table cellspacing=0 cellpadding=5 align=center>";
@@ -697,7 +695,7 @@ function renderNewTripletForm ($realm1, $realm2, $parent = null, $placehoder = '
 			$names[] = 'a ' . $realm2_data['name'];
 		$message = 'Please create ' . (implode (' and ', $names)) . '.';
 		showNotice ($message);
-		$mod->addOutput('message', $message);
+		$mod->addOutput('Message', $message);
 	//	printImageHREF ('DENIED', $message, FALSE);
 	}
 	//echo "<tr valign=top><th class=tdright>{$realm2_data['name']}</th><td class=tdleft>";

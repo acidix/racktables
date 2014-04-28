@@ -17,8 +17,8 @@
 	</ul></td>
 	<?php if ($this->is("editable",true)) { ?>
 		<td valign=middle>
-		<?php $this->getH("PrintOpFormIntro", $this->formIntroPara); ?> 
-		<?php $this->getH("PrintImageHref", 'DELETE', 'Remove triplet', TRUE); ?> 
+		<?php $this->getH("PrintOpFormIntro", $this->_formIntroPara); ?> 
+		<?php $this->getH("PrintImageHref", array('DELETE', 'Remove triplet', TRUE)); ?> 
 		</form></td>
 	<?php } ?> 
 <?php } else { ?>

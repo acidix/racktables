@@ -291,7 +291,7 @@ function getRenderedAlloc ($object_id, $alloc)
 					'hl_object_id' => $object_id,
 					'ip' => $dottedquad,
 				)
-			) . "'>$title</a>";*/
+			) . "'>$title</a>"; */
 	}
 	else{
 		$tplm->generateSubmodule('Info', 'RenderedAllocTdIpNoNetInfo', $td_ip_mod, true,
@@ -326,7 +326,7 @@ function getRenderedAlloc ($object_id, $alloc)
 			getOutputOf ('renderCell', $netinfo) . '</td>'; */
 		$ret['td_network'] = $tplm->generateModule('RenderedAllocNetworkNetinfo', true, 
 							 array('TdClass' => $td_class,
-							 	   'InfoCell' => renderCell($netinfo)))->run();
+							 	   'InfoCell' => renderCell($netinfo)))->run(); 
 
 		// render "routed by" td
 		if ($display_routers = (getConfigVar ('IPV4_TREE_RTR_AS_CELL') == 'none'))
@@ -376,7 +376,7 @@ function getRenderedAlloc ($object_id, $alloc)
 		$prefix = '; ';
 	}
 	//$ret['td_peers'] .= '</td>';
-	$ret['td_peers'] = $td_peers_mod->run();
+	$ret['td_peers'] = $td_peers_mod->run(); 
 	return $ret;
 }
 
@@ -1720,7 +1720,7 @@ function renderObjectPortRow ($port, $is_highlighted, $parent = null, $placehold
 	
 	$mod->setNamespace('object');
 	
-	echo '<tr';
+	//echo '<tr';
 	if ($is_highlighted)
 		$mod->addOutput('IsHighlighted', true);
 			 
@@ -1915,8 +1915,7 @@ function renderObject ($object_id)
 		//startPortlet ('IP addresses');
 		//echo "<table cellspacing=0 cellpadding='5' align='center' class='widetable'>\n";
 		if (getConfigVar ('EXT_IPV4_VIEW') == 'yes')
-			$mod->addOutput("isExt_ipv4_view", true);
-				 
+			$mod->addOutput("isExt_ipv4_view", true);		 
 		//	echo "<tr><th>OS interface</th><th>IP address</th><th>network</th><th>routed by</th><th>peers</th></tr>\n";
 		//else
 		//	echo "<tr><th>OS interface</th><th>IP address</th><th>peers</th></tr>\n";
@@ -1934,8 +1933,6 @@ function renderObject ($object_id)
 			$is_first_row = TRUE;
 			foreach ($alloclist as $alloc)
 			{
-				
-
 				$rendered_alloc = callHook ('getRenderedAlloc', $object_id, $alloc);
 			
 				$singlePort = array('tr_class' => $rendered_alloc['tr_class']);
@@ -2112,19 +2109,20 @@ function renderRackMultiSelect ($sname, $racks, $selected, $parent = null, $plac
 	foreach ($row_names as $optgroup)
 	{
 	//	echo "<optgroup label='${optgroup}'>";
-		$allRowDataOut[] = array('GroupLabel' => $optgroup);
-
+		$singleOptGroup = array('GroupLabel' => $optgroup);
+		$singleOptGroup['RackEntries'] = '';
 		foreach ($rdata[$optgroup] as $rack_id => $rack_name)
 		{
-			$tplm->generateSubmodule('RackEntries', 'StdOptionTemplate', $mod, true, 
+			$singleOptGroup['RackEntries'] .= $tplm->generateModule('StdOptionTemplate', true, 
 					array(	'RackId' => $rack_id,
 							'IsSelected' => ((array_search ($rack_id, $selected) === FALSE) ? '' : 'selected'),
-							'RackName' => $rack_name));	
+							'RackName' => $rack_name))->run();	
 		//	echo "<option value=${rack_id}";
 		//	if (!(array_search ($rack_id, $selected) === FALSE))		
 		//		echo ' selected';
 		//	echo">${rack_name}</option>\n";
 		}
+		$allRowDataOut[] = $singleOptGroup;
 	}
 
 	$mod->addOutput("allRowData", $allRowDataOut);
@@ -2233,7 +2231,7 @@ function renderPortsForObject ($object_id)
 			$singlePort['iif_name'] = $port['iif_name'];
 		//	echo '<label>' . $port['iif_name'] . ' ';
 		//printSelect (getExistingPortTypeOptions ($port['id']), array ('name' => 'port_type_id'), $port['oif_id']);
-		printSelect (getExistingPortTypeOptions ($port['id']), array ('name' => 'port_type_id'), $port['oif_id'], false, $mod, 'printSelExType');
+		$singlePort['printSelExType'] = printSelect (getExistingPortTypeOptions ($port['id']), array ('name' => 'port_type_id'), $port['oif_id'], false);
 		//if ($port['iif_id'] != 1)
 		//	echo '</label>';
 		//echo '</td>';
@@ -2824,7 +2822,7 @@ function renderRackSpaceForObject ($object_id)
 	foreach (array_keys ($workingRacksData) as $rackId)
 		applyObjectMountMask ($workingRacksData[$rackId], $object_id);
 	//printOpFormIntro ('updateObjectAllocation');
-	renderRackMultiSelect ('rackmulti[]', $allRacksData, array_keys ($workingRacksData), $mod, "rackMultiSet");
+	renderRackMultiSelect ('rackmulti[]', $allRacksData, array_keys ($workingRacksData), $mod, "RackMultiSet");
 	//echo "<br><br>";
 	//finishPortlet();
 	//echo "</td>";
@@ -2858,8 +2856,10 @@ function renderRackSpaceForObject ($object_id)
 		if (isset ($_REQUEST['rackmulti'][0])) // is an update
 			mergeGridFormToRack ($rackData);
 
-		$singleDataSet = array('name' => $rackData['name'], 'rack_id' => $rack_id, 
-							   'height' => $rackData['height'] );
+		$singleDataSet = array('name' => $rackData['name'],
+							'rack_id' => $rack_id, 
+							'height' => $rackData['height'],
+							'AtomGrid' => renderAtomGrid ($rackData) );
 		/*echo "<td valign=top>";
 		echo "<center>\n<h2>${rackData['name']}</h2>\n";
 		echo "<table class=rack id=selectableRack border=0 cellspacing=0 cellpadding=1>\n";
@@ -2867,7 +2867,7 @@ function renderRackSpaceForObject ($object_id)
 		echo "<th width='20%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('${rack_id}', '0', ${rackData['height']})\">Front</a></th>";
 		echo "<th width='50%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('${rack_id}', '1', ${rackData['height']})\">Interior</a></th>";
 		echo "<th width='20%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('${rack_id}', '2', ${rackData['height']})\">Back</a></th></tr>\n";*/
-		renderAtomGrid ($rackData, $mod, 'atomGrid');
+		//renderAtomGrid ($rackData);
 		/*echo "<tr><th width='10%'>&nbsp;</th>";
 		echo "<th width='20%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('${rack_id}', '0', ${rackData['height']})\">Front</a></th>";
 		echo "<th width='50%'><a href='javascript:;' onclick=\"toggleColumnOfAtoms('${rack_id}', '1', ${rackData['height']})\">Interior</a></th>";
@@ -5168,15 +5168,22 @@ function renderSearchResults ($terms, $summary)
 // for adding rack problem:            printAtomGrid ($data, 'F', 'U')
 // for adding object problem:          printAtomGrid ($data, 'T', 'W')
 
-function renderAtomGrid ($data, $parent, $placeholder)
+function renderAtomGrid ($data, $parent = null, $placeholder = 'AtomGrid')
 {
 	$rack_id = $data['id'];
 	
 	$tplm = TemplateManager::getInstance();
 	//addJS ('js/racktables.js');
+	if($parent == null)
+		$output = '';
+
 	for ($unit_no = $data['height']; $unit_no > 0; $unit_no--)
 	{
-		$trow = $tplm->generateSubmodule($placeholder, 'GridRow', $parent);
+		if($parent == null)
+			$trow = $tplm->generateModule('GridRow');
+		else
+			$trow = $tplm->generateSubmodule($placeholder, 'GridRow', $parent);
+		
 		$trow->setNamespace("");
 		$trow->addOutput('RackId', $rack_id);
 		$trow->addOutput('UnitNo', $unit_no);
@@ -5206,8 +5213,12 @@ function renderAtomGrid ($data, $parent, $placeholder)
 				//echo "<input type=checkbox" . $data[$unit_no][$locidx]['checked'] . " name=${name} id=${name}>";
 			//echo '</td>';
 		}
+		if($parent == null)
+			$output .= $trow->run();
 		//echo "</tr>\n";
 	}
+	if($parent == null)
+		return $output;
 }
 
 function renderCellList ($realm = NULL, $title = 'items', $do_amplify = FALSE, $celllist = NULL, $parent = NULL, $placeholder = "CellList")
@@ -7121,12 +7132,11 @@ END
 	function printNewItemTR ($options, $parent, $placeholder)
 	{
 		global $taglist;
-		//TODO =????
 		$tplm = TemplateManager::getInstance();
 		
 		$mod = $tplm->generateSubmodule($placeholder, 'TagtreeEditorNew', $parent);
 		$mod->setNamespace('tagtree');
-		$mod->setOutput('Select', getSelect ($options, array ('name' => 'parent_id', 'tabindex' => 110)));
+		$mod->setOutput('Options', $options);
 		//printOpFormIntro ('createTag');
 		//echo '<tr>';
 		//echo '<td align=left style="padding-left: 16px;">' . getImageHREF ('create', 'Create tag', TRUE) . '</td>';
@@ -11183,13 +11193,16 @@ function renderVSTListEditor()
 	//echo '</table>';
 }
 
-function renderVSTRules ($rules, $title = NULL)
+function renderVSTRules ($rules, $title = NULL, $parent = null, $placeholder = 'Payload')
 {
 	
 	$tplm = TemplateManager::getInstance();
 	$tplm->setTemplate('vanilla');
 	//$tplm->createMainModule();
-	$mod = $tplm->generateSubmodule('Payload', 'RenderVSTRules');
+	if($parent == null)
+		$mod = $tplm->generateSubmodule($placeholder, 'RenderVSTRules');
+	else
+		$mod = $tplm->generateSubmodule($placeholder, 'RenderVSTRules', $parent);
 	$mod->setNamespace('vst', TRUE);
 	
 	if (!count ($rules)){
@@ -11222,7 +11235,7 @@ function renderVSTRules ($rules, $title = NULL)
 		}
 		//echo '</table>';
 	}
-	finishPortlet();
+	//finishPortlet();
 }
 
  function renderVST ($vst_id)
@@ -11241,9 +11254,9 @@ function renderVSTRules ($rules, $title = NULL)
 	//echo '<tr><td colspan=2 align=center><h1>' . niftyString ($vst['description'], 0) . '</h1><h2>';
 	//echo "<tr><td class=pcleft width='50%'>";
 
-	renderEntitySummary ($vst, 'summary', array ('tags' => ''));
+	renderEntitySummary ($vst, 'summary', array ('tags' => ''), $mod, 'EntitySummary');
 
-	renderVSTRules ($vst['rules']);
+	renderVSTRules ($vst['rules'], $mod, 'VstRules');
 	//echo '</td><td class=pcright>';
 	if (!count ($vst['switches']))
 		$mod->addOutput('EmptySwitches', true);
@@ -11288,14 +11301,7 @@ function renderVSTRulesEditor ($vst_id)
 	$mod = $tplm->generateSubmodule('Payload', 'VstRulesEditor');
 	$mod->addOutput('Nifty', niftyString ($vst['description']));
 	
-	
-	
-	
-	
-	
 	//echo '<center><h1>' . niftyString ($vst['description']) . '</h1></center>';
-	
-	
 	
 	if (count ($source_options))
 	{
@@ -11350,7 +11356,7 @@ function renderVSTRulesEditor ($vst_id)
 	if (isset ($_SESSION['vst_edited']))
 	{
 		// draw current template
-		renderVSTRules ($vst['rules'], 'currently saved tamplate');
+		renderVSTRules ($vst['rules'], 'currently saved tamplate', $mod, 'VstRules');
 		unset ($_SESSION['vst_edited']);
 	}
 	session_commit();
@@ -11777,7 +11783,7 @@ function addAutoScrollScript ($anchor_name, $parent = null, $placeholder = "auto
 		$mod = $tplm->generateSubmodule($placeholder, "AddAutoScrollScript", $parent);
 	
 	$mod->setNamespace("");
-	
+	$mod->setOutput('AnchorName', $anchor_name);
 	if($parent==null)
 		return $mod->run();
 /*

@@ -1,5 +1,4 @@
 <?php if (defined("RS_TPL")) {?>
-
 	<div class=portlet>
 		<h2> VS instances ( <?php $this->countTriplets ?> ) </h2>
 		<table cellspacing=0 cellpadding=5 align=center class=widetable><tr>
@@ -13,12 +12,7 @@
 			
 			<?php $this->startLoop("tripletsOutArray"); ?>	
 				<tr valign=top class='row_<?php $this->order ?>  triplet-row'>
-				<?php $this->startLoop("cellsOutputArray"); ?>	
-					<td class=tdleft>
-	                <?php $this->renderedEntityCell ?> 
-					</td>
-				<?php $this->endLoop(); ?>
-
+				<?php $this->cellsOutput ?>
 				<td class=slbconf> <?php $this->vsconfig ?> </td>
 				<td class=slbconf> <?php $this->rsconfig ?> </td>
 				<td class=slbconf> <?php $this->prio ?> </td>	 

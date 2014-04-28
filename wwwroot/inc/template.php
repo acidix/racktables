@@ -81,7 +81,7 @@ class TemplateManager
 		$inst->setTemplate($template_list[$tpl_to_use]);
 		$inst->createMainModule($mainmod);
 
-		//$inst->getMainModule()->addOutput('Payload',$template_list[$tpl_to_use] . '<br />');
+		$inst->getMainModule()->addOutput('Payload',$template_list[$tpl_to_use] . '<br />');
 		
 	}
 	
@@ -101,7 +101,7 @@ class TemplateManager
 	public static function getOrderedTemplateList()
 	{
 		static $arr = array('vanilla');
-		//$arr = glob('../tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
+		$arr = glob('./tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
 		sort($arr);
 
 		return $arr;

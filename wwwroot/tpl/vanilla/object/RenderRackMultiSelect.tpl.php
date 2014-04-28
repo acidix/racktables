@@ -3,7 +3,6 @@
 	<?php $this->startLoop("allRowData"); ?>	
 		<optgroup label='<?php $this->GroupLabel ?>'>
 		<?php $this->RackEntries ?>
-		
 	<?php $this->endLoop(); ?> 
 	</select>
 <?php } else { ?>

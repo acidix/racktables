@@ -34,6 +34,7 @@
 	<input type=hidden name="mutex_rev" value=" <?php $this->Mutex_rev; ?> ">
 	<center> <?php $this->getH('PrintImageHref', array('SAVE', 'Save template', TRUE)); ?> </center>
 	</form>
+	<?php $this->VstRules ?>
 	<?php if($this->is('Count_source_option', TRUE)) echo '</div'; ?>
 	
 <?php } else { ?>

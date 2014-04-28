@@ -25,6 +25,8 @@
 		<?php if ($this->is('Allocations')) { ?>
 			<div class=portlet>
 				<h2>allocations</h2>
+				<table class='widetable' cellpadding=5 cellspacing=0 border=0 align='center' width='100%'>
+				<tr><th>object</th><th>OS interface</th><th>allocation type</th></tr>
 				<?php $this->startLoop('Allocations'); ?>
 					<tr class='tdleft <?php $this->AddrClass; ?> <?php $this->Highlight; ?>'>
 						<td><a href='<?php $this->Link; ?>'><?php $this->ObjName; ?></a></td>
