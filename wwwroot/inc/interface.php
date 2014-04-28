@@ -11265,17 +11265,19 @@ function renderVSTRules ($rules, $title = NULL, $parent = null, $placeholder = '
 	else
 	{
 			global $nextorder;
-		startPortlet ('orders (' . count ($vst['switches']) . ')');
+		//startPortlet ('orders (' . count ($vst['switches']) . ')');
 	//	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
 		$order = 'odd';
+		$arr = array();
 		foreach (array_keys ($vst['switches']) as $object_id)
 		{
-			$mod->addOutput('Order_id_array', array('Render_cell' => renderCell (spotEntity ('object', $object_id)), 'Order' => $order));
+			$arr[] = array('Render_cell' => renderCell (spotEntity ('object', $object_id)), 'Order' => $order);
 			//echo "<tr class=row_${order}><td>";
 			//renderCell (spotEntity ('object', $object_id));
 			//echo '</td></tr>';
 			$order = $nextorder[$order];
 		}
+		$mod->addOutput('Order_id_array',$arr);
 		//echo '</table>';
 	}
 	//finishPortlet();
