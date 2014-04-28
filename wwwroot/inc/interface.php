@@ -9523,7 +9523,7 @@ function render8021QOrderForm ($some_id)
 					if ($decision)
 						$options[$object_id] = $object_dname;
 				}
-			$mod->addOutput("selected", printSelect ($options, array ('name' => 'object_id', 'tabindex' => 101, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_objid'])); 
+			$mod->addOutput("selected", getSelect ($options, array ('name' => 'object_id', 'tabindex' => 101, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_objid'])); 
 			//printSelect ($options, array ('name' => 'object_id', 'tabindex' => 101, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_objid']);
 			//echo '</td>';
 		}
