@@ -3748,7 +3748,8 @@ function renderIPv4NetworkAddresses ($range, $parent, $placeholder)
 			? 'editable'
 					: '';
 			
-			$smod = $tplm->generateSubmodule('IPList', 'IPNetworkAddressEmpty');
+			$smod = $tplm->generateSubmodule('IPList', 'IPNetworkAddressEmpty',$mod);
+			$smod->setNamespace('ipnetwork',true);
 			$smod->addOutput('Link', makeHref(array('page'=>'ipaddress', 'ip' => $dottedquad)));
 			$smod->addOutput('IP', $dottedquad);
 			$smod->addOutput('Editable', $editable);
