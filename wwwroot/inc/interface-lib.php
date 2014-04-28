@@ -1065,6 +1065,7 @@ function renderEntitySummary ($cell, $title, $values = array(), $parent = null, 
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderEntitySummary", $parent);
 	$mod->setNamespace('',true);
+	$mod->setLock(true);
 	//startPortlet ($title);
 	$mod->setOutput("Title", $title);
 	//echo "<table border=0 cellspacing=0 cellpadding=3 width='100%'>\n";
