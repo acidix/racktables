@@ -1160,9 +1160,10 @@ class TemplateModule
 		{
 			$var .= '_reference';
 		}
-		if (array_key_exists($placeholder, $this->$var))
+		$var = $this->{$var} ;
+		if (array_key_exists($placeholder, $var))
 		{
-			if ($value !== null && $this->$var[$placeholder] == $value)
+			if ($value !== null && $var[$placeholder] == $value)
 			{
 				return true;
 			}
