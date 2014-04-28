@@ -976,6 +976,10 @@ class TemplateModule
 	{
 		$tplm = TemplateManager::getInstance();
 		$helper = $tplm->getHelper($name);
+		if ($helper == null)
+		{
+			throw new TemplateException('TplException: Cant find helper ' . $name);
+		}
 		$helper->run($this,$params);
 	}
 

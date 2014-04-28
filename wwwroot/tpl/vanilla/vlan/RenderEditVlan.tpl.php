@@ -8,7 +8,7 @@
 		<input type=text size=40 name=vlan_descr value='<?php $this->vlan_descr ?>'>
 		</td></tr>
 		<tr><th class=tdright>Type:</th><td class=tdleft>
-		<?php $this->getH("GetSelect", array($this->_vtoptions, 
+		<?php $this->getH("PrintSelect", array($this->_vtoptions, 
 		array ('name' => 'vlan_type', 'tabindex' => 102), $this->_vlan_prop)); ?>
 		</td></tr>
 		</table>
