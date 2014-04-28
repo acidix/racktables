@@ -11299,9 +11299,9 @@ function renderVSTRulesEditor ($vst_id)
 	$tplm->setTemplate('vanilla');
 	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'VstRulesEditor');
-	$mod->addOutput('Nifty', niftyString ($vst['description']));
 	$mod->setNamespace('vst',true);
 	$mod->setLock();
+	$mod->addOutput('Nifty', niftyString ($vst['description']));
 	
 	//echo '<center><h1>' . niftyString ($vst['description']) . '</h1></center>';
 	
@@ -11310,10 +11310,10 @@ function renderVSTRulesEditor ($vst_id)
 		$mod->addOutput('Count', true);
 		//startPortlet ('clone another template');
 		//printOpFormIntro ('clone');
-		$mod->addOutput('Vst_mutex_rev', $vst['mutex_rev']);
+		$mod->addOutput('VstMutexRev', $vst['mutex_rev']);
 		//echo '<input type=hidden name="mutex_rev" value="' . $vst['mutex_rev'] . '">';
 		//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-		$mod->addOutput('Getselect', getSelect ($source_options, array ('name' => 'from_id')));
+		$mod->addOutput('AccessSelect', getSelect ($source_options, array ('name' => 'from_id')));
 		//echo '<tr><td>' . getSelect ($source_options, array ('name' => 'from_id')) . '</td>';
 		//echo '<td>' . getImageHREF ('COPY', 'copy from selected', TRUE) . '</td></tr></table></form>';
 		//finishPortlet();
@@ -11333,7 +11333,7 @@ function renderVSTRulesEditor ($vst_id)
 	$row_html .= '<td><input type=text name=wrt_vlans value="%s"></td>';
 	$row_html .= '<td><input type=text name=description value="%s"></td>';
 	$row_html .= '<td><a href="#" class="vst-add-rule">' . getImageHREF ('add', 'Duplicate rule') . '</a></td>';  //<img width="16" height="16" border="0" title="Duplicate rule" src="?module=chrome&uri=pix/tango-list-add.png"> */
-	$mod->addOutput('Getselect',  getSelect ($port_role_options, array ('name' => 'port_role'), 'anymode'));
+	$mod->addOutput('AccessSelect',  getSelect ($port_role_options, array ('name' => 'port_role'), 'anymode'));
 	//addJS ("var new_vst_row = '" . addslashes (sprintf ($row_html, '', '', getSelect ($port_role_options, array ('name' => 'port_role'), 'anymode'), '', '')) . "';", TRUE);
 	@session_start();
 	
