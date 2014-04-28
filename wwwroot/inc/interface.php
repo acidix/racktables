@@ -11300,6 +11300,8 @@ function renderVSTRulesEditor ($vst_id)
 	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'VstRulesEditor');
 	$mod->addOutput('Nifty', niftyString ($vst['description']));
+	$mod->setNamespace('vst',true);
+	$mod->setLock();
 	
 	//echo '<center><h1>' . niftyString ($vst['description']) . '</h1></center>';
 	
