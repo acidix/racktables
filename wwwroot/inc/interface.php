@@ -11385,7 +11385,7 @@ function renderDeployQueue()
 	foreach ($allq as $qcode => $data)
 		if ($dqcode == $qcode)
 		{
-			$mod = $tplm->generateModule("Payload","DeployQueue");
+			$mod = $tplm->generateSubmodule("Payload","DeployQueue");
 			$mod->setNamespace("", true);
 
 		//	echo "<h2 align=center>Queue '" . $dqtitle[$qcode] . "' (" . count ($data) . ")</h2>";
