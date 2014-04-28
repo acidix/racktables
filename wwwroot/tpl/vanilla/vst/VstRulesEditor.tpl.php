@@ -1,6 +1,8 @@
 <?php if (defined("RS_TPL")) {?>
 
 	<?php
+		$this->addJS('js/vst_editor.js');
+	
 		$row_html  = '<td><a href="#" class="vst-del-rule"> <img width="16" height="16" border="0" title="delete rule" src="?module=chrome&uri=pix/tango-list-remove.png"> </a></td>'; 
 		$row_html .= '<td><input type=text name=rule_no value="%s" size=3></td>';
 		$row_html .= '<td><input type=text name=port_pcre value="%s"></td>';
@@ -10,7 +12,7 @@
 		$row_html .= '<td><a href="#" class="vst-add-rule"> <img width="16" height="16" border="0" title="Duplicate rule" src="?module=chrome&uri=pix/tango-list-add.png"> </a></td>'; 
 		$this->addJS("var new_vst_row = '" . addslashes($row_html) . "';", TRUE);
 
-		$this->addJS('js/vst_editor.js'); ?>
+	?>
 	<center><h1> <?php $this->Nifty; ?> </h1></center>
 
 	<?php if($this->is('Count', true)){ ?>
