@@ -11256,7 +11256,7 @@ function renderVSTRules ($rules, $title = NULL, $parent = null, $placeholder = '
 
 	renderEntitySummary ($vst, 'summary', array ('tags' => ''), $mod, 'EntitySummary');
 
-	renderVSTRules ($vst['rules'], $mod, 'VstRules');
+	renderVSTRules ($vst['rules'], null, $mod, 'VstRules');
 	//echo '</td><td class=pcright>';
 	if (!count ($vst['switches']))
 		$mod->addOutput('EmptySwitches', true);
