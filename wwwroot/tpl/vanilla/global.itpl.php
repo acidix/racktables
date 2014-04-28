@@ -459,4 +459,12 @@ $this->setInMemoryTemplate("RSPoolSrvDefault","<td class=tdleft>{{Cont}}</td>");
 **/
 $this->setInMemoryTemplate("StdSpan","<span class='{{Class}}'>{{Cont}}</span>");
 
+/**
+ *	StdSpan:
+ *	Usage:  renderVS ->  slb2_interface.php
+ *
+ **/
+$this->setInMemoryTemplate("VSSLBList","<ul class=\"slb-checks\">{{List}}</ul>");
+$this->setInMemoryTemplate("VSSLBListElement","<li>{{Content}}</li>");
+
 ?>

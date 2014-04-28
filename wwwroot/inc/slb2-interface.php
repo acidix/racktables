@@ -53,36 +53,48 @@ function renderVS ($vsid)
 	$vsinfo = spotEntity ('ipvs', $vsid);
 	amplifyCell ($vsinfo);
 
-	echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
+	$tplm = TemplateManager::getInstance();
+	
+	$mod = $tplm->generateSubmodule('Payload', 'RenderVS');
+	$mod->setNamespace('ipvs',true);
+	
+	
+	//echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
 	if (strlen ($vsinfo['name']))
-		echo "<tr><td colspan=2 align=center><h1>${vsinfo['name']}</h1></td></tr>\n";
-	echo '<tr>';
+		$mod->addOutput('Name', $vsinfo['name']);
+		//echo "<tr><td colspan=2 align=center><h1>${vsinfo['name']}</h1></td></tr>\n";
+	//echo '<tr>';
 
-	echo '<td class=pcleft>';
+	//echo '<td class=pcleft>';
 	$summary = array();
 	$summary['Name'] = $vsinfo['name'] . getPopupSLBConfig ($vsinfo);
 	$summary['tags'] = '';
-
-	$ips = '<ul class="slb-checks">';
+	
+	$smod = $tplm->generateModule('VSSLBList',true);
+	//$ips = '<ul class="slb-checks">';
 	foreach ($vsinfo['vips'] as $vip)
-		$ips .= '<li>' . formatVSIP ($vip) . getPopupSLBConfig ($vip) . '</li>';
-	$ips .= '</ul>';
-	$summary['IPs'] = $ips;
+		$tplm->generateSubmodule('List', 'VSSLBListElement', $smod, true, array('Content'=>formatVSIP ($vip) . getPopupSLBConfig ($vip)));
+		//$ips .= '<li>' . formatVSIP ($vip) . getPopupSLBConfig ($vip) . '</li>';
+	//$ips .= '</ul>';
+	$summary['IPs'] = $smod->run();
 
-	$ports = '<ul class="slb-checks">';
+	
+	$smod = $tplm->generateModule('VSSLBList',true);
+	//$ports = '<ul class="slb-checks">';
 	foreach ($vsinfo['ports'] as $port)
-		$ports .= '<li>' . formatVSPort ($port) . getPopupSLBConfig ($port) . '</li>';
-	$ports .= '</ul>';
-	$summary['Ports'] = $ports;
+		$tplm->generateSubmodule('List', 'VSSLBListElement', $smod, true, array('Content'=>formatVSPort ($port) . getPopupSLBConfig ($port)));
+		//$ports .= '<li>' . formatVSPort ($port) . getPopupSLBConfig ($port) . '</li>';
+	//$ports .= '</ul>';
+	$summary['Ports'] = $smod->run();
 
-	renderEntitySummary ($vsinfo, 'Summary', $summary);
-	echo '</td>';
+	renderEntitySummary ($vsinfo, 'Summary', $summary, $mod, 'Summary');
+	//echo '</td>';
 
-	echo '<td class=pcright>';
-	renderSLBTriplets2 ($vsinfo);
-	echo '</td></tr><tr><td colspan=2>';
-	renderFilesPortlet ('ipvs', $vsid);
-	echo '</tr><table>';
+	//echo '<td class=pcright>';
+	renderSLBTriplets2 ($vsinfo, FALSE, NULL, $mod, 'SLBTriplets');
+	//echo '</td></tr><tr><td colspan=2>';
+	renderFilesPortlet ('ipvs', $vsid, $mod, 'Files');
+	//echo '</tr><table>';
 }
 
 function renderTripletForm ($bypass_id)

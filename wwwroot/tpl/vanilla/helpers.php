@@ -105,7 +105,7 @@ class TemplateHelperPrintImageHref extends TemplateHelperAbstract
 
 		//Loading and rendering small module in memory and returning the
 		$tplm = TemplateManager::getInstance();
-		$tplm->setTemplate("vanilla");	
+		//$tplm->setTemplate("vanilla");	
 		if ($do_input == TRUE){		
 			$mod = $tplm->generateModule( "GetImageHrefDoInput", true, 
 					array( "SrcPath" => $img['path'],  "TabIndex" => ($tabindex ? "tabindex=${tabindex}" : ''),
@@ -314,7 +314,7 @@ class TemplateHelperPrintOpFormIntro extends TemplateHelperAbstract
 
 		global $pageno, $tabno, $page;
 		$tplm = TemplateManager::getInstance();
-		$tplm->setTemplate("vanilla");
+		//$tplm->setTemplate("vanilla");
 		
 		$mod = $tplm->generateModule("PrintOpFormIntro",  false, array("opname" => $opname, "pageno" => $pageno, "tabno" => $tabno));
 
@@ -357,7 +357,7 @@ class TemplateHelperGetOpLink extends TemplateHelperAbstract
 
 		//Initiate TemplateManager
 		$tplm = TemplateManager::getInstance();
-		$tplm->setTemplate("vanilla");
+		//$tplm->setTemplate("vanilla");
 
 		$mod = $tplm->generateModule("GetOpLink");		
 		
@@ -471,7 +471,7 @@ class TemplateHelperPrintSelect extends TemplateHelperAbstract
 		}
 
 		$tplm = TemplateManager::getInstance();
-		$tplm->setTemplate("vanilla");
+		//$tplm->setTemplate("vanilla");
 
 		if (count ($optList) == 1)
 		{

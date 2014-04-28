@@ -1145,6 +1145,19 @@ class TemplateModule
 		$this->setNamespace("");
 		$this->setLock();
 	}
+	
+	/**
+	 * New loop function, to be used within PHP default loops (while($this->refLoop($var)).
+	 * 
+	 * It maps a 
+	 * @param unknown $placeholder
+	 * @param string $forcestart
+	 * @param number $startvar
+	 */
+	public function refLoop($placeholder, $forcestart = false, $startvar = 0)
+	{
+		
+	}
 }
 
 /**
@@ -1199,4 +1212,6 @@ class TemplateInMemory extends TemplateModule
 		
 		return $code ;
 	}
+	
+	
 }
