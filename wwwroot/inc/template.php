@@ -653,6 +653,30 @@ class TemplateModule
 	protected $islevel = 0;
 	
 	/**
+	 * Used to store a reference to the current output, instead of using the global output array
+	 * @var unknown
+	 */
+	protected $output_reference ;
+	
+	/**
+	 * True when the referenced var in output_reference should be used instead of the main output
+	 * @var unknown
+	 */
+	protected $use_reference = false ;
+	
+	/**
+	 * Used to store the next key to use with step
+	 * @var unknown
+	 */
+	protected $reference_next = 0;
+	
+	/**
+	 * Used when reference, dereference and step are used to use an array
+	 * @var unknown
+	 */
+	protected $reference_origin ;
+	
+	/**
 	 * Constructor
 	 * 
 	 * Set the template, the module-placeholder for the parent (doesn'T matter if you create the main module),
@@ -829,20 +853,15 @@ class TemplateModule
 		}
 		else
 		{
-			if(array_key_exists($name, $this->output))
+			if ($this->use_reference === true && is_array($this->output_reference) &&array_key_exists($name, $this->output_reference))
 			{
-				if (is_array($this->output[$name]))
+				if (is_array($this->output_reference[$name]) && !$return)
 				{
-					if(!$return)
-					{
-						$out = implode($this->output[$name]);
-					}
-					else
-						return $this->output[$name];					
+					$out = implode($this->output_reference[$name]);
 				}
 				else
 				{
-					$out = $this->output[$name];
+					$out = $this->output_reference[$name];
 				}
 				if ($return)
 				{
@@ -850,6 +869,26 @@ class TemplateModule
 				}
 				echo $out;
 				return "";
+			}
+			else
+			{
+				if(array_key_exists($name, $this->output))
+				{
+					if (is_array($this->output[$name]) && !$return)
+					{
+						$out = implode($this->output[$name]);
+					}
+					else
+					{
+						$out = $this->output[$name];
+					}
+					if ($return)
+					{
+						return $out;
+					}
+					echo $out;
+					return "";
+				}
 			}
 		}
 	}
@@ -1116,9 +1155,14 @@ class TemplateModule
 	 */
 	public function is($placeholder,$value=null)
 	{
-		if (array_key_exists($placeholder, $this->output))
+		$var = 'output';
+		if ($this->use_reference === true)
 		{
-			if ($value !== null && $this->output[$placeholder] == $value)
+			$var .= '_reference';
+		}
+		if (array_key_exists($placeholder, $this->$var))
+		{
+			if ($value !== null && $this->$var[$placeholder] == $value)
 			{
 				return true;
 			}
@@ -1149,14 +1193,61 @@ class TemplateModule
 	/**
 	 * New loop function, to be used within PHP default loops (while($this->refLoop($var)).
 	 * 
-	 * It maps a 
-	 * @param unknown $placeholder
-	 * @param string $forcestart
+	 * It forces get and is to use an element of the array within output[$name], and with
+	 * every call from there on, it will replace the content with the next row within that array.
+	 * When there are no rows left it returns false.
+	 * 
+	 * It also returns false when: a) the placeholder name doesn't exist
+	 * 							   b) the placeholder is no array
+	 * 							   c) it can't find a 'first' key to use
+	 * 
+	 * The input placeholder is supposed to look like this:
+	 * array(0 => array('Var1'=>'Stuff','Var2'=>'Stuff'),
+	 * 		 1 => array('Var1'=>'Stuff','NoVar2Here'=>'Stuff'))
+	 * 
+	 * is('Var2') will return true within the first and false within the 2nd row.
+	 * 
+	 * The loop stops when there are missing keys, e.g. array(1 =>...,2 =>...,4 =>...).
+	 * 
+	 * @param string $placeholder
+	 * @param boolean $forcestart
 	 * @param number $startvar
 	 */
-	public function refLoop($placeholder, $forcestart = false, $startvar = 0)
+	public function refLoop($name, $forcestart = false, $startvar = 0)
 	{
-		
+		if ($this->use_reference === true)
+		{
+			if (array_key_exists($this->reference_next, $this->output[$this->reference_origin]))
+			{
+				$this->output_reference &= $this->output[$this->reference_origin][$this->reference_next];
+				$this->reference_next++;
+				return true;
+			}
+			else
+			{
+				$this->use_reference = false;
+				return false;
+			}
+		}
+		elseif (($this->use_reference === false && $this->reference_origin != $name) || $forcestart === true)
+		{
+			if (array_key_exists($name, $this->output) && is_array($this->output[$name]) && array_key_exists($startvar, $this->output[$name]))
+			{
+				$this->output_reference &= $this->output[$this->reference_origin][$startvar];
+				$this->use_reference = true;
+				$this->reference_origin = $name;
+				$this->reference_next = $startvar + 1;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
 

@@ -169,30 +169,42 @@ function renderPopupVSPortForm ($port, $used = 0)
 {
 	$keys = array ('proto' => $port['proto'], 'port' => $port['vport']);
 	$title = 'remove port ' . formatVSPort ($port) . ($used ? " (used $used times)" : '');
-	printOpFormIntro ('updPort', $keys);
-	echo '<p align=center>';
-	echo getOpLink (array ('op' => 'delPort') + $keys, $title, 'destroy', '', ($used ? 'del-used-slb' : '') );
-	echo '<p><label>VS config:<br>';
-	echo '<textarea name=vsconfig rows=3 cols=80>' . htmlspecialchars ($port['vsconfig']) . '</textarea></label>';
-	echo '<p><label>RS config:<br>';
-	echo '<textarea name=rsconfig rows=3 cols=80>' . htmlspecialchars ($port['rsconfig']) . '</textarea></label>';
-	echo '<p align=center>' . getImageHREF ('SAVE', 'Save changes', TRUE);
-	echo '</form>';
+	//printOpFormIntro ('updPort', $keys);
+	//echo '<p align=center>';
+	//echo getOpLink (array ('op' => 'delPort') + $keys, $title, 'destroy', '', ($used ? 'del-used-slb' : '') );
+	//echo '<p><label>VS config:<br>';
+	//echo '<textarea name=vsconfig rows=3 cols=80>' . htmlspecialchars ($port['vsconfig']) . '</textarea></label>';
+	//echo '<p><label>RS config:<br>';
+	//echo '<textarea name=rsconfig rows=3 cols=80>' . htmlspecialchars ($port['rsconfig']) . '</textarea></label>';
+	//echo '<p align=center>' . getImageHREF ('SAVE', 'Save changes', TRUE);
+	//echo '</form>';
+	return array(
+		'PortOPIntro'=>array('updPort', $keys),
+		'PortOPLink'=>array(array ('op' => 'delPort') + $keys, $title, 'destroy', '', ($used ? 'del-used-slb' : '')),
+		'PortVSConfig'=>htmlspecialchars ($port['vsconfig']),
+		'PortRSConfig'=>htmlspecialchars ($port['rsconfig'])
+	);
 }
 
 function renderPopupVSVIPForm ($vip, $used = 0)
 {
 	$fmt_ip = ip_format ($vip['vip']);
 	$title = 'remove IP ' . formatVSIP ($vip) . ($used ? " (used $used times)" : '');
-	printOpFormIntro ('updIP', array ('ip' => $fmt_ip));
-	echo '<p align=center>';
-	echo getOpLink (array ('op' => 'delIP', 'ip' => $fmt_ip), $title, 'destroy', '', ($used ? 'del-used-slb' : '') );
-	echo '<p><label>VS config:<br>';
-	echo '<textarea name=vsconfig rows=3 cols=80>' . htmlspecialchars ($vip['vsconfig']) . '</textarea></label>';
-	echo '<p><label>RS config:<br>';
-	echo '<textarea name=rsconfig rows=3 cols=80>' . htmlspecialchars ($vip['rsconfig']) . '</textarea></label>';
-	echo '<p align=center>' . getImageHREF ('SAVE', 'Save changes', TRUE);
-	echo '</form>';
+	//printOpFormIntro ('updIP', array ('ip' => $fmt_ip));
+	//echo '<p align=center>';
+	//echo getOpLink (array ('op' => 'delIP', 'ip' => $fmt_ip), $title, 'destroy', '', ($used ? 'del-used-slb' : '') );
+	//echo '<p><label>VS config:<br>';
+	//echo '<textarea name=vsconfig rows=3 cols=80>' . htmlspecialchars ($vip['vsconfig']) . '</textarea></label>';
+	//echo '<p><label>RS config:<br>';
+	//echo '<textarea name=rsconfig rows=3 cols=80>' . htmlspecialchars ($vip['rsconfig']) . '</textarea></label>';
+	//echo '<p align=center>' . getImageHREF ('SAVE', 'Save changes', TRUE);
+	//echo '</form>';
+	return array(
+		'IPOPIntro'=>array('updIP', array ('ip' => $fmt_ip)),
+		'IPOPLink'=>array(array ('op' => 'delIP', 'ip' => $fmt_ip), $title, 'destroy', '', ($used ? 'del-used-slb' : '')),
+		'IPVSConfig'=>htmlspecialchars ($vip['vsconfig']),
+		'IPRSConfig'=>htmlspecialchars ($vip['rsconfig'])
+	);
 }
 
 function renderEditVS ($vs_id)

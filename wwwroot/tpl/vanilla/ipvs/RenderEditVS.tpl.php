@@ -36,7 +36,21 @@
 	
 	<tr><td valign=top class=tdleft>
 		<ul class="slb-checks editable">
-		
+		<?php while($this->refLoop('VSPorts')) { ?>
+			<li class="enabled">
+				<?php $this->Port; ?><?php $this->SLBConfig; ?>
+				<?php $this->getH('PrintOPFormIntro',$this->_PortOPIntro); ?>
+				<p align=center>
+				<?php $this->getH('PrintOPLink',$this->_PortOPLink); ?>
+				<p><label>VS config:<br>
+				<textarea name=vsconfig rows=3 cols=80><?php $this->PortVSConfig; ?></textarea></label>
+				<p><label>RS config:<br>
+				<textarea name=rsconfig rows=3 cols=80><?php $this->PortRSConfig; ?></textarea></label>
+				<p align=center>
+				<?php $this->getH('PrintImageHREF',array('SAVE', 'Save changes', TRUE)); ?>
+				</form>
+			</li>
+		<?php } ?>
 		</ul>
 	</td>
 	
@@ -44,7 +58,21 @@
 	
 	<td valign=top class=tdleft>
 		<ul class="slb-checks editable">
-	
+		<?php while($this->refLoop('VSIPs')) { ?>
+			<li class="enabled">
+				<?php $this->IP; ?><?php $this->SLBConfig; ?>
+				<?php $this->getH('PrintOPFormIntro',$this->_IPOPIntro); ?>
+				<p align=center>
+				<?php $this->getH('PrintOPLink',$this->_IPOPLink); ?>
+				<p><label>VS config:<br>
+				<textarea name=vsconfig rows=3 cols=80><?php $this->IPVSConfig; ?></textarea></label>
+				<p><label>RS config:<br>
+				<textarea name=rsconfig rows=3 cols=80><?php $this->IPRSConfig; ?></textarea></label>
+				<p align=center>
+				<?php $this->getH('PrintImageHREF',array('SAVE', 'Save changes', TRUE)); ?>
+				</form>
+			</li>
+		<?php } ?>	
 		</ul>
 	</td>
 	</tr></table>
