@@ -101,7 +101,7 @@ class TemplateManager
 	public static function getOrderedTemplateList()
 	{
 		static $arr = array('vanilla');
-		$arr = glob('../tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
+	//	$arr = glob('../tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
 		sort($arr);
 
 		return $arr;
@@ -1015,6 +1015,8 @@ class TemplateModule
 			$this->loopplaceholder = $placeholder;
 			ob_start();
 		}
+		else
+			throw new TemplateException("TplErr: Placeholder " . $placeholder . " for loop  unknown" );
 	}
 	
 	/**

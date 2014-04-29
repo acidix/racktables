@@ -16,7 +16,7 @@
 		<?php while($this->refLoop("AllInterface")) { ?>	
 			<tr class=row_<?php $this->Order ?>><td>
 			<?php $this->OpLink ?>
-			 </td><td class=tdleft><?php $this->IifName ?></td><td class=tdleft><?php $this->OifName ?></td></tr>
+			</td><td class=tdleft><?php $this->IifName ?></td><td class=tdleft><?php $this->OifName ?></td></tr>
 		<?php } ?> 
 		<?php $this->AddNewBottom; ?> 
 		</table>
