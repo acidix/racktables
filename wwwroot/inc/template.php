@@ -1015,8 +1015,8 @@ class TemplateModule
 			$this->loopplaceholder = $placeholder;
 			ob_start();
 		}
-		else
-			throw new TemplateException("TplErr: Placeholder " . $placeholder . " for loop  unknown" );
+		//else
+		//	throw new TemplateException("TplErr: Placeholder " . $placeholder . " for loop  unknown" );
 	}
 	
 	/**

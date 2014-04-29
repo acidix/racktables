@@ -1773,7 +1773,7 @@ function renderObject ($object_id)
 	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderObject");
-	$mod->setNamespace("object");
+	$mod->setNamespace("object", true);
 		
 	// Main layout starts.
 	//echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
@@ -10354,11 +10354,24 @@ function getTrunkPortCursorCode ($object_id, $port_name, $req_port_name)
 		getImageHREF ($imagename, $imagetext) . '</a>';
 }
 
-function renderTrunkPortControls ($vswitch, $vdom, $port_name, $vlanport)
+function renderTrunkPortControls ($vswitch, $vdom, $port_name, $vlanport, $parent = null, $placeholder = 'Payload')
 {
+	$tplm = TemplateManager::getInstance();
+	
+	if($parent==null)	
+		$mod = $tplm->generateSubmodule($placeholder,'RenderTrunkPortControls');
+	else
+		$mod = $tplm->generateSubmodule($placeholder, 'RenderTrunkPortControls', $parent);
+	
+	$mod->setNamespace('object');
+	
+	if($parent==null)
+		return $mod->run();
 	if (!count ($vdom['vlanlist']))
 	{
-		echo '<td colspan=2>(configured VLAN domain is empty)</td>';
+		$mod->addOutput('NoList', true);
+			 
+		//echo '<td colspan=2>(configured VLAN domain is empty)</td>';
 		return;
 	}
 	$formextra = array
@@ -10369,10 +10382,12 @@ function renderTrunkPortControls ($vswitch, $vdom, $port_name, $vlanport)
 		'pm_0' => 'trunk',
 		'form_mode' => 'save',
 	);
-	printOpFormIntro ('save8021QConfig', $formextra);
+	$mod->addOutput('FormExtra', $formextra);
+		 
+/*	printOpFormIntro ('save8021QConfig', $formextra);
 	echo '<td width="35%">';
 	echo '<table border=0 cellspacing=0 cellpadding=3 align=center>';
-	echo '<tr><th colspan=2>allowed</th></tr>';
+	echo '<tr><th colspan=2>allowed</th></tr>';*/
 	// Present all VLANs of the domain and all currently configured VLANs
 	// (regardless if these sets intersect or not).
 	$allowed_options = array();
@@ -10390,6 +10405,7 @@ function renderTrunkPortControls ($vswitch, $vdom, $port_name, $vlanport)
 				'text' => "unlisted VLAN ${vlan_id}",
 			);
 	ksort ($allowed_options);
+	$allAllowedOptionsOut = array();
 	foreach ($allowed_options as $vlan_id => $option)
 	{
 		$selected = '';
@@ -10403,19 +10419,28 @@ function renderTrunkPortControls ($vswitch, $vdom, $port_name, $vlanport)
 		// particular port, but it cannot be changed by user.
 		if ($option['vlan_type'] == 'alien')
 			$selected .= ' disabled';
-		echo "<tr><td nowrap colspan=2 class='${class}'>";
-		echo "<label><input type=checkbox name='pav_0[]' value='${vlan_id}'${selected}> ";
-		echo $option['text'] . "</label></td></tr>";
+		//echo "<tr><td nowrap colspan=2 class='${class}'>";
+		//echo "<label><input type=checkbox name='pav_0[]' value='${vlan_id}'${selected}> ";
+		//echo $option['text'] . "</label></td></tr>";
+		$allAllowedOptionsOut[] = array('Class' => $class, 
+			'Vlan_Id' => $vlan_id, 
+			'Selected' => $selected,
+			'OptionTxt' => $option['text']);
 	}
-	echo '</table>';
+	$mod->setOutput('AllowedOptions', $allAllowedOptionsOut);
+		 
+	/*echo '</table>';
 	echo '</td><td width="35%">';
 	// rightmost table also contains form buttons
 	echo '<table border=0 cellspacing=0 cellpadding=3 align=center>';
-	echo '<tr><th colspan=2>native</th></tr>';
-	if (!count ($vlanport['allowed']))
-		echo '<tr><td colspan=2>(no allowed VLANs for this port)</td></tr>';
-	else
-	{
+	echo '<tr><th colspan=2>native</th></tr>';*/
+	//if (!count ($vlanport['allowed']))
+	//	echo '<tr><td colspan=2>(no allowed VLANs for this port)</td></tr>';
+	//else
+	if (count ($vlanport['allowed']))
+	{	
+		$mod->addOutput('Vlan_Port_Allowed', true);
+			 
 		$native_options = array (0 => array ('vlan_type' => 'none', 'text' => '-- NONE --'));
 		foreach ($vlanport['allowed'] as $vlan_id)
 			$native_options[$vlan_id] = array_key_exists ($vlan_id, $vdom['vlanlist']) ? array
@@ -10427,6 +10452,8 @@ function renderTrunkPortControls ($vswitch, $vdom, $port_name, $vlanport)
 					'vlan_type' => 'none',
 					'text' => "unlisted VLAN ${vlan_id}",
 				);
+		
+		$allNativeOptOut = array();
 		foreach ($native_options as $vlan_id => $option)
 		{
 			$selected = '';
@@ -10448,15 +10475,21 @@ function renderTrunkPortControls ($vswitch, $vdom, $port_name, $vlanport)
 				$option['vlan_type'] == 'alien'
 			)
 				$selected .= ' disabled';
-			echo "<tr><td nowrap colspan=2 class='${class}'>";
-			echo "<label><input type=radio name='pnv_0' value='${vlan_id}'${selected}> ";
-			echo $option['text'] . "</label></td></tr>";
+			//echo "<tr><td nowrap colspan=2 class='${class}'>";
+			//echo "<label><input type=radio name='pnv_0' value='${vlan_id}'${selected}> ";
+			//echo $option['text'] . "</label></td></tr>";
+			$allNativeOptOut[] = array('Class' => $class, 
+				'Vlan_Id' => $vlan_id, 
+				'Selected' => $selected,
+				'OptionTxt' => $option['text']);
 		}
+		$mod->addOutput('NativeOpts', $allNativeOptOut);		 
 	}
-	echo '<tr><td class=tdleft>';
+	/*echo '<tr><td class=tdleft>';
 	printImageHREF ('SAVE', 'Save changes', TRUE);
-	echo '</form></td><td class=tdright>';
-	if (!count ($vlanport['allowed']))
+	echo '</form></td><td class=tdright>';*/
+	/*if (!count ($vlanport['allowed']))
+
 		printImageHREF ('CLEAR gray');
 	else
 	{
@@ -10465,7 +10498,7 @@ function renderTrunkPortControls ($vswitch, $vdom, $port_name, $vlanport)
 		echo '</form>';
 	}
 	echo '</td></tr></table>';
-	echo '</td>';
+	echo '</td>';*/
 }
 
 function renderVLANInfo ($vlan_ck)

@@ -4,7 +4,7 @@
 	<tr><th>port</th><th>interface</th><th>link</th><th width="25%">last&nbsp;saved&nbsp;config</th>
 	<?php if ($this->is('IsReqPortName')) { ?>
 		<th width="25%">new&nbsp;config</th></tr>	
-		<?php $this->getH("PrintOpFromIntro", array('save8021QConfig', array ('mutex_rev' => $this->_Vswitch, 'form_mode' => 'save'))); ?>	
+		<?php $this->getH("PrintOpFormIntro", array('save8021QConfig', array ('mutex_rev' => $this->_Vswitch, 'form_mode' => 'save'))); ?>	
 	<?php } else { ?>
 		<th>(zooming)</th></tr>
 	<?php } ?> 

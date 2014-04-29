@@ -6,7 +6,7 @@
 		$row_html  = '<td><a href="#" class="vst-del-rule"> <img width="16" height="16" border="0" title="delete rule" src="?module=chrome&uri=pix/tango-list-remove.png"> </a></td>'; 
 		$row_html .= '<td><input type=text name=rule_no value="%s" size=3></td>';
 		$row_html .= '<td><input type=text name=port_pcre value="%s"></td>';
-		$row_html .= '<td>' . $this->_AccessSelect . '</td>';
+		$row_html .= '<td>' . $this->AccessSelect . '</td>';
 		$row_html .= '<td><input type=text name=wrt_vlans value="%s"></td>';
 		$row_html .= '<td><input type=text name=description value="%s"></td>';
 		$row_html .= '<td><a href="#" class="vst-add-rule"> <img width="16" height="16" border="0" title="Duplicate rule" src="?module=chrome&uri=pix/tango-list-add.png"> </a></td>'; 
