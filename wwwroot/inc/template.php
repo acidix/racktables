@@ -101,7 +101,11 @@ class TemplateManager
 	public static function getOrderedTemplateList()
 	{
 		static $arr = array('vanilla');
+
 		// $arr = glob('../tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
+
+		$arr = glob('../tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
+
 		sort($arr);
 
 		return $arr;
@@ -853,7 +857,7 @@ class TemplateModule
 		}
 		else
 		{
-			if ($this->use_reference === true && is_array($this->output_reference) &&array_key_exists($name, $this->output_reference))
+			if ($this->use_reference === true && is_array($this->output_reference) && array_key_exists($name, $this->output_reference))
 			{
 				if (is_array($this->output_reference[$name]) && !$return)
 				{
@@ -976,6 +980,10 @@ class TemplateModule
 	{
 		$tplm = TemplateManager::getInstance();
 		$helper = $tplm->getHelper($name);
+		if ($helper == null)
+		{
+			throw new TemplateException('TplException: Cant find helper ' . $name);
+		}
 		$helper->run($this,$params);
 	}
 
@@ -1011,6 +1019,8 @@ class TemplateModule
 			$this->loopplaceholder = $placeholder;
 			ob_start();
 		}
+		//else
+		//	throw new TemplateException("TplErr: Placeholder " . $placeholder . " for loop  unknown" );
 	}
 	
 	/**
@@ -1220,8 +1230,9 @@ class TemplateModule
 		{
 			if (array_key_exists($this->reference_next, $this->output[$this->reference_origin]))
 			{
-				$this->output_reference &= $this->output[$this->reference_origin][$this->reference_next];
+				$this->output_reference = $this->output[$this->reference_origin][$this->reference_next];
 				$this->reference_next++;
+				$this->use_reference = true;
 				return true;
 			}
 			else
@@ -1234,7 +1245,7 @@ class TemplateModule
 		{
 			if (array_key_exists($name, $this->output) && is_array($this->output[$name]) && array_key_exists($startvar, $this->output[$name]))
 			{
-				$this->output_reference &= $this->output[$this->reference_origin][$startvar];
+				$this->output_reference = $this->output[$name][$startvar];
 				$this->use_reference = true;
 				$this->reference_origin = $name;
 				$this->reference_next = $startvar + 1;

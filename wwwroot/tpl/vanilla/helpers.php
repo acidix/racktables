@@ -214,8 +214,8 @@ class TemplateHelperNiftyString extends TemplateHelperAbstract
 			$string = preg_replace ("/\t/", ' ', $string);
 			if (!$maxlen or mb_strlen ($string) <= $maxlen)
 				echo htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
-			echo
-			($usetags ? ("<span title='" . htmlspecialchars ($string, ENT_QUOTES, 'UTF-8') . "'>") : '') .
+			else
+				echo ($usetags ? ("<span title='" . htmlspecialchars ($string, ENT_QUOTES, 'UTF-8') . "'>") : '') .
 			str_replace (' ', '&nbsp;', htmlspecialchars (mb_substr ($string, 0, $maxlen - 1), ENT_QUOTES, 'UTF-8')) .
 			$cutind .
 			($usetags ? '</span>' : '');

@@ -1,7 +1,7 @@
 <?php if (defined("RS_TPL")) {?>
 	<?php $this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/codemirror/codemirror.js")); ?>
 	<?php $this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/codemirror/rackcode.js")); ?>
-	<?php $this->addRequirement("Header","HeaderCSSInclude",array("path"=>"js/codemirror/codemirror.css")) ; ?>
+	<?php $this->addRequirement("Header","HeaderCssInclude",array("path"=>"js/codemirror/codemirror.css")) ; ?>
 	<?php $this->addRequirement("Header","HeaderJsInline",array("code"=>$this->_jsRawCode)); ?>
 
 	<?php $this->getH("PrintOpFormIntro", array('saveRackCode')); ?> 

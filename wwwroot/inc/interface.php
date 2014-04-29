@@ -1773,7 +1773,7 @@ function renderObject ($object_id)
 	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderObject");
-	$mod->setNamespace("object");
+	$mod->setNamespace("object", true);
 		
 	// Main layout starts.
 	//echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
@@ -3272,7 +3272,7 @@ function renderIPSpaceRecords ($tree, $baseurl, $target = 0, $level = 1, $parent
 			// non-allocated (spare) IP range
 			//echo "<tr valign=top>";
 			$mod = $tplm->generateSubmodule($placeholder, 'IPSpaceRecordNoAlloc', $parent);
-			
+			$mod->setNamespace('ipspace');
 			
 			printIPNetInfoTDs ($item, array ('indent' => $level, 'knight' => $knight, 'tdclass' => 'sparenetwork'), $mod, 'IPnetInfo');
 
@@ -3646,6 +3646,7 @@ function renderSeparator ($first, $last, $hl_ip, $parent, $placeholder)
 	{
 		$tplm = TemplateManager::getInstance();
 		$mod = $tplm->generateSubmodule($placeholder, 'IPv6SeparatorPlain', $parent, true);
+
 	}
 		//echo "<tr><td colspan=4 class=tdleft></td></tr>\n";
 }
@@ -3748,7 +3749,8 @@ function renderIPv4NetworkAddresses ($range, $parent, $placeholder)
 			? 'editable'
 					: '';
 			
-			$smod = $tplm->generateSubmodule('IPList', 'IPNetworkAddressEmpty');
+			$smod = $tplm->generateSubmodule('IPList', 'IPNetworkAddressEmpty',$mod);
+			$smod->setNamespace('ipnetwork',true);
 			$smod->addOutput('Link', makeHref(array('page'=>'ipaddress', 'ip' => $dottedquad)));
 			$smod->addOutput('IP', $dottedquad);
 			$smod->addOutput('Editable', $editable);
@@ -3889,7 +3891,7 @@ function renderIPv6NetworkAddresses ($netinfo, $parent, $placeholder)
 	$tplm = TemplateManager::getInstance();
 	
 	$mod = $tplm->generateSubmodule($placeholder, 'IPv6NetworkAddresses', $parent);
-	$mod->setNamespace('ipnetwork',true);
+	$mod->setNamespace('ipnetwork');
 	
 	
 	global $pageno, $tabno, $aac2;
@@ -3969,6 +3971,7 @@ function renderIPv6NetworkAddresses ($netinfo, $parent, $placeholder)
 		$prev_ip = $ip_bin;
 
 		$smod = $tplm->generateSubmodule('IPList', 'IPv6NetworkAddress');
+		$smod->setNamespace('ipnetwork');
 	
 		// render IP change history
 		$title = '';
@@ -5433,7 +5436,7 @@ function renderOIFCompatEditor()
 		$mod->addOutput('Looparray', array(
 											'Order' => $order,
 											'Title' => $packinfo['title'],
-											'Codename' => $codename));
+											'Codename' => $codename)); //@XXX XXX XXX No helpers within old loops
 		// echo "<tr class=row_${order}><td class=tdleft>" . $packinfo['title'] . '</td><td>';
 		// echo getOpLink (array ('op' => 'addPack', 'standard' => $codename), '', 'add');
 		// echo '</td><td>';
@@ -7652,7 +7655,8 @@ function renderNewEntityTags ($for_realm = '', $parent = null , $placeholder = "
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderNewEntityTags", $parent);
 
-	$mod->setNamespace('');
+	$mod->setNamespace('',true);
+	$mod->setLock(true);
  	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm, $mod, "checkbox");
 //	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm);
 //	echo '</table></div>';
@@ -8040,7 +8044,7 @@ function renderFileLinks ($links, $parent, $placeholder)
 			case 'ipv4vs':
 			case 'ipv4rspool':
 			case 'object':
-				$tplm->generateSubmodule('Links','FileLinksDefLink',$mod,true, array('Content'=>renderCell ($cell)));
+				$tplm->generateSubmodule('Links','StdTableRowClass',$mod,true, array('Content'=>renderCell ($cell), 'Class' => 'tdleft'));
 				break;
 			default:
 				$tplm->generateSubmodule('Links', 'FileLinksObjLink', $mod, true, array('Name'=>formatRealmName ($link['entity_type']),'Link'=>mkCellA ($cell)));
@@ -9524,7 +9528,7 @@ function render8021QOrderForm ($some_id)
 					if ($decision)
 						$options[$object_id] = $object_dname;
 				}
-			$mod->addOutput("selected", printSelect ($options, array ('name' => 'object_id', 'tabindex' => 101, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_objid'])); 
+			$mod->addOutput("selected", getSelect ($options, array ('name' => 'object_id', 'tabindex' => 101, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_objid'])); 
 			//printSelect ($options, array ('name' => 'object_id', 'tabindex' => 101, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_objid']);
 			//echo '</td>';
 		}
@@ -10061,13 +10065,26 @@ function renderObject8021QPorts ($object_id)
 	$cached_config = getStored8021QConfig ($object_id, 'cached');
 	$desired_config = sortPortList	($desired_config);
 	$uplinks = filter8021QChangeRequests ($vdom['vlanlist'], $desired_config, produceUplinkPorts ($vdom['vlanlist'], $desired_config, $vswitch['object_id']));
-	echo '<table border=0 width="100%"><tr valign=top><td class=tdleft width="50%">';
+	
+	$tplm = TemplateManager::getInstance();
+	$mod = $tplm->generateSubmodule('Payload', 'RenderObject8021QPorts');
+
+	$mod->setNamespace('object');
+
+//	echo '<table border=0 width="100%"><tr valign=top><td class=tdleft width="50%">';
 	// port list
-	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-	echo '<tr><th>port</th><th>interface</th><th>link</th><th width="25%">last&nbsp;saved&nbsp;config</th>';
-	echo $req_port_name == '' ? '<th width="25%">new&nbsp;config</th></tr>' : '<th>(zooming)</th></tr>';
-	if ($req_port_name == '');
-		printOpFormIntro ('save8021QConfig', array ('mutex_rev' => $vswitch['mutex_rev'], 'form_mode' => 'save'));
+//	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
+//	echo '<tr><th>port</th><th>interface</th><th>link</th><th width="25%">last&nbsp;saved&nbsp;config</th>';
+//	echo $req_port_name == '' ? '<th width="25%">new&nbsp;config</th></tr>' : '<th>(zooming)</th></tr>';
+	$req_port_name == '' ? '<th width="25%">new&nbsp;config</th></tr>' : '<th>(zooming)</th></tr>';
+	
+	$mod->addOutput("Vswitch", $vswitch['mutex_rev']);
+	
+	if ($req_port_name != ''){
+		$mod->addOutput('IsReqPortName', true);
+	}
+			 
+	//	printOpFormIntro ('save8021QConfig', array ('mutex_rev' => $vswitch['mutex_rev'], 'form_mode' => 'save'));
 	$object = spotEntity ('object', $object_id);
 	amplifyCell ($object);
 	$sockets = array();
@@ -10076,7 +10093,7 @@ function renderObject8021QPorts ($object_id)
 		assertUIntArg ('hl_port_id');
 		$hl_port_id = intval ($_REQUEST['hl_port_id']);
 		$hl_port_name = NULL;
-		addAutoScrollScript ("port-$hl_port_id");
+		addAutoScrollScript ("port-$hl_port_id", $mod, 'JSScripts');
 	}
 	foreach ($object['ports'] as $port)
 		if (mb_strlen ($port['name']) and array_key_exists ($port['name'], $desired_config))
@@ -10095,9 +10112,11 @@ function renderObject8021QPorts ($object_id)
 		}
 	unset ($object);
 	$nports = 0; // count only access ports
-	switchportInfoJS ($object_id); // load JS code to make portnames interactive
+	switchportInfoJS ($object_id, $mod, 'JSScripts'); // load JS code to make portnames interactive
+
 	foreach ($desired_config as $port_name => $port)
 	{
+
 		$text_left = formatVLANPackDiff ($cached_config[$port_name], $port);
 		// decide on row class
 		switch ($port['vst_role'])
@@ -10133,30 +10152,48 @@ function renderObject8021QPorts ($object_id)
 		default:
 			throw new InvalidArgException ('vst_role', $port['vst_role']);
 		}
+
+		$rowMod = $tplm->generateSubmodule('PortRows', 'RenderObject8021QPorts_Row', $mod);
+		$rowMod->setNamespace('object');
+		$rowMod->addOutput('TextRight', $text_right);
+		$rowMod->addOutput('TextLeft', $text_left);
+		$rowMod->addOutput('TextClass', $trclass);
+		$rowMod->addOutput('PortName', $port_name);
+
+
 		if (!checkPortRole ($vswitch, $port_name, $port))
-			$trclass = 'trerror';
+			$rowMod->addOutput('HasErrors', true);
+				 
+		//	$trclass = 'trerror';
 
 		if (!array_key_exists ($port_name, $sockets))
-		{
-			$socket_columns = '<td>&nbsp;</td><td>&nbsp;</td>';
-			$td_extra = '';
+		{	
+			$rowMod->addOutput('NoSocketColumns', true);
+			//$socket_columns = '<td>&nbsp;</td><td>&nbsp;</td>';
+			//$td_extra = '';
 		}
 		else
 		{
 			$td_extra = count ($sockets[$port_name]) > 1 ? (' rowspan=' . count ($sockets[$port_name])) : '';
-			$socket_columns = '';
+			$rowMod->addOutput("TdExtra", $td_extra);
+				 
+			//$socket_columns = '';
 			foreach ($sockets[$port_name][0] as $tmp)
-				$socket_columns .= '<td>' . $tmp . '</td>';
+				$tplm->generateSubmodule('SocketColumns', 'StdTableCell', $rowMod, true, array('cont' => $tmp));
+				//$socket_columns .= '<td>' . $tmp . '</td>';
 		}
-		$anchor = '';
-		$tdclass = '';
+		//$anchor = '';
+		//$tdclass = '';
 		if (isset ($hl_port_name) and $hl_port_name == $port_name)
 		{
-			$tdclass .= 'class="border_highlight"';
-			$anchor = "name='port-$hl_port_id'";
+			$rowMod->addOutput('HasPortName', true);
+		//	$tdclass .= 'class="border_highlight"';
+		//	$anchor = "name='port-$hl_port_id'";
+			$rowMod->addOutput('PortId', $hl_port_id);
 		}
-		echo "<tr class='${trclass}' valign=top><td${td_extra} ${tdclass} NOWRAP><a class='interactive-portname port-menu nolink' $anchor>${port_name}</a></td>" . $socket_columns;
-		echo "<td${td_extra}>${text_left}</td><td class=tdright nowrap${td_extra}>${text_right}</td></tr>";
+		
+		//echo "<tr class='${trclass}' valign=top><td${td_extra} ${tdclass} NOWRAP><a class='interactive-portname port-menu nolink' $anchor>${port_name}</a></td>" . $socket_columns;
+		//echo "<td${td_extra}>${text_left}</td><td class=tdright nowrap${td_extra}>${text_right}</td></tr>";
 		if (!array_key_exists ($port_name, $sockets))
 			continue;
 		$first_socket = TRUE;
@@ -10164,40 +10201,53 @@ function renderObject8021QPorts ($object_id)
 			if ($first_socket)
 				$first_socket = FALSE;
 			else
-			{
-				echo "<tr class=${trclass} valign=top>";
+			{	
+				$socketRowMod = $tplm->generateSubmodule('SocketRows', 'StdTableRowClass', $rowMod, true, array('Class' => $trclass));
+				//echo "<tr class=${trclass} valign=top>";
 				foreach ($socket as $tmp)
-					echo '<td>' . $tmp . '</td>';
-				echo '</tr>';
+					$tplm->generateSubmodule('Cont', 'StdTableCell', $socketRowMod, true, array('cont' => $tmp));
+				//	echo '<td>' . $tmp . '</td>';
+				//echo '</tr>';
 			}
 	}
-	echo '<tr><td colspan=5 class=tdcenter><ul class="btns-8021q-sync">';
+	//echo '<tr><td colspan=5 class=tdcenter><ul class="btns-8021q-sync">';
 	if ($req_port_name == '' and $nports)
-	{
-		echo "<input type=hidden name=nports value=${nports}>";
-		echo '<li>' . getImageHREF ('SAVE', 'save configuration', TRUE, 100) . '</li>';
+	{	
+		$mod->addOutput("IsToSave", true);
+		$mod->addOutput("Nports", $nports);
+			 	 	 
+		//echo "<input type=hidden name=nports value=${nports}>";
+		//echo '<li>' . getImageHREF ('SAVE', 'save configuration', TRUE, 100) . '</li>';
 	}
-	echo '</form>';
+	//echo '</form>';
 	if (permitted (NULL, NULL, NULL, array (array ('tag' => '$op_recalc8021Q'))))
-		echo '<li>' . getOpLink (array ('op' => 'exec8021QRecalc'), '', 'RECALC', 'Recalculate uplinks and downlinks') . '</li>';
-	echo '</ul></td></tr></table>';
-	if ($req_port_name == '');
-		echo '</form>';
-	echo '</td>';
+		$mod->addOutput("RecalcPerm", true);
+			 
+	//	echo '<li>' . getOpLink (array ('op' => 'exec8021QRecalc'), '', 'RECALC', 'Recalculate uplinks and downlinks') . '</li>';
+	//echo '</ul></td></tr></table>';
+	//if ($req_port_name == '');
+	//	echo '</form>';
+	//echo '</td>';
 	// configuration of currently selected port, if any
 	if (!array_key_exists ($req_port_name, $desired_config))
 	{
-		echo '<td>';
+		$mod->addOutput('HasPortOpt', true);
+			 
+		//echo '<td>';
 		$port_options = array();
 		foreach ($desired_config as $pn => $portinfo)
 			if (editable8021QPort ($portinfo))
 				$port_options[$pn] = same8021QConfigs ($desired_config[$pn], $cached_config[$pn]) ?
 					$pn : "${pn} (*)";
 		if (count ($port_options) < 2)
-			echo '&nbsp;';
+			$mod->addOutput('SinglePort', true);
+		//	echo '&nbsp;';
 		else
 		{
-			startPortlet ('port duplicator');
+			$mod->addOutput("PortOpt", $port_options);
+			$mod->addOutput("MaxSelSize", getConfigVar ('MAXSELSIZE'));
+
+			/*startPortlet ('port duplicator');
 			echo '<table border=0 align=center>';
 			printOpFormIntro ('save8021QConfig', array ('mutex_rev' => $vswitch['mutex_rev'], 'form_mode' => 'duplicate'));
 			echo '<tr><td>' . getSelect ($port_options, array ('name' => 'from_port')) . '</td></tr>';
@@ -10205,9 +10255,9 @@ function renderObject8021QPorts ($object_id)
 			echo '<tr><td>' . getSelect ($port_options, array ('name' => 'to_ports[]', 'size' => getConfigVar ('MAXSELSIZE'), 'multiple' => 1)) . '</td></tr>';
 			echo '<tr><td>' . getImageHREF ('COPY', 'duplicate', TRUE) . '</td></tr>';
 			echo '</form></table>';
-			finishPortlet();
+			finishPortlet();*/
 		}
-		echo '</td>';
+		//echo '</td>';
 	}
 	else
 		renderTrunkPortControls
@@ -10217,7 +10267,7 @@ function renderObject8021QPorts ($object_id)
 			$req_port_name,
 			$desired_config[$req_port_name]
 		);
-	echo '</tr></table>';
+//	echo '</tr></table>';
 }
 
 // Return the text to place into control column of VLAN ports list
@@ -10307,11 +10357,24 @@ function getTrunkPortCursorCode ($object_id, $port_name, $req_port_name)
 		getImageHREF ($imagename, $imagetext) . '</a>';
 }
 
-function renderTrunkPortControls ($vswitch, $vdom, $port_name, $vlanport)
+function renderTrunkPortControls ($vswitch, $vdom, $port_name, $vlanport, $parent = null, $placeholder = 'Payload')
 {
+	$tplm = TemplateManager::getInstance();
+	
+	if($parent==null)	
+		$mod = $tplm->generateSubmodule($placeholder,'RenderTrunkPortControls');
+	else
+		$mod = $tplm->generateSubmodule($placeholder, 'RenderTrunkPortControls', $parent);
+	
+	$mod->setNamespace('object');
+	
+	if($parent==null)
+		return $mod->run();
 	if (!count ($vdom['vlanlist']))
 	{
-		echo '<td colspan=2>(configured VLAN domain is empty)</td>';
+		$mod->addOutput('NoList', true);
+			 
+		//echo '<td colspan=2>(configured VLAN domain is empty)</td>';
 		return;
 	}
 	$formextra = array
@@ -10322,10 +10385,12 @@ function renderTrunkPortControls ($vswitch, $vdom, $port_name, $vlanport)
 		'pm_0' => 'trunk',
 		'form_mode' => 'save',
 	);
-	printOpFormIntro ('save8021QConfig', $formextra);
+	$mod->addOutput('FormExtra', $formextra);
+		 
+/*	printOpFormIntro ('save8021QConfig', $formextra);
 	echo '<td width="35%">';
 	echo '<table border=0 cellspacing=0 cellpadding=3 align=center>';
-	echo '<tr><th colspan=2>allowed</th></tr>';
+	echo '<tr><th colspan=2>allowed</th></tr>';*/
 	// Present all VLANs of the domain and all currently configured VLANs
 	// (regardless if these sets intersect or not).
 	$allowed_options = array();
@@ -10343,6 +10408,7 @@ function renderTrunkPortControls ($vswitch, $vdom, $port_name, $vlanport)
 				'text' => "unlisted VLAN ${vlan_id}",
 			);
 	ksort ($allowed_options);
+	$allAllowedOptionsOut = array();
 	foreach ($allowed_options as $vlan_id => $option)
 	{
 		$selected = '';
@@ -10356,19 +10422,28 @@ function renderTrunkPortControls ($vswitch, $vdom, $port_name, $vlanport)
 		// particular port, but it cannot be changed by user.
 		if ($option['vlan_type'] == 'alien')
 			$selected .= ' disabled';
-		echo "<tr><td nowrap colspan=2 class='${class}'>";
-		echo "<label><input type=checkbox name='pav_0[]' value='${vlan_id}'${selected}> ";
-		echo $option['text'] . "</label></td></tr>";
+		//echo "<tr><td nowrap colspan=2 class='${class}'>";
+		//echo "<label><input type=checkbox name='pav_0[]' value='${vlan_id}'${selected}> ";
+		//echo $option['text'] . "</label></td></tr>";
+		$allAllowedOptionsOut[] = array('Class' => $class, 
+			'Vlan_Id' => $vlan_id, 
+			'Selected' => $selected,
+			'OptionTxt' => $option['text']);
 	}
-	echo '</table>';
+	$mod->setOutput('AllowedOptions', $allAllowedOptionsOut);
+		 
+	/*echo '</table>';
 	echo '</td><td width="35%">';
 	// rightmost table also contains form buttons
 	echo '<table border=0 cellspacing=0 cellpadding=3 align=center>';
-	echo '<tr><th colspan=2>native</th></tr>';
-	if (!count ($vlanport['allowed']))
-		echo '<tr><td colspan=2>(no allowed VLANs for this port)</td></tr>';
-	else
-	{
+	echo '<tr><th colspan=2>native</th></tr>';*/
+	//if (!count ($vlanport['allowed']))
+	//	echo '<tr><td colspan=2>(no allowed VLANs for this port)</td></tr>';
+	//else
+	if (count ($vlanport['allowed']))
+	{	
+		$mod->addOutput('Vlan_Port_Allowed', true);
+			 
 		$native_options = array (0 => array ('vlan_type' => 'none', 'text' => '-- NONE --'));
 		foreach ($vlanport['allowed'] as $vlan_id)
 			$native_options[$vlan_id] = array_key_exists ($vlan_id, $vdom['vlanlist']) ? array
@@ -10380,6 +10455,8 @@ function renderTrunkPortControls ($vswitch, $vdom, $port_name, $vlanport)
 					'vlan_type' => 'none',
 					'text' => "unlisted VLAN ${vlan_id}",
 				);
+		
+		$allNativeOptOut = array();
 		foreach ($native_options as $vlan_id => $option)
 		{
 			$selected = '';
@@ -10401,15 +10478,21 @@ function renderTrunkPortControls ($vswitch, $vdom, $port_name, $vlanport)
 				$option['vlan_type'] == 'alien'
 			)
 				$selected .= ' disabled';
-			echo "<tr><td nowrap colspan=2 class='${class}'>";
-			echo "<label><input type=radio name='pnv_0' value='${vlan_id}'${selected}> ";
-			echo $option['text'] . "</label></td></tr>";
+			//echo "<tr><td nowrap colspan=2 class='${class}'>";
+			//echo "<label><input type=radio name='pnv_0' value='${vlan_id}'${selected}> ";
+			//echo $option['text'] . "</label></td></tr>";
+			$allNativeOptOut[] = array('Class' => $class, 
+				'Vlan_Id' => $vlan_id, 
+				'Selected' => $selected,
+				'OptionTxt' => $option['text']);
 		}
+		$mod->addOutput('NativeOpts', $allNativeOptOut);		 
 	}
-	echo '<tr><td class=tdleft>';
+	/*echo '<tr><td class=tdleft>';
 	printImageHREF ('SAVE', 'Save changes', TRUE);
-	echo '</form></td><td class=tdright>';
-	if (!count ($vlanport['allowed']))
+	echo '</form></td><td class=tdright>';*/
+	/*if (!count ($vlanport['allowed']))
+
 		printImageHREF ('CLEAR gray');
 	else
 	{
@@ -10418,7 +10501,7 @@ function renderTrunkPortControls ($vswitch, $vdom, $port_name, $vlanport)
 		echo '</form>';
 	}
 	echo '</td></tr></table>';
-	echo '</td>';
+	echo '</td>';*/
 }
 
 function renderVLANInfo ($vlan_ck)
@@ -11215,7 +11298,6 @@ function renderVSTRules ($rules, $title = NULL, $parent = null, $placeholder = '
 	}
 		else
 	{
-		$mod->addOutput('');
 		global $port_role_options, $nextorder;
 		$mod->addOutput('Title', isset($title)? $title: 'rules (' . count ($rules) . ')');	
 		//startPortlet (isset ($title) ? $title : 'rules (' . count ($rules) . ')');
@@ -11225,8 +11307,14 @@ function renderVSTRules ($rules, $title = NULL, $parent = null, $placeholder = '
 		foreach ($rules as $item)
 		{
 			
-			$submod = $tplm->generateSubmodule('Itemrow' ,'CreateItemRow' ,$mod);
-			$submod->addOutput('Foreacharry', array('Order' => $order, 'Rule_no' => $item['rule_no'], 'Port_pcre' => $iten['port_pcre'], 'Port_role' => $port_role_options[$item['port_role']], 'Wrt_vlans' => $item['wrt_vlans'], 'Description' => $item['description']));
+			$submod = $tplm->generateSubmodule('ItemRows' ,'RenderVSTRules_CreateItemRow' ,$mod,false,
+				 array('Order' => $order, 
+				 	'Rule_no' => $item['rule_no'], 
+				 	'Port_pcre' => $item['port_pcre'], 
+				 	'Port_role' => $port_role_options[$item['port_role']], 
+				 	'Wrt_vlans' => $item['wrt_vlans'], 
+				 	'Description' => $item['description']));
+			$submod->setNamespace('vst');
 			//echo "<tr class=row_${order} align=left>";
 			//echo "<td>${item['rule_no']}</td>";
 			//echo "<td nowrap><tt>${item['port_pcre']}</tt></td>";
@@ -11252,6 +11340,7 @@ function renderVSTRules ($rules, $title = NULL, $parent = null, $placeholder = '
 	$vst = spotEntity ('vst', $vst_id);
 	amplifyCell ($vst);
 	$mod->addOutput('Vst', $vst);
+	$mod->addOutput('VstDescription', $vst['description']);
 	$mod->addOutput('Switches', $vst['switches']);
 	//echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
 	//echo '<tr><td colspan=2 align=center><h1>' . niftyString ($vst['description'], 0) . '</h1><h2>';
@@ -11266,17 +11355,19 @@ function renderVSTRules ($rules, $title = NULL, $parent = null, $placeholder = '
 	else
 	{
 			global $nextorder;
-		startPortlet ('orders (' . count ($vst['switches']) . ')');
+		//startPortlet ('orders (' . count ($vst['switches']) . ')');
 	//	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
 		$order = 'odd';
+		$arr = array();
 		foreach (array_keys ($vst['switches']) as $object_id)
 		{
-			$mod->addOutput('Order_id_array', array('Render_cell' => renderCell (spotEntity ('object', $object_id)), 'Order' => $order));
+			$arr[] = array('Render_cell' => renderCell (spotEntity ('object', $object_id)), 'Order' => $order);
 			//echo "<tr class=row_${order}><td>";
 			//renderCell (spotEntity ('object', $object_id));
 			//echo '</td></tr>';
 			$order = $nextorder[$order];
 		}
+		$mod->addOutput('Order_id_array',$arr);
 		//echo '</table>';
 	}
 	//finishPortlet();
@@ -11302,9 +11393,9 @@ function renderVSTRulesEditor ($vst_id)
 	$tplm->setTemplate('vanilla');
 	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'VstRulesEditor');
-	$mod->addOutput('Nifty', niftyString ($vst['description']));
 	$mod->setNamespace('vst',true);
 	$mod->setLock();
+	$mod->addOutput('Nifty', niftyString ($vst['description']));
 	
 	//echo '<center><h1>' . niftyString ($vst['description']) . '</h1></center>';
 	
@@ -11313,10 +11404,10 @@ function renderVSTRulesEditor ($vst_id)
 		$mod->addOutput('Count', true);
 		//startPortlet ('clone another template');
 		//printOpFormIntro ('clone');
-		$mod->addOutput('Vst_mutex_rev', $vst['mutex_rev']);
+		$mod->addOutput('VstMutexRev', $vst['mutex_rev']);
 		//echo '<input type=hidden name="mutex_rev" value="' . $vst['mutex_rev'] . '">';
 		//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-		$mod->addOutput('Getselect', getSelect ($source_options, array ('name' => 'from_id')));
+		$mod->addOutput('AccessSelect', getSelect ($source_options, array ('name' => 'from_id')));
 		//echo '<tr><td>' . getSelect ($source_options, array ('name' => 'from_id')) . '</td>';
 		//echo '<td>' . getImageHREF ('COPY', 'copy from selected', TRUE) . '</td></tr></table></form>';
 		//finishPortlet();
@@ -11336,7 +11427,7 @@ function renderVSTRulesEditor ($vst_id)
 	$row_html .= '<td><input type=text name=wrt_vlans value="%s"></td>';
 	$row_html .= '<td><input type=text name=description value="%s"></td>';
 	$row_html .= '<td><a href="#" class="vst-add-rule">' . getImageHREF ('add', 'Duplicate rule') . '</a></td>';  //<img width="16" height="16" border="0" title="Duplicate rule" src="?module=chrome&uri=pix/tango-list-add.png"> */
-	$mod->addOutput('Getselect',  getSelect ($port_role_options, array ('name' => 'port_role'), 'anymode'));
+	$mod->addOutput('AccessSelect',  getSelect ($port_role_options, array ('name' => 'port_role'), 'anymode'));
 	//addJS ("var new_vst_row = '" . addslashes (sprintf ($row_html, '', '', getSelect ($port_role_options, array ('name' => 'port_role'), 'anymode'), '', '')) . "';", TRUE);
 	@session_start();
 	
@@ -11386,7 +11477,7 @@ function renderDeployQueue()
 	foreach ($allq as $qcode => $data)
 		if ($dqcode == $qcode)
 		{
-			$mod = $tplm->generateModule("Payload","DeployQueue");
+			$mod = $tplm->generateSubmodule("Payload","DeployQueue");
 			$mod->setNamespace("", true);
 
 		//	echo "<h2 align=center>Queue '" . $dqtitle[$qcode] . "' (" . count ($data) . ")</h2>";
@@ -12161,7 +12252,7 @@ function switchportInfoJS($object_id, $parent = null, $placeholder = "switchport
 		$mod = $tplm->generateSubmodule($placeholder, "SwitchPortInfoJS", $parent);
 	
 	$mod->setNamespace("");
-	$mod->setOutput('list', $list);
+	$mod->setOutput('List', $list);
 	/*addJS ('js/jquery.thumbhover.js');
 	addCSS ('css/jquery.contextmenu.css');
 	addJS ('js/jquery.contextmenu.js');
