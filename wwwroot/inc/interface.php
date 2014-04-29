@@ -3749,7 +3749,8 @@ function renderIPv4NetworkAddresses ($range, $parent, $placeholder)
 			? 'editable'
 					: '';
 			
-			$smod = $tplm->generateSubmodule('IPList', 'IPNetworkAddressEmpty');
+			$smod = $tplm->generateSubmodule('IPList', 'IPNetworkAddressEmpty',$mod);
+			$smod->setNamespace('ipnetwork',true);
 			$smod->addOutput('Link', makeHref(array('page'=>'ipaddress', 'ip' => $dottedquad)));
 			$smod->addOutput('IP', $dottedquad);
 			$smod->addOutput('Editable', $editable);
@@ -5435,7 +5436,7 @@ function renderOIFCompatEditor()
 		$mod->addOutput('Looparray', array(
 											'Order' => $order,
 											'Title' => $packinfo['title'],
-											'Codename' => $codename));
+											'Codename' => $codename)); //@XXX XXX XXX No helpers within old loops
 		// echo "<tr class=row_${order}><td class=tdleft>" . $packinfo['title'] . '</td><td>';
 		// echo getOpLink (array ('op' => 'addPack', 'standard' => $codename), '', 'add');
 		// echo '</td><td>';
@@ -7651,7 +7652,8 @@ function renderNewEntityTags ($for_realm = '', $parent = null , $placeholder = "
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "RenderNewEntityTags", $parent);
 
-	$mod->setNamespace('');
+	$mod->setNamespace('',true);
+	$mod->setLock(true);
  	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm, $mod, "checkbox");
 //	printTagCheckboxTable ('taglist', array(), array(), $tagtree, $for_realm);
 //	echo '</table></div>';
@@ -9523,7 +9525,7 @@ function render8021QOrderForm ($some_id)
 					if ($decision)
 						$options[$object_id] = $object_dname;
 				}
-			$mod->addOutput("selected", printSelect ($options, array ('name' => 'object_id', 'tabindex' => 101, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_objid'])); 
+			$mod->addOutput("selected", getSelect ($options, array ('name' => 'object_id', 'tabindex' => 101, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_objid'])); 
 			//printSelect ($options, array ('name' => 'object_id', 'tabindex' => 101, 'size' => getConfigVar ('MAXSELSIZE')), $focus['prev_objid']);
 			//echo '</td>';
 		}
@@ -11260,7 +11262,6 @@ function renderVSTRules ($rules, $title = NULL, $parent = null, $placeholder = '
 	}
 		else
 	{
-		$mod->addOutput('');
 		global $port_role_options, $nextorder;
 		$mod->addOutput('Title', isset($title)? $title: 'rules (' . count ($rules) . ')');	
 		//startPortlet (isset ($title) ? $title : 'rules (' . count ($rules) . ')');
@@ -11270,8 +11271,14 @@ function renderVSTRules ($rules, $title = NULL, $parent = null, $placeholder = '
 		foreach ($rules as $item)
 		{
 			
-			$submod = $tplm->generateSubmodule('Itemrow' ,'CreateItemRow' ,$mod);
-			$submod->addOutput('Foreacharry', array('Order' => $order, 'Rule_no' => $item['rule_no'], 'Port_pcre' => $iten['port_pcre'], 'Port_role' => $port_role_options[$item['port_role']], 'Wrt_vlans' => $item['wrt_vlans'], 'Description' => $item['description']));
+			$submod = $tplm->generateSubmodule('ItemRows' ,'RenderVSTRules_CreateItemRow' ,$mod,false,
+				 array('Order' => $order, 
+				 	'Rule_no' => $item['rule_no'], 
+				 	'Port_pcre' => $item['port_pcre'], 
+				 	'Port_role' => $port_role_options[$item['port_role']], 
+				 	'Wrt_vlans' => $item['wrt_vlans'], 
+				 	'Description' => $item['description']));
+			$submod->setNamespace('vst');
 			//echo "<tr class=row_${order} align=left>";
 			//echo "<td>${item['rule_no']}</td>";
 			//echo "<td nowrap><tt>${item['port_pcre']}</tt></td>";
@@ -11297,6 +11304,7 @@ function renderVSTRules ($rules, $title = NULL, $parent = null, $placeholder = '
 	$vst = spotEntity ('vst', $vst_id);
 	amplifyCell ($vst);
 	$mod->addOutput('Vst', $vst);
+	$mod->addOutput('VstDescription', $vst['description']);
 	$mod->addOutput('Switches', $vst['switches']);
 	//echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
 	//echo '<tr><td colspan=2 align=center><h1>' . niftyString ($vst['description'], 0) . '</h1><h2>';
@@ -11304,24 +11312,26 @@ function renderVSTRules ($rules, $title = NULL, $parent = null, $placeholder = '
 
 	renderEntitySummary ($vst, 'summary', array ('tags' => ''), $mod, 'EntitySummary');
 
-	renderVSTRules ($vst['rules'], $mod, 'VstRules');
+	renderVSTRules ($vst['rules'], null, $mod, 'VstRules');
 	//echo '</td><td class=pcright>';
 	if (!count ($vst['switches']))
 		$mod->addOutput('EmptySwitches', true);
 	else
 	{
 			global $nextorder;
-		startPortlet ('orders (' . count ($vst['switches']) . ')');
+		//startPortlet ('orders (' . count ($vst['switches']) . ')');
 	//	echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
 		$order = 'odd';
+		$arr = array();
 		foreach (array_keys ($vst['switches']) as $object_id)
 		{
-			$mod->addOutput('Order_id_array', array('Render_cell' => renderCell (spotEntity ('object', $object_id)), 'Order' => $order));
+			$arr[] = array('Render_cell' => renderCell (spotEntity ('object', $object_id)), 'Order' => $order);
 			//echo "<tr class=row_${order}><td>";
 			//renderCell (spotEntity ('object', $object_id));
 			//echo '</td></tr>';
 			$order = $nextorder[$order];
 		}
+		$mod->addOutput('Order_id_array',$arr);
 		//echo '</table>';
 	}
 	//finishPortlet();
@@ -11347,6 +11357,8 @@ function renderVSTRulesEditor ($vst_id)
 	$tplm->setTemplate('vanilla');
 	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'VstRulesEditor');
+	$mod->setNamespace('vst',true);
+	$mod->setLock();
 	$mod->addOutput('Nifty', niftyString ($vst['description']));
 	
 	//echo '<center><h1>' . niftyString ($vst['description']) . '</h1></center>';
@@ -11356,10 +11368,10 @@ function renderVSTRulesEditor ($vst_id)
 		$mod->addOutput('Count', true);
 		//startPortlet ('clone another template');
 		//printOpFormIntro ('clone');
-		$mod->addOutput('Vst_mutex_rev', $vst['mutex_rev']);
+		$mod->addOutput('VstMutexRev', $vst['mutex_rev']);
 		//echo '<input type=hidden name="mutex_rev" value="' . $vst['mutex_rev'] . '">';
 		//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-		$mod->addOutput('Getselect', getSelect ($source_options, array ('name' => 'from_id')));
+		$mod->addOutput('AccessSelect', getSelect ($source_options, array ('name' => 'from_id')));
 		//echo '<tr><td>' . getSelect ($source_options, array ('name' => 'from_id')) . '</td>';
 		//echo '<td>' . getImageHREF ('COPY', 'copy from selected', TRUE) . '</td></tr></table></form>';
 		//finishPortlet();
@@ -11379,14 +11391,14 @@ function renderVSTRulesEditor ($vst_id)
 	$row_html .= '<td><input type=text name=wrt_vlans value="%s"></td>';
 	$row_html .= '<td><input type=text name=description value="%s"></td>';
 	$row_html .= '<td><a href="#" class="vst-add-rule">' . getImageHREF ('add', 'Duplicate rule') . '</a></td>';  //<img width="16" height="16" border="0" title="Duplicate rule" src="?module=chrome&uri=pix/tango-list-add.png"> */
-	$mod->addOutput('Getselect',  getSelect ($port_role_options, array ('name' => 'port_role'), 'anymode'));
+	$mod->addOutput('AccessSelect',  getSelect ($port_role_options, array ('name' => 'port_role'), 'anymode'));
 	//addJS ("var new_vst_row = '" . addslashes (sprintf ($row_html, '', '', getSelect ($port_role_options, array ('name' => 'port_role'), 'anymode'), '', '')) . "';", TRUE);
 	@session_start();
 	
-	
+	$arr = array();
 	foreach (isset ($_SESSION['vst_edited']) ? $_SESSION['vst_edited'] : $vst['rules'] as $item)
 	{
-		$mod->setOutput('Itemarray', array('Rule_no' => $item['rule_no'], 'Port_pcre' => $item['port_pcre'], 'Getselect' => getSelect ($port_role_options, array ('name' => 'port_role'), $item['port_role']), 'Wrt_vlans' => $item['wrt_vlans'], 'Description' => $item['description']));
+		$arr[] = array('RuleNo' => $item['rule_no'], 'PortPCRE' => htmlspecialchars($item['port_pcre'], ENT_QUOTES), 'AccessSelect' => getSelect ($port_role_options, array ('name' => 'port_role'), $item['port_role']), 'WRTVlans' => $item['wrt_vlans'], 'Description' => $item['description']);
 		/*$mod->setOutput('Rule_no', $item['rule_no']);
 		$mod->setOutput('Port_pcre', $item['port_pcre']);
 		$mod->setOutput('Getselect', getSelect ($port_role_options, array ('name' => 'port_role'), $item['port_role']));   
@@ -11395,7 +11407,8 @@ function renderVSTRulesEditor ($vst_id)
 		
 	//	printf ('<tr>' . $row_html . '</tr>', $item['rule_no'], htmlspecialchars ($item['port_pcre'], ENT_QUOTES),  getSelect ($port_role_options, array ('name' => 'port_role'), $item['port_role']), $item['wrt_vlans'], $item['description']);
 	};
-	$mod->addOutput('Mutex_rev', $vst['mutex_rev']);
+	$mod->addOutput('ItemArray',$arr);
+	$mod->addOutput('MutexRev', $vst['mutex_rev']);
 	//echo '</table>';
 	//echo '<input type=hidden name="template_json">';
 	//echo '<input type=hidden name="mutex_rev" value="' . $vst['mutex_rev'] . '">';
@@ -11410,7 +11423,7 @@ function renderVSTRulesEditor ($vst_id)
 	session_commit();
 
 	if (count ($source_options))
-		$mod->addOutput('Count_source_option', TRUE);
+		$mod->addOutput('CountSourceOption', TRUE);
 }
 
 function renderDeployQueue()
@@ -11428,7 +11441,7 @@ function renderDeployQueue()
 	foreach ($allq as $qcode => $data)
 		if ($dqcode == $qcode)
 		{
-			$mod = $tplm->generateModule("Payload","DeployQueue");
+			$mod = $tplm->generateSubmodule("Payload","DeployQueue");
 			$mod->setNamespace("", true);
 
 		//	echo "<h2 align=center>Queue '" . $dqtitle[$qcode] . "' (" . count ($data) . ")</h2>";
