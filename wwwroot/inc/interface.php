@@ -1773,7 +1773,7 @@ function renderObject ($object_id)
 	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule("Payload","RenderObject");
-	$mod->setNamespace("object", true);
+	$mod->setNamespace("object");
 		
 	// Main layout starts.
 	//echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
@@ -10101,7 +10101,7 @@ function renderObject8021QPorts ($object_id)
 			if ($port['remote_object_id'])
 				$socket['link'] = formatLoggedSpan ($port['last_log'], formatLinkedPort ($port));
 			elseif (strlen ($port['reservation_comment']))
-				$socket['link'] = formatLoggedSpan ($port['last_log'], 'Rsv:', 'strong underline') . ' ' .
+				$socket['link'] = formatLoggedSpan ($port['last_truelog'], 'Rsv:', 'strong underline') . ' ' .
 				formatLoggedSpan ($port['last_log'], $port['reservation_comment']);
 			else
 				$socket['link'] = '&nbsp;';
@@ -10262,7 +10262,9 @@ function renderObject8021QPorts ($object_id)
 			$vswitch,
 			$vdom,
 			$req_port_name,
-			$desired_config[$req_port_name]
+			$desired_config[$req_port_name],
+			$mod,
+			'TrunkPortlets'
 		);
 //	echo '</tr></table>';
 }
@@ -10382,7 +10384,7 @@ function renderTrunkPortControls ($vswitch, $vdom, $port_name, $vlanport, $paren
 		'pm_0' => 'trunk',
 		'form_mode' => 'save',
 	);
-	$mod->addOutput('FormExtra', $formextra);
+	$mod->addOutput('Save8021QConfig', printOpFormIntro ('save8021QConfig', $formextra));
 		 
 /*	printOpFormIntro ('save8021QConfig', $formextra);
 	echo '<td width="35%">';
@@ -10945,9 +10947,7 @@ function renderObject8021QSyncPreview ($object, $vswitch, $plan, $C, $R, $maxdec
 	//$tplm->createMainModule("index");
 	
 	$mod = $tplm->generateSubmodule($placeholder , "RenderObject8021QSyncPreview", $parent);
-
-
-
+	$mod->setNamespace('object');
 	if (isset ($_REQUEST['hl_port_id']))
 	{
 		$mod->setOutput('Port_Id', $hl_port_id);
