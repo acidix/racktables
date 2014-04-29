@@ -3,7 +3,7 @@
 	<table border=0 align=center>
 	<tr><th class=tdright>name:</th><td class=tdleft><input type=text name=name value='<?php $this->PoolInfoName ?> '></td></tr>
 	<tr><th class=tdright>VS config:</th><td class=tdleft><textarea name=vsconfig rows=20 cols=80><?php $this->PoolInfoVSConfig ?></textarea></td></tr>
-	<tr><th class=tdright>RS config:</th><td class=tdleft><textarea name=vsconfig rows=20 cols=80><?php $this->PoolInfoRSConfig ?></textarea></td></tr>
+	<tr><th class=tdright>RS config:</th><td class=tdleft><textarea name=rsconfig rows=20 cols=80><?php $this->PoolInfoRSConfig ?></textarea></td></tr>
 	<tr><th class=submit colspan=2>
 	<?php $this->getH("PrintImageHREF", array( 'SAVE', 'Save changes', TRUE)); ?> 
 	</td></tr>

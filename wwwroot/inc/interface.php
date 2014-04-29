@@ -5654,8 +5654,11 @@ function renderLocationPage ($location_id)
 	$mod->addOutput('Countlocations', count ($locationData['locations']));
 	// startPortlet ('Child Locations (' . count ($locationData['locations']) . ')');
 	// echo "<table border=0 cellspacing=0 cellpadding=5 align=center>\n";
+	$helperarray = array();
 	foreach ($locationData['locations'] as $location_id => $name)
-		$mod->addOutput('Looparray2', array('Locationmka' => mkA ($name, 'location', $location_id) ));
+		$helperarray[] = array('Locationmka' => mkA($name, 'location', $location_id) );
+		
+		$mod->addOutput('Looparray2', $helperarray);
 		// echo '<tr><td>' . mkA ($name, 'location', $location_id) . '</td></tr>';
 	// echo "</table>\n";
 	// finishPortlet();
@@ -6186,7 +6189,7 @@ function renderEditAttrMapForm ()
 		//TODO ???
 		foreach ($attrMap as $attr)
 			$allAttrMapsOut[] = array('Id' => $attr['id'], 'Shorttype' => $shortType[$attr['type']], 'Name' => $attr['name']);
-		$mod->addOutput("AllAttrMaps", $allAttrMapsOut);
+		$submod->addOutput("AllAttrMaps", $allAttrMapsOut);
 			 
 			// echo "<option value=${attr['id']}>[" . $shortType[$attr['type']] . "] ${attr['name']}</option>";
 		// echo "</select></td><td class=tdleft>";
