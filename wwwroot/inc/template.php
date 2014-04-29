@@ -1226,7 +1226,7 @@ class TemplateModule
 		{
 			if (array_key_exists($this->reference_next, $this->output[$this->reference_origin]))
 			{
-				$this->output_reference &= $this->output[$this->reference_origin][$this->reference_next];
+				$this->output_reference = $this->output[$this->reference_origin][$this->reference_next];
 				$this->reference_next++;
 				$this->use_reference = true;
 				return true;
@@ -1241,7 +1241,7 @@ class TemplateModule
 		{
 			if (array_key_exists($name, $this->output) && is_array($this->output[$name]) && array_key_exists($startvar, $this->output[$name]))
 			{
-				$this->output_reference &= $this->output[$name][$startvar];
+				$this->output_reference = $this->output[$name][$startvar];
 				$this->use_reference = true;
 				$this->reference_origin = $name;
 				$this->reference_next = $startvar + 1;

@@ -14,7 +14,7 @@
 		</table>
 		<p>
 		<input type="hidden" name="vdom_id" value="<?php $this->htmlspcDomainID ?>">
-		<input type="hidden" name="vdom_id" value="<?php $this->htmlspcVlanID ?>">
+		<input type="hidden" name="vlan_id" value="<?php $this->htmlspcVlanID ?>">
 		<?php $this->getH("PrintImageHref", array('SAVE', 'Update VLAN', TRUE)); ?>
 		</form><p>
 		<?php $this->reasonLink ?>

@@ -13,12 +13,12 @@
 		<br><table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>
 		<tr><th>&nbsp;</th><th class=tdleft>inner interface</th><th class=tdleft>outer interface</th></tr>
 		<?php $this->AddNewTop ?> 
-		<?php $this->startLoop("AllInterfaces"); ?>	
+		<?php while($this->refLoop("AllInterface")) { ?>	
 			<tr class=row_<?php $this->Order ?>><td>
 			<?php $this->OpLink ?>
 			</td><td class=tdleft><?php $this->IifName ?></td><td class=tdleft><?php $this->OifName ?></td></tr>
-		<?php $this->endLoop(); ?> 
-		<?php $this->AddNewBottom ?> 
+		<?php } ?> 
+		<?php $this->AddNewBottom; ?> 
 		</table>
 	</div>
 <?php } else { ?>

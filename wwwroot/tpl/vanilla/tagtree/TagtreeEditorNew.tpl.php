@@ -7,6 +7,7 @@
 		<td><?php $this->getH("PrintSelect", array($this->_Options, array ('name' => 'parent_id', 'tabindex' => 110))); ?></td>
 		<td><?php $this->getH('PrintImageHref',array('create', 'Create tag', TRUE, 120)); ?></td>
 	</tr>
+	</form>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />
