@@ -250,10 +250,10 @@ $this->setInMemoryTemplate('FileSummaryComment','<div class="dashed commentblock
 $this->setInMemoryTemplate("RenderConfigVarName",'<span class="varname">{{vname}}</span>\n<p class="vardescr">{{desAndIsDefined}}</p>');
 
 /**
- * FileSummaryComment
+ * StdTableRowClass
  * Usage: as above
  */
-$this->setInMemoryTemplate('FileLinksDefLink','<tr><td class=tdleft>{{Content}}</td></tr>');
+$this->setInMemoryTemplate('StdTableRowClass','<tr><td class={{Class}}>{{Content}}</td></tr>');
 
 /**
  * FileSummaryComment
