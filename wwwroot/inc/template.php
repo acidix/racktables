@@ -955,17 +955,17 @@ class TemplateModule
 	
 	public function addJS($code, $inline = false) {
 		if ($inline) {
-			$this->addRequirement('Header', 'HeaderJsInline', array('code'=>$code,'',true));
+			$this->addRequirement('Header', 'HeaderJsInline', array('code'=>$code),'',true);
 		} else {
-			$this->addRequirement('Header', 'HeaderJsInclude', array('path'=>$code,'',true));
+			$this->addRequirement('Header', 'HeaderJsInclude', array('path'=>$code),'',true);
 		}
 	}
 	
 	public function addCSS($code, $inline = false) {
 		if ($inline) {
-			$this->addRequirement('Header', 'HeaderCssInline', array('code'=>$code,'',true));
+			$this->addRequirement('Header', 'HeaderCssInline', array('code'=>$code),'',true);
 		} else {
-			$this->addRequirement('Header', 'HeaderCssInclude', array('path'=>$code,'',true));
+			$this->addRequirement('Header', 'HeaderCssInclude', array('path'=>$code),'',true);
 		}
 	}
 	
