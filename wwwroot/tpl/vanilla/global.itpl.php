@@ -23,7 +23,7 @@ $this->setInMemoryTemplate("HeaderJsInline",'<script type="text/javascript">' . 
  * Template for: JS include
  * Usage: interface-lib.php (printPageHeaders())
 */
-$this->setInMemoryTemplate("HeaderJsInclude","<link rel=stylesheet type='text/css' href='?module=chrome&uri={{path}}' />\n");
+$this->setInMemoryTemplate("HeaderJsInclude","<script type='text/javascript' src='?module=chrome&uri={{path}}'></script>\n");
 
 /**
  * Template for: CellFilterPortlet in case there are no tags
