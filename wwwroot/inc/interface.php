@@ -1251,8 +1251,8 @@ function renderRack ($rack_id, $hl_obj_id = 0, $parent = null, $placeholder = "R
 
 function renderRackSortForm ($row_id)
 {
-	includeJQueryUI (false);
-	$js = <<<JSTXT
+	//includeJQueryUI (false);
+	/* $js = <<<JSTXT
 	$(document).ready(
 		function () {
 			$("#sortRacks").sortable({
@@ -1268,7 +1268,7 @@ function renderRackSortForm ($row_id)
 		}
 	);
 JSTXT;
-	addJS($js, true);
+	addJS($js, true); */
 	
 	$tplm = TemplateManager::getInstance();
 	

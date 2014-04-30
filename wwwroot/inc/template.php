@@ -104,7 +104,7 @@ class TemplateManager
 
 		// $arr = glob('../tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
 
-		$arr = glob('../tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
+		//$arr = glob('../tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
 
 		sort($arr);
 
@@ -422,7 +422,7 @@ class TemplateManager
 	 */
 	public function addRequirement($placeholder,$name,$namespace="",$inmemory=false,$cont=array() )
 	{
-		$test = array($placeholder,$name,$namespace,$inmemory,$cont);
+		$test = $placeholder . $name . $namespace . $inmemory . $cont ;
 		foreach ($this->requirements as $req)
 		{
 			if ($req == $test)
@@ -968,7 +968,6 @@ class TemplateModule
 		} else {
 			$this->addRequirement('Header', 'HeaderCssInclude', array('path'=>$code,'',true));
 		}
-		
 	}
 	
 	/**
