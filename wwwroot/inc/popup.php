@@ -234,11 +234,11 @@ function renderPopupObjectSelector()
 	//echo '<h2>Choose a container:</h2>';
 	//echo '<form action="javascript:;">';
 	$parents = findObjectParentCandidates($object_id);
-	printSelect ($parents, array ('name' => 'parents', 'size' => getConfigVar ('MAXSELSIZE')));
+	//printSelect ($parents, array ('name' => 'parents', 'size' => getConfigVar ('MAXSELSIZE')));
 	
 	$tplm = TemplateManager::getInstance();
 	
-	$mod = $tplm->generateSubmodule('Payload', 'PortSelector');
+	$mod = $tplm->generateSubmodule('Payload', 'ObjectSelector');
 	$mod->setNamespace('popup',true);
 	
 	$mod->addOutput('ObjectSelect', getSelect ($parents, array ('name' => 'parents', 'size' => getConfigVar ('MAXSELSIZE'))));
