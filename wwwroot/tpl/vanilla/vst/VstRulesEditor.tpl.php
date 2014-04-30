@@ -10,7 +10,7 @@
 		$row_html .= "<td><input type=text name=wrt_vlans value=''></td>";
 		$row_html .= "<td><input type=text name=description value=''></td>";
 		$row_html .= "<td><a href='#' class='vst-add-rule'> <img width='16' height='16' border='0' title='Duplicate rule' src='?module=chrome&uri=pix/tango-list-add.png'> </a></td>"; 
-		$this->addJS("var new_vst_row = \"" . addslashes($row_html) . "\";", TRUE);
+		$this->addJS("var new_vst_row = \"" . addslashes(trim(preg_replace('/\s+/', ' ', $row_html))) . "\";", TRUE);
 		$this->addJS('js/vst_editor.js');
 	?>
 	<center><h1> <?php $this->Nifty; ?> </h1></center>

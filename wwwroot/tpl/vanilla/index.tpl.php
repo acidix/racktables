@@ -3,7 +3,7 @@
 <!-- Template taken from: interface.php:94 -->
 <head><title><?php $this->PageTitle ; //echo getTitle ($pageno); ?></title>
 	<link rel="stylesheet" type="text/css" href="?module=chrome&amp;uri=css/pi.css">
-	<?php $this->Header ; echo 'stuff';//printPageHeaders(); ?>
+	<?php $this->Header ; //printPageHeaders(); ?>
 </head>
 <body>
 	<div class="maintable">
