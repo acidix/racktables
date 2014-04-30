@@ -1280,8 +1280,12 @@ JSTXT;
 	//echo "<table border=0 cellspacing=0 cellpadding=5 align=center class=widetable>\n";
 	//echo "<tr><th>Drag to change order</th></tr>\n";
 	//echo "<tr><td><ul class='uflist' id='sortRacks'>\n";
+	$arr = array();
 	foreach (getRacks($row_id) as $rack_id => $rackInfo)
-		$mod->addOutput('racklist', array('RackId'=>$rack_id,'RackName'=>$rackInfo['name']));
+		$arr[] = array('RackId'=>$rack_id,'RackName'=>$rackInfo['name']);
+	
+	$mod->addOutput('racklist', $arr);
+		//$mod->addOutput('racklist', array());
 		//echo "<li id=racks_${rack_id}>${rackInfo['name']}</li>\n";
 	//echo "</ul></td></tr></table>\n";
 	//finishPortlet();
