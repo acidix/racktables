@@ -438,6 +438,7 @@ class TemplateManager
 		$mod->setLock(true);
 		
 		$this->getMainModule()->addOutput($placeholder, $mod->run());
+		return 'added ' . $name . ' to ' . $placeholder;
 	}
 	
 	/**
