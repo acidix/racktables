@@ -30,7 +30,7 @@
 	<div class=portlet><h2>add rules one by one</h2>
 	<?php } ?>
 		
-	$this->getH('PrintOpFormIntro', 'upd'); ?>
+	<?php $this->getH('PrintOpFormIntro', 'upd'); ?>
 	<table cellspacing=0 cellpadding=5 align=center class="widetable template-rules">
 		<tr><th></th><th>sequence</th><th>regexp</th><th>role</th><th>VLAN IDs</th><th>comment</th><th><a href="#" class="vst-add-rule initial"> <?php $this->getH('PrintImageHref', array('add', 'Add rule')); ?> </a></th></tr>
 		<?php $this->startLoop('ItemArray'); ?>
