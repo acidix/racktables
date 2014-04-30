@@ -975,7 +975,7 @@ class TemplateModule
 	
 	public function addLocalRequirement($placeholder, $value)
 	{
-		if (array_key_exists($name, $this->localRequirements))
+		if (array_key_exists($placeholder, $this->localRequirements))
 		{
 			if(is_array($this->localRequirements[$placeholder])&&!$this->isAssoc($this->localRequirements[$placeholder]))
 			{
