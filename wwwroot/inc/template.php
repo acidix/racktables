@@ -808,9 +808,9 @@ class TemplateModule
 			throw new TemplateException("TplErr: Module and template need to be set before running a template-module.");
 			return "";
 		}
-		ob_start();
 		
-		$this->output = $this->runModules($this->output);
+		
+		$this->output = array_merge_recursive($this->runModules($this->output),$this->output);
 		
 		$this->output["css"] = './tpl/' . $this->tpl . '/css/';
 		$this->output["img"] = './tpl/' . $this->tpl . '/img/';
@@ -825,6 +825,7 @@ class TemplateModule
 			throw new TemplateException("TplError: Module " . $this->module . " doesn't exist in " . $this->tpl);
 			return "";
 		}
+		ob_start();
 		include './tpl/' . $this->tpl . '/' . $this->module . '.tpl.php';
 		return ob_get_clean();
 	}
@@ -1299,7 +1300,7 @@ class TemplateInMemory extends TemplateModule
 		}
 		$code = $tplm->getInMemoryTemplate($this->module);
 		
-		$this->output = $this->runModules($this->output);
+		$this->output = array_merge_recursive($this->runModules($this->output),$this->output);
 		
 		$this->output["css"] = './tpl/' . $this->tpl . '/css/';
 		$this->output["img"] = './tpl/' . $this->tpl . '/img/';

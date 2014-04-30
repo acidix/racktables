@@ -1276,7 +1276,7 @@ JSTXT;
 	$mod = $tplm->generateSubmodule('Payload', 'RowRackSortForm');
 	$mod->setNamespace('row',true);
 	
-	$mod->addJS('js/jquery-ui-1.8.21.min.js');
+	//$mod->addJS('js/jquery-ui-1.8.21.min.js');
 
 	//startPortlet ('Racks');
 	//echo "<table border=0 cellspacing=0 cellpadding=5 align=center class=widetable>\n";
