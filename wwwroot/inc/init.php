@@ -143,11 +143,10 @@ $op = '';
 
 	switch ($requestedModule)
 	{
-		case 'interface' : $mod = 'interface'; break;
-		case 'popup' : $mod = 'interface'; break;
-		default : $mod = 'interface';
+		case 'interface' : TemplateManager::initalizeTemplate('index'); break;
+		case 'popup' : TemplateManager::initalizeTemplate('PopUp'); break;
 	}
-TemplateManager::initalizeTemplate($mod);
+//TemplateManager::initalizeTemplate($mod);
 
 //Adjust static dir to search within the template directory ./tpl/template/css etc.
 TemplateManager::changeStaticDir();
