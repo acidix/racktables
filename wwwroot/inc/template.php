@@ -104,7 +104,10 @@ class TemplateManager
 
 		// $arr = glob('../tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
 
-		//$arr = glob('../tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
+
+		// $arr = glob('../tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
+
+
 
 		sort($arr);
 
