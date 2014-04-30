@@ -41,7 +41,9 @@
 		</div>
 		<?php } ?>
 		</td>
-	<?php } ?> 
+	<?php } else {
+		$this->TrunkPortlets;
+		} ?> 
 	</tr></table>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
