@@ -5,7 +5,7 @@
 		<table border=0 cellspacing=0 cellpadding=3 align=center>
 		<tr><td>&nbsp;</td><th colspan=2><h2>Attributes</h2></th></tr>
 		<tr><td>&nbsp;</td><th class=tdright>Type:</th><td class=tdleft>
-		<?php $this->selectedObj ?>
+		<?php $this->PrintOptSel ?>
 		</td></tr>
 		<tr><td>&nbsp;</td><th class=tdright>Common name:</th><td class=tdleft><input type=text name=object_name value='<?php $this->object_name ?>'></td></tr>
 		<tr><td>&nbsp;</td><th class=tdright>Visible label:</th><td class=tdleft><input type=text name=object_label value='<?php $this->object_label ?>'></td></tr>
@@ -17,13 +17,12 @@
 			<?php $this->mkA ?>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<?php $this->parentsOpLink ?>
-			</td></tr>
+			</td></tr>edit
 		<?php $this->endLoop(); ?> 
 			<tr><td>&nbsp;</td>
 			<th class=tdright>Select container:</th><td class=tdleft>
-			<span onclick='window.open("<?php $this->hrefHelper ?>", "findlink", "height=700, width=400, location=no, menubar=no, 
-				resizable=yes, scrollbars=yes, status=no, titlebar=no, toolbar=no");'>
-				<?php $this->imageSelCont ?>
+			<span onclick='window.open("<?php $this->hrefHelper ?>", "findlink", "height=700, width=400, location=no, menubar=no, resizable=yes, scrollbars=yes, status=no, titlebar=no, toolbar=no");'>
+			<?php $this->getH("PrintImageHref", array('attach', 'Select a container')); ?>
 			</span></td></tr>
 		<?php } ?> 
 		<?php if ($this->is("areValues",true)) { ?>
