@@ -18,7 +18,7 @@ $js = <<<JSTXT
 JSTXT;
 
 $this->addJs($js,true); 
-$this->addJS ('js/jquery-ui-1.8.21.min.js'); ?>
+$this->addJS('js/jquery-ui-1.8.21.min.js'); ?>
 
 <div class=portlet>
 	<h2>Racks</h2>
