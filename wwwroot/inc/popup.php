@@ -586,13 +586,12 @@ function renderPopupHTML()
 			throw new InvalidRequestArgException ('helper', $_REQUEST['helper']);
 	}
 	
+	echo 'running popup';
 	$tplm->run(true);
+	echo 'run succesfull';
 	//echo '<head><title>RackTables pop-up</title>';
 	//printPageHeaders();
 	//echo '</head>';
 	//echo '<body style="height: 100%;">' . $text . '</body>';
-?>
-</html>
-<?php
 }
 ?>
