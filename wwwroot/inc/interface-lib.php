@@ -307,7 +307,6 @@ function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $
 	{
 		foreach ($optionList as $key => $value)
 			break;
-
 		$mod = $tplm->generateModule("GetSelectInLine",  true, array("selectName" => $select_attrs['name'], "keyValue" => $key, "value" => $value ));	
 		$mod->setNamespace("");
 //		return "<input type=hidden name=${select_attrs['name']} id=${select_attrs['name']} value=${key}>" . $value;

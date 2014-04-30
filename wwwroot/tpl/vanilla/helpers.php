@@ -453,11 +453,14 @@ class TemplateHelperPrintSelect extends TemplateHelperAbstract
 		$optList = $params[0];
 		$select_attrs = array();
 		$selected_id = NULL;
+		$treat_single_special = TRUE;
 
 		if(count($params) > 1)
 			$select_attrs = $params[1];
 		if(count($params) > 2)
 			$selected_id = $params[2];
+		if(count($params) > 3)
+			$treat_single_special = $params[3];
 		
 		//Original getSelect code 
 		if (!array_key_exists ('name', $select_attrs)){
@@ -473,16 +476,15 @@ class TemplateHelperPrintSelect extends TemplateHelperAbstract
 		$tplm = TemplateManager::getInstance();
 		//$tplm->setTemplate("vanilla");
 
-		if (count ($optList) == 1)
+		if (count ($optList) == 1  && $treat_single_special)
 		{
 			foreach ($optList as $key => $value)
 				break;
-
 			$mod = $tplm->generateModule("GetSelectInLine",  true, array("selectName" => $select_attrs['name'], "keyValue" => $key, "value" => $value ));	
-
 			echo $mod->run();
 			return;
 		}
+		
 		$mod = $tplm->generateModule("GetSelect");
 		
 		if (!array_key_exists ('id', $select_attrs))

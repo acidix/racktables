@@ -1354,7 +1354,7 @@ function renderEditObjectForm()
 //	echo "<tr><td>&nbsp;</td><th colspan=2><h2>Attributes</h2></th></tr>";
 //	echo '<tr><td>&nbsp;</td><th class=tdright>Type:</th><td class=tdleft>';
 //	printSelect (getObjectTypeChangeOptions ($object['id']), array ('name' => 'object_type_id'), $object['objtype_id']);
-	printSelect (getObjectTypeChangeOptions ($object['id']), array ('name' => 'object_type_id'), $object['objtype_id'], $mod, 'selectedObj');
+	$mod->setOutput('PrintOptSel', printSelect (getObjectTypeChangeOptions ($object['id']), array ('name' => 'object_type_id'), $object['objtype_id']));
 //	echo '</td></tr>';
 	// baseline info
 	$mod->addOutput("object_name", $object['name']);
@@ -1398,7 +1398,7 @@ function renderEditObjectForm()
 	//	echo "\",\"findlink\",\"${popup_args}\");'>";
 	//	printImageHREF ('attach', 'Select a container');
 	//	echo "</span></td></tr>\n";
-		printImageHREF ('attach', 'Select a container', $mod, 'imageSelCont');
+		//printImageHREF ('attach', 'Select a container', $mod, 'ImageSelCont');
 
 	}
 	// optional attributes
