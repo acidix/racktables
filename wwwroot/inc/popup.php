@@ -585,6 +585,8 @@ function renderPopupHTML()
 		default:
 			throw new InvalidRequestArgException ('helper', $_REQUEST['helper']);
 	}
+	
+	$tplm->run(true);
 	//echo '<head><title>RackTables pop-up</title>';
 	//printPageHeaders();
 	//echo '</head>';
