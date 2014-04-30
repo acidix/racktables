@@ -886,7 +886,7 @@ function renderRow ($row_id)
 	$mod->addOutput('RowName', $rowInfo['name']);
 	
 	
-	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
+	//echo "<table border=0 class=objectview cellspacing=0 cellpadding=0>";
 
 	// Left portlet with row information.
 	//echo "<tr><td class=pcleft>";
@@ -946,6 +946,7 @@ function renderRow ($row_id)
 		///echo " title='${rack['height']} units'";
 		//echo "src='?module=image&img=midirack&rack_id=${rack['id']}&scale=" . getConfigVar ('ROW_SCALE') . "'>";
 		//echo "<br>${rack['name']}</a></td>";
+		$smod->addOutput('RowScale', getConfigVar ('ROW_SCALE'));
 		$order = $nextorder[$order];
 		$rackListIdx++;
 	}

@@ -7,7 +7,7 @@
 	<?php } ?>
 	<td align=center valign=bottom class=row_<?php $this->Class; ?>>
 		<a href='<?php $this->Link ?>'>
-			<img border=0 width=<?php $this->ImgWidth; ?> height=<?php $this->ImgHeight; ?> title='<?php $this->RackHeight; ?> units' src='?module=image&img=midirack&rack_id=<?php $this->Id; ?>'>
+			<img border=0 width=<?php $this->ImgWidth; ?> height=<?php $this->ImgHeight; ?> title='<?php $this->RackHeight; ?> units' src='?module=image&img=midirack&rack_id=<?php $this->Id; ?>&scale=<?php $this->RowScale; ?>'>
 			<br>
 			<?php $this->Name; ?>
 		</a>
