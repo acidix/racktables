@@ -437,8 +437,8 @@ class TemplateManager
 		$mod->setNamespace($namespace);
 		$mod->setLock(true);
 		
-		$this->getMainModule()->addOutput($placeholder, $mod->run());
-		return 'added ' . $name . ' to ' . $placeholder;
+		$this->getMainModule()->addLocalRequirement($placeholder, $mod->run());
+		return true;
 	}
 	
 	/**
@@ -603,7 +603,7 @@ class TemplateModule
 	 * Contains all submodules of this module.
 	 * @var string
 	 */
-	protected $submodules = array();
+	protected $localRequirements = array();
 	
 	/**
 	 * Defines a path where the module will search for it's template (for example: Namespace="rackspace" and name="RackspaceOverview"
@@ -810,7 +810,7 @@ class TemplateModule
 		}
 		
 		
-		$this->output = array_merge_recursive($this->runModules($this->output),$this->output);
+		$this->output = array_merge_recursive($this->runModules($this->output),$this->localRequirements);
 		
 		$this->output["css"] = './tpl/' . $this->tpl . '/css/';
 		$this->output["img"] = './tpl/' . $this->tpl . '/img/';
@@ -970,6 +970,25 @@ class TemplateModule
 			return $this->addRequirement('Header', 'HeaderCssInline', array('code'=>$code),'',true);
 		} else {
 			return $this->addRequirement('Header', 'HeaderCssInclude', array('path'=>$code),'',true);
+		}
+	}
+	
+	public function addLocalRequirement($placeholder, $value)
+	{
+		if (array_key_exists($name, $this->localRequirements))
+		{
+			if(is_array($this->localRequirements[$placeholder])&&!$this->isAssoc($this->localRequirements[$placeholder]))
+			{
+				$this->localRequirements[$placeholder][] = $value ;
+			}
+			else
+			{
+				$this->localRequirements[$placeholder] = array($this->localRequirements[$placeholder],$value);
+			}
+		}
+		else
+		{
+			$this->localRequirements[$placeholder] = $value;
 		}
 	}
 	
@@ -1300,7 +1319,7 @@ class TemplateInMemory extends TemplateModule
 		}
 		$code = $tplm->getInMemoryTemplate($this->module);
 		
-		$this->output = array_merge_recursive($this->runModules($this->output),$this->output);
+		$this->output = array_merge_recursive($this->runModules($this->output),$this->localRequirements);
 		
 		$this->output["css"] = './tpl/' . $this->tpl . '/css/';
 		$this->output["img"] = './tpl/' . $this->tpl . '/img/';
