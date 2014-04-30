@@ -808,7 +808,6 @@ class TemplateModule
 			return "";
 		}
 		ob_start();
-		$this->sout = array();
 		
 		$this->output = $this->runModules($this->output);
 		
@@ -958,17 +957,17 @@ class TemplateModule
 	
 	public function addJS($code, $inline = false) {
 		if ($inline) {
-			$this->addRequirement('Header', 'HeaderJsInline', array('code'=>$code));
+			return $this->addRequirement('Header', 'HeaderJsInline', array('code'=>$code));
 		} else {
-			$this->addRequirement('Header', 'HeaderJsInclude', array('path'=>$code));
+			return $this->addRequirement('Header', 'HeaderJsInclude', array('path'=>$code));
 		}
 	}
 	
 	public function addCSS($code, $inline = false) {
 		if ($inline) {
-			$this->addRequirement('Header', 'HeaderCssInline', array('code'=>$code),'',true);
+			return $this->addRequirement('Header', 'HeaderCssInline', array('code'=>$code),'',true);
 		} else {
-			$this->addRequirement('Header', 'HeaderCssInclude', array('path'=>$code),'',true);
+			return $this->addRequirement('Header', 'HeaderCssInclude', array('path'=>$code),'',true);
 		}
 	}
 	
