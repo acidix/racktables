@@ -3,14 +3,14 @@
 	<?php
 		$this->addJS('js/vst_editor.js');
 	
-		$row_html  = '<td><a href="#" class="vst-del-rule"> <img width="16" height="16" border="0" title="delete rule" src="?module=chrome&uri=pix/tango-list-remove.png"> </a></td>'; 
-		$row_html .= '<td><input type=text name=rule_no value="%s" size=3></td>';
-		$row_html .= '<td><input type=text name=port_pcre value="%s"></td>';
+		$row_html  = "<td><a href='#' class='vst-del-rule'> <img width='16' height='16' border='0' title='delete rule' src='?module=chrome&uri=pix/tango-list-remove.png'> </a></td>"; 
+		$row_html .= "<td><input type=text name=rule_no value='%s' size=3></td>";
+		$row_html .= "<td><input type=text name=port_pcre value='%s'></td>";
 		$row_html .= '<td>' . $this->AccessSelect . '</td>';
-		$row_html .= '<td><input type=text name=wrt_vlans value="%s"></td>';
-		$row_html .= '<td><input type=text name=description value="%s"></td>';
-		$row_html .= '<td><a href="#" class="vst-add-rule"> <img width="16" height="16" border="0" title="Duplicate rule" src="?module=chrome&uri=pix/tango-list-add.png"> </a></td>'; 
-		$this->addJS("var new_vst_row = '" . addslashes($row_html) . "';", TRUE);
+		$row_html .= "<td><input type=text name=wrt_vlans value='%s'></td>";
+		$row_html .= "<td><input type=text name=description value='%s'></td>";
+		$row_html .= "<td><a href='#' class='vst-add-rule'> <img width='16' height='16' border='0' title='Duplicate rule' src='?module=chrome&uri=pix/tango-list-add.png'> </a></td>"; 
+		$this->addJS("var new_vst_row = \"" . addslashes($row_html) . "\";", TRUE);
 
 	?>
 	<center><h1> <?php $this->Nifty; ?> </h1></center>
@@ -28,8 +28,8 @@
 	</form>
 	</div>
 	<div class=portlet><h2>add rules one by one</h2>
-	<?php } 
-	
+	<?php } ?>
+		
 	$this->getH('PrintOpFormIntro', 'upd'); ?>
 	<table cellspacing=0 cellpadding=5 align=center class="widetable template-rules">
 		<tr><th></th><th>sequence</th><th>regexp</th><th>role</th><th>VLAN IDs</th><th>comment</th><th><a href="#" class="vst-add-rule initial"> <?php $this->getH('PrintImageHref', array('add', 'Add rule')); ?> </a></th></tr>
@@ -50,7 +50,7 @@
 	<center> <?php $this->getH('PrintImageHref', array('SAVE', 'Save template', TRUE)); ?> </center>
 	</form>
 	<?php $this->VstRules; ?>
-	<?php if($this->is('CountSourceOption', TRUE)) { ?></div><?php } ?>
+	<?php if($this->is('Count', TRUE)) { ?></div><?php } ?>
 	
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
