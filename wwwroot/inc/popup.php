@@ -586,7 +586,7 @@ function renderPopupHTML()
 			throw new InvalidRequestArgException ('helper', $_REQUEST['helper']);
 	}
 	
-	ob_end_clean();
+	//ob_end_clean();
 	echo 'running popup';
 	$tplm->run(true);
 	echo 'run succesfull';

@@ -1392,6 +1392,8 @@ function renderEditObjectForm()
 	//	echo "<th class=tdright>Select container:</th><td class=tdleft>";
 	//	echo "<span";
 		$helper_args = array ('object_id' => $object_id);
+		$mod->addOutput('ObjID', $object_id);
+		//$mod->addOutput('ParentPopupLink', makeHrefForHelper ('objlist', $helper_args));
 	//	$popup_args = 'height=700, width=400, location=no, menubar=no, '.
 	//		'resizable=yes, scrollbars=yes, status=no, titlebar=no, toolbar=no';
 	//	echo " onclick='window.open(\"" . makeHrefForHelper ('objlist', $helper_args);

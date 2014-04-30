@@ -21,7 +21,7 @@
 		<?php $this->endLoop(); ?> 
 			<tr><td>&nbsp;</td>
 			<th class=tdright>Select container:</th><td class=tdleft>
-			<span onclick='window.open("<?php $this->hrefHelper ?>", "findlink", "height=700, width=400, location=no, menubar=no, resizable=yes, scrollbars=yes, status=no, titlebar=no, toolbar=no");'>
+			<span onclick='window.open("?module=popup&helper=objlist&object_id=<?php $this->ObjID ?>", "findlink", "height=700, width=400, location=no, menubar=no, resizable=yes, scrollbars=yes, status=no, titlebar=no, toolbar=no");'>
 			<?php $this->getH("PrintImageHref", array('attach', 'Select a container')); ?>
 			</span></td></tr>
 		<?php } ?> 
