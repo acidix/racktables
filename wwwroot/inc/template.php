@@ -422,7 +422,7 @@ class TemplateManager
 	 */
 	public function addRequirement($placeholder,$name,$namespace="",$inmemory=false,$cont=array() )
 	{
-		$test = $placeholder . $name . $namespace . $inmemory . $cont ;
+		$test = $placeholder . $name . $namespace . $inmemory . implode('', $cont) . implode('',array_keys($cont)) ;
 		foreach ($this->requirements as $req)
 		{
 			if ($req == $test)
