@@ -1251,8 +1251,8 @@ function renderRack ($rack_id, $hl_obj_id = 0, $parent = null, $placeholder = "R
 
 function renderRackSortForm ($row_id)
 {
-	includeJQueryUI (false);
-	$js = <<<JSTXT
+	//includeJQueryUI (false);
+	/* $js = <<<JSTXT
 	$(document).ready(
 		function () {
 			$("#sortRacks").sortable({
@@ -1268,7 +1268,7 @@ function renderRackSortForm ($row_id)
 		}
 	);
 JSTXT;
-	addJS($js, true);
+	addJS($js, true); */
 	
 	$tplm = TemplateManager::getInstance();
 	
@@ -11407,7 +11407,7 @@ function renderVSTRulesEditor ($vst_id)
 		$mod->addOutput('VstMutexRev', $vst['mutex_rev']);
 		//echo '<input type=hidden name="mutex_rev" value="' . $vst['mutex_rev'] . '">';
 		//echo '<table cellspacing=0 cellpadding=5 align=center class=widetable>';
-		$mod->addOutput('AccessSelect', getSelect ($source_options, array ('name' => 'from_id')));
+		$mod->addOutput('AccessSelectClone', getSelect ($source_options, array ('name' => 'from_id')));
 		//echo '<tr><td>' . getSelect ($source_options, array ('name' => 'from_id')) . '</td>';
 		//echo '<td>' . getImageHREF ('COPY', 'copy from selected', TRUE) . '</td></tr></table></form>';
 		//finishPortlet();
@@ -11418,7 +11418,7 @@ function renderVSTRulesEditor ($vst_id)
 	//echo '<tr><th></th><th>sequence</th><th>regexp</th><th>role</th>';
 	//echo '<th>VLAN IDs</th><th>comment</th><th><a href="#" class="vst-add-rule initial">' . getImageHREF ('add', 'Add rule') . '</a></th></tr>';
 	global $port_role_options;
-	$mod->addOutput('Port_role_options', $port_role_options);
+	//$mod->addOutput('Port_role_options', $port_role_options);
 	
   /*$row_html  = '<td><a href="#" class="vst-del-rule">' . getImageHREF ('destroy', 'delete rule') . '</a></td>'; //<img width="16" height="16" border="0" title="delete rule" src="?module=chrome&uri=pix/tango-list-remove.png">
 	$row_html .= '<td><input type=text name=rule_no value="%s" size=3></td>';
@@ -11434,7 +11434,7 @@ function renderVSTRulesEditor ($vst_id)
 	$arr = array();
 	foreach (isset ($_SESSION['vst_edited']) ? $_SESSION['vst_edited'] : $vst['rules'] as $item)
 	{
-		$arr[] = array('RuleNo' => $item['rule_no'], 'PortPCRE' => htmlspecialchars($item['port_pcre'], ENT_QUOTES), 'AccessSelect' => getSelect ($port_role_options, array ('name' => 'port_role'), $item['port_role']), 'WRTVlans' => $item['wrt_vlans'], 'Description' => $item['description']);
+		$arr[] = array('RuleNo' => $item['rule_no'], 'PortPCRE' => htmlspecialchars($item['port_pcre'], ENT_QUOTES), 'AccessSelectSingle' => getSelect ($port_role_options, array ('name' => 'port_role'), $item['port_role']), 'WRTVlans' => $item['wrt_vlans'], 'Description' => $item['description']);
 		/*$mod->setOutput('Rule_no', $item['rule_no']);
 		$mod->setOutput('Port_pcre', $item['port_pcre']);
 		$mod->setOutput('Getselect', getSelect ($port_role_options, array ('name' => 'port_role'), $item['port_role']));   
