@@ -536,10 +536,10 @@ function renderPopupHTML()
 	header ('Content-Type: text/html; charset=UTF-8');
 	
 	//Initialize template functionality
-	TemplateManager::initalizeTemplate('PopUp');
+	//TemplateManager::initalizeTemplate('PopUp');
 	
 	//Adjust static dir to search within the template directory ./tpl/template/css etc.
-	TemplateManager::changeStaticDir();
+	//TemplateManager::changeStaticDir();
 //<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 //<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" style="height: 100%;">
 	assertStringArg ('helper');

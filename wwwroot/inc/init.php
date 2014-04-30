@@ -138,8 +138,16 @@ alterConfigWithUserPreferences();
 $op = '';
 
 
-//Initialize template functionality
-TemplateManager::initalizeTemplate();
+//Initialize template functionality#
+	$requestedModule = array_key_exists ('module', $_REQUEST) ? $_REQUEST['module'] : 'interface';
+
+	switch ($requestedModule)
+	{
+		case 'interface' : $mod = 'interface'; break;
+		case 'popup' : $mod = 'interface'; break;
+		default : $mod = 'interface';
+	}
+TemplateManager::initalizeTemplate($mod);
 
 //Adjust static dir to search within the template directory ./tpl/template/css etc.
 TemplateManager::changeStaticDir();
