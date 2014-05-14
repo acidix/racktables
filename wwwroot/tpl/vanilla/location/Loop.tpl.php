@@ -1,6 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
 
-	<input type=hidden name=<?php< $this->Index; ?>_attr_id value=<?php $this->Record_Id; ?>>
+	<input type=hidden name=<?php $this->Index; ?>_attr_id value=<?php $this->Record_Id; ?>>
 	<td><tr>
 
 	<?php 
