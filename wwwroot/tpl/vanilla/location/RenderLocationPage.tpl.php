@@ -4,8 +4,8 @@
 	<!--  left collum with information  -->
 	<td class=pcleft>
 	<?php 
-		$this->Renderentitysummary;
-		$this->Renderfilesportlet;
+		$this->EntitySummary;
+		$this->FilesPortlet;
 	?>
 	</td>	
    <!-- Right column with list of rows and child locations -->

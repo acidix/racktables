@@ -5646,8 +5646,8 @@ function renderLocationPage ($location_id)
 	$summary['tags'] = '';
 	if (strlen ($locationData['comment']))
 		$summary['Comment'] = $locationData['comment'];
-	$mod->addOutput('Renderentitysummary', renderEntitySummary ($locationData, 'Summary', $summary, $mod));
-	$mod->addOutput('Renderfilesportlet', renderFilesPortlet ('location', $location_id));
+	renderEntitySummary ($locationData, 'Summary', $summary, $mod, 'EntitySummary');
+	renderFilesPortlet ('location', $location_id, $mod, 'FilesPortlet');
 	// echo '</td>';
 
 	// Right column with list of rows and child locations
