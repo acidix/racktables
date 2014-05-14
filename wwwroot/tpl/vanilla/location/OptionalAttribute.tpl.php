@@ -4,7 +4,7 @@
 	<tr><td>
 	<?php 
 	if ($this->is('Deletable', TRUE)){
-				$this->getH('GetOpLink', array(array ('op'=>'clearSticker', 'attr_id'=>$this->_Record_Id, '', 'clear', 'Clear value', 'need-confirmation'));	
+				$this->getH('GetOpLink', array(array ('op'=>'clearSticker', 'attr_id'=>$this->_Record_Id), '', 'clear', 'Clear value', 'need-confirmation'));	
 	} else {	?>
 				&nbsp;
 	<?php } ?>
