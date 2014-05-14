@@ -3754,9 +3754,7 @@ function renderIPv4NetworkAddresses ($range, $parent, $placeholder)
 			$addr = $range['addrlist'][$ip_bin];
 		else
 		{
-			$editable = permitted ('ipaddress', 'properties', 'editAddress')
-			? 'editable'
-					: '';
+			$editable = permitted ('ipaddress', 'properties', 'editAddress') ? 'editable' : '';
 			
 			$smod = $tplm->generateSubmodule('IPList', 'IPNetworkAddressEmpty',$mod);
 			$smod->setNamespace('ipnetwork',true);
@@ -3787,15 +3785,16 @@ function renderIPv4NetworkAddresses ($range, $parent, $placeholder)
 			//$title = ' title="' . htmlspecialchars ($addr['last_log']['user'] . ', ' . formatAge ($addr['last_log']['time']) , ENT_QUOTES) . '"';
 			//$history_class = 'hover-history underline';
 		}
-		$tr_class .= ' ' . $addr['class'];$smod->addOutput('RowClas', $tr_class);
+		$tr_class .= ' ' . $addr['class'];
+		$smod->addOutput('RowClass', $tr_class);
 		$smod->addOutput('DottedQuad', $dottedquad);
 		$smod->addOutput('Link', makeHref(array('page'=>'ipaddress', 'ip'=>$addr['ip'])));
 		$smod->addOutput('IP', $addr['ip']);
+
 		//echo "<tr class='tdleft $tr_class'>";
 		//echo "<td><a class='$history_class' $title name='ip-$dottedquad' href='".makeHref(array('page'=>'ipaddress', 'ip'=>$addr['ip']))."'>${addr['ip']}</a></td>";
-		$editable =
-			(empty ($addr['allocs']) || !empty ($addr['name']) || !empty ($addr['comment']))
-			&& permitted ('ipaddress', 'properties', 'editAddress')
+		$editable =	(empty ($addr['allocs']) || !empty ($addr['name']) || !empty ($addr['comment']))
+					&& permitted ('ipaddress', 'properties', 'editAddress')
 			? 'editable'
 			: '';
 		
@@ -3885,7 +3884,6 @@ function renderIPv4NetworkAddresses ($range, $parent, $placeholder)
 	}
 	// end of iteration
 	if (permitted (NULL, NULL, 'set_reserve_comment'))
-		
 		$mod->addOutput('UserHasEditPerm', true);
 		//addJS ('js/inplace-edit.js');
 

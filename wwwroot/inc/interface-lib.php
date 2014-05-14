@@ -1248,7 +1248,7 @@ function includeJQueryUI ($do_css = TRUE, $parent = null, $placeholder = "jquery
 	//	$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
-		$mod = $tplm->generateModule("IncludeJQueryUI");
+		$mod = $tplm->generateModule('Payload','IncludeJQueryUI', $tplm->createMainModule());
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "IncludeJQueryUI", $parent);
 	
@@ -1259,8 +1259,6 @@ function includeJQueryUI ($do_css = TRUE, $parent = null, $placeholder = "jquery
 	if ($do_css)
 		$mod->addOutput("do_css", true);			 
 //		addCSS ('css/jquery-ui-1.8.22.redmond.css');
-	if($parent==null)
-		return $mod->run();
 }
 
 function getRenderedIPPortPair ($ip, $port = NULL, $parent = null, $placeholder = "RenderedIPPortPair")

@@ -16,6 +16,7 @@ $js = <<<JSTXT
 		}
 	);
 JSTXT;
+	$this->addJS('js/jquery-1.4.4.min.js');
 	$this->addJS('js/jquery-ui-1.8.21.min.js');
 	$this->addJS($js,true);
 ?>
