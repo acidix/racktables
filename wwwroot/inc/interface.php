@@ -3592,7 +3592,7 @@ function renderIPNetwork ($id)
 	}
 	$summary['tags'] = '';
 	//renderEntitySummary ($range, 'summary', $summary);
-	renderEntitySummary ($range, 'summary', $summary, $mod, $summary);
+	renderEntitySummary ($range, 'summary', $summary, $mod, 'Summary');
 
 	if (strlen ($range['comment']))
 	{
