@@ -34,11 +34,11 @@
 		</td></tr></table>
 	<?php } ?>
 
-	<?php if ($this->is("typeIPV4",true)) { ?>
+	<?php if ($this->is("typeIPV4RSPool",true)) { ?>
 		<?php $this->get("ipv4ImgSpace"); ?>
 	<?php } ?>
 
-	<?php if ($this->is("typeIPV6",true)) { ?>
+	<?php if ($this->is("typeIPNet",true)) { ?>
 		<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>
 		<?php  $this->getH("PrintImageHref", "NET");?>
 		</td><td> <?php $this->get("mkACell"); ?>

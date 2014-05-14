@@ -3536,7 +3536,7 @@ function getRenderedIPNetBacktrace ($range)
 			'hl_net' => 1,
 			'eid' => $range['id'])));
 		//)) //. '" title="View IP tree with this net as root">' . $arrow . '</a>';
-		$ret[] = array ($mod->run(), getOutputOf ('renderCell', $ainfo));
+		$ret[] = array ($mod->run(), renderCell($ainfo)); //getOutputOf ('renderCell', $ainfo));
 	}
 	return $ret;
 }
@@ -8610,13 +8610,13 @@ function renderCell ($cell)
 	case 'ipv4vs':
 	case 'ipvs':
 	case 'ipv4rspool':
-		$mod->setOutput("typeIPV4", true);
+		$mod->setOutput("typeIPV4RSPool", true);
 		$mod->setOutput("ipv4ImgSpace", renderSLBEntityCell ($cell));
 		break;
 	case 'ipv4net':
 	case 'ipv6net':
 
-		$mod->setOutput("typeIPV6", true);
+		$mod->setOutput("typeIPNet", true);
 
 	//	echo "<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>";
 		//printImageHREF ('NET');
