@@ -34,6 +34,7 @@
 						<td><strong><?php $this->Type; ?></strong></td>
 					</tr>
 				<?php $this->endLoop(); ?>
+				</table><br><br>
 			</div>
 		<?php } ?>
 		
