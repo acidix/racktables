@@ -1,6 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
 	<div class=portlet>
-		<h2> Manage RS list (<?php $this->PoolInfoRSCount ?> )</h2>
+		<h2> Manage RS list (<?php $this->PoolInfoRSCount ?>)</h2>
 		<?php $this->RenderedRSList ?> 
 	</div>
 	<?php $this->RenderedAddManyPortlet ?> 

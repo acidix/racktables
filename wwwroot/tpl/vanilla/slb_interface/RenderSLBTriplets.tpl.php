@@ -1,6 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
 	<div class=portlet>
-		<h2> VS instances ( <?php $this->countTriplets ?> ) </h2>
+		<h2> VS instances (<?php $this->countTriplets ?>) </h2>
 		<table cellspacing=0 cellpadding=5 align=center class=widetable><tr>
 			<?php $this->startLoop("cellRealmHeaders"); ?>	
 				<th><?php $this->header ?> </th>
