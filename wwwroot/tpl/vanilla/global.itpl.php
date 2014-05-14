@@ -127,7 +127,7 @@ $this->setInMemoryTemplate("RenderedIPv6NetCapacity","<div class=\"{{class}}\" i
 *	Usage: interface.php, interface-lib.php
 *
 **/
-$this->setInMemoryTemplate("RenderNetVLAN","<div class='vlan'><strong><small>{{noun}}</small>{{link}} </strong></div>");
+$this->setInMemoryTemplate("RenderNetVLAN","<div class='vlan'><strong><small>{{Noun}}</small> {{Links}}</strong></div>");
 
 /**
 *	MkA: 
