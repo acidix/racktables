@@ -1282,6 +1282,153 @@ class TemplateModule
 			return false;
 		}
 	}
+	
+	/**
+	 * The following 3 functions allow it to change the content of a placeholder
+	 * before displaying it.
+	 * 
+	 * To do so, the designer provides a place to search, an array that describes
+	 * the keys that will be searched.
+	 * 
+	 * For example:
+	 * array('TableContent',0,'Name')
+	 * will search for a placeholder called TableContent, that is a list of
+	 * table-rows that contain a placeholder called Name and it will only select the first line.
+	 * 
+	 * Then the algorithm will search for everything stored in name (That means
+	 * if name is an array of strings, it will search within ALL of thoose strings)
+	 * and replace all found occurences of $search and will replace them with the
+	 * value stored in $replace.
+	 * 
+	 * Using -1 instead of explicited key in the $place array will force the function
+	 * to search in all subarrays of the given key.
+	 * 
+	 * For example:
+	 * array('TableContent',-1,'Name')
+	 * will work similar to the first example, but will replace occurences in all
+	 * Names within all table rows.
+	 * 
+	 * It will return true if the function was able to find the specified place
+	 * otherwise it will return false.
+	 * 
+	 * mapRegEx and mapFunction work in a similar way, but use regular expressions
+	 * or a function given by the user to search/replace content.
+	 * 
+	 * @param array $place
+	 * @param string $search
+	 * @param string $replace
+	 * @return boolean
+	 */
+	public function map($place, $search, $replace)
+	{
+		return $this->mapTarget($this->output, $place, $search, $replace);
+	}
+	
+	protected function mapTarget(&$target, $place, $search, $replace)
+	{
+		if (!is_array($place))
+			return false;
+		if (count($place) > 0)
+		{
+			if ($place[0] == -1)
+			{
+				foreach ($target as $key => $value) {
+					$ret = ($this->mapTarget($target[$key], array_shift($place), $search, $replace) ? $ret : false);
+				}
+				return $ret;
+			}
+			else
+			{
+				if (!is_array($target)||!array_key_exists($place[0], $target))
+				{
+					return false ;
+				}
+				return $this->mapTarget($target[$place[0]], array_shift($place), $search, $replace);
+			}
+		}
+		else 
+		{	
+			$target = str_replace($search, $replace, $target);
+			return true;
+		}
+	}
+	
+	public function mapRegEx($place, $search, $replace)
+	{
+		$this->mapRegExTarget($this->output, $place, $search, $replace);
+	}
+	
+	protected function mapRegExTarget(&$target, $place, $search, $replace)
+	{
+		if (!is_array($place))
+			return false;
+		if (count($place) > 0)
+		{
+			if ($place[0] == -1)
+			{
+				foreach ($target as $key => $value) {
+					$ret = ($this->mapTarget($target[$key], array_shift($place), $search, $replace) ? $ret : false);
+				}
+				return $ret;
+			}
+			else
+			{
+				if (!is_array($target)||!array_key_exists($place[0], $target))
+				{
+					return false ;
+				}
+				return $this->mapTarget($target[$place[0]], array_shift($place), $search, $replace);
+			}
+		}
+		else
+		{
+			$target = preg_replace($search, $replace, $target);
+			return true;
+		}
+	}
+	
+	public function mapFunction($place, $func)
+	{
+		return $this->mapFunctionTarget($this->output, $place, $func);
+	}
+	
+	protected function mapFunctionTarget(&$target, $place, $func)
+	{
+		if (!is_array($place))
+			return false;
+		if (count($place) > 0)
+		{
+			if ($place[0] == -1)
+			{
+				foreach ($target as $key => $value) {
+					$ret = ($this->mapTarget($target[$key], array_shift($place), $search, $replace) ? $ret : false);
+				}
+				return $ret;
+			}
+			else
+			{
+				if (!is_array($target)||!array_key_exists($place[0], $target))
+				{
+					return false ;
+				}
+				return $this->mapTarget($target[$place[0]], array_shift($place), $search, $replace);
+			}
+		}
+		else
+		{
+			if (is_array($target))
+			{
+				foreach ($target as $key => $value) {
+					$target[$key] = call_user_func($func,$value);
+				}
+			}
+			else
+			{
+				$target = call_user_func($func,$value);
+			}
+			return true;
+		}
+	}
 }
 
 /**

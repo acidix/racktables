@@ -6,7 +6,6 @@
 <?php $this->EntitySummary ?>
 <?php $this->VstRules ?>
 </td><td class=pcright>
-
 <?php if($this->is('EmptySwitches', true)) {?> <div class=portlet><h2>no orders</h2> <?php } 
 
 		else {  ?>

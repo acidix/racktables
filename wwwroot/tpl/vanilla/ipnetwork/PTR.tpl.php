@@ -9,10 +9,10 @@
 				<center>
 					<?php if($this->is('Paged')) { ?>
 						<h3><?php $this->StartIP; ?> ~ <?php $this->EndIP; ?></h3>
-					<?php } ?>
 					<?php $this->startLoop('Pages'); ?>
 						<?php $this->B; ?><a href='<?php $this->Link(); ?>'>$i</a><?php $this->BEnd; ?>
-					<?php $this->endLoop(); ?>	
+					<?php $this->endLoop(); ?>
+					<?php } ?>
 				</center>
 				<?php $this->getH('PrintOpFormIntro',array('importPTRData', array ('addrcount' => $this->_AddrCount))); ?>
 				<table class='widetable' border=0 cellspacing=0 cellpadding=5 align='center'>
