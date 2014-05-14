@@ -1,18 +1,14 @@
 <?php if (defined("RS_TPL")) {?>
 
-	<input type=hidden name=<?php< $this->Index; ?>_attr_id value=<?php $this->Record_Id; ?>>
-	<td><tr>
-
+	<input type=hidden name=<?php $this->Index; ?>_attr_id value=<?php $this->Record_Id; ?>>
+	<tr><td>
 	<?php 
-	if ($this->is('Value', TRUE)){
-				$this->getH('GetOpLink', array(array ('op'=>'clearSticker', 'attr_id'=>$record['id']), '', 'clear', 'Clear value', 'need-confirmation'));	
-								}
-
-	else{	?>
+	if ($this->is('Deletable', TRUE)){
+				$this->getH('GetOpLink', array(array ('op'=>'clearSticker', 'attr_id'=>$this->_Record_Id), '', 'clear', 'Clear value', 'need-confirmation'));	
+	} else {	?>
 				&nbsp;
 	<?php } ?>
-
-			</td>
+	</td>
 
 			<th class=sticker><?php $this->Record_Name; ?>:</th><td class=tdleft>
 

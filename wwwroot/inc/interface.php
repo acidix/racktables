@@ -3977,7 +3977,7 @@ function renderIPv6NetworkAddresses ($netinfo, $parent, $placeholder)
 			renderSeparator (ip_next ($prev_ip), ip_prev ($ip_bin), $hl_ip, $mod, 'IPList');
 		$prev_ip = $ip_bin;
 
-		$smod = $tplm->generateSubmodule('IPList', 'IPv6NetworkAddress');
+		$smod = $tplm->generateSubmodule('IPList', 'IPv6NetworkAddress', $mod);
 		$smod->setNamespace('ipnetwork');
 	
 		// render IP change history
@@ -5644,8 +5644,8 @@ function renderLocationPage ($location_id)
 	$summary['tags'] = '';
 	if (strlen ($locationData['comment']))
 		$summary['Comment'] = $locationData['comment'];
-	$mod->addOutput('Renderentitysummary', renderEntitySummary ($locationData, 'Summary', $summary, $mod));
-	$mod->addOutput('Renderfilesportlet', renderFilesPortlet ('location', $location_id));
+	renderEntitySummary ($locationData, 'Summary', $summary, $mod, 'EntitySummary');
+	renderFilesPortlet ('location', $location_id, $mod, 'FilesPortlet');
 	// echo '</td>';
 
 	// Right column with list of rows and child locations
@@ -5653,20 +5653,28 @@ function renderLocationPage ($location_id)
 	// $mod->addOutput('Count', count ($locationData['rows']));
 	// startPortlet ('Rows ('. count ($locationData['rows']) . ')');
 	// echo "<table border=0 cellspacing=0 cellpadding=5 align=center>\n";
+	$mod->addOutput('CountRows', count ($locationData['rows']));
+	$helperarray = array();
 	foreach ($locationData['rows'] as $row_id => $name)
-		$mod->addOutput('Looparray', array('mKa'=> mkA ($name, 'row', $row_id)));
+		$helperarray[] = array('Link'=> mkA ($name, 'row', $row_id));
+	
+	if(count($helperarray)>0) {
+		$mod->addOutput('Rows', $helperarray);
+	}
+		
 		// echo '<tr><td>' . mkA ($name, 'row', $row_id) . '</td></tr>';
 	// echo "</table>\n";
 	// finishPortlet();
-	$mod->addOutput('Countlocations', count ($locationData['locations']));
+	$mod->addOutput('CountLocations', count ($locationData['locations']));
 	// startPortlet ('Child Locations (' . count ($locationData['locations']) . ')');
 	// echo "<table border=0 cellspacing=0 cellpadding=5 align=center>\n";
 	$helperarray = array();
 	foreach ($locationData['locations'] as $location_id => $name)
-		$helperarray[] = array('Locationmka' => mkA($name, 'location', $location_id) );
-		
-		$mod->addOutput('Looparray2', $helperarray);
-		// echo '<tr><td>' . mkA ($name, 'location', $location_id) . '</td></tr>';
+		$helperarray[] = array('LocationLink' => mkA($name, 'location', $location_id) );
+
+	if(count($helperarray) > 0 ) {
+	$mod->addOutput('ChildLocations', $helperarray);	
+	}	// echo '<tr><td>' . mkA ($name, 'location', $location_id) . '</td></tr>';
 	// echo "</table>\n";
 	// finishPortlet();
 	// echo '</td>';
@@ -5710,7 +5718,7 @@ function renderEditLocationForm ($location_id)
 	$i = 0;
 	foreach ($values as $record)
 	{
-		$submod = $tplm->generateSubmodule('Loopcontent', 'Loop', $mod);
+		$submod = $tplm->generateSubmodule('OptionalAttributes', 'OptionalAttribute', $mod);
 
 		$submod->addOutput('Record_Id', $record['id']);
 		$submod->addOutput('Index', $i);
@@ -5718,7 +5726,7 @@ function renderEditLocationForm ($location_id)
 		// echo "<input type=hidden name=${i}_attr_id value=${record['id']}>";
 		// echo '<tr><td>';
 		if (strlen ($record['value']))
-			$submod->addOutput('Value', TRUE);
+			$submod->addOutput('Deletable', TRUE);
 			// echo getOpLink (array ('op'=>'clearSticker', 'attr_id'=>$record['id']), '', 'clear', 'Clear value', 'need-confirmation');
 		// else
 		// 	echo '&nbsp;';
@@ -9068,12 +9076,12 @@ function showTabs ($pageno, $tabno,$tpl = false)
 		// Dynamic tabs should only be shown in certain cases (trigger exists and returns true).
 		if (!isset ($trigger[$pageno][$tabidx]))
 			$tabclass = 'TabInactive';
-		elseif (strlen ($tabclass = call_user_func ($trigger[$pageno][$tabidx])))
+		elseif (strlen ($tabclass2 = call_user_func ($trigger[$pageno][$tabidx])))
 		{
-			switch ($tabclass)
+			switch ($tabclass2)
 			{
-				case 'std': $tabclass = "TabInactive";
-				case 'attn': $tabclass = "TabAttention";
+				case 'std': $tabclass = "TabInactive"; break;
+				case 'attn': $tabclass = "TabAttention"; break;
 				default: $tabclass = "TabInactive";
 			}
 		}
