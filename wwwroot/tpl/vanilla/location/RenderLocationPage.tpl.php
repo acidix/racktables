@@ -18,14 +18,15 @@
    	<table border=0 cellspacing=0 cellpadding=5 align=center>
 
    		<?php 
-   			$this->startLoop('Looparray');
+   			if ($this->is('Rows')) {
+   			$this->startLoop('Rows');
    		?> 
    			<tr><td>
-   				<?php $this->mKa; ?>
+   				<?php $this->Link; ?>
    			</td></tr>	
 
    		<?php 
-   			$this->endLoop();
+   			$this->endLoop(); }
    		 ?>
 
    		 </table></div>
@@ -35,15 +36,15 @@
    		    	<table border=0 cellspacing=0 cellpadding=5 align=center>
 
    		    	<?php 
+   		    	if ($this->is('ChildLocations')) {
    		    		$this->startLoop('Looparray2');
    		    	?>
    		    		<tr><td>
-   		    	<?php $this->Locationmka; ?>	
+   		    	<?php $this->LocationLink; ?>	
    		    		</td></tr>
    		    	<?php 
-   		    		$this->endLoop();
-   		    	?>	
-
+   		    		$this->endLoop(); } 
+   		    	?>
 							</table>
 						</div>
 					</td>

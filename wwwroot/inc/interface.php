@@ -5655,8 +5655,14 @@ function renderLocationPage ($location_id)
 	// $mod->addOutput('Count', count ($locationData['rows']));
 	// startPortlet ('Rows ('. count ($locationData['rows']) . ')');
 	// echo "<table border=0 cellspacing=0 cellpadding=5 align=center>\n";
+	$helperarray = array();
 	foreach ($locationData['rows'] as $row_id => $name)
-		$mod->addOutput('Looparray', array('mKa'=> mkA ($name, 'row', $row_id)));
+		$helperarray[] = array('Link'=> mkA ($name, 'row', $row_id));
+	
+	if(length($helperarray)>0) {
+		$mod->addOutput('Rows', $helperarray);
+	}
+		
 		// echo '<tr><td>' . mkA ($name, 'row', $row_id) . '</td></tr>';
 	// echo "</table>\n";
 	// finishPortlet();
@@ -5665,10 +5671,11 @@ function renderLocationPage ($location_id)
 	// echo "<table border=0 cellspacing=0 cellpadding=5 align=center>\n";
 	$helperarray = array();
 	foreach ($locationData['locations'] as $location_id => $name)
-		$helperarray[] = array('Locationmka' => mkA($name, 'location', $location_id) );
-		
-		$mod->addOutput('Looparray2', $helperarray);
-		// echo '<tr><td>' . mkA ($name, 'location', $location_id) . '</td></tr>';
+		$helperarray[] = array('LocationLink' => mkA($name, 'location', $location_id) );
+
+	if(length($helperarray) > 0 ) {
+	$mod->addOutput('ChildLocations', $helperarray);	
+	}	// echo '<tr><td>' . mkA ($name, 'location', $location_id) . '</td></tr>';
 	// echo "</table>\n";
 	// finishPortlet();
 	// echo '</td>';
