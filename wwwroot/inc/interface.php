@@ -5659,7 +5659,7 @@ function renderLocationPage ($location_id)
 	foreach ($locationData['rows'] as $row_id => $name)
 		$helperarray[] = array('Link'=> mkA ($name, 'row', $row_id));
 	
-	if(length($helperarray)>0) {
+	if(count($helperarray)>0) {
 		$mod->addOutput('Rows', $helperarray);
 	}
 		
@@ -5673,7 +5673,7 @@ function renderLocationPage ($location_id)
 	foreach ($locationData['locations'] as $location_id => $name)
 		$helperarray[] = array('LocationLink' => mkA($name, 'location', $location_id) );
 
-	if(length($helperarray) > 0 ) {
+	if(count($helperarray) > 0 ) {
 	$mod->addOutput('ChildLocations', $helperarray);	
 	}	// echo '<tr><td>' . mkA ($name, 'location', $location_id) . '</td></tr>';
 	// echo "</table>\n";
