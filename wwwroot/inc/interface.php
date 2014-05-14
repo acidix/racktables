@@ -9078,9 +9078,9 @@ function showTabs ($pageno, $tabno,$tpl = false)
 		// Dynamic tabs should only be shown in certain cases (trigger exists and returns true).
 		if (!isset ($trigger[$pageno][$tabidx]))
 			$tabclass = 'TabInactive';
-		elseif (strlen ($tabclass = call_user_func ($trigger[$pageno][$tabidx])))
+		elseif (strlen ($tabclass2 = call_user_func ($trigger[$pageno][$tabidx])))
 		{
-			switch ($tabclass)
+			switch ($tabclass2)
 			{
 				case 'std': $tabclass = "TabInactive";
 				case 'attn': $tabclass = "TabAttention";
