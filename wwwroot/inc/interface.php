@@ -3700,10 +3700,6 @@ function renderIPv4NetworkAddresses ($range, $parent, $placeholder)
 		//addAutoScrollScript ('ip-' . $_REQUEST['hl_ip']); // scroll page to highlighted ip
 	}
 
-	/*
-
-	*/
-
 	// pager
 	$maxperpage = getConfigVar ('IPV4_ADDRS_PER_PAGE');
 	$address_count = $endip - $startip + 1;
