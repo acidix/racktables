@@ -9,12 +9,9 @@ $(document).ready(function() {
 });
 END
 		, TRUE);
-	
-	}
-	if ($this->is('UserHasEditPerm')) { 
-		$this->addJS('js/inplace-edit.js');	
 	}
 	?>
+
 	<?php if ($this->is('HasPagination')) { ?>
 		<h3><?php $this->StartIP; ?> ~ <?php $this->EndIP; ?></h3>
 	<?php } ?>
@@ -29,6 +26,10 @@ END
 	<?php if ($this->is('Pager')) { ?>
 	<p><?php $this->Pager; ?></p>
 	<?php } ?>
+	
+	<?php if ($this->is('UserHasEditPerm')) { 
+		$this->addJS('js/inplace-edit.js');	
+	} ?>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

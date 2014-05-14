@@ -1,4 +1,5 @@
 <?php if (defined("RS_TPL")) {?>
+	<?php $this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/jquery-1.4.4.min.js")); ?>
 	<?php $this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/jquery-ui-1.8.21.min.js")); ?>
 	<?php if ($this->is("do_css",true)) { ?>
 		<?php $this->addRequirement("Header","HeaderCssInclude",array("path"=>"css/jquery-ui-1.8.22.redmond.css")); ?>
