@@ -3979,7 +3979,7 @@ function renderIPv6NetworkAddresses ($netinfo, $parent, $placeholder)
 			renderSeparator (ip_next ($prev_ip), ip_prev ($ip_bin), $hl_ip, $mod, 'IPList');
 		$prev_ip = $ip_bin;
 
-		$smod = $tplm->generateSubmodule('IPList', 'IPv6NetworkAddress');
+		$smod = $tplm->generateSubmodule('IPList', 'IPv6NetworkAddress', $mod);
 		$smod->setNamespace('ipnetwork');
 	
 		// render IP change history
