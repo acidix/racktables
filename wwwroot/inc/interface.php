@@ -5719,7 +5719,7 @@ function renderEditLocationForm ($location_id)
 	$i = 0;
 	foreach ($values as $record)
 	{
-		$submod = $tplm->generateSubmodule('Loopcontent', 'Loop', $mod);
+		$submod = $tplm->generateSubmodule('OptionalAttributes', 'OptionalAttribute', $mod);
 
 		$submod->addOutput('Record_Id', $record['id']);
 		$submod->addOutput('Index', $i);
@@ -5727,7 +5727,7 @@ function renderEditLocationForm ($location_id)
 		// echo "<input type=hidden name=${i}_attr_id value=${record['id']}>";
 		// echo '<tr><td>';
 		if (strlen ($record['value']))
-			$submod->addOutput('Value', TRUE);
+			$submod->addOutput('Deletable', TRUE);
 			// echo getOpLink (array ('op'=>'clearSticker', 'attr_id'=>$record['id']), '', 'clear', 'Clear value', 'need-confirmation');
 		// else
 		// 	echo '&nbsp;';

@@ -15,7 +15,7 @@
 					<td class=tdleft><input type=text name=name value='<?php $this->Locationname; ?>'>
 			</td></tr>	 	
 			<input type=hidden name=num_attrs value=<?php $this->Num_attrs; ?>>
-			<?php $this->Loopcontent; ?>
+			<?php $this->OptionalAttributes; ?>
 			<tr><td>&nbsp;</td><th class=tdright>Has problems:</th><td class=tdleft><input type=checkbox name=has_problems <?php if($this->is('Has_Problems', TRUE)){ ?>checked<?php } ?> ></td></tr>
 
 			<?php 
