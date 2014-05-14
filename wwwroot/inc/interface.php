@@ -9082,8 +9082,8 @@ function showTabs ($pageno, $tabno,$tpl = false)
 		{
 			switch ($tabclass2)
 			{
-				case 'std': $tabclass = "TabInactive";
-				case 'attn': $tabclass = "TabAttention";
+				case 'std': $tabclass = "TabInactive"; break;
+				case 'attn': $tabclass = "TabAttention"; break;
 				default: $tabclass = "TabInactive";
 			}
 		}
