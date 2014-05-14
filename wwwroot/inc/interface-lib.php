@@ -1233,7 +1233,7 @@ function renderNetVLAN ($cell)
 		$links[] = mkA ($vi['vlan_id'], 'vlan', "${vi['domain_id']}-${vi['vlan_id']}");
 	$noun = count ($cell['8021q']) > 1 ? 'VLANs' : 'VLAN';
 
-
+	$tplm = TemplateManager::getInstance();
 	$mod = $tplm->generateModule("RenderNetVLAN", true);
 	$mod->setOutput("noun", $noun);
 	$mod->setOutput("links",  implode (', ', $links));
