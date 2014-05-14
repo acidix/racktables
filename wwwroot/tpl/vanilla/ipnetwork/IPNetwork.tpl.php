@@ -14,7 +14,7 @@
 				<?php } ?>
 				<?php $this->Files; ?>
 			</td>
-			<td>
+			<td class=pcright width='50%'>
 				<div class=portlet>
 					<h2>details</h2>
 					<?php $this->AddressList; ?>
