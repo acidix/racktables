@@ -13,7 +13,7 @@
    <td class=pcright>
 
 
-   <div class=portlet><h2>Rows (<?php $this->Count; ?>)</h2>
+   <div class=portlet><h2>Rows (<?php $this->CountRows; ?>)</h2>
 
    	<table border=0 cellspacing=0 cellpadding=5 align=center>
 
@@ -31,7 +31,7 @@
 
    		 </table></div>
 
-   		    <div class=portlet><h2>Child Locations (<?php $this->Countlocations; ?>)</h2>
+   		    <div class=portlet><h2>Child Locations (<?php $this->CountLocations; ?>)</h2>
 
    		    	<table border=0 cellspacing=0 cellpadding=5 align=center>
 

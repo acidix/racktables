@@ -5655,6 +5655,7 @@ function renderLocationPage ($location_id)
 	// $mod->addOutput('Count', count ($locationData['rows']));
 	// startPortlet ('Rows ('. count ($locationData['rows']) . ')');
 	// echo "<table border=0 cellspacing=0 cellpadding=5 align=center>\n";
+	$mod->addOutput('CountRows', count ($locationData['rows']));
 	$helperarray = array();
 	foreach ($locationData['rows'] as $row_id => $name)
 		$helperarray[] = array('Link'=> mkA ($name, 'row', $row_id));
@@ -5666,7 +5667,7 @@ function renderLocationPage ($location_id)
 		// echo '<tr><td>' . mkA ($name, 'row', $row_id) . '</td></tr>';
 	// echo "</table>\n";
 	// finishPortlet();
-	$mod->addOutput('Countlocations', count ($locationData['locations']));
+	$mod->addOutput('CountLocations', count ($locationData['locations']));
 	// startPortlet ('Child Locations (' . count ($locationData['locations']) . ')');
 	// echo "<table border=0 cellspacing=0 cellpadding=5 align=center>\n";
 	$helperarray = array();
