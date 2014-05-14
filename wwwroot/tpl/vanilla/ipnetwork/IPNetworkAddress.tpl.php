@@ -5,7 +5,7 @@
 		<td><span class='rsvtext <?php $this->Editable; ?> id-<?php $this->DottedQuad; ?> op-upd-ip-comment'><?php $this->Comment; ?></span></td>
 		<td>
 			<?php if ($this->is('Reserved')) { ?>
-				<strong>RESERVED</strong> ; 
+				<strong>RESERVED</strong>  
 			<?php } ?>
 			<?php if ($this->is('Allocs')) { ?>
 				<?php $this->startLoop('Allocs'); ?>

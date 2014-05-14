@@ -3777,7 +3777,7 @@ function renderIPv4NetworkAddresses ($range, $parent, $placeholder)
 		$title = '';
 		$history_class = '';
 		
-		$smod = $tplm->generateSubmodule('IPList', 'IPNetworkAddress');
+		$smod = $tplm->generateSubmodule('IPList', 'IPNetworkAddress', $mod);
 		$smod->setNamespace('ipnetwork');
 		
 		if (isset ($addr['last_log']))
