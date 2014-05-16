@@ -752,12 +752,12 @@ function getPopupSLBConfig ($row, TemplateModule $parent = null, $placeholder = 
 		return '';
 	
 	$tplm = TemplateManager::getInstance();
-	$main = $tplm->createMainModule();
+	
 	//if($parent==null)
 	//	$tplm->setTemplate("vanilla");
 
 	if($parent==null)	
-		$mod = $tplm->generateModule('Payload',"GetPopupSLBConfig");
+		$mod = $tplm->generateModule("GetPopupSLBConfig");
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "GetPopupSLBConfig", $parent);
 
@@ -784,8 +784,11 @@ function getPopupSLBConfig ($row, TemplateModule $parent = null, $placeholder = 
 
 	static $js_added = FALSE;
 	if (! $js_added)
-	{
-		$mod->setOutput("loadjs", true);
+	{	
+		//Add JS Code to the main module
+		$tplm->createMainModule();
+		$tplm->generateSubmodule('Payload', 'GetPopupSLBConfig_LoadJS');
+
 //		addJS ('js/jquery.thumbhover.js');
 //		addJS (<<<END
 //	$(document).ready (function () {
@@ -796,10 +799,9 @@ function getPopupSLBConfig ($row, TemplateModule $parent = null, $placeholder = 
 //END
 ///		, TRUE);
 	}
-	//if($parent == null)
-	//	return $mod->run();
-	return '';
-//	return $ret;
+	if($parent == null)
+		return $mod->run();
+
 }
 
 function trigger_ipvs_convert ()
