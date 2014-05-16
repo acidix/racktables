@@ -164,10 +164,26 @@ function renderPopupTripletForm ($triplet, $port, $vip, $row, TemplateModule $pa
 		return $mod->run();
 }
 
-function renderPopupVSPortForm ($port, $used = 0)
+function renderPopupVSPortForm ($port, $used = 0, $parent = null, $placeholder = 'PopupVSPortForm')
 {
 	$keys = array ('proto' => $port['proto'], 'port' => $port['vport']);
 	$title = 'remove port ' . formatVSPort ($port) . ($used ? " (used $used times)" : '');
+
+	$tplm = TemplateManager::getInstance();
+	
+	if($parent==null)	
+		$mod = $tplm->generateModule('PopupVSPortForm');
+	else
+		$mod = $tplm->generateSubmodule($placeholder, 'PopupVSPortForm', $parent);
+	
+	$mod->setNamespace('');
+	
+	$mod->addOutput('Keys', $keys);
+	$mod->addOutput('Title', $title);
+	$mod->addOutput('Used', $used);
+	$mod->addOutput('Vsconfig', htmlspecialchars ($port['vsconfig']));
+	$mod->addOutput('Rsconfig', htmlspecialchars ($port['rsconfig']));
+
 	//printOpFormIntro ('updPort', $keys);
 	//echo '<p align=center>';
 	//echo getOpLink (array ('op' => 'delPort') + $keys, $title, 'destroy', '', ($used ? 'del-used-slb' : '') );
@@ -177,18 +193,31 @@ function renderPopupVSPortForm ($port, $used = 0)
 	//echo '<textarea name=rsconfig rows=3 cols=80>' . htmlspecialchars ($port['rsconfig']) . '</textarea></label>';
 	//echo '<p align=center>' . getImageHREF ('SAVE', 'Save changes', TRUE);
 	//echo '</form>';
-	return array(
-		'PortOPIntro'=>array('updPort', $keys),
-		'PortOPLink'=>array(array ('op' => 'delPort') + $keys, $title, 'destroy', '', ($used ? 'del-used-slb' : '')),
-		'PortVSConfig'=>htmlspecialchars ($port['vsconfig']),
-		'PortRSConfig'=>htmlspecialchars ($port['rsconfig'])
-	);
+
+	if($parent==null)
+		return $mod->run();
 }
 
-function renderPopupVSVIPForm ($vip, $used = 0)
+function renderPopupVSVIPForm ($vip, $used = 0,$parent = null, $placeholder = 'PopupVSPortForm')
 {
 	$fmt_ip = ip_format ($vip['vip']);
 	$title = 'remove IP ' . formatVSIP ($vip) . ($used ? " (used $used times)" : '');
+
+	$tplm = TemplateManager::getInstance();
+	
+	if($parent==null)	
+		$mod = $tplm->generateModule('PopupVSVIPForm');
+	else
+		$mod = $tplm->generateSubmodule($placeholder, 'PopupVSVIPForm', $parent);
+	
+	$mod->setNamespace('');
+	
+	$mod->addOutput('Fmt_ip', $fmt_ip);
+	$mod->addOutput('Title', $title);
+	$mod->addOutput('Used', $used);
+	$mod->addOutput('Vsconfig', htmlspecialchars ($vip['vsconfig']));
+	$mod->addOutput('Rsconfig', htmlspecialchars ($vip['rsconfig']));
+		 
 	//printOpFormIntro ('updIP', array ('ip' => $fmt_ip));
 	//echo '<p align=center>';
 	//echo getOpLink (array ('op' => 'delIP', 'ip' => $fmt_ip), $title, 'destroy', '', ($used ? 'del-used-slb' : '') );
@@ -198,12 +227,8 @@ function renderPopupVSVIPForm ($vip, $used = 0)
 	//echo '<textarea name=rsconfig rows=3 cols=80>' . htmlspecialchars ($vip['rsconfig']) . '</textarea></label>';
 	//echo '<p align=center>' . getImageHREF ('SAVE', 'Save changes', TRUE);
 	//echo '</form>';
-	return array(
-		'IPOPIntro'=>array('updIP', array ('ip' => $fmt_ip)),
-		'IPOPLink'=>array(array ('op' => 'delIP', 'ip' => $fmt_ip), $title, 'destroy', '', ($used ? 'del-used-slb' : '')),
-		'IPVSConfig'=>htmlspecialchars ($vip['vsconfig']),
-		'IPRSConfig'=>htmlspecialchars ($vip['rsconfig'])
-	);
+	if($parent==null)
+		return $mod->run();
 }
 
 function renderEditVS ($vs_id)
@@ -279,7 +304,7 @@ function renderEditVS ($vs_id)
 			if (isPortEnabled ($port, $triplet['ports']))
 				$used++;
 		$outarr[] = array('Port'=>formatVSPort ($port),
-						  'SLBConfig'=> getPopupSLBConfig ($port)) + renderPopupVSPortForm ($port, $used);
+						  'SLBConfig'=> getPopupSLBConfig ($port), 'PopupVsPort' => renderPopupVSPortForm ($port, $used));
 		//echo '<li class="enabled">';
 		//echo formatVSPort ($port) . getPopupSLBConfig ($port);
 		//renderPopupVSPortForm ($port, $used);
@@ -299,7 +324,7 @@ function renderEditVS ($vs_id)
 			if (isVIPEnabled ($vip, $triplet['vips']))
 				$used++;
 		$outarr[] = array('IP'=>formatVSIP($vip),
-						  'SLBConfig'=>getPopupSLBConfig ($vip)) + renderPopupVSVIPForm ($vip, $used);
+						  'SLBConfig'=>getPopupSLBConfig ($vip), 'PopupVSVIP' => renderPopupVSVIPForm ($vip, $used));
 		//echo '<li class="enabled">';
 		//echo formatVSIP ($vip) . getPopupSLBConfig ($vip);
 		//renderPopupVSVIPForm ($vip, $used);
