@@ -7,10 +7,9 @@
 	<?php } ?> 
 
 	<?php if ($this->is("do_rs", true)) { ?>
-		<h1>VS config:</h1>
+		<h1>RS config:</h1>
 		<?php $this->row_rsconfig ?> 
 	<?php } ?> 
-
 	</div>
 
 	<?php if ($this->is("loadjs", true)) { ?>

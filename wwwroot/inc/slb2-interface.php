@@ -749,14 +749,15 @@ function getPopupSLBConfig ($row, TemplateModule $parent = null, $placeholder = 
 	$do_vs = (isset ($row) && isset ($row['vsconfig']) && strlen ($row['vsconfig']));
 	$do_rs = (isset ($row) && isset ($row['rsconfig']) && strlen ($row['rsconfig']));
 	if (!$do_vs && !$do_rs)
-		return;
+		return '';
 	
 	$tplm = TemplateManager::getInstance();
+	$main = $tplm->createMainModule();
 	//if($parent==null)
 	//	$tplm->setTemplate("vanilla");
 
 	if($parent==null)	
-		$mod = $tplm->generateModule("GetPopupSLBConfig");
+		$mod = $tplm->generateModule('Payload',"GetPopupSLBConfig");
 	else
 		$mod = $tplm->generateSubmodule($placeholder, "GetPopupSLBConfig", $parent);
 
@@ -795,8 +796,9 @@ function getPopupSLBConfig ($row, TemplateModule $parent = null, $placeholder = 
 //END
 ///		, TRUE);
 	}
-	if($parent == null)
-		return $mod->run();
+	//if($parent == null)
+	//	return $mod->run();
+	return '';
 //	return $ret;
 }
 
