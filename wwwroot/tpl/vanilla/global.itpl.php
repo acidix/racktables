@@ -65,7 +65,7 @@ $this->setInMemoryTemplate("TabAttention","<li><a class=attn href='index.php?pag
  * Template for: Part of the path  in the PathAndSearch module
  * Usage: interface.php (showPathAndSearch)
  */
-$this->setInMemoryTemplate("PathLink"," : <a href='index.php?{{Params}}{{AnchorTail}}'>{{Name}}</a>");
+$this->setInMemoryTemplate("PathLink"," {{Delimiter}} <a href='index.php?{{Params}}{{AnchorTail}}'>{{Name}}</a>");
 
 /**
  * Template for spacer in CellFilterPortlet

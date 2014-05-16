@@ -8903,6 +8903,7 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 	
 	$tplm = TemplateManager::getInstance();
 	$mod = $tplm->getMainModule();
+	
 	foreach (array_reverse ($path) as $no)
 	{
 		if (preg_match ('/(.*):(.*)/', $no, $m) && isset ($tab[$m[1]][$m[2]]))
@@ -8921,7 +8922,11 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 			$title = callHook ('dynamic_title_decoder', $no);
 		//$item = "<a href='index.php?";
 		$item = $tplm->generateModule("PathLink", true);
+		$item->setOutput('Delimiter', ':');
 		
+		
+
+
 		if (! isset ($title['params']['page']))
 			$title['params']['page'] = $no;
 		if (! isset ($title['params']['tab']))
@@ -8960,6 +8965,9 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 			$items[count ($items)-1] = getLocationTrail ($title['params']['location_id']);
 		}
 	}
+	//Hide the first :
+	$items[count($items)-1]->setOutput('Delimiter', '');
+
 	// Search form.
 	//echo "<div class='searchbox' style='float:right'>";
 	//echo "<form name=search method=get>";
@@ -12602,11 +12610,11 @@ function renderExpirations ()
 			//echo '<tr valign=top><th align=center>Count</th><th align=center>Name</th>';
 			//echo "<th align=center>Asset Tag</th><th align=center>OEM S/N 1</th><th align=center>Date Warranty <br> Expires</th></tr>\n";
 			$singleSectOut['ResOut'] = '';
+			$res = $tplm->generateModule("RenderExpirations_result");
+			$res->setNamespace("reports");
+			$allExpirationResultsOut = array();
 			foreach ($result as $row)
 			{
-
-				$res = $tplm->generateModule("RenderExpirations_result");
-				$res->setNamespace("reports");
 
 
 				$date_value = datetimestrFromTimestamp ($row['uint_value']);
@@ -12614,12 +12622,14 @@ function renderExpirations ()
 				$object = spotEntity ('object', $row['object_id']);
 				$attributes = getAttrValues ($object['id']);
 				$oem_sn_1 = array_key_exists (1, $attributes) ? $attributes[1]['a_value'] : '&nbsp;';
-				$res->setOutput("ClassOrder", $section['class'] . $order );
-				$res->setOutput("Count", $count );	
-				$res->setOutput("Mka", mkA ($object['dname'], 'object', $object['id']) );	 
-				$res->setOutput("AssetNo", $object['asset_no'] );
-				$res->setOutput("OemSn1", $oem_sn_1 );
-				$res->setOutput("DateValue", $date_value );
+
+				$allExpirationResultsOut[] = array(
+						"ClassOrder" => $section['class'] . $order,
+						"Count" => $count,	
+						"Mka" => mkA ($object['dname'], 'object', $object['id']),	 
+						"AssetNo" => $object['asset_no'],
+						"OemSn1" => $oem_sn_1,
+						"DateValue" => $date_value );
 			//	echo '<tr class=' . $section['class'] . $order . ' valign=top>';
 			//	echo "<td>${count}</td>";
 			//	echo '<td>' . mkA ($object['dname'], 'object', $object['id']) . '</td>';
@@ -12628,14 +12638,12 @@ function renderExpirations ()
 			//	echo "<td>${date_value}</td>";
 			//	echo "</tr>\n";
 				
-
-				$singleSectOut['resOut'] .= $res->run();
 				$order = $nextorder[$order];
 				$count++;
-
-	
 			}
-
+		
+			$res->addOutput('Expiration_Results', $allExpirationResultsOut);
+			$singleSectOut['ResOut'] = $res->run();		 
 			$allSectsOut[] = $singleSectOut;
 			//echo "</table><br>\n";
 		}
