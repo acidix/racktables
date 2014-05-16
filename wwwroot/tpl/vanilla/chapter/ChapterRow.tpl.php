@@ -3,16 +3,14 @@
 <?php $this->getH('PrintImageHref','%%ImageType'); ?>
 </td><td><?php $this->key; ?></td><td>
 
-<?php if(!$this->is('refcnt', 0) && $this->is('cfe', true)) { ?>
-<a href="<?php $this->href; ?>"><?php $this->refcnt; ?></a>
-<?php } else{ ?>
-0 <?php } ?>
+<?php if(!$this->is('refcnt', 0)) { ?> 
+	<?php if($this->is('cfe')) { ?>
+		<a href="<?php $this->href; ?>"><?php $this->refcnt; ?></a>
+	<?php } ?>
+	<?php $this->refcnt ?>
+<?php } ?>
 
 </td><td><?php $this->value; ?></td></tr>
-
-
-
-
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

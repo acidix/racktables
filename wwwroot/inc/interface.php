@@ -5822,9 +5822,11 @@ function renderDictionary ()
 	
 
 	//echo '<ul>';
+	$chapterListOut = array();
 	foreach (getChapterList() as $chapter_no => $chapter)
-		$mod->addOutput('Dictlist', array('Link'=>mkA($chapter['name'], 'chapter', $chapter_no),'Records'=>$chapter['wordc']));
-	
+		$chapterListOut[] = array('Link' => mkA ($chapter['name'], 'chapter', $chapter_no), 'Records' => $chapter['wordc']);
+	$mod->addOutput("ChapterList", $chapterListOut);
+		 
 		//echo '<li>' . mkA ($chapter['name'], 'chapter', $chapter_no) . " (${chapter['wordc']} records)</li>";
 	//echo '</ul>';
 }
@@ -5864,6 +5866,7 @@ function renderChapter ($tgt_chapter_no)
 		//echo "</td><td>${key}</td><td>";
 		$submod->addOutput('key', $key);
 		$submod->addOutput('refcnt', $refcnt[$key]);
+
 		if ($refcnt[$key])
 		{
 			$cfe = '';
@@ -5896,7 +5899,11 @@ function renderChapter ($tgt_chapter_no)
 		
 				//echo $refcnt[$key];
 		}
+		else
+			$submod->setOutput('refcnt', 0);
 		//echo "</td><td>${value}</td></tr>\n";
+		$submod->addOutput('value', $value);
+
 		$order = $nextorder[$order];
 	}
 	//echo "</table>\n<br>";
@@ -7054,7 +7061,7 @@ function renderTagRowForViewer ($taginfo, $level = 0, $parent, $placeholder = 'T
 	$mod->addOutput('SpanClass', getTagClassName($taginfo['id']));
 	$mod->addOutput('Tag', $taginfo['tag']);
 	$mod->addOutput('Refc', $refc ? $refc : '');
-	$mod->addOutput('Level', $level * 16);
+	$mod->addOutput('Level', $level );
 
 	//echo '<span title="' . implode (', ', $stats) . '" class="' . getTagClassName ($taginfo['id']) . '">' . $taginfo['tag'];
 	//echo ($refc ? " <i>(${refc})</i>" : '') . '</span></td></tr>';

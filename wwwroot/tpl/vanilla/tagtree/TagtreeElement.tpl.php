@@ -7,13 +7,15 @@
 			<?php } ?>
 		<?php } ?>
 	>
-	<td align=left style='padding-left: " <?php $this->Level; ?> "px;'>
-	<?php if ($this->is('HasChildren')) { ?>
+	<td align=left style='padding-left:<?php echo ($this->_Level * 16); ?>px;'>
+	<?php if ($this->is('HasChildren',true)) { ?>
 		<img width="16" border="0" height="16" src="?module=chrome&uri=pix/node-expanded-static.png"></img>
 	<?php } ?>
 	<span title="<?php $this->Stats; ?>" class="<?php $this->SpanClass; ?>">
 		<?php $this->Tag; ?>
-		<i> <?php $this->Refc; ?></i>
+		<?php if (!$this->is('Refc', '')) { ?>
+			<i>(<?php $this->Refc; ?>)</i>
+		<?php } ?> 
 	</span>
 	</td>
 	</tr>

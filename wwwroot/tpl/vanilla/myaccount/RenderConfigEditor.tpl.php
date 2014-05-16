@@ -16,7 +16,7 @@
 		<?php $this->OpLink ?> 
 		</td></tr>
 	<?php $this->endLoop(); ?>
-	<input type=hidden name=num_vars value=<?php $this->i; ?>>
+	<input type=hidden name=num_vars value=<?php $this->Index; ?>>
 	<tr><td colspan=3>
 	<?php $this->getH('PrintImageHref', array('SAVE', 'Save changes', TRUE)); ?>
 	</td></tr>
