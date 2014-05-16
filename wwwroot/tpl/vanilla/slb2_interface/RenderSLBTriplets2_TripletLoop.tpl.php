@@ -1,6 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
 	<tr valign=top class='row_<?php $this->order ?> triplet-row'>
-	<td><a href="#" onclick="slb_config_preview(event <?php $this->slb_object_id ?>, <?php $this->slb_vs_id ?>, <?php $this->slb_rspool_id ?>); return false"> <?php $this->getH("PrintImageHref", array('Zoom', 'config preview'));?> </a></td>
+	<td><a href="#" onclick="slb_config_preview(event, <?php $this->slb_object_id ?>, <?php $this->slb_vs_id ?>, <?php $this->slb_rspool_id ?>); return false"> <?php $this->getH("PrintImageHref", array('Zoom', 'config preview'));?> </a></td>
 	<?php $this->startLoop("cellOutputArray") ?>
 		<td <?php $this->span_html ?> class=tdleft>
 		<?php $this->slb_cell ?>

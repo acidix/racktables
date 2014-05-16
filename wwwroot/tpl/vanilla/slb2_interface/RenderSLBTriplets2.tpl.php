@@ -5,7 +5,6 @@
 	<?php if($this->is("showTriplets", true)){?>
 		<div class=portlet>
 			<h2> VS group instances (<?php $this->countTriplets ?>) </h2>
-
 			<table cellspacing=0 cellpadding=5 align=center class=widetable><tr><th></th>
 			<?php $this->startLoop("headersArray") ?>
 				<th> <?php $this->header ?> </th>
