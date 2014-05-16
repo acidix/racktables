@@ -9943,14 +9943,14 @@ function renderVLANDomain ($vdom_id)
 		$allDomainSwitchOut = array();
 		foreach ($mydomain['switchlist'] as $switchinfo)
 		{
-			$singleDomain = array('order' => $order, 'renderedCell' => renderCell (spotEntity ('object', $switchinfo['object_id'])) );
+			$singleDomain = array('order' => $order, 'renderedCell' => renderCell (spotEntity ('object', $switchinfo['object_id'])));
 			//echo "<tr class=row_${order}><td>";
 			//renderCell (spotEntity ('object', $switchinfo['object_id']));
 			//echo '</td><td class=tdleft>';
 			$singleDomain['vstlist'] = $vstlist[$switchinfo['template_id']];
 			//echo $vstlist[$switchinfo['template_id']];
 			//echo '</td><td>';
-			//$qcode = detectVLANSwitchQueue (getVLANSwitchInfo ($switchinfo['object_id']));
+			$qcode = detectVLANSwitchQueue (getVLANSwitchInfo ($switchinfo['object_id']));
 			//printImageHREF ("DQUEUE ${qcode}", $dqtitle[$qcode]);
 			$singleDomain['imageHREF'] = printImageHREF ("DQUEUE ${qcode}", $dqtitle[$qcode]);
 			//echo '</td></tr>';
