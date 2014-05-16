@@ -788,6 +788,7 @@ function getPopupSLBConfig ($row, TemplateModule $parent = null, $placeholder = 
 		//Add JS Code to the main module
 		$tplm->createMainModule();
 		$jsMod = $tplm->generateSubmodule('Payload', 'GetPopupSLBConfig_LoadJS');
+		
 		$jsMod->setNamespace("slb2_interface");
 //		addJS ('js/jquery.thumbhover.js');
 //		addJS (<<<END
