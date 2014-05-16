@@ -10,9 +10,9 @@
 	<?php $this->getH('PrintImageHREF',array('SAVE','Save changes', true)); ?>
 	<span style="margin-left: 2em"></span>
 	<?php if (!$this->is('Deletable')) { ?>
-		<?php $this->getH('GetOPLink',array(NULL, '', 'NODESTROY', "Could not delete: there are " . $this->_TripletCount . " LB links")); ?>
+		<?php $this->getH('GetOpLink',array(NULL, '', 'NODESTROY', "Could not delete: there are " . $this->_TripletCount . " LB links")); ?>
 	<?php } else { ?>
-		<?php $this->getH('GetOPLink',array(array ('op' => 'del', 'id' => $this->_ID), '', 'DESTROY', 'Delete', 'need-confirmation')); ?>
+		<?php $this->getH('GetOpLink',array(array ('op' => 'del', 'id' => $this->_ID), '', 'DESTROY', 'Delete', 'need-confirmation')); ?>
 	<?php } ?>
 	</th>
 	</tr>
@@ -37,11 +37,10 @@
 	<tr><td valign=top class=tdleft>
 		<ul class="slb-checks editable">
 		<?php while($this->refLoop('VSPorts')) { ?>
-			<li class="enabled">
-				<?php $this->Port; ?><?php $this->SLBConfig; ?>
-				<?php $this->getH('PrintOPFormIntro',$this->_PortOPIntro); ?>
+			<li class="enabled"><?php $this->Port; ?><?php $this->SLBConfig; ?>
+				<?php $this->getH('PrintOpFormIntro',$this->_PortOPIntro); ?>
 				<p align=center>
-				<?php $this->getH('PrintOPLink',$this->_PortOPLink); ?>
+				<?php $this->getH('GetOpLink',$this->_PortOPLink); ?>
 				<p><label>VS config:<br>
 				<textarea name=vsconfig rows=3 cols=80><?php $this->PortVSConfig; ?></textarea></label>
 				<p><label>RS config:<br>
@@ -61,9 +60,9 @@
 		<?php while($this->refLoop('VSIPs')) { ?>
 			<li class="enabled">
 				<?php $this->IP; ?><?php $this->SLBConfig; ?>
-				<?php $this->getH('PrintOPFormIntro',$this->_IPOPIntro); ?>
+				<?php $this->getH('PrintOpFormIntro',$this->_IPOPIntro); ?>
 				<p align=center>
-				<?php $this->getH('PrintOPLink',$this->_IPOPLink); ?>
+				<?php $this->getH('GetOpLink',$this->_IPOPLink); ?>
 				<p><label>VS config:<br>
 				<textarea name=vsconfig rows=3 cols=80><?php $this->IPVSConfig; ?></textarea></label>
 				<p><label>RS config:<br>

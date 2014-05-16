@@ -56,8 +56,7 @@ function renderVS ($vsid)
 	$tplm = TemplateManager::getInstance();
 	
 	$mod = $tplm->generateSubmodule('Payload', 'RenderVS');
-	$mod->setNamespace('ipvs',true);
-	
+	$mod->setNamespace('ipvs');
 	
 	//echo '<table border=0 class=objectview cellspacing=0 cellpadding=0>';
 	if (strlen ($vsinfo['name']))
@@ -217,7 +216,7 @@ function renderEditVS ($vs_id)
 	$tplm = TemplateManager::getInstance();
 	
 	$mod = $tplm->generateSubmodule('Payload', 'RenderEditVS');
-	$mod->setNamespace('ipvs',true);
+	$mod->setNamespace('ipvs');
 	
 	$mod->addOutput('Name', htmlspecialchars ($vsinfo['name'], ENT_QUOTES));
 	$mod->addOutput('VSConfig', htmlspecialchars ($vsinfo['vsconfig']));
@@ -280,7 +279,7 @@ function renderEditVS ($vs_id)
 			if (isPortEnabled ($port, $triplet['ports']))
 				$used++;
 		$outarr[] = array('Port'=>formatVSPort ($port),
-						  'SLBConfig'=>getPopupSLBConfig ($port)) + renderPopupVSPortForm ($port, $used);
+						  'SLBConfig'=> getPopupSLBConfig ($port)) + renderPopupVSPortForm ($port, $used);
 		//echo '<li class="enabled">';
 		//echo formatVSPort ($port) . getPopupSLBConfig ($port);
 		//renderPopupVSPortForm ($port, $used);
@@ -788,7 +787,6 @@ function getPopupSLBConfig ($row, TemplateModule $parent = null, $placeholder = 
 		//Add JS Code to the main module
 		$tplm->createMainModule();
 		$jsMod = $tplm->generateSubmodule('Payload', 'GetPopupSLBConfig_LoadJS');
-		
 		$jsMod->setNamespace("slb2_interface");
 //		addJS ('js/jquery.thumbhover.js');
 //		addJS (<<<END
