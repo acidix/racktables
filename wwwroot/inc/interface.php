@@ -4277,6 +4277,7 @@ function renderIPAddress ($ip_bin)
 			foreach ($address[$key] as $rule)
 			{
 				$smod = $tplm->generateSubmodule($placeholder, 'IPAddressNATRule', $mod);
+				$smod->setNamespace('ipaddress');
 				$smod->addOutput('Proto', $rule['proto']);
 				$smod->addOutput('FromIp', $rule['localip']);
 				$smod->addOutput('FromPort', $rule['localport']);
@@ -7420,7 +7421,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		count ($preselect['pnamelist']) +
 		(mb_strlen ($preselect['extratext']) ? 1 : 0)
 	);
-	$title = $filterc ? "Tag filters (${filterc})" : 'Tag filters';
+	$title = $filterc ? "Tag filters (" . $filterc . ")" : 'Tag filters';
 
 	$tplm = TemplateManager::getInstance();
 
@@ -7448,7 +7449,6 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	// and/or block
 	if (getConfigVar ('FILTER_SUGGEST_ANDOR') == 'yes' or strlen ($preselect['andor']))
 	{
-		
 		//echo $hr;
 		if (!$rulerfirst)
 		{
@@ -7574,10 +7574,12 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		// "apply"
 		//echo "<input type=hidden name=page value=${pageno}>\n";
 		//echo "<input type=hidden name=tab value=${tabno}>\n";
+		$mod->setOutput('PageNo', $pageno);
+		$mod->setOutput('TabNo', $tabno);
 		$bypass_out = '';
 		foreach ($bypass_params as $bypass_name => $bypass_value)
 			$bypass_out .= '<input type=hidden name="' . htmlspecialchars ($bypass_name, ENT_QUOTES) . '" value="' . htmlspecialchars ($bypass_value, ENT_QUOTES) . '">' . "\n";
-		$mod->addOutput("HiddenParams", $bypass_out);
+		$mod->setOutput("HiddenParams", $bypass_out);
 		// FIXME: The user will be able to "submit" the empty form even without a "submit"
 		// input. To make things consistent, it is necessary to avoid pritning both <FORM>
 		// and "and/or" radio-buttons, when enable_apply isn't TRUE.
@@ -7601,7 +7603,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 				: '(' . $preselect['extratext'] . ')';
 			$text = addslashes ($text);
 			$submod = $tplm->generateSubmodule("Textify", "CellFilterPortletTextify", $mod);
-			$submod->setOutput("Text",$text);
+			$submod->setOutput("Text", $text);
 			//echo " <a href=\"#\" onclick=\"textifyCellFilter(this, '$text'); return false\">";
 			//printImageHREF ('COPY', 'Make text expression from current filter');
 			//echo '</a>';
@@ -8820,6 +8822,7 @@ function getFilePreviewCode ($file, $parent, $mod)
 				$file = getFile ($file['id']);
 				
 				$mod = $tplm->generateSubmodule($placeholder, 'FilePreviewText', $parent);
+				$mod->setNamespace('file');
 				$mod->addOutput('Rows', getConfigVar ('PREVIEW_TEXT_ROWS'));
 				$mod->addOutput('Cols', getConfigVar ('PREVIEW_TEXT_COLS'));
 				$mod->addOutput('Content', $file['contents']);

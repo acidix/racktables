@@ -1,7 +1,7 @@
 <?php if (defined("RS_TPL")) {?>
 	<div class=portlet>
 		<h2>Log messages</h2>
-		<table class=2idetable" cellspacing="0" cellpadding="5" align=2center" width="50%">
+		<table class="widetable" cellspacing="0" cellpadding="5" align="center" width="50%">
 			<tr>
 				<th>Date &uarr;</th>
 				<th>User</th>
