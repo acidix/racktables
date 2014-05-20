@@ -1235,8 +1235,8 @@ function renderNetVLAN ($cell)
 
 	$tplm = TemplateManager::getInstance();
 	$mod = $tplm->generateModule("RenderNetVLAN", true);
-	$mod->setOutput("noun", $noun);
-	$mod->setOutput("links",  implode (', ', $links));
+	$mod->setOutput("Noun", $noun);
+	$mod->setOutput("Links",  implode (', ', $links));
 	//echo "<div class='vlan'><strong><small>${noun}</small> " . implode (', ', $links) . '</strong></div>';
 	return $mod->run();
 }

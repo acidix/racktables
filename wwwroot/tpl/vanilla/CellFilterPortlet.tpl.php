@@ -2,8 +2,8 @@
 	<?php 	$this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/tag-cb.js"));
 		 	$this->addRequirement("Header","HeaderJsInline",array("code"=>"tag_cb.enableNegation()")); ?>
 	<div class=portlet><h2><?php $this->get("PortletTitle"); ?></h2>
-		<table border=0 align=center cellspacing=0 class="tagtree">
-			<form method=get>
+		<form method=get>
+			<table border=0 align=center cellspacing=0 class="tagtree">
 				<?php $this->TableContent; ?>
 				<tr>
 					<td class="tdleft">
@@ -23,7 +23,7 @@
 							<img src="pix/pix/pgadmin3-viewdata-grayscale.png" width=32 height=32 border=0>
 						<?php } ?>
 						<?php if ($this->is("EnableReset",true)) { ?>
-							<form method=get>
+							<form method='get'>
 								<input type=hidden name=page value=<?php $this->PageNo; ?>>
 								<input type=hidden name=tab value=<?php $this->TabNo; ?>>
 								<input type=hidden name='cft[]' value=''>
@@ -37,8 +37,8 @@
 						<?php } ?>
 					</td>
 				</tr>
-			</form>
-		</table>
+			</table>
+		</form>
 	</div>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />

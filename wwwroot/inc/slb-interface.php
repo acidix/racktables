@@ -590,7 +590,7 @@ function renderEditRSList ($rs_list, TemplateModule $parent = null)
 	foreach ($rs_list as $rsid => $rs)
 	{
 		$rs_element = array( 'OpFormIntro' => printOpFormIntro ('updRS', array ('rs_id' => $rsid)),
-							 'OpLink' => getOpLink (array('op'=>'delRS', 'id'=>$rsid), '', 'delete', 'Delete this real server'),
+							 'OpLink' => getOpLink (array('op'=>'delRS', 'id' => $rsid), '', 'delete', 'Delete this real server'),
 							 'ImgHref' => printImageHREF ('SAVE', 'Save changes', TRUE),
 							 'rs_id' => $rsid,
 							 'order' => $order, 
@@ -665,7 +665,7 @@ function renderRSPoolServerForm ($pool_id)
 
 	$mod = $tplm->generateSubmodule("Payload","RenderRSPoolServerForm");
 	$mod->setNamespace("slb_interface");
-	$mod->setOutput("PoolInfoRSCount", $poolinfo['rscount']);
+	$mod->setOutput("PoolInfoRSCount", $poolInfo['rscount']);
 	$mod->setOutput("RenderedRSList", renderEditRSList (getRSListInPool ($pool_id)) );	 
 //	startPortlet ("Manage RS list (${poolInfo['rscount']})");
 //	renderEditRSList (getRSListInPool ($pool_id));

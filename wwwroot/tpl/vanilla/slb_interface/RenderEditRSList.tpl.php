@@ -18,7 +18,7 @@
 		<?php $this->OpFormIntro ?>
 		<tr valign=top class=row_<?php $this->order ?> ><td>
 		<?php $this->OpLink ?>
-		</td><td><input type=text name=rsip value='<?php $this->rs_rsip ?> '></td>
+		</td><td><input type=text name=rsip value='<?php $this->rs_rsip ?>'></td>
 		<td><input type=text name=rsport size=5 value='<?php $this->rs_rsport ?>'></td>
 		<td><input type=text name=comment size=15 value='<?php $this->rs_comment ?>'></td>
 		<td><input type=checkbox name=inservice <?php $this->checked ?> ></td>

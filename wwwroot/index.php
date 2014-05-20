@@ -49,7 +49,7 @@ try {
 		if ($tplm->getMainModule() != null)
 		{
 			//All calls below use the template engine to output their content
-			showPathAndSearch($pageno,$tabno,true); //generate PathaAndSearch
+			showPathAndSearch($pageno,$tabno,true); //generate PathAndSearch
 			showTabs($pageno, $tabno, true); //generate TabList
 			showMessageOrError(true); //show all Messages
 			renderQuickLinks(); //show QuickLinks

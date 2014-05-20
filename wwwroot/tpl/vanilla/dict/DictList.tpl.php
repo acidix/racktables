@@ -1,6 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
 	<ul>
-	<?php $this->startLoop('Dictlist'); ?>
+	<?php $this->startLoop('ChapterList'); ?>
 		<li><?php $this->Link; ?> (<?php $this->Records; ?> records)</li>
 	<?php $this->endLoop(); ?>
 	</ul>

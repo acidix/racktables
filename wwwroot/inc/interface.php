@@ -4277,6 +4277,7 @@ function renderIPAddress ($ip_bin)
 			foreach ($address[$key] as $rule)
 			{
 				$smod = $tplm->generateSubmodule($placeholder, 'IPAddressNATRule', $mod);
+				$smod->setNamespace('ipaddress');
 				$smod->addOutput('Proto', $rule['proto']);
 				$smod->addOutput('FromIp', $rule['localip']);
 				$smod->addOutput('FromPort', $rule['localport']);
@@ -5822,9 +5823,11 @@ function renderDictionary ()
 	
 
 	//echo '<ul>';
+	$chapterListOut = array();
 	foreach (getChapterList() as $chapter_no => $chapter)
-		$mod->addOutput('Dictlist', array('Link'=>mkA($chapter['name'], 'chapter', $chapter_no),'Records'=>$chapter['wordc']));
-	
+		$chapterListOut[] = array('Link' => mkA ($chapter['name'], 'chapter', $chapter_no), 'Records' => $chapter['wordc']);
+	$mod->addOutput("ChapterList", $chapterListOut);
+		 
 		//echo '<li>' . mkA ($chapter['name'], 'chapter', $chapter_no) . " (${chapter['wordc']} records)</li>";
 	//echo '</ul>';
 }
@@ -5864,6 +5867,7 @@ function renderChapter ($tgt_chapter_no)
 		//echo "</td><td>${key}</td><td>";
 		$submod->addOutput('key', $key);
 		$submod->addOutput('refcnt', $refcnt[$key]);
+
 		if ($refcnt[$key])
 		{
 			$cfe = '';
@@ -5896,7 +5900,11 @@ function renderChapter ($tgt_chapter_no)
 		
 				//echo $refcnt[$key];
 		}
+		else
+			$submod->setOutput('refcnt', 0);
 		//echo "</td><td>${value}</td></tr>\n";
+		$submod->addOutput('value', $value);
+
 		$order = $nextorder[$order];
 	}
 	//echo "</table>\n<br>";
@@ -7054,7 +7062,7 @@ function renderTagRowForViewer ($taginfo, $level = 0, $parent, $placeholder = 'T
 	$mod->addOutput('SpanClass', getTagClassName($taginfo['id']));
 	$mod->addOutput('Tag', $taginfo['tag']);
 	$mod->addOutput('Refc', $refc ? $refc : '');
-	$mod->addOutput('Level', $level * 16);
+	$mod->addOutput('Level', $level );
 
 	//echo '<span title="' . implode (', ', $stats) . '" class="' . getTagClassName ($taginfo['id']) . '">' . $taginfo['tag'];
 	//echo ($refc ? " <i>(${refc})</i>" : '') . '</span></td></tr>';
@@ -7413,7 +7421,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		count ($preselect['pnamelist']) +
 		(mb_strlen ($preselect['extratext']) ? 1 : 0)
 	);
-	$title = $filterc ? "Tag filters (${filterc})" : 'Tag filters';
+	$title = $filterc ? "Tag filters (" . $filterc . ")" : 'Tag filters';
 
 	$tplm = TemplateManager::getInstance();
 
@@ -7441,7 +7449,6 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	// and/or block
 	if (getConfigVar ('FILTER_SUGGEST_ANDOR') == 'yes' or strlen ($preselect['andor']))
 	{
-		
 		//echo $hr;
 		if (!$rulerfirst)
 		{
@@ -7567,10 +7574,12 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 		// "apply"
 		//echo "<input type=hidden name=page value=${pageno}>\n";
 		//echo "<input type=hidden name=tab value=${tabno}>\n";
+		$mod->setOutput('PageNo', $pageno);
+		$mod->setOutput('TabNo', $tabno);
 		$bypass_out = '';
 		foreach ($bypass_params as $bypass_name => $bypass_value)
 			$bypass_out .= '<input type=hidden name="' . htmlspecialchars ($bypass_name, ENT_QUOTES) . '" value="' . htmlspecialchars ($bypass_value, ENT_QUOTES) . '">' . "\n";
-		$mod->addOutput("HiddenParams", $bypass_out);
+		$mod->setOutput("HiddenParams", $bypass_out);
 		// FIXME: The user will be able to "submit" the empty form even without a "submit"
 		// input. To make things consistent, it is necessary to avoid pritning both <FORM>
 		// and "and/or" radio-buttons, when enable_apply isn't TRUE.
@@ -7594,7 +7603,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 				: '(' . $preselect['extratext'] . ')';
 			$text = addslashes ($text);
 			$submod = $tplm->generateSubmodule("Textify", "CellFilterPortletTextify", $mod);
-			$submod->setOutput("Text",$text);
+			$submod->setOutput("Text", $text);
 			//echo " <a href=\"#\" onclick=\"textifyCellFilter(this, '$text'); return false\">";
 			//printImageHREF ('COPY', 'Make text expression from current filter');
 			//echo '</a>';
@@ -8813,6 +8822,7 @@ function getFilePreviewCode ($file, $parent, $mod)
 				$file = getFile ($file['id']);
 				
 				$mod = $tplm->generateSubmodule($placeholder, 'FilePreviewText', $parent);
+				$mod->setNamespace('file');
 				$mod->addOutput('Rows', getConfigVar ('PREVIEW_TEXT_ROWS'));
 				$mod->addOutput('Cols', getConfigVar ('PREVIEW_TEXT_COLS'));
 				$mod->addOutput('Content', $file['contents']);
@@ -8896,6 +8906,7 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 	
 	$tplm = TemplateManager::getInstance();
 	$mod = $tplm->getMainModule();
+	
 	foreach (array_reverse ($path) as $no)
 	{
 		if (preg_match ('/(.*):(.*)/', $no, $m) && isset ($tab[$m[1]][$m[2]]))
@@ -8914,7 +8925,11 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 			$title = callHook ('dynamic_title_decoder', $no);
 		//$item = "<a href='index.php?";
 		$item = $tplm->generateModule("PathLink", true);
+		$item->setOutput('Delimiter', ':');
 		
+		
+
+
 		if (! isset ($title['params']['page']))
 			$title['params']['page'] = $no;
 		if (! isset ($title['params']['tab']))
@@ -8953,6 +8968,9 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 			$items[count ($items)-1] = getLocationTrail ($title['params']['location_id']);
 		}
 	}
+	//Hide the first :
+	$items[count($items)-1]->setOutput('Delimiter', '');
+
 	// Search form.
 	//echo "<div class='searchbox' style='float:right'>";
 	//echo "<form name=search method=get>";
@@ -9928,14 +9946,14 @@ function renderVLANDomain ($vdom_id)
 		$allDomainSwitchOut = array();
 		foreach ($mydomain['switchlist'] as $switchinfo)
 		{
-			$singleDomain = array('order' => $order, 'renderedCell' => renderCell (spotEntity ('object', $switchinfo['object_id'])) );
+			$singleDomain = array('order' => $order, 'renderedCell' => renderCell (spotEntity ('object', $switchinfo['object_id'])));
 			//echo "<tr class=row_${order}><td>";
 			//renderCell (spotEntity ('object', $switchinfo['object_id']));
 			//echo '</td><td class=tdleft>';
 			$singleDomain['vstlist'] = $vstlist[$switchinfo['template_id']];
 			//echo $vstlist[$switchinfo['template_id']];
 			//echo '</td><td>';
-			//$qcode = detectVLANSwitchQueue (getVLANSwitchInfo ($switchinfo['object_id']));
+			$qcode = detectVLANSwitchQueue (getVLANSwitchInfo ($switchinfo['object_id']));
 			//printImageHREF ("DQUEUE ${qcode}", $dqtitle[$qcode]);
 			$singleDomain['imageHREF'] = printImageHREF ("DQUEUE ${qcode}", $dqtitle[$qcode]);
 			//echo '</td></tr>';
@@ -12595,11 +12613,11 @@ function renderExpirations ()
 			//echo '<tr valign=top><th align=center>Count</th><th align=center>Name</th>';
 			//echo "<th align=center>Asset Tag</th><th align=center>OEM S/N 1</th><th align=center>Date Warranty <br> Expires</th></tr>\n";
 			$singleSectOut['ResOut'] = '';
+			$res = $tplm->generateModule("RenderExpirations_result");
+			$res->setNamespace("reports");
+			$allExpirationResultsOut = array();
 			foreach ($result as $row)
 			{
-
-				$res = $tplm->generateModule("RenderExpirations_result");
-				$res->setNamespace("reports");
 
 
 				$date_value = datetimestrFromTimestamp ($row['uint_value']);
@@ -12607,12 +12625,14 @@ function renderExpirations ()
 				$object = spotEntity ('object', $row['object_id']);
 				$attributes = getAttrValues ($object['id']);
 				$oem_sn_1 = array_key_exists (1, $attributes) ? $attributes[1]['a_value'] : '&nbsp;';
-				$res->setOutput("ClassOrder", $section['class'] . $order );
-				$res->setOutput("Count", $count );	
-				$res->setOutput("Mka", mkA ($object['dname'], 'object', $object['id']) );	 
-				$res->setOutput("AssetNo", $object['asset_no'] );
-				$res->setOutput("OemSn1", $oem_sn_1 );
-				$res->setOutput("DateValue", $date_value );
+
+				$allExpirationResultsOut[] = array(
+						"ClassOrder" => $section['class'] . $order,
+						"Count" => $count,	
+						"Mka" => mkA ($object['dname'], 'object', $object['id']),	 
+						"AssetNo" => $object['asset_no'],
+						"OemSn1" => $oem_sn_1,
+						"DateValue" => $date_value );
 			//	echo '<tr class=' . $section['class'] . $order . ' valign=top>';
 			//	echo "<td>${count}</td>";
 			//	echo '<td>' . mkA ($object['dname'], 'object', $object['id']) . '</td>';
@@ -12621,14 +12641,12 @@ function renderExpirations ()
 			//	echo "<td>${date_value}</td>";
 			//	echo "</tr>\n";
 				
-
-				$singleSectOut['resOut'] .= $res->run();
 				$order = $nextorder[$order];
 				$count++;
-
-	
 			}
-
+		
+			$res->addOutput('Expiration_Results', $allExpirationResultsOut);
+			$singleSectOut['ResOut'] = $res->run();		 
 			$allSectsOut[] = $singleSectOut;
 			//echo "</table><br>\n";
 		}

@@ -1,8 +1,8 @@
 <?php if (defined("RS_TPL")) {?>
 	<tr>
 		<td><?php $this->Proto; ?></td>
-		<td><a href="<?php $this->FromLink; ?>"><?php $this->FromIP; ?> : <?php $this->FromPort; ?></a></td>
-		<td><a href="<?php $this->ToLink; ?>"><?php $this->ToIP; ?> : <?php $this->ToPort; ?></a></td>
+		<td><a href="<?php $this->FromLink; ?>"><?php $this->FromIp; ?></a>:<?php $this->FromPort; ?></td>
+		<td><a href="<?php $this->ToLink; ?>"><?php $this->ToIp; ?></a>:<?php $this->ToPort; ?></td>
 		<td><?php $this->Description; ?></td>
 	</tr>
 <?php } else { ?>

@@ -11,7 +11,6 @@
 	<div id="ShowMessage"></div>
 	<input type='button' value='Verify' onclick='verify();'>
 	<input type='submit' value='Save' disabled='disabled' id='SaveChanges' onclick='$(RCTA).toggleEditor();'>
-	<?php $this->getH("PrintImageHref", array('SAVE', 'Save changes', TRUE)); ?> 
 	</td></tr>
 	</table>
 	</form>
