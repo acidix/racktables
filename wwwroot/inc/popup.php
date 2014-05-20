@@ -587,9 +587,9 @@ function renderPopupHTML()
 	}
 	
 	//ob_end_clean();
-	echo 'running popup';
+//echo 'running popup';
 	$tplm->run(true);
-	echo 'run succesfull';
+	//echo 'run succesfull';
 	//echo '<head><title>RackTables pop-up</title>';
 	//printPageHeaders();
 	//echo '</head>';

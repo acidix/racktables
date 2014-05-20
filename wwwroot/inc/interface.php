@@ -5942,7 +5942,7 @@ function renderChapterEditor ($tgt_chapter_no)
 	foreach ($words as $key => $value)
 	{
 			$submod = $tplm->generateSubmodule('merge', 'CreateChapterRow', $mod);
-		echo $key;
+		//echo $key;
 			//echo "<tr class=row_${order}><td>";
 		$order = $nextorder[$order];
 		$submod->addOutput('order', $order);
