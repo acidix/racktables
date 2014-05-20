@@ -61,7 +61,7 @@ try {
 			$mod->setOutput('Enterprise', getConfigVar ('enterprise'));
 			$mod->setOutput('PageTitle', getTitle ($pageno));
 			
-			$tplm->run(true,"vanilla");
+			$tplm->run(true);
 
 		}
 		else

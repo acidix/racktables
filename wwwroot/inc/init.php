@@ -145,6 +145,7 @@ $op = '';
 	{
 		case 'interface' : TemplateManager::initalizeTemplate('index'); break;
 		case 'popup' : TemplateManager::initalizeTemplate('PopUp'); break;
+		case 'redirect' : TemplateManager::initalizeTemplate('index'); break; //TODO Workaround to make output functions within ophandlers work.
 	}
 //TemplateManager::initalizeTemplate($mod);
 

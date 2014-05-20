@@ -17,7 +17,7 @@
 			<?php $this->mkA ?>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<?php $this->parentsOpLink ?>
-			</td></tr>edit
+			</td></tr>
 		<?php $this->endLoop(); ?> 
 			<tr><td>&nbsp;</td>
 			<th class=tdright>Select container:</th><td class=tdleft>
