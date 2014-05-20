@@ -81,7 +81,7 @@ class TemplateManager
 		$inst->setTemplate($template_list[$tpl_to_use]);
 		$inst->createMainModule($mainmod);
 
-		$inst->getMainModule()->addOutput('Payload',$template_list[$tpl_to_use] . '<br />');
+// 		$inst->getMainModule()->addOutput('Payload',$template_list[$tpl_to_use] . '<br />');
 		
 	}
 	
