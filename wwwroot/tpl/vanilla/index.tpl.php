@@ -37,8 +37,8 @@
 		
 	</div>
  	<div class="tabbar">
- 		<div class=greynavbar>
-			<ul id=foldertab style='margin-bottom: 0px; padding-top: 10px;'>
+ 		<div class="greynavbar">
+			<ul id="foldertab" style='margin-bottom: 0px; padding-top: 10px;'>
 				<?php $this->Tabs; ?>
 			</ul>
 		</div>

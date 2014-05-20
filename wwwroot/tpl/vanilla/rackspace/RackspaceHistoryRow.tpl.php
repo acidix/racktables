@@ -1,5 +1,5 @@
 <?php if (defined("RS_TPL")) {?>
-	<tr class='<?php $this->RowClass; ?>'>
+	<tr class='<?php $this->Class; ?>'>
 		<td>
 			<a href='<?php $this->Link; ?>'><?php $this->Time; ?></a>
 		</td>

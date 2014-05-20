@@ -467,4 +467,11 @@ $this->setInMemoryTemplate("StdSpan","<span class='{{Class}}'>{{Cont}}</span>");
 $this->setInMemoryTemplate("VSSLBList","<ul class=\"slb-checks\">{{List}}</ul>");
 $this->setInMemoryTemplate("VSSLBListElement","<li>{{Content}}</li>");
 
+/**
+*	TdAtomState: 
+*	Usage:  renderMolecule -> interface.php
+*
+**/
+$this->setInMemoryTemplate('TdAtomState',"<td class='atom state_{{State}}'>&nbsp;</td>");
+
 ?>

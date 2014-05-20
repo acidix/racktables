@@ -692,6 +692,7 @@ function renderLocationRowForEditor ($parentmod,$subtree, $level = 0)
 			
 		$smod->addOutput("LocationName", $locationinfo['name']);
 		$smod->addOutput("LocationId", $locationinfo['id']);
+		$smod->setOutput('Level', ($locationinfo['kidc'] ? $level : ($level + 1) * 16));
 		//echo '</td><td class=tdleft>';
 		//printOpFormIntro ('updateLocation', array ('location_id' => $locationinfo['id']));
 		$parent = isset ($locationinfo['parent_id']) ? $locationinfo['parent_id'] : 0;
@@ -2905,7 +2906,7 @@ function renderRackSpaceForObject ($object_id)
 	//echo "</tr></table>\n";
 }
 
-function renderMolecule ($mdata, $object_id)
+function renderMolecule ($mdata, $object_id, $parent = null, $placeholder = 'RenderedMolecule')
 {
 	// sort data out
 	$rackpack = array();
@@ -2928,24 +2929,45 @@ function renderMolecule ($mdata, $object_id)
 		$rackpack[$rack_id][$unit_no][$loclist[$atom]]['object_id'] = $object_id;
 	}
 	// now we have some racks to render
+
+	$tplm = TemplateManager::getInstance();
+	
+	if($parent==null)	
+		$containerMod = $tplm->generateModule("GlobalPlaceholder", true);
+		
 	foreach ($rackpack as $rackData)
 	{
 		markAllSpans ($rackData);
-		echo "<table class=molecule cellspacing=0>\n";
-		echo "<caption>${rackData['name']}</caption>\n";
-		echo "<tr><th width='10%'>&nbsp;</th><th width='20%'>Front</th><th width='50%'>Interior</th><th width='20%'>Back</th></tr>\n";
+		if($parent == null){
+			$mod = $tplm->generateSubmodule('Cont', 'RenderMolecule', $containerMod);
+		}
+		else
+			$mod = $tplm->generateSubmodule($placeholder, 'RenderMolecule', $parent);
+
+//		echo "<table class=molecule cellspacing=0>\n";
+//		echo "<caption>${rackData['name']}</caption>\n";
+		$mod->setOutput('RackName', $rackData['name']);
+//		echo "<tr><th width='10%'>&nbsp;</th><th width='20%'>Front</th><th width='50%'>Interior</th><th width='20%'>Back</th></tr>\n";
+		$allRowsOut = array();
 		for ($i = $rackData['height']; $i > 0; $i--)
 		{
-			echo "<tr><th>" . inverseRackUnit ($i, $rackData) . "</th>";
+			//echo "<tr><th>" . inverseRackUnit ($i, $rackData) . "</th>";
+			$atomsStates = '';
 			for ($locidx = 0; $locidx < 3; $locidx++)
 			{
 				$state = $rackData[$i][$locidx]['state'];
-				echo "<td class='atom state_${state}'>&nbsp;</td>\n";
+				$atomsStates .= $tplm->generateModule('TdAtomState', true, array('State' =>  $state))->run();
+				//echo "<td class='atom state_${state}'>&nbsp;</td>\n";
 			}
-			echo "</tr>\n";
+			$allRowsOut[] = array('AllLocs' => $atomsStates, 'InverseRack' => inverseRackUnit ($i, $rackData));
+			//echo "</tr>\n";
 		}
-		echo "</table>\n";
+		$mod->setOutput('AllRows', $allRowsOut);
+		//echo "</table>\n";
 	}
+
+	if($parent==null)
+		return $containerMod->run();
 }
 
 function renderDepot ()
@@ -3177,7 +3199,8 @@ function renderRackspaceHistory ()
 	if ($omid)
 	{
 		$oldMolecule = getMolecule ($omid);
-		renderMolecule ($oldMolecule, $object_id);
+		//renderMolecule ($oldMolecule, $object_id)
+		$mod->setOutput("OldAlloc", renderMolecule ($oldMolecule, $object_id ));
 	}
 	else
 		$mod->setOutput("OldAlloc","nothing");
@@ -3190,7 +3213,7 @@ function renderRackspaceHistory ()
 	if ($nmid)
 	{
 		$newMolecule = getMolecule ($nmid);
-		renderMolecule ($newMolecule, $object_id);
+		$mod->setOutput("NewAlloc",renderMolecule ($newMolecule, $object_id));
 	}
 	else
 		$mod->setOutput("NewAlloc","nothing");
@@ -3209,7 +3232,8 @@ function renderRackspaceHistory ()
 		if ($row['mo_id'] == $op_id)
 			$class = 'hl';
 		else
-			$class = "row_${order}";
+			$class = "row_" . $order;
+		
 		$smod->addOutput("Class",$class);
 		$smod->addOutput("Link",makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'op_id'=>$row['mo_id'])));
 		$smod->addOutput("Time",$row['ctime']);
