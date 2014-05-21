@@ -1489,7 +1489,7 @@ function renderEditObjectForm()
 	getOpLink (array ('op'=>'resetObject'), '' ,'clear', 'Reset (cleanup) object', 
 		'need-confirmation', $mod, 'resObjLink');
 	//echo "</td></tr>\n";
-	$mod->addOutput("obj_comment", $object['comment']);
+	$mod->addOutput("Obj_comment", $object['comment']);
 		 
 	//echo "<tr><td colspan=3><b>Comment:</b><br><textarea name=object_comment rows=10 cols=80>${object['comment']}</textarea></td></tr>";
 
