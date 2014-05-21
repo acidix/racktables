@@ -25,7 +25,7 @@
 	<?php if($this->is('ID')) { ?>
 		<?php $this->getH('NiftyString',$this->_Name); ?>
 		<?php if($this->is('Tags')) { ?>
-			<br><small> <?php $this->Tags; ?></small>
+			<br><small><?php $this->Tags; ?></small>
 		<?php } ?>
 	<?php } else { ?>
 		<?php $this->getH('PrintImageHREF',array('dragons', 'Here be dragons.')); ?>
@@ -34,7 +34,6 @@
 		<?php } ?>
 	<?php } ?>
 	</td>
-
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

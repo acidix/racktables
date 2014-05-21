@@ -5,6 +5,9 @@
 		<form method=get>
 			<table border=0 align=center cellspacing=0 class="tagtree">
 				<?php $this->TableContent; ?>
+				<?php if ($this->is('EnableSubmitOnClick')) { ?>
+					<?php $this->addRequirement("Header","HeaderJsInline",array("code"=>"tag_cb.enableSubmitOnClick()")); ?>
+				<?php } ?> 
 				<tr>
 					<td class="tdleft">
 						<input type=hidden name=page value=<?php $this->PageNo; ?>>

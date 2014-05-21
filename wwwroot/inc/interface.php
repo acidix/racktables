@@ -7506,6 +7506,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	// tags block
 	if (getConfigVar ('FILTER_SUGGEST_TAGS') == 'yes' or count ($preselect['tagidlist']))
 	{
+
 		if (count ($preselect['tagidlist']))
 			$enable_reset = TRUE;
 		//echo $hr;
@@ -7527,7 +7528,8 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 			printTagCheckboxTable ('cft', buildTagChainFromIds ($preselect['tagidlist']), $negated_chain, $objectivetags, $realm, $mod, "TableContent");
 		}
 
-		//if (getConfigVar('SHRINK_TAG_TREE_ON_CLICK') == 'yes')
+		if (getConfigVar('SHRINK_TAG_TREE_ON_CLICK') == 'yes')
+			$mod->setOutput('EnableSubmitOnClick', true);
 			//addJS ('tag_cb.enableSubmitOnClick()', TRUE);
 	}
 	// predicates block
@@ -9097,14 +9099,14 @@ function getTitle ($pageno)
 	return $tmp['name'];
 }
 
-function showTabs ($pageno, $tabno,$tpl = false)
+function showTabs ($pageno, $tabno)
 {
 	global $tab, $page, $trigger;
 	if (!isset ($tab[$pageno]['default']))
 		return;
 	
-	if($tpl)
-	{
+	//if($tpl)
+	//{
 	$tplm = TemplateManager::getInstance();
 	$mod = $tplm->getMainModule();
 	
@@ -9150,34 +9152,6 @@ function showTabs ($pageno, $tabno,$tpl = false)
 		//echo "'>${tabtitle}</a></li>\n";
 	}
 	//echo "</ul></div>";
-	}
-	else
-	{ ////Old version
-		//@TODO Remove Old version, change to TemplateEngine
-		echo "<div class=greynavbar><ul id=foldertab style='margin-bottom: 0px; padding-top: 10px;'>";
-		foreach ($tab[$pageno] as $tabidx => $tabtitle)
-		{
-			// Hide forbidden tabs.
-			if (!permitted ($pageno, $tabidx))
-				continue;
-			// Dynamic tabs should only be shown in certain cases (trigger exists and returns true).
-			if (!isset ($trigger[$pageno][$tabidx]))
-				$tabclass = 'std';
-			elseif (!strlen ($tabclass = call_user_func ($trigger[$pageno][$tabidx])))
-			continue;
-			if ($tabidx == $tabno)
-				$tabclass = 'current'; // override any class for an active selection
-			echo "<li><a class=${tabclass}";
-			echo " href='index.php?page=${pageno}&tab=${tabidx}";
-			$args = array();
-			fillBypassValues ($pageno, $args);
-			foreach ($args as $param_name => $param_value)
-				echo "&" . urlencode ($param_name) . '=' . urlencode ($param_value);
-		
-				echo "'>${tabtitle}</a></li>\n";
-		}
-				echo "</ul></div>";
-	}
 }
 
 // Arg is path page number, which can be different from the primary page number,

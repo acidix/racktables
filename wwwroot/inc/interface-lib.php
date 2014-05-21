@@ -965,8 +965,8 @@ function serializeTags ($chain, $baseurl = '', $parent = null, $placeholder = "S
 			else
 				$mod = $tplm->generateSubmodule($placeholder, 'SerializedTagLink', $parent, true);
 
-			//$mod->addOutput('BaseUrl', $baseurl);
-			//$mod->addOutput('ID', $taginfo['id']);
+			$mod->addOutput('BaseUrl', $baseurl);
+			$mod->addOutput('ID', $taginfo['id']);
 			//$tag = 'a';
 			//$href = "href='${baseurl}cft[]=${taginfo['id']}'";
 		}
