@@ -3303,7 +3303,7 @@ function renderIPSpaceRecords ($tree, $baseurl, $target = 0, $level = 1, $parent
 			$mod = $tplm->generateSubmodule($placeholder, 'IPSpaceRecordNoAlloc', $parent);
 			$mod->setNamespace('ipspace');
 			
-			printIPNetInfoTDs ($item, array ('indent' => $level, 'knight' => $knight, 'tdclass' => 'sparenetwork'), $mod, 'IPnetInfo');
+			printIPNetInfoTDs ($item, array ('indent' => $level, 'knight' => $knight, 'tdclass' => 'sparenetwork'), $mod, 'IPNetInfo');
 
 			// capacity and usage
 			//echo "<td class=tdcenter>";
@@ -7333,7 +7333,6 @@ function printTagCheckboxTable ($input_name, $preselect, $neg_preselect, $taglis
 					
 					if (array_key_exists ('text_refcnt', $row))
 					{
-						$tagobj->setOutput("isRefCnt", 	true);
 						$tagobj->setOutput("RefCnt", 	$row['text_refcnt']);
 					}
 				}
@@ -7653,6 +7652,8 @@ END;
 		else
 		{
 			//echo "<form method=get>\n";
+			$mod->setOutput('PageNo', $pageno);
+			$mod->setOutput('TabNo', $tabno);
 			//echo "<input type=hidden name=page value=${pageno}>\n";
 			//echo "<input type=hidden name=tab value=${tabno}>\n";
 			//echo "<input type=hidden name='cft[]' value=''>\n";

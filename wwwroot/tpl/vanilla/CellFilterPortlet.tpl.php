@@ -23,7 +23,7 @@
 							<img src="pix/pix/pgadmin3-viewdata-grayscale.png" width=32 height=32 border=0>
 						<?php } ?>
 						<?php if ($this->is("EnableReset",true)) { ?>
-							<form method='get'>
+							<form method=get>
 								<input type=hidden name=page value=<?php $this->PageNo; ?>>
 								<input type=hidden name=tab value=<?php $this->TabNo; ?>>
 								<input type=hidden name='cft[]' value=''>
