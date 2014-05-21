@@ -271,7 +271,7 @@ class TemplateHelperPrintTagTRs extends TemplateHelperAbstract
 		//($cell, $baseurl = '')
 		//Initalize paramters 
 		if(count($params) < 1)
-			return "";
+			return '';
 		
 		$cell = $params[0];
 		$baseurl = '';

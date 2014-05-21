@@ -84,10 +84,8 @@ function renderQuickLinks()
 {
 	global $quick_links;
 	
-
 	if (! isset ($quick_links))
 		$quick_links = getConfiguredQuickLinks();
-
 
 	$tplm = TemplateManager::getInstance();
 	////$tplm->createMainModule("index");
@@ -96,7 +94,7 @@ function renderQuickLinks()
 	//if($mod == null)
 	//	return;
 
-	$quicklinks_data =  array();
+	$quicklinks_data = array();
 	//echo '<ul class="qlinks">';
 	foreach ($quick_links as $link)
 	{
@@ -108,8 +106,7 @@ function renderQuickLinks()
 		//	echo '<li><a href="' . $link['href'] . '">' . str_replace (' ', '&nbsp;', $link['title']) . '</a></li>';
 	}
 	$mod->addOutput("Quicklinks_Data", $quicklinks_data);
-	//echo '</ul>';
-	
+	//echo '</ul>';	
 }
 
 function renderInterfaceHTML ($pageno, $tabno, $payload)
@@ -1384,8 +1381,7 @@ function renderEditObjectForm()
 			if (!isset($label))
 				$label = count($parents) > 1 ? 'Containers:' : 'Container:';
 			$allParentsOut[] = array('label' => $label, 'mkA' => mkA ($parent_details['name'], 'object', $parent_details['entity_id']),
-							);
-			getOpLink (array('op'=>'unlinkEntities', 'link_id'=>$link_id), '', 'cut', 'Unlink container', '', $mod, "parentsOpLink");
+							'parentsOpLink' => getOpLink (array('op'=>'unlinkEntities', 'link_id'=>$link_id), '', 'cut', 'Unlink container'));
 			//echo "<tr><td>&nbsp;</td>";
 			//echo "<th class=tdright>${label}</th><td class=tdleft>";
 			//echo mkA ($parent_details['name'], 'object', $parent_details['entity_id']);

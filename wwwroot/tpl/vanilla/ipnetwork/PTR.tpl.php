@@ -5,7 +5,7 @@
 	<tr>
 		<td class=pcleft>
 			<div class=portlet>
-				<h2>current records</h2>#
+				<h2>current records</h2>
 				<center>
 					<?php if($this->is('Paged')) { ?>
 						<h3><?php $this->StartIP; ?> ~ <?php $this->EndIP; ?></h3>
@@ -34,7 +34,7 @@
 			<div class=portlet>
 				<h2>stats</h2>
 				<table border=0 width='100%' cellspacing=0 cellpadding=2>
-					<tr class=trok><th class=tdright>Exact matches:</th><td class=tdleft><?php $this->Matches; ?></td></tr>
+					<tr class=trok><th class=tdright>Exact matches:</th><td class=tdleft><?php $this->Match; ?></td></tr>
 					<tr class=trwarning><th class=tdright>Missing from DB/DNS:</th><td class=tdleft><?php $this->Missing; ?></td></tr>
 					<?php if($this->is('Mismatch')) { ?>
 						<tr class=trerror><th class=tdright>Mismatches:</th><td class=tdleft><?php $this->MisMatch; ?></td></tr>
