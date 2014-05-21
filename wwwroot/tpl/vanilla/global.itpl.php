@@ -441,7 +441,7 @@ $this->setInMemoryTemplate("RenderedAllocNetworkNetinfo","<td class='{{TdClass}}
 $this->setInMemoryTemplate("RenderedAllocRoutedByOnly","<td class='{{TdClass}}'>&nbsp;</td>");
 
 $this->setInMemoryTemplate("RenderedAllocPeers","<td class='{{TdClass}}'>{{Prefix}}{{Strong}}{{LocPeers}}</td>");
-$this->setInMemoryTemplate("RenderedAllocLocPeers","{{Prefix}}<a href='{{href}}'>{{Osif}}{{LocPeer}</a>");
+$this->setInMemoryTemplate("RenderedAllocLocPeers","{{Prefix}}<a href='{{Href}}'>{{Osif}}{{LocPeer}}</a>");
 
 /**
 *	RSPoolSrvPortlet Table Filed Templates: 

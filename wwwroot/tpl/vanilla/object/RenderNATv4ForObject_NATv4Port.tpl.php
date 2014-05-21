@@ -2,13 +2,13 @@
 	<tr class='<?php $this->class ?>'>
 	<td><?php $this->opLink ?></td>
 	<td><?php $this->proto ?>/<?php $this->osif ?><?php $this->portpair_local_mod ?>
-	<?php if (!$this->is("local_addr_name", null)) { ?>
+	<?php if ($this->is("local_addr_name")) { ?>
 		(<?php $this->local_addr_name ?>)
 	<?php } ?>
 	<td><?php $this->portpair_remote_mod ?></td> 
 	<td class='description'>
 	<?php $this->mkAList ?>
-	<?php if (!$this->is("remote_addr_name", null)) { ?>
+	<?php if ($this->is("remote_addr_name")) { ?>
 		(<?php $this->remote_addr_name ?>)
 	<?php } ?> 
 	<?php $this->opFormIntro ?>

@@ -1268,9 +1268,9 @@ function getRenderedIPPortPair ($ip, $port = NULL, $parent = null, $placeholder 
 	//	$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
-		$mod = $tplm->generateModule("RenderedIPPortPair", true );
+		$mod = $tplm->generateModule('RenderedIPPortPair', true);
 	else
-		$mod = $tplm->generateSubmodule("RenderedIPPortPair", "RenderedIPPortPair", $parent, true);
+		$mod = $tplm->generateSubmodule($placeholder, 'RenderedIPPortPair', $parent, true);
 	
 	$mod->setNamespace("");
 	$mod->addOutput("href", makeHref (array ('page' => 'ipaddress',  'tab'=>'default', 'ip' => $ip)));

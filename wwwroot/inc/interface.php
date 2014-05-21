@@ -4539,13 +4539,13 @@ function renderNATv4ForObject ($object_id)
 			), '', 'delete', 'Delete NAT rule'
 		) . "</td>";
 		echo "<td>${pf['proto']}/${osif}" . getRenderedIPPortPair ($pf['localip'], $pf['localport']);*/
-		getRenderedIPPortPair ($pf['localip'], $pf['localport'], $mod, 'portpair_local_mod');
+		
 		if (strlen ($pf['local_addr_name']))
 			$singlePort['local_addr_name'] = $pf['local_addr_name'];
 		//	echo ' (' . $pf['local_addr_name'] . ')';
 		//echo "</td>";
 		//echo "<td>" . getRenderedIPPortPair ($pf['remoteip'], $pf['remoteport']) . "</td>";
-		getRenderedIPPortPair ($pf['remoteip'], $pf['remoteport'],$mod, 'portpair_remote_mod');
+		
 
 		$address = getIPAddress (ip4_parse ($pf['remoteip']));
 		$singlePort['mkAList'] = '';
@@ -4578,7 +4578,11 @@ function renderNATv4ForObject ($object_id)
 		$singlePort['description'] = $pf['description'];
 
 		//Using loop array style paramter for output
-		$tplm->generateSubmodule('AllNatv4Ports','RenderNATv4ForObject_NATv4Port', $mod, false, $singlePort);
+		$vorPorts = $tplm->generateSubmodule('AllNatv4Ports','RenderNATv4ForObject_NATv4Port', $mod, false, $singlePort);
+		$vorPorts->setNamespace('object');
+
+		getRenderedIPPortPair ($pf['remoteip'], $pf['remoteport'], $vorPorts, 'portpair_remote_mod');
+		getRenderedIPPortPair ($pf['localip'], $pf['localport'], $vorPorts, 'portpair_local_mod');
 	}
 		 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
@@ -4608,8 +4612,8 @@ function renderNATv4ForObject ($object_id)
 				'proto'=>$pf['proto'],
 			), '', 'delete', 'Delete NAT rule');
 		$singleFocus['mkA'] = mkA ($pf['object_name'], 'object', $pf['object_id']);
-		getRenderedIPPortPair ($pf['localip'], $pf['localport'], $mod, 'focus_portpair_local_mod');
-		getRenderedIPPortPair ($pf['remoteip'], $pf['remoteport'], $mod, 'focus_portpair_remote_mod');
+		$singleFocus['focus_portpair_local_mod'] = getRenderedIPPortPair ($pf['localip'], $pf['localport']);
+		$singleFocus['focus_portpair_remote_mod'] = getRenderedIPPortPair ($pf['remoteip'], $pf['remoteport']);
 		/*echo "<tr><td>" . getOpLink (
 			array(
 				'op'=>'delNATv4Rule',
