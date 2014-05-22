@@ -1,7 +1,5 @@
 <?php if (defined("RS_TPL")) {?>
-	<div class="slbconf-btn">…</div>
-	<div class="slbconf popup-box">
-	<?php if ($this->is("row_vsconfig", true)) { ?>
+	<div class="slbconf-btn">…</div><div class="slbconf popup-box"><?php if ($this->is("row_vsconfig", true)) { ?>
 		<h1>VS config:</h1><?php $this->row_vsconfig ?><?php } ?>
 	<?php if ($this->is("row_rsconfig", true)) { ?>
 		<h1>RS config:</h1><?php $this->row_rsconfig ?><?php } ?> 
