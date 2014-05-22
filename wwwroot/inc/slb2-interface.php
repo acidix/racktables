@@ -807,7 +807,7 @@ function getPopupSLBConfig ($row, TemplateModule $parent = null, $placeholder = 
 //	$ret .= '</div>';
 
 	static $js_added = FALSE;
-	if (! $js_added)
+	if (!$js_added)
 	{	
 		//Add JS Code to the main module
 		$tplm->createMainModule();

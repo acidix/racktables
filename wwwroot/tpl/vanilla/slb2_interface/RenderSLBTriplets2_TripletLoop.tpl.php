@@ -10,7 +10,8 @@
 	</ul></td>
 	<td class=tdleft><ul class='<?php $this->class ?>'>
 	<!-- Is quite ugly, but is need to keep original formating -->
-<?php $this->startLoop("vipAllOutput"); ?><li class='<?php $this->li_class ?>'><?php $this->formated_VISP ?><?php $this->FormatedPrioSpan ?><?php $this->popupSLBConfig ?>
+<?php $this->startLoop("vipAllOutput"); ?><li class='<?php $this->li_class ?>'><?php $this->formated_VISP ?><?php $this->FormatedPrioSpan ?>
+<?php $this->popupSLBConfig ?>
 <?php $this->tripletForm ?>
 </li>
 	<?php $this->endLoop(); ?> 

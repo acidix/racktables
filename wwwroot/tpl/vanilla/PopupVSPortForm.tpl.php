@@ -2,7 +2,7 @@
 	<?php $this->getH('PrintOpFormIntro', array('updPort', $this->_Keys)); ?>
 		<p align=center>
 		<?php $this->getH("GetOpLink", array( array ('op' => 'delPort') + $this->_Keys, $this->_Title, 'destroy', '', ($this->_Used ? 'del-used-slb' : ''))); ?>
-		<p><label>VS config:<br>
+		<p><label>VS config123:<br>
 		<textarea name=vsconfig rows=3 cols=80><?php $this->Vsconfig ?></textarea></label>
 		<p><label>RS config:<br>
 		<textarea name=rsconfig rows=3 cols=80><?php $this->Rsconfig ?></textarea></label>
