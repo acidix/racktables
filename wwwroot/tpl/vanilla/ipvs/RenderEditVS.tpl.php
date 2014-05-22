@@ -7,7 +7,8 @@
 	<tr><th class=tdright>VS config:</th><td class=tdleft><textarea name=vsconfig rows=3 cols=80><?php $this->VSConfig; ?></textarea></td></tr>
 	<tr><th class=tdright>RS config:</th><td class=tdleft><textarea name=rsconfig rows=3 cols=80><?php $this->RSConfig; ?></textarea></td></tr>
 	<tr><th></th><th>
-	<?php $this->getH('PrintImageHREF',array('SAVE','Save changes', true)); ?>
+	<?php $this->getH('PrintImageHref',array('SAVE','Save changes', true)); ?>
+	
 	<span style="margin-left: 2em"></span>
 	<?php if (!$this->is('Deletable')) { ?>
 		<?php $this->getH('GetOpLink',array(NULL, '', 'NODESTROY', "Could not delete: there are " . $this->_TripletCount . " LB links")); ?>
@@ -29,16 +30,14 @@
 	</form></th></tr>
 	<tr><td valign=top class=tdleft>
 		<ul class="slb-checks editable">
-		<?php while($this->refLoop('VSPorts')) { ?>
-			<li class="enabled"><?php $this->Port; ?><?php $this->SLBConfig; ?><?php $this->PopupVsPort ?></li>
+		<?php while($this->refLoop('VSPorts')) { ?><li class="enabled"><?php $this->Port; ?><?php $this->SLBConfig; ?><?php $this->PopupVsPort ?></li>
 		<?php } ?>
 		</ul>
 	</td>
 	<td width=99%></td>
 	<td valign=top class=tdleft>
 		<ul class="slb-checks editable">
-		<?php while($this->refLoop('VSIPs')) { ?>
-			<li class="enabled"> <?php $this->IP; ?><?php $this->SLBConfig; ?><?php $this->PopupVSVIP ?> </li>
+		<?php while($this->refLoop('VSIps')) { ?><li class="enabled"><?php $this->IP; ?><?php $this->SLBConfig; ?><?php $this->PopupVSVIP ?></li>
 		<?php } ?>	
 		</ul>
 	</td>
