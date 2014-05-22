@@ -523,7 +523,8 @@ function renderSLBTriplets2 ($cell, $editable = FALSE, $hl_ip = NULL, TemplateMo
 		$portOutputArray = array();
 		foreach ($vs_cell['ports'] as $port)
 		{
-			$singlePort = array("Row_Class" => ($row = isPortEnabled ($port, $slb['ports']) ? 'enabled' : 'disabled'));
+			$row = isPortEnabled ($port, $slb['ports']);
+			$singlePort = array("Row_Class" => (($row) ? 'enabled' : 'disabled'));
 
 //			echo '<li class="' . (($row = isPortEnabled ($port, $slb['ports'])) ? 'enabled' : 'disabled') . '">';
 //			echo formatVSPort ($port) . getPopupSLBConfig ($row);
@@ -792,14 +793,12 @@ function getPopupSLBConfig ($row, TemplateModule $parent = null, $placeholder = 
 //	$ret .= '<div class="slbconf popup-box">';
 	if ($do_vs)
 	{
-		$mod->setOutput("do_vs", true);
 		$mod->setOutput("row_vsconfig", $row['vsconfig']);
 //		$ret .= '<h1>VS config:</h1>';
 //		$ret .= $row['vsconfig'];
 	}
 	if ($do_rs)
 	{
-		$mod->setOutput("do_rs", true);
 		$mod->setOutput("row_rsconfig", $row['rsconfig']);
 //		$ret .= '<h1>RS config:</h1>';
 //		$ret .= $row['rsconfig'];
