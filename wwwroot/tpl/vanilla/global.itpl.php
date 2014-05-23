@@ -247,7 +247,7 @@ $this->setInMemoryTemplate('FileSummaryComment','<div class="dashed commentblock
 *	Usage:  interface.php
 *
 **/
-$this->setInMemoryTemplate("RenderConfigVarName",'<span class="varname">{{vname}}</span>\n<p class="vardescr">{{desAndIsDefined}}</p>');
+$this->setInMemoryTemplate("RenderConfigVarName",'<span class="varname">{{vname}}</span><p class="vardescr">{{desAndIsDefined}}</p>');
 
 /**
  * StdTableRowClass

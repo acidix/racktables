@@ -6685,7 +6685,7 @@ function renderConfigVarName ($v)
 	$tplm = TemplateManager::getInstance();
 	//$tplm->setTemplate("vanilla");
 	
-	$mod = $tplm->generateModule("RenderConfigVarName",   true);
+	$mod = $tplm->generateModule("RenderConfigVarName", true);
 	
 	$mod->addOutput("vname", $v['varname']);
 	$mod->addOutput("desAndIsDefined",  $v['description'] . ($v['is_userdefined'] == 'yes' ? '' : ' (system-wide)'));	 
@@ -7938,8 +7938,6 @@ function renderConfigEditor ()
 	// echo "<th class=tdleft>Value</th></tr>";
 	// printOpFormIntro ('upd');
 
-
-
 	$i = 0;
 	$allConfigsPerUser = array();
 	foreach ($per_user ? $configCache : loadConfigCache() as $v)
@@ -8925,9 +8923,7 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 	}
 	global $page, $tab;
 	// Path.
-	if ($tpl)
-	{
-	////New Version
+	
 	$path = getPath ($pageno);
 	$items = array();
 	
@@ -8952,10 +8948,7 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 			$title = callHook ('dynamic_title_decoder', $no);
 		//$item = "<a href='index.php?";
 		$item = $tplm->generateModule("PathLink", true);
-		$item->setOutput('Delimiter', ':');
-		
-		
-
+		$item->setOutput('Delimiter', ':');	
 
 		if (! isset ($title['params']['page']))
 			$title['params']['page'] = $no;
@@ -8992,11 +8985,12 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 		if($no == 'location')
 		{
 			// overwrite the bread crumb for current location with whole path
-			$items[count ($items)-1] = getLocationTrail ($title['params']['location_id']);
+			$items[count ($items)-1] = ' : ' . getLocationTrail ($title['params']['location_id']);
 		}
 	}
 	//Hide the first :
-	$items[count($items)-1]->setOutput('Delimiter', '');
+	//$items[count($items)-1]->setOutput('Delimiter', '');
+	$mod->addOutput("Path", array_reverse($items));
 
 	// Search form.
 	//echo "<div class='searchbox' style='float:right'>";
@@ -9009,85 +9003,11 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 	$mod->addOutput("PageNo", $pageno);
 	$mod->addOutput("TabNo", $tabno);
 	$mod->addOutput("SearchValue", (isset ($_REQUEST['q']) ? htmlspecialchars ($_REQUEST['q'], ENT_QUOTES) : '')) ;
-	$mod->addOutput("Path", array_reverse($items));
+	
 	// Path (breadcrumbs)
 	//echo implode(' : ', array_reverse ($items));
-	}
-	else
-	{
-	///////Old Version
-	//@TODO Remove Old Version change to template engine
-		$path = getPath ($pageno);
-		$items = array();
-		
-		foreach (array_reverse ($path) as $no)
-		{
-			if (preg_match ('/(.*):(.*)/', $no, $m) && isset ($tab[$m[1]][$m[2]]))
-			$title = array
-		(
-				'name' => $tab[$m[1]][$m[2]],
-				'params' => array('page' => $m[1], 'tab' => $m[2]),
-		);
-	elseif (isset ($page[$no]['title']))
-	$title = array
-	(
-			'name' => $page[$no]['title'],
-			'params' => array()
-	);
-	else
-		$title = callHook ('dynamic_title_decoder', $no);
-	
-	$item = "<a href='index.php?";
 	
 	
-
-	if (! isset ($title['params']['page']))
-		$title['params']['page'] = $no;
-	if (! isset ($title['params']['tab']))
-		$title['params']['tab'] = 'default';
-		$is_first = TRUE;
-		$anchor_tail = '';
-		$params = '';
-		foreach ($title['params'] as $param_name => $param_value)
-		{
-				if ($param_name == '#')
-			{
-				$anchor_tail = '#' . $param_value;
-				continue;
-			}
-			$params .= ($is_first ? '' : '&') . "${param_name}=${param_value}";
-			$is_first = FALSE;
-	}
-	$item .= $anchor_tail;
-	$item .= "'>" . $title['name'] . "</a>";
-	
-	$items[] = $item;
-	
-	// location bread crumbs insert for Rows and Racks
-	if ($no == 'row')
-	{
-		$trail = getLocationTrail ($title['params']['location_id']);
-		if(!empty ($trail))
-			$items[] = $trail;
-	}
-	if($no == 'location')
-	{
-		// overwrite the bread crumb for current location with whole path
-			$items[count ($items)-1] = getLocationTrail ($title['params']['location_id']);
-		}
-	}
-	// Search form.
-	echo "<div class='searchbox' style='float:right'>";
-	echo "<form name=search method=get>";
-	echo '<input type=hidden name=page value=search>';
-	echo "<input type=hidden name=last_page value=$pageno>";
-	echo "<input type=hidden name=last_tab value=$tabno>";
-	// This input will be the first, if we don't add ports or addresses.
-	echo "<label>Search:<input type=text name=q size=20 tabindex=1000 value='".(isset ($_REQUEST['q']) ? htmlspecialchars ($_REQUEST['q'], ENT_QUOTES) : '')."'></label></form></div>";
-	
-	// Path (breadcrumbs)
-	echo implode(' : ', array_reverse ($items));
-	}
 }
 
 function getTitle ($pageno)
