@@ -1474,7 +1474,7 @@ class TemplateInMemory extends TemplateModule
 		foreach ($this->output as $name => $value) {
 			if (is_array($this->output[$name]))
 			{
-				$this->output[$name] = implode($this->output[$name]);
+				$value = implode($this->output[$name]);
 			}
 			$code = str_replace("{{".$name."}}", $value, $code);
 		}

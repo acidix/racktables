@@ -1082,7 +1082,6 @@ function renderEntitySummary ($cell, $title, $values = array(), $parent = null, 
 	
 	foreach ($values as $name => $value)
 	{
-
 		$loopMod = $tplm->generateSubmodule("LoopMod", "RenderEntitySummary_LoopCont" , $mod);
 		//$loopMod->setNamespace("", true);
 		$loopMod->defNamespace();
@@ -1091,7 +1090,7 @@ function renderEntitySummary ($cell, $title, $values = array(), $parent = null, 
 		if (is_array ($value) and count ($value) == 1)
 		{
 			$value = array_shift ($value);
-			$loopMod->setOutput("Val", $value);
+			$loopMod->addOutput("Val", $value);
 			$loopMod->setOutput("SingleValue", true);
 			//echo $value;
 			continue;
@@ -1114,7 +1113,7 @@ function renderEntitySummary ($cell, $title, $values = array(), $parent = null, 
 		$loopMod->setOutput("Class", $class);
 		$loopMod->setOutput("Name", $name);
 		$loopMod->setOutput("Val", $value);
-	
+		
 		if ($name == 'tags:')
 		{
 			$loopMod->setOutput("ShowTags", true);	 
