@@ -8989,7 +8989,7 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 		}
 	}
 	//Hide the first :
-	//$items[count($items)-1]->setOutput('Delimiter', '');
+	$items[count($items)-1]->setOutput('Delimiter', '');
 	$mod->addOutput("Path", array_reverse($items));
 
 	// Search form.
