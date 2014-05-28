@@ -8978,7 +8978,7 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 		// location bread crumbs insert for Rows and Racks
 		if ($no == 'row')
 		{
-			$trail = getLocationTrail ($title['params']['location_id']);
+			$trail = ' : ' . getLocationTrail ($title['params']['location_id']);
 			if(!empty ($trail))
 				$items[] = $trail;
 		}
