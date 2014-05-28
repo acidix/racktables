@@ -41,13 +41,10 @@
 	<?php if ($this->is("typeIPNet",true)) { ?>
 		<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>
 		<?php  $this->getH("PrintImageHref", "NET");?>
-		</td><td> <?php $this->get("mkACell"); ?>
-		<?php $this->get("renderdIPNetCap"); ?> </td></tr>
+		</td><td><?php $this->get("mkACell"); ?><?php $this->get("renderdIPNetCap"); ?></td></tr>
 		<tr><td>
-
 		<?php if($this->is("cellName",true)) { ?>
-			<strong> <?php $this->get("niftyCellName"); ?> </strong>
-
+			<strong><?php $this->get("niftyCellName"); ?></strong>
 		<?php }else{ ?>
 			<span class=sparenetwork>no name</span>
 		<?php } ?>
