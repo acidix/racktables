@@ -1,5 +1,4 @@
 <?php if (defined("RS_TPL")) {?>
-
 <?php $js = <<<END
 function checkAll(bx) {
 	for (var tbls=document.getElementsByTagName("table"), i=tbls.length; i--;)
@@ -55,11 +54,11 @@ function expand(id) {
 	}
 }
 END;
-
-	$this->addRequirement("Header","HeaderJsInline",array("code" => $js));
+	$this->addRequirement("Header","HeaderJsInline",array("code"=>$js));
 ?>
-	<div class=portlet>
-		<h2>Location filter</h2>
+	<div class="panel panel-default">
+		<div class="panel-heading">Location filter</div>
+		<div class="panel-content">
 		<table border=0 align=center cellspacing=0 class="tagtree" id="locationFilter">
     		<form method=post>
     			<input type=hidden name=page value=rackspace>
@@ -85,6 +84,7 @@ END;
     			<?php } ?>
 			</form>
 		</table>
+		</div>
 	</div>	
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
