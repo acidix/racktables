@@ -81,9 +81,9 @@ END;
 		</ul>
 		<div class="panel-footer">
 		<?php if ($this->is("LocationsExist",true)) { ?>
-			<button type="submit" class="btn btn-primary" name="submit">Set filter</button>
+			<button type="submit" class="btn btn-primary btn-block" name="submit">Set filter</button>
 		<?php } else { ?>
-			<button type="submit" class="btn btn-primary" name="submit" disabled="disabled">Set filter</button>
+			<button class="btn btn-primary btn-block" disabled="disabled">Set filter</button>
 		<?php } ?>
 		</div>
 	</div>	

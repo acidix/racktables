@@ -1,50 +1,46 @@
 <?php if (defined("RS_TPL")) {?>
 	<?php 	$this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/tag-cb.js"));
-		 	$this->addRequirement("Header","HeaderJsInline",array("code"=>"tag_cb.enableNegation()")); ?>
+		 	$this->addRequirement("Header","HeaderJsInline",array("code"=>"tag_cb.enableNegation()")); 
+		 	if ($this->is('EnableSubmitOnClick')) { 
+				$this->addRequirement("Header","HeaderJsInline",array("code"=>"tag_cb.enableSubmitOnClick()"));
+			}  ?>
 	<div class="panel panel-default">
 		<div class="panel-heading">Tag filters</div>
-		<div class="panel-content">
 		<form method=get>
+		<div class="panel-content">
 			<table border=0 align=center cellspacing=0 class="tagtree">
 				<?php $this->TableContent; ?>
-				<?php if ($this->is('EnableSubmitOnClick')) { ?>
-					<?php $this->addRequirement("Header","HeaderJsInline",array("code"=>"tag_cb.enableSubmitOnClick()")); ?>
-				<?php } ?> 
-				<tr>
-					<td class="tdleft">
-						<input type=hidden name=page value=<?php $this->PageNo; ?>>
-						<input type=hidden name=tab value=<?php $this->TabNo; ?>>
-						<?php $this->HiddenParams; ?>
-						<?php if ($this->is("EnableApply",true)) { ?>
-							<input class="icon" type="image" border="0" title="set filter" src="?module=chrome&uri=pix/pgadmin3-viewfiltereddata.png" name="submit"></input>
-						<?php } ?>
-						<?php if ($this->is("EnableApply",false)) { ?>
-							<img src="pix/pgadmin3-viewfiltereddata-grayscale.png" width=32 height=32 border=0>
-						<?php }?>
-						<?php $this->Textify; ?>
-					</td>
-					<td class=tdright>
-						<?php if ($this->is("EnableReset",false)) { ?>
-							<img src="pix/pix/pgadmin3-viewdata-grayscale.png" width=32 height=32 border=0>
-						<?php } ?>
-						<?php if ($this->is("EnableReset",true)) { ?>
-							<form method=get>
-								<input type=hidden name=page value=<?php $this->PageNo; ?>>
-								<input type=hidden name=tab value=<?php $this->TabNo; ?>>
-								<input type=hidden name='cft[]' value=''>
-								<input type=hidden name='cfp[]' value=''>
-								<input type=hidden name='nft[]' value=''>
-								<input type=hidden name='nfp[]' value=''>
-								<input type=hidden name='cfe' value=''>
-								<?php $this->HiddenParamsReset; ?>
-								<input class="icon" type="image" border="0" title="reset filter" src="?module=chrome&uri=pix/pgadmin3-viewdata.png" name="submit"></input>
-							</form>
-						<?php } ?>
-					</td>
-				</tr>
 			</table>
-		</form>
 		</div>
+		<div class="panel-footer">
+			<input type=hidden name=page value=<?php $this->PageNo; ?>>
+			<input type=hidden name=tab value=<?php $this->TabNo; ?>>
+			<?php $this->HiddenParams; ?>
+			<?php if ($this->is("EnableApply",true)) { ?>
+				<button type="submit" class="btn btn-primary btn-block" name="submit">Set filter</button>
+			<?php } ?>
+			<?php if ($this->is("EnableApply",false)) { ?>
+				<button class="btn btn-primary btn-block" disabled="disabled">Set filter</button>
+			<?php }?>
+			<?php $this->Textify; ?><br />
+			<?php if ($this->is("EnableReset",false)) { ?>
+				<button class="btn btn-default btn-block" disabled="disabled">Reset filter</button>
+			<?php } ?>
+			<?php if ($this->is("EnableReset",true)) { ?>
+				<form method=get>
+					<input type=hidden name=page value=<?php $this->PageNo; ?>>
+					<input type=hidden name=tab value=<?php $this->TabNo; ?>>
+					<input type=hidden name='cft[]' value=''>
+					<input type=hidden name='cfp[]' value=''>
+					<input type=hidden name='nft[]' value=''>
+					<input type=hidden name='nfp[]' value=''>
+					<input type=hidden name='cfe' value=''>
+					<?php $this->HiddenParamsReset; ?>
+					<button type="submit" class="btn btn-default btn-block" name="submit">Reset filter</button>
+				</form>
+			<?php } ?>
+			</div>
+		</form>
 	</div>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
