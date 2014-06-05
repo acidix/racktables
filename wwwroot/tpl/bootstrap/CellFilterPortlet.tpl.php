@@ -8,7 +8,7 @@
 		<div class="panel-heading" data-toggle="collapse" data-target="#CellFilter"><h4 class="panel-title">Tag filters</h4></div>
 		<form method=get>
 		<div class="panel-content">
-			<table border=0 align=center cellspacing=0 class="tagtree">
+			<table border=0 align=center cellspacing=0>
 				<?php $this->TableContent; ?>
 			</table>
 		</div>
