@@ -567,7 +567,7 @@ function renderRackspace ()
 			$order = 'odd';
 			if (count ($rows))
 			{
-
+				
 				//Generate the table module instead.
 
 				//echo '<table border=0 cellpadding=10 class=cooltable>';
