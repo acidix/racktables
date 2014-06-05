@@ -56,33 +56,30 @@ function expand(id) {
 END;
 	$this->addRequirement("Header","HeaderJsInline",array("code"=>$js));
 ?>
+<form method=post>
 	<div class="panel panel-default">
 		<div class="panel-heading">Location filter</div>
-		<form method=post>
+		
 		<div class="panel-content">
-		<table border=0 align=center cellspacing=0 class="tagtree table" id="locationFilter">
+		<ul class="list-group" id="locationFilter">
     		<input type=hidden name=page value=rackspace>
     		<input type=hidden name=tab value=default>
     		<input type=hidden name=changeLocationFilter value=true>
     		<?php if($this->is("LocationsExist",true)) { ?>
-    			<tr>
-    				<td class=tagbox style='padding-left: 0px'>
+    			<li class="list-group-item">
     					<label>
 						<input type=checkbox name='location'  onClick=checkAll(this)> Toggle all
 						<img src=pix/1x1t.gif onLoad=collapseAll(this)>
 						</label>
-					</td>
-				</tr>
-				<tr>
-					<td class=tagbox>
+				</li>
+				<li class="list-group-item">
 						<?php $this->Locations; ?>
-					</td>
-				</tr>
+				</li>
     		<?php } ?>
     		<?php if ($this->is("LocationsExist",false)) { ?>
- 				<tr><td class='tagbox sparenetwork'>(no locations exist)</td></tr>	
+ 				<li class="list-group-item">(no locations exist)</li>
     		<?php } ?>
-		</table>
+		</ul>
 		</div>
 		<div class="panel-footer">
 		<?php if ($this->is("LocationsExist",true)) { ?>
@@ -91,8 +88,8 @@ END;
 			<button type="submit" class="btn btn-primary" name="submit" disabled="disabled">Set filter</button>
 		<?php } ?>
 		</div>
-		</form>
 	</div>	
+</form>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />
