@@ -100,7 +100,7 @@ class TemplateManager
 	 */
 	public static function getOrderedTemplateList()
 	{
-		static $arr = array('vanilla');
+		static $arr = array('vanilla', 'bootstrap');
 
 //		$arr = glob('../tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
 
