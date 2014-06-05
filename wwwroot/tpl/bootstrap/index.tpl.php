@@ -8,6 +8,7 @@
 	<script type="text/JavaScript" src="js/jquery-1.4.4.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="tpl/bootstrap/css/bootstrap.min.css">
 	<script type="text/JavaScript" src="tpl/bootstrap/css/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="tpl/bootstrap/css/template.css">
 	<?php $this->Header ; //printPageHeaders(); ?>
 </head>
 <body>
@@ -18,28 +19,28 @@
 	 			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 	  				<div class="container-fluid">
 			  			<div class="navbar-header">
-					      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar-collapse">
 					        <span class="sr-only">Toggle navigation</span>
-					        <span class="icon-bar"></span>
 					        <span class="icon-bar"></span>
 					        <span class="icon-bar"></span>
 					      </button>
 					      <a class="navbar-brand" href="index.php"><?php $this->Enterprise; //echo getConfigVar ('enterprise') ?></a>
 					    </div>
 					<!-- Collect the nav links, forms, and other content for toggling -->
-					    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-					      <ul class="nav navbar-nav">
-					      	<li><a href="http://racktables.org" title="Visit RackTables site">RackTables <?php echo CODE_VERSION ?></a></li>
+					    <div class="collapse navbar-collapse" id="main-navbar-collapse">
+					    <ul class="nav navbar-nav">
+					      	<li class="hidden-sm"><a href="http://racktables.org" title="Visit RackTables site">RackTables <?php echo CODE_VERSION ?></a></li>
 					      	<?php $this->Quicklinks_Table; ?>
-					      	<li class="divider"></li>
-							<li style='float:right'><a href='?logout'>[ logout ]</a></li>
-					      	<li style='float:right'><a href='index.php?page=myaccount&tab=default'><?php $this->RemoteDisplayname; ?></a></li>
-					      </ul>
+					    </ul>
+					    	<ul class="nav navbar-nav" style='float:right'>
+					      		<li><a href='index.php?page=myaccount&tab=default'><em><?php $this->RemoteDisplayname; ?></em></a></li>
+					    		<li><a href='?logout'><em>[ logout ]</a></em></li>
+					    	</ul>
 					    </div>
 					</div>
 				</nav>
 	 		</div>
-	 	<div class="menubar alert alert-info row col-xs-12" style="padding-top: 75px">
+	 	<div class="menubar alert alert-info row" style="padding-top: 75px">
 	 		<div class="alert-link" style="padding: 0 0 0 0; float: left"><?php $this->Path; ?></div>
 	 			<div class='searchbox'  style="padding: 0 0 0 0; float: right">
 				<form name=search method=get>
@@ -52,7 +53,7 @@
 				</form>
 			</div>
 		</div>
-	 	<div class="tabbar row col-xs-12">
+	 	<div class="tabbar row">
 	 		<div class="greynavbar">
 				<ul id="foldertab" style='margin-bottom: 0px; padding-top: 10px;'>
 					<?php $this->Tabs; ?>
@@ -60,9 +61,9 @@
 			</div>
 		</div>
 	</div>
-	<div class="container">
+	<div>
 	 	<div class="msgbar row col-xs-12"><?php $this->Message; //showMessageOrError(); ?></div>
-	 	<div class="container well well-sm col-xs-12"><?php $this->Payload; //echo $payload; ?></div>
+	 	<div class="container"><?php $this->Payload; //echo $payload; ?></div>
  	</div><br />
  	<?php $this->Debug; ?>
 </div>

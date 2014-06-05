@@ -1,17 +1,15 @@
 <?php if (defined("RS_TPL")) {?>
-	
-	
-	<?php	 
-	
-	while($this->refLoop("indexArrayOutput")){ ?>
-
 
 	
-	<div class="row col-md-12">
-		<?php $this->renderedRows ?>
-	</div>
-	 
-	<?php }  ?>
+	
+	
+
+	
+	<?php while($this->refLoop("indexArrayOutput")){  ?>	
+		<div class="row">
+			<?php $this->renderedRows ?>
+		</div>
+	<?php } ?>
 
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />

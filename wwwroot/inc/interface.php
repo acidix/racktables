@@ -173,9 +173,9 @@ function renderIndex()
 				else
 				$rowsCont[] = array(
 					'IndexItem' => $tplm->generateModule('IndexItemMod', true, array(
-						'Href' => makeHref (array ('page' => $column)),
-						'PageName' => getPageName ($column),
-						'Image' => getImageHREF ($column))
+					'Href' => makeHref (array ('page' => $column)),
+					'PageName' => getPageName ($column),
+					'Image' => getImageHREF ($column))
 						)->run());
 			}
 		$rowMod->setOutput("singleRowCont", $rowsCont);
