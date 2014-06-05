@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-md-9">
 			<div class="panel panel-primary">
-				<div class="panel-heading"><h3 class="panel-title"><?php $this->RackspaceOverviewHeadline; ?></h3></div>
+				<div class="panel-heading"><h4 class="panel-title"><?php $this->RackspaceOverviewHeadline; ?></h4></div>
 				<?php $this->get("RackspaceOverviewTable"); ?>
 			</div>
 		</div>
