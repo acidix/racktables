@@ -54,11 +54,9 @@
 			</div>
 		</div>
 	 	<div class="tabbar row">
-	 		<div class="greynavbar">
-				<ul id="foldertab" style='margin-bottom: 0px; padding-top: 10px;'>
-					<?php $this->Tabs; ?>
-				</ul>
-			</div>
+			<ul class="nav nav-pills" id="foldertab" style='margin-bottom: 0px; padding: 0px 5px 20px;'>
+				<?php $this->Tabs; ?>
+			</ul>
 		</div>
 	</div>
 	<div>

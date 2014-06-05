@@ -1,5 +1,5 @@
 <?php if (defined("RS_TPL")) { ?>
-	<link rel="stylesheet" type="text/css" href="?module=chrome&amp;uri=css/pi.css">
+<!--	<link rel="stylesheet" type="text/css" href="?module=chrome&amp;uri=css/pi.css"> -->
 	<div style="background-color: #f0f0f0; border: 1px solid #3c78b5; padding: 10px; height: 100%; text-align: center; margin: 5px;">
 	<h2>Choose a container:</h2>
 	<form action="javascript:;">
