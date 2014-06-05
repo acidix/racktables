@@ -363,7 +363,7 @@ $this->setInMemoryTemplate("EmptyTableCell","<td>&nbsp;</td>");
 *	Usage: renderIndex -> interface.php
 *
 **/
-$this->setInMemoryTemplate("IndexItemMod"," <h1><a href='{{Href}}'>" .
+$this->setInMemoryTemplate("IndexItemMod","<h1 style='text-align: center'><a href='{{Href}}'>" .
 		"{{PageName}}<br>{{Image}}</a></h1>");
 
 /**
