@@ -1285,7 +1285,7 @@ class TemplateModule
 	
 	/**
 	 * The following 3 functions allow it to change the content of a placeholder
-	 * before displaying it.
+	 * before displaying its content.
 	 * 
 	 * To do so, the designer provides a place to search, an array that describes
 	 * the keys that will be searched.
@@ -1293,19 +1293,17 @@ class TemplateModule
 	 * For example:
 	 * array('TableContent',0,'Name')
 	 * will search for a placeholder called TableContent, that is a list of
-	 * table-rows that contain a placeholder called Name and it will only select the first line.
+	 * table-rows that contain a placeholder called Name and it will only select the first line (0).
 	 * 
-	 * Then the algorithm will search for everything stored in name (That means
-	 * if name is an array of strings, it will search within ALL of thoose strings)
-	 * and replace all found occurences of $search and will replace them with the
+	 * Then the algorithm will replace all found occurences of $search with the
 	 * value stored in $replace.
 	 * 
-	 * Using -1 instead of explicited key in the $place array will force the function
+	 * Using an empty array instead of an explicit key in the $place array will force the function
 	 * to search in all subarrays of the given key.
 	 * 
 	 * For example:
-	 * array('TableContent',-1,'Name')
-	 * will work similar to the first example, but will replace occurences in all
+	 * array('TableContent',[],'Name')
+	 * will work similar to the first example, but will replace occurences of $search in all
 	 * Names within all table rows.
 	 * 
 	 * It will return true if the function was able to find the specified place
@@ -1314,6 +1312,10 @@ class TemplateModule
 	 * mapRegEx and mapFunction work in a similar way, but use regular expressions
 	 * or a function given by the user to search/replace content.
 	 * 
+	 * mapFunction has only one parameter, func.
+	 * func should contain the name of a callable user function with exactly one parameter.
+	 * This parameter contains the old content of the placeholder, and it should return the new content.
+	 * 
 	 * @param array $place
 	 * @param string $search
 	 * @param string $replace
@@ -1321,113 +1323,102 @@ class TemplateModule
 	 */
 	public function map($place, $search, $replace)
 	{
-		return $this->mapTarget($this->output, $place, $search, $replace);
+		return $this->mapFree($this->output, $place, 'rep', $search, $replace);
 	}
 	
-	protected function mapTarget(&$target, $place, $search, $replace)
+	public function mapPreg($place, $search, $replace)
 	{
-		if (!is_array($place))
-			return false;
-		if (count($place) > 0)
-		{
-			if ($place[0] == -1)
-			{
-				foreach ($target as $key => $value) {
-					$ret = ($this->mapTarget($target[$key], array_shift($place), $search, $replace) ? $ret : false);
-				}
-				return $ret;
-			}
-			else
-			{
-				if (!is_array($target)||!array_key_exists($place[0], $target))
-				{
-					return false ;
-				}
-				return $this->mapTarget($target[$place[0]], array_shift($place), $search, $replace);
-			}
-		}
-		else 
-		{	
-			$target = str_replace($search, $replace, $target);
-			return true;
-		}
-	}
-	
-	public function mapRegEx($place, $search, $replace)
-	{
-		$this->mapRegExTarget($this->output, $place, $search, $replace);
-	}
-	
-	protected function mapRegExTarget(&$target, $place, $search, $replace)
-	{
-		if (!is_array($place))
-			return false;
-		if (count($place) > 0)
-		{
-			if ($place[0] == -1)
-			{
-				foreach ($target as $key => $value) {
-					$ret = ($this->mapTarget($target[$key], array_shift($place), $search, $replace) ? $ret : false);
-				}
-				return $ret;
-			}
-			else
-			{
-				if (!is_array($target)||!array_key_exists($place[0], $target))
-				{
-					return false ;
-				}
-				return $this->mapTarget($target[$place[0]], array_shift($place), $search, $replace);
-			}
-		}
-		else
-		{
-			$target = preg_replace($search, $replace, $target);
-			return true;
-		}
+		return $this->mapFree($this->output, $place, 'preg', $search, $replace);
 	}
 	
 	public function mapFunction($place, $func)
 	{
-		return $this->mapFunctionTarget($this->output, $place, $func);
+		return $this->mapFree($this->output, $place, 'func', $func);
+	}
+		
+	public function mapFree(&$original_array, $path,$mode, $search, $new_value = '') {
+    	$cursor =& $original_array;
+    	if (!is_array($path))
+    	    return false;
+    	while($path) {
+    	    $index = array_shift($path);
+    	    if (!is_array($cursor) || (!is_array($index) && !isset($cursor[$index])))
+    	        return false;
+    	    if (is_array($index)) {
+    	        foreach($cursor as &$child)
+    	            $this->mapFree($child, $path, $mode, $search, $new_value);
+    	        return true;
+    	    } else {
+    	        $cursor =& $cursor[$index];
+    	    }
+    	}
+    	switch ($mode) {
+    		case 'func' : 
+    			$cursor = call_user_func($search,$cursor);
+    			break;
+    		case 'preg' :
+    			$cursor = preg_replace($search, $new_value, $cursor);
+    			break;
+    		case 'rep' :
+    			$cursor = str_replace($search, $new_value, $cursor);
+    			break;
+    		default :
+    			throw new TemplateException('TplErr: replace_array used with missing mode.');
+    	}
+    	return true;
 	}
 	
-	protected function mapFunctionTarget(&$target, $place, $func)
-	{
-		if (!is_array($place))
-			return false;
-		if (count($place) > 0)
-		{
-			if ($place[0] == -1)
-			{
-				foreach ($target as $key => $value) {
-					$ret = ($this->mapTarget($target[$key], array_shift($place), $search, $replace) ? $ret : false);
-				}
-				return $ret;
-			}
-			else
-			{
-				if (!is_array($target)||!array_key_exists($place[0], $target))
-				{
-					return false ;
-				}
-				return $this->mapTarget($target[$place[0]], array_shift($place), $search, $replace);
-			}
+	/**
+	 * This debug function generates a list of all submodules.
+	 */
+	public function generateModTree($level = 0) {
+		return $this->parseModNames($this->output, $level);
+	}
+	
+	protected function parseModNames($array, $level) {
+		$ret = '';
+		for ($i = 0;$i < $level * 4; $i++) {
+			$ret .= '&nbsp';
 		}
-		else
-		{
-			if (is_array($target))
-			{
-				foreach ($target as $key => $value) {
-					$target[$key] = call_user_func($func,$value);
+		$ret .= '{ <br />';
+		$level++;
+		$only_scalars = true;
+		if (count($array) == 0) {
+			for ($i = 0;$i < $level * 4; $i++) {
+				$ret .= '&nbsp';
+			}
+			$ret .= '(NO SUBCONTENT)<br />';
+			$only_scalars = false;
+		} else {
+			foreach ($array as $key => $mod) {
+				for ($i = 0;$i < $level * 4; $i++) {
+					$ret .= '&nbsp';
 				}
-			}
-			else
-			{
-				$target = call_user_func($func,$value);
-			}
-			return true;
+				if (is_array($mod)) {
+					$ret .= $key . '=> (ARRAY): <br />';
+					$ret .= $this->parseModNames($mod, $level);
+				}
+				if (is_object($mod)) {
+					$ret .= $key . '=>' . $mod->getModuleName() . ' (MODULE):<br />'; 
+					$ret .= $mod->generateModTree($level);
+				}
+				if (!is_scalar($mod)) {
+					$only_scalars = falsE;
+				}
+			} 
 		}
+		if ($only_scalars) {
+			$ret .= ' (ONLY SCALARS)<br />';
+		}
+		for ($i = 0;$i < ($level-1) * 4; $i++) {
+			$ret .= '&nbsp';
+		}
+		$ret .= '} <br />';
+		return $ret;
+	}
+	
+	public function getModuleName() {
+		return $this->module;
 	}
 }
 
