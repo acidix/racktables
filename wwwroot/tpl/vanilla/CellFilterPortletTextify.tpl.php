@@ -10,9 +10,7 @@
 END;
 	$this->addRequirement("Header","HeaderJsInline",array("code"=>$js));
 ?>
-	<a href="#" onclick="textifyCellFilter(this, '<?php $this->Text; ?>'); return false">
-		<img src="pix/pix/pgadmin3-viewdata-grayscale.png" width=32 height=32 border=0 title="Make text expression from current filter">
-	</a>
+	<button class="btn btn-default btn-block" onclick="textifyCellFilter(this, '<?php $this->Text; ?>'); return false;">Create text-filter</button><br />
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

@@ -1,5 +1,5 @@
 <?php if (defined("RS_TPL")) {?>
-	<div class=tagbox style='text-align:left; padding-left: <?php $this->LevelSpace; ?>px;'>
+	<div style='text-align:left; padding-left: <?php $this->LevelSpace; ?>px;'>
 		<label>
 			<input type=checkbox name='location_id[]' class=<?php $this->Level; ?> value='<?php $this->Id; ?>'<?php $this->Checked; ?> onClick=checkAll(this)>
 				<?php $this->Name; ?>

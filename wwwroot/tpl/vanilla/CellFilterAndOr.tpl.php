@@ -1,7 +1,7 @@
 <?php if (defined("RS_TPL")) {?>
 	<tr>
 		<?php $this->startLoop("AndOr"); ?>
-			<td class='tagbox <?php $this->get("Selected"); ?>' >
+			<td class='<?php $this->get("Selected"); ?>' >
 				<label>
 					<input type=radio name=andor value=<?php $this->get("Boolop");?> <?php $this->get("Checked"); ?>><?php $this->get("Boolop"); ?></input>
 				</label>
