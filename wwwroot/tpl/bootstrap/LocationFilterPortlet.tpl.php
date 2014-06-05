@@ -61,23 +61,27 @@ END;
 		<form method=post>
 		<div class="panel-content">
 		<table border=0 align=center cellspacing=0 class="tagtree table" id="locationFilter">
-    		
-    			<input type=hidden name=page value=rackspace>
-    			<input type=hidden name=tab value=default>
-    			<input type=hidden name=changeLocationFilter value=true>
-    			<?php if($this->is("LocationsExist",true)) { ?>
-    				<tr><td class=tagbox style='padding-left: 0px'><label>
-					<input type=checkbox name='location'  onClick=checkAll(this)> Toggle all
-					<img src=pix/1x1t.gif onLoad=collapseAll(this)>
-					</label></td></tr>
-					<tr><td class=tagbox><hr>
+    		<input type=hidden name=page value=rackspace>
+    		<input type=hidden name=tab value=default>
+    		<input type=hidden name=changeLocationFilter value=true>
+    		<?php if($this->is("LocationsExist",true)) { ?>
+    			<tr>
+    				<td class=tagbox style='padding-left: 0px'>
+    					<label>
+						<input type=checkbox name='location'  onClick=checkAll(this)> Toggle all
+						<img src=pix/1x1t.gif onLoad=collapseAll(this)>
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<td class=tagbox><hr>
 						<?php $this->Locations; ?>
-					<hr></td></tr>
-    			<?php } ?>
-    			<?php if ($this->is("LocationsExist",false)) { ?>
- 					<tr><td class='tagbox sparenetwork'>(no locations exist)</td></tr>	
-    			<?php } ?>
-			
+					<hr></td>
+				</tr>
+    		<?php } ?>
+    		<?php if ($this->is("LocationsExist",false)) { ?>
+ 				<tr><td class='tagbox sparenetwork'>(no locations exist)</td></tr>	
+    		<?php } ?>
 		</table>
 		</div>
 		<div class="panel-footer">

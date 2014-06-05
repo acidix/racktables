@@ -5,7 +5,7 @@
 				<?php $this->Name; ?>
 		</label>
 		<?php if ($this->is("Kidc")) { ?>
-			<a id='lfa<?php $this->Id; ?>' onclick="expand('<?php $this->Id; ?>')\" href="#" > - </a>
+			<a id='lfa<?php $this->Id; ?>' onclick="expand('<?php $this->Id; ?>')" href="#" > - </a>
 			<div id='lfd<?php $this->Id; ?>'>
 				<?php $this->Locations; ?>
 			</div>
