@@ -5,9 +5,9 @@
 				$this->addRequirement("Header","HeaderJsInline",array("code"=>"tag_cb.enableSubmitOnClick()"));
 			}  ?>
 	<div class="panel panel-default" id="CellFilter">
-		<div class="panel-heading" data-toggle="collapse" data-target="#CellFilterContent"><h4 class="panel-title">Tag filters</h4></div>
+		<div class="panel-heading"><h4 class="panel-title">Tag filters</h4></div>
 		<form method=get>
-		<div class="panel-content collapse" id="CellFilterContent">
+		<div class="panel-content" id="CellFilterContent">
 			<table border=0 align=center cellspacing=0>
 				<?php $this->TableContent; ?>
 			</table>
