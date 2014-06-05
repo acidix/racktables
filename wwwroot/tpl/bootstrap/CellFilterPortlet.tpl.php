@@ -21,8 +21,8 @@
 			<?php } ?>
 			<?php if ($this->is("EnableApply",false)) { ?>
 				<button class="btn btn-primary btn-block" disabled="disabled">Set filter</button>
-			<?php }?>
-			<?php $this->Textify; ?><br />
+			<?php }?><br />
+			<?php $this->Textify; ?>
 			<?php if ($this->is("EnableReset",false)) { ?>
 				<button class="btn btn-default btn-block" disabled="disabled">Reset filter</button>
 			<?php } ?>
