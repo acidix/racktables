@@ -29,7 +29,7 @@
     		<i class="glyphicon glyphicon-list"></i>
     	</button>
         <a class="navbar-brand" href="index.php?page=myaccount&tab=default"><?php $this->RemoteDisplayname; ?></a>
-        <a class="navbar-brand" href="#"><?php $this->get("Enterprise"); ?></a>
+        <a class="navbar-brand" href=""><?php $this->get("Enterprise"); ?></a>
              <ul class="nav navbar-nav">
             	 <li><a href="index.php?page=rackspace">Rackspace</a></li>
             	 <li><a href="index.php?page=depot">Objects</a></li>
