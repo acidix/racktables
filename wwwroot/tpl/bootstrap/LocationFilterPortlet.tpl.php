@@ -60,7 +60,6 @@ END;
 	<div class="panel panel-default">
 		<div class="panel-heading">Location filter</div>
 		
-		<div class="panel-content">
 		<ul class="list-group" id="locationFilter">
     		<input type=hidden name=page value=rackspace>
     		<input type=hidden name=tab value=default>
@@ -80,7 +79,6 @@ END;
  				<li class="list-group-item">(no locations exist)</li>
     		<?php } ?>
 		</ul>
-		</div>
 		<div class="panel-footer">
 		<?php if ($this->is("LocationsExist",true)) { ?>
 			<button type="submit" class="btn btn-primary" name="submit">Set filter</button>
