@@ -23,7 +23,7 @@ $this->setInMemoryTemplate("HeaderJsInline",'<script type="text/javascript">' . 
  * Template for: JS include
  * Usage: interface-lib.php (printPageHeaders())
 */
-$this->setInMemoryTemplate("HeaderJsInclude","<link rel=stylesheet type='text/css' href='?module=chrome&uri={{path}}' />\n");
+$this->setInMemoryTemplate("HeaderJsInclude","<script type='text/javascript' src='?module=chrome&uri={{path}}'></script>\n");
 
 /**
  * Template for: CellFilterPortlet in case there are no tags
@@ -47,25 +47,25 @@ $this->setInMemoryTemplate("CellFilterExtraText","<tr><td colspan=2><textarea na
  * Template for: Tablist, the currently active Tab
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabActive","<li><a class=current href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
+$this->setInMemoryTemplate("TabActive","<li><a class=current href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>\n");
 
 /**
  * Template for: Tablist, currently inactive tabs
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabInactive","<li><a class=std href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
+$this->setInMemoryTemplate("TabInactive","<li><a class=std href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>\n");
 
 /**
  * Template for: Tablist, tabs with warnings
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabAttention","<li><a class=attn href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
+$this->setInMemoryTemplate("TabAttention","<li><a class=attn href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>\n");
 
 /**
  * Template for: Part of the path  in the PathAndSearch module
  * Usage: interface.php (showPathAndSearch)
  */
-$this->setInMemoryTemplate("PathLink"," : <a href='index.php?{{Params}}{{AnchorTail}}'>{{Name}}</a>");
+$this->setInMemoryTemplate("PathLink"," {{Delimiter}} <a href='index.php?{{Params}}{{AnchorTail}}'>{{Name}}</a>");
 
 /**
  * Template for spacer in CellFilterPortlet
@@ -90,10 +90,10 @@ $this->setInMemoryTemplate("NoSearchItemFound","<center><h2>Nothing found for {{
  * The four error messages.
  * Usage: interface.php (showMessageOrError)
  */
-$this->setInMemoryTemplate("MessageNeutral","<div class=msg_neutral><p class=bg_primary> {{Message}} </p></div>");
-$this->setInMemoryTemplate("MessageSuccess","<div class=msg_success><p class=bg_success> {{Message}} </p></div>");
-$this->setInMemoryTemplate("MessageError","<div class=msg_error><p class=bg_danger> {{Message}} </p></div>");
-$this->setInMemoryTemplate("MessageWarning","<div class=msg_warning><p class=bg_warning> {{Message}} </p></div>");
+$this->setInMemoryTemplate("MessageNeutral","<div class=msg_neutral> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageSuccess","<div class=msg_success> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageError","<div class=msg_error> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageWarning","<div class=msg_warning> {{Message}} </div>");
 
 /**
  * Text to render when no CellList elements are available.
@@ -127,7 +127,7 @@ $this->setInMemoryTemplate("RenderedIPv6NetCapacity","<div class=\"{{class}}\" i
 *	Usage: interface.php, interface-lib.php
 *
 **/
-$this->setInMemoryTemplate("RenderNetVLAN","<div class='vlan'><strong><small>{{noun}}</small>{{link}} </strong></div>");
+$this->setInMemoryTemplate("RenderNetVLAN","<div class='vlan'><strong><small>{{Noun}}</small> {{Links}}</strong></div>");
 
 /**
 *	MkA: 
@@ -247,13 +247,13 @@ $this->setInMemoryTemplate('FileSummaryComment','<div class="dashed commentblock
 *	Usage:  interface.php
 *
 **/
-$this->setInMemoryTemplate("RenderConfigVarName",'<span class="varname">{{vname}}</span>\n<p class="vardescr">{{desAndIsDefined}}</p>');
+$this->setInMemoryTemplate("RenderConfigVarName",'<span class="varname">{{vname}}</span><p class="vardescr">{{desAndIsDefined}}</p>');
 
 /**
- * FileSummaryComment
+ * StdTableRowClass
  * Usage: as above
  */
-$this->setInMemoryTemplate('FileLinksDefLink','<tr><td class=tdleft>{{Content}}</td></tr>');
+$this->setInMemoryTemplate('StdTableRowClass','<tr><td class={{Class}}>{{Content}}</td></tr>');
 
 /**
  * FileSummaryComment
@@ -271,7 +271,7 @@ $this->setInMemoryTemplate('CellLink','<a href="{{Link}}">{{Title}}</a>');
  * Serialized Tag
  * Usage: serializeTags (interface-lib.php)
  */
-$this->setInMemoryTemplate('SerializedTagLink','<a href="{{BaseUrl}}cft[]={{ID}}" class="{{Class}}" title="{{Title}}">{{Tag}}</a> {{Delimiter}}');
+$this->setInMemoryTemplate('SerializedTagLink','<a href="{{BaseUrl}}cft[]={{ID}}" class="{{Class}}" title="{{Title}}">{{Tag}}</a>{{Delimiter}}');
 $this->setInMemoryTemplate('SerializedTag','<span class="{{Class}}" title="{{Title}}">{{Tag}}</span> {{Delimiter}}');
 
 /**
@@ -363,8 +363,8 @@ $this->setInMemoryTemplate("EmptyTableCell","<td>&nbsp;</td>");
 *	Usage: renderIndex -> interface.php
 *
 **/
-$this->setInMemoryTemplate("IndexItemMod"," <td>\n<h1><a href='{{Href}}'>" .
-		"{{PageName}}<br>\n{{Image}} </a></h1>\n</td>");
+$this->setInMemoryTemplate("IndexItemMod"," <h1><a href='{{Href}}'>" .
+		"{{PageName}}<br>{{Image}}</a></h1>");
 
 /**
 *	TDLeftCell: 
@@ -423,7 +423,7 @@ $this->setInMemoryTemplate('StrongElement',"<strong>{{Cont}}</strong>");
 *	Usage:  renderRackMultiSelect -> interface.php
 *
 **/
-$this->setInMemoryTemplate('StdOptionTemplate',"<option value={{RackId}} {{IsSelected}}>{{RackName}}</option>\n");
+$this->setInMemoryTemplate('StdOptionTemplate',"<option value={{RackId}} {{IsSelected}}>{{RackName}}</option>");
 
 
 /**
@@ -441,7 +441,7 @@ $this->setInMemoryTemplate("RenderedAllocNetworkNetinfo","<td class='{{TdClass}}
 $this->setInMemoryTemplate("RenderedAllocRoutedByOnly","<td class='{{TdClass}}'>&nbsp;</td>");
 
 $this->setInMemoryTemplate("RenderedAllocPeers","<td class='{{TdClass}}'>{{Prefix}}{{Strong}}{{LocPeers}}</td>");
-$this->setInMemoryTemplate("RenderedAllocLocPeers","{{Prefix}}<a href='{{href}}'>{{Osif}}{{LocPeer}</a>");
+$this->setInMemoryTemplate("RenderedAllocLocPeers","{{Prefix}}<a href='{{Href}}'>{{Osif}}{{LocPeer}}</a>");
 
 /**
 *	RSPoolSrvPortlet Table Filed Templates: 
@@ -458,5 +458,20 @@ $this->setInMemoryTemplate("RSPoolSrvDefault","<td class=tdleft>{{Cont}}</td>");
 *
 **/
 $this->setInMemoryTemplate("StdSpan","<span class='{{Class}}'>{{Cont}}</span>");
+
+/**
+ *	StdSpan:
+ *	Usage:  renderVS ->  slb2_interface.php
+ *
+ **/
+$this->setInMemoryTemplate("VSSLBList","<ul class=\"slb-checks\">{{List}}</ul>");
+$this->setInMemoryTemplate("VSSLBListElement","<li>{{Content}}</li>");
+
+/**
+*	TdAtomState: 
+*	Usage:  renderMolecule -> interface.php
+*
+**/
+$this->setInMemoryTemplate('TdAtomState',"<td class='atom state_{{State}}'>&nbsp;</td>");
 
 ?>

@@ -1,21 +1,12 @@
 <?php if (defined("RS_TPL")) {?>
-	
-<div class="container">
-<div class="row" style="padding-top: 0.5cm">
-
-	<div class="col-md-8" >
+	<table class=objview border=0 width='100%'><tr><td class=pcleft>
 	<?php $this->getH("H2",array("%%RackspaceOverviewHeadline")); ?>
 	<?php $this->get("RackspaceOverviewTable"); ?>
-	</div>	
+	</td><td class=pcright width="25%">
+		<?php $this->get("CellFilter"); ?>
+		<br />
+		<?php $this->get("LocationFilter"); ?>
 
-	<div class="col-md-4">
-	<?php $this->get("CellFilterPortlet");?>
-	<br />
-	<?php $this->get("LocationFilterPortlet");?>
-	</div>
-</div>
-</div>
-	
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

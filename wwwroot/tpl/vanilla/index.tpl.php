@@ -7,6 +7,7 @@
 <head><title><?php $this->PageTitle ; //echo getTitle ($pageno); ?></title>
 	<link rel="stylesheet" type="text/css" href="?module=chrome&amp;uri=css/pi.css">
 	<script type="text/JavaScript" src="js/jquery-1.4.4.min.js"></script>
+
 	<?php $this->Header ; //printPageHeaders(); ?>
 </head>
 <body>
