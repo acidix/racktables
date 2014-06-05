@@ -341,7 +341,7 @@ class TemplateManager
 		$this->mainmod->mergeOutputArray($this->gout,true);
 		$this->mainmod->setTemplate($this->tpl);
 		
-		$this->mainmod->addOutput('Debug',$mainmod->generateModTree());
+		$this->mainmod->addOutput('Debug',$this->mainmod->generateModTree());
 		
 		self::log("Running with template: " . $this->tpl . " Mainmod: " , $this->mainmod);
 		$cont = $this->mainmod->run();
