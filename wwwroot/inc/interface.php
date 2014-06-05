@@ -84,10 +84,8 @@ function renderQuickLinks()
 {
 	global $quick_links;
 	
-
 	if (! isset ($quick_links))
 		$quick_links = getConfiguredQuickLinks();
-
 
 	$tplm = TemplateManager::getInstance();
 	////$tplm->createMainModule("index");
@@ -96,7 +94,7 @@ function renderQuickLinks()
 	//if($mod == null)
 	//	return;
 
-	$quicklinks_data =  array();
+	$quicklinks_data = array();
 	//echo '<ul class="qlinks">';
 	foreach ($quick_links as $link)
 	{
@@ -108,8 +106,7 @@ function renderQuickLinks()
 		//	echo '<li><a href="' . $link['href'] . '">' . str_replace (' ', '&nbsp;', $link['title']) . '</a></li>';
 	}
 	$mod->addOutput("Quicklinks_Data", $quicklinks_data);
-	//echo '</ul>';
-	
+	//echo '</ul>';	
 }
 
 function renderInterfaceHTML ($pageno, $tabno, $payload)
@@ -692,6 +689,7 @@ function renderLocationRowForEditor ($parentmod,$subtree, $level = 0)
 			
 		$smod->addOutput("LocationName", $locationinfo['name']);
 		$smod->addOutput("LocationId", $locationinfo['id']);
+		$smod->setOutput('Level', ($locationinfo['kidc'] ? $level : ($level + 1) * 16));
 		//echo '</td><td class=tdleft>';
 		//printOpFormIntro ('updateLocation', array ('location_id' => $locationinfo['id']));
 		$parent = isset ($locationinfo['parent_id']) ? $locationinfo['parent_id'] : 0;
@@ -1383,8 +1381,7 @@ function renderEditObjectForm()
 			if (!isset($label))
 				$label = count($parents) > 1 ? 'Containers:' : 'Container:';
 			$allParentsOut[] = array('label' => $label, 'mkA' => mkA ($parent_details['name'], 'object', $parent_details['entity_id']),
-							);
-			getOpLink (array('op'=>'unlinkEntities', 'link_id'=>$link_id), '', 'cut', 'Unlink container', '', $mod, "parentsOpLink");
+							'parentsOpLink' => getOpLink (array('op'=>'unlinkEntities', 'link_id'=>$link_id), '', 'cut', 'Unlink container'));
 			//echo "<tr><td>&nbsp;</td>";
 			//echo "<th class=tdright>${label}</th><td class=tdleft>";
 			//echo mkA ($parent_details['name'], 'object', $parent_details['entity_id']);
@@ -1488,7 +1485,7 @@ function renderEditObjectForm()
 	getOpLink (array ('op'=>'resetObject'), '' ,'clear', 'Reset (cleanup) object', 
 		'need-confirmation', $mod, 'resObjLink');
 	//echo "</td></tr>\n";
-	$mod->addOutput("obj_comment", $object['comment']);
+	$mod->addOutput("Obj_comment", $object['comment']);
 		 
 	//echo "<tr><td colspan=3><b>Comment:</b><br><textarea name=object_comment rows=10 cols=80>${object['comment']}</textarea></td></tr>";
 
@@ -2905,7 +2902,7 @@ function renderRackSpaceForObject ($object_id)
 	//echo "</tr></table>\n";
 }
 
-function renderMolecule ($mdata, $object_id)
+function renderMolecule ($mdata, $object_id, $parent = null, $placeholder = 'RenderedMolecule')
 {
 	// sort data out
 	$rackpack = array();
@@ -2928,24 +2925,45 @@ function renderMolecule ($mdata, $object_id)
 		$rackpack[$rack_id][$unit_no][$loclist[$atom]]['object_id'] = $object_id;
 	}
 	// now we have some racks to render
+
+	$tplm = TemplateManager::getInstance();
+	
+	if($parent==null)	
+		$containerMod = $tplm->generateModule("GlobalPlaceholder", true);
+		
 	foreach ($rackpack as $rackData)
 	{
 		markAllSpans ($rackData);
-		echo "<table class=molecule cellspacing=0>\n";
-		echo "<caption>${rackData['name']}</caption>\n";
-		echo "<tr><th width='10%'>&nbsp;</th><th width='20%'>Front</th><th width='50%'>Interior</th><th width='20%'>Back</th></tr>\n";
+		if($parent == null){
+			$mod = $tplm->generateSubmodule('Cont', 'RenderMolecule', $containerMod);
+		}
+		else
+			$mod = $tplm->generateSubmodule($placeholder, 'RenderMolecule', $parent);
+
+//		echo "<table class=molecule cellspacing=0>\n";
+//		echo "<caption>${rackData['name']}</caption>\n";
+		$mod->setOutput('RackName', $rackData['name']);
+//		echo "<tr><th width='10%'>&nbsp;</th><th width='20%'>Front</th><th width='50%'>Interior</th><th width='20%'>Back</th></tr>\n";
+		$allRowsOut = array();
 		for ($i = $rackData['height']; $i > 0; $i--)
 		{
-			echo "<tr><th>" . inverseRackUnit ($i, $rackData) . "</th>";
+			//echo "<tr><th>" . inverseRackUnit ($i, $rackData) . "</th>";
+			$atomsStates = '';
 			for ($locidx = 0; $locidx < 3; $locidx++)
 			{
 				$state = $rackData[$i][$locidx]['state'];
-				echo "<td class='atom state_${state}'>&nbsp;</td>\n";
+				$atomsStates .= $tplm->generateModule('TdAtomState', true, array('State' =>  $state))->run();
+				//echo "<td class='atom state_${state}'>&nbsp;</td>\n";
 			}
-			echo "</tr>\n";
+			$allRowsOut[] = array('AllLocs' => $atomsStates, 'InverseRack' => inverseRackUnit ($i, $rackData));
+			//echo "</tr>\n";
 		}
-		echo "</table>\n";
+		$mod->setOutput('AllRows', $allRowsOut);
+		//echo "</table>\n";
 	}
+
+	if($parent==null)
+		return $containerMod->run();
 }
 
 function renderDepot ()
@@ -3177,7 +3195,8 @@ function renderRackspaceHistory ()
 	if ($omid)
 	{
 		$oldMolecule = getMolecule ($omid);
-		renderMolecule ($oldMolecule, $object_id);
+		//renderMolecule ($oldMolecule, $object_id)
+		$mod->setOutput("OldAlloc", renderMolecule ($oldMolecule, $object_id ));
 	}
 	else
 		$mod->setOutput("OldAlloc","nothing");
@@ -3190,7 +3209,7 @@ function renderRackspaceHistory ()
 	if ($nmid)
 	{
 		$newMolecule = getMolecule ($nmid);
-		renderMolecule ($newMolecule, $object_id);
+		$mod->setOutput("NewAlloc",renderMolecule ($newMolecule, $object_id));
 	}
 	else
 		$mod->setOutput("NewAlloc","nothing");
@@ -3209,7 +3228,8 @@ function renderRackspaceHistory ()
 		if ($row['mo_id'] == $op_id)
 			$class = 'hl';
 		else
-			$class = "row_${order}";
+			$class = "row_" . $order;
+		
 		$smod->addOutput("Class",$class);
 		$smod->addOutput("Link",makeHref(array('page'=>$pageno, 'tab'=>$tabno, 'op_id'=>$row['mo_id'])));
 		$smod->addOutput("Time",$row['ctime']);
@@ -3283,7 +3303,7 @@ function renderIPSpaceRecords ($tree, $baseurl, $target = 0, $level = 1, $parent
 			$mod = $tplm->generateSubmodule($placeholder, 'IPSpaceRecordNoAlloc', $parent);
 			$mod->setNamespace('ipspace');
 			
-			printIPNetInfoTDs ($item, array ('indent' => $level, 'knight' => $knight, 'tdclass' => 'sparenetwork'), $mod, 'IPnetInfo');
+			printIPNetInfoTDs ($item, array ('indent' => $level, 'knight' => $knight, 'tdclass' => 'sparenetwork'), $mod, 'IPNetInfo');
 
 			// capacity and usage
 			//echo "<td class=tdcenter>";
@@ -4515,13 +4535,13 @@ function renderNATv4ForObject ($object_id)
 			), '', 'delete', 'Delete NAT rule'
 		) . "</td>";
 		echo "<td>${pf['proto']}/${osif}" . getRenderedIPPortPair ($pf['localip'], $pf['localport']);*/
-		getRenderedIPPortPair ($pf['localip'], $pf['localport'], $mod, 'portpair_local_mod');
+		
 		if (strlen ($pf['local_addr_name']))
 			$singlePort['local_addr_name'] = $pf['local_addr_name'];
 		//	echo ' (' . $pf['local_addr_name'] . ')';
 		//echo "</td>";
 		//echo "<td>" . getRenderedIPPortPair ($pf['remoteip'], $pf['remoteport']) . "</td>";
-		getRenderedIPPortPair ($pf['remoteip'], $pf['remoteport'],$mod, 'portpair_remote_mod');
+		
 
 		$address = getIPAddress (ip4_parse ($pf['remoteip']));
 		$singlePort['mkAList'] = '';
@@ -4554,7 +4574,11 @@ function renderNATv4ForObject ($object_id)
 		$singlePort['description'] = $pf['description'];
 
 		//Using loop array style paramter for output
-		$tplm->generateSubmodule('AllNatv4Ports','RenderNATv4ForObject_NATv4Port', $mod, false, $singlePort);
+		$vorPorts = $tplm->generateSubmodule('AllNatv4Ports','RenderNATv4ForObject_NATv4Port', $mod, false, $singlePort);
+		$vorPorts->setNamespace('object');
+
+		getRenderedIPPortPair ($pf['remoteip'], $pf['remoteport'], $vorPorts, 'portpair_remote_mod');
+		getRenderedIPPortPair ($pf['localip'], $pf['localport'], $vorPorts, 'portpair_local_mod');
 	}
 		 
 	if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
@@ -4584,8 +4608,8 @@ function renderNATv4ForObject ($object_id)
 				'proto'=>$pf['proto'],
 			), '', 'delete', 'Delete NAT rule');
 		$singleFocus['mkA'] = mkA ($pf['object_name'], 'object', $pf['object_id']);
-		getRenderedIPPortPair ($pf['localip'], $pf['localport'], $mod, 'focus_portpair_local_mod');
-		getRenderedIPPortPair ($pf['remoteip'], $pf['remoteport'], $mod, 'focus_portpair_remote_mod');
+		$singleFocus['focus_portpair_local_mod'] = getRenderedIPPortPair ($pf['localip'], $pf['localport']);
+		$singleFocus['focus_portpair_remote_mod'] = getRenderedIPPortPair ($pf['remoteip'], $pf['remoteport']);
 		/*echo "<tr><td>" . getOpLink (
 			array(
 				'op'=>'delNATv4Rule',
@@ -6661,7 +6685,7 @@ function renderConfigVarName ($v)
 	$tplm = TemplateManager::getInstance();
 	//$tplm->setTemplate("vanilla");
 	
-	$mod = $tplm->generateModule("RenderConfigVarName",   true);
+	$mod = $tplm->generateModule("RenderConfigVarName", true);
 	
 	$mod->addOutput("vname", $v['varname']);
 	$mod->addOutput("desAndIsDefined",  $v['description'] . ($v['is_userdefined'] == 'yes' ? '' : ' (system-wide)'));	 
@@ -7309,7 +7333,6 @@ function printTagCheckboxTable ($input_name, $preselect, $neg_preselect, $taglis
 					
 					if (array_key_exists ('text_refcnt', $row))
 					{
-						$tagobj->setOutput("isRefCnt", 	true);
 						$tagobj->setOutput("RefCnt", 	$row['text_refcnt']);
 					}
 				}
@@ -7483,6 +7506,7 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 	// tags block
 	if (getConfigVar ('FILTER_SUGGEST_TAGS') == 'yes' or count ($preselect['tagidlist']))
 	{
+
 		if (count ($preselect['tagidlist']))
 			$enable_reset = TRUE;
 		//echo $hr;
@@ -7504,7 +7528,8 @@ function renderCellFilterPortlet ($preselect, $realm, $cell_list = array(), $byp
 			printTagCheckboxTable ('cft', buildTagChainFromIds ($preselect['tagidlist']), $negated_chain, $objectivetags, $realm, $mod, "TableContent");
 		}
 
-		//if (getConfigVar('SHRINK_TAG_TREE_ON_CLICK') == 'yes')
+		if (getConfigVar('SHRINK_TAG_TREE_ON_CLICK') == 'yes')
+			$mod->setOutput('EnableSubmitOnClick', true);
 			//addJS ('tag_cb.enableSubmitOnClick()', TRUE);
 	}
 	// predicates block
@@ -7629,6 +7654,8 @@ END;
 		else
 		{
 			//echo "<form method=get>\n";
+			$mod->setOutput('PageNo', $pageno);
+			$mod->setOutput('TabNo', $tabno);
 			//echo "<input type=hidden name=page value=${pageno}>\n";
 			//echo "<input type=hidden name=tab value=${tabno}>\n";
 			//echo "<input type=hidden name='cft[]' value=''>\n";
@@ -7910,8 +7937,6 @@ function renderConfigEditor ()
 	// echo "<tr><th class=tdleft>Option</th>";
 	// echo "<th class=tdleft>Value</th></tr>";
 	// printOpFormIntro ('upd');
-
-
 
 	$i = 0;
 	$allConfigsPerUser = array();
@@ -8898,9 +8923,7 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 	}
 	global $page, $tab;
 	// Path.
-	if ($tpl)
-	{
-	////New Version
+	
 	$path = getPath ($pageno);
 	$items = array();
 	
@@ -8925,10 +8948,7 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 			$title = callHook ('dynamic_title_decoder', $no);
 		//$item = "<a href='index.php?";
 		$item = $tplm->generateModule("PathLink", true);
-		$item->setOutput('Delimiter', ':');
-		
-		
-
+		$item->setOutput('Delimiter', ':');	
 
 		if (! isset ($title['params']['page']))
 			$title['params']['page'] = $no;
@@ -8958,18 +8978,19 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 		// location bread crumbs insert for Rows and Racks
 		if ($no == 'row')
 		{
-			$trail = getLocationTrail ($title['params']['location_id']);
+			$trail = ' : ' . getLocationTrail ($title['params']['location_id']);
 			if(!empty ($trail))
 				$items[] = $trail;
 		}
 		if($no == 'location')
 		{
 			// overwrite the bread crumb for current location with whole path
-			$items[count ($items)-1] = getLocationTrail ($title['params']['location_id']);
+			$items[count ($items)-1] = ' : ' . getLocationTrail ($title['params']['location_id']);
 		}
 	}
 	//Hide the first :
 	$items[count($items)-1]->setOutput('Delimiter', '');
+	$mod->addOutput("Path", array_reverse($items));
 
 	// Search form.
 	//echo "<div class='searchbox' style='float:right'>";
@@ -8982,85 +9003,11 @@ function showPathAndSearch ($pageno, $tabno, $tpl = false)
 	$mod->addOutput("PageNo", $pageno);
 	$mod->addOutput("TabNo", $tabno);
 	$mod->addOutput("SearchValue", (isset ($_REQUEST['q']) ? htmlspecialchars ($_REQUEST['q'], ENT_QUOTES) : '')) ;
-	$mod->addOutput("Path", array_reverse($items));
+	
 	// Path (breadcrumbs)
 	//echo implode(' : ', array_reverse ($items));
-	}
-	else
-	{
-	///////Old Version
-	//@TODO Remove Old Version change to template engine
-		$path = getPath ($pageno);
-		$items = array();
-		
-		foreach (array_reverse ($path) as $no)
-		{
-			if (preg_match ('/(.*):(.*)/', $no, $m) && isset ($tab[$m[1]][$m[2]]))
-			$title = array
-		(
-				'name' => $tab[$m[1]][$m[2]],
-				'params' => array('page' => $m[1], 'tab' => $m[2]),
-		);
-	elseif (isset ($page[$no]['title']))
-	$title = array
-	(
-			'name' => $page[$no]['title'],
-			'params' => array()
-	);
-	else
-		$title = callHook ('dynamic_title_decoder', $no);
-	
-	$item = "<a href='index.php?";
 	
 	
-
-	if (! isset ($title['params']['page']))
-		$title['params']['page'] = $no;
-	if (! isset ($title['params']['tab']))
-		$title['params']['tab'] = 'default';
-		$is_first = TRUE;
-		$anchor_tail = '';
-		$params = '';
-		foreach ($title['params'] as $param_name => $param_value)
-		{
-				if ($param_name == '#')
-			{
-				$anchor_tail = '#' . $param_value;
-				continue;
-			}
-			$params .= ($is_first ? '' : '&') . "${param_name}=${param_value}";
-			$is_first = FALSE;
-	}
-	$item .= $anchor_tail;
-	$item .= "'>" . $title['name'] . "</a>";
-	
-	$items[] = $item;
-	
-	// location bread crumbs insert for Rows and Racks
-	if ($no == 'row')
-	{
-		$trail = getLocationTrail ($title['params']['location_id']);
-		if(!empty ($trail))
-			$items[] = $trail;
-	}
-	if($no == 'location')
-	{
-		// overwrite the bread crumb for current location with whole path
-			$items[count ($items)-1] = getLocationTrail ($title['params']['location_id']);
-		}
-	}
-	// Search form.
-	echo "<div class='searchbox' style='float:right'>";
-	echo "<form name=search method=get>";
-	echo '<input type=hidden name=page value=search>';
-	echo "<input type=hidden name=last_page value=$pageno>";
-	echo "<input type=hidden name=last_tab value=$tabno>";
-	// This input will be the first, if we don't add ports or addresses.
-	echo "<label>Search:<input type=text name=q size=20 tabindex=1000 value='".(isset ($_REQUEST['q']) ? htmlspecialchars ($_REQUEST['q'], ENT_QUOTES) : '')."'></label></form></div>";
-	
-	// Path (breadcrumbs)
-	echo implode(' : ', array_reverse ($items));
-	}
 }
 
 function getTitle ($pageno)
@@ -9072,14 +9019,14 @@ function getTitle ($pageno)
 	return $tmp['name'];
 }
 
-function showTabs ($pageno, $tabno,$tpl = false)
+function showTabs ($pageno, $tabno)
 {
 	global $tab, $page, $trigger;
 	if (!isset ($tab[$pageno]['default']))
 		return;
 	
-	if($tpl)
-	{
+	//if($tpl)
+	//{
 	$tplm = TemplateManager::getInstance();
 	$mod = $tplm->getMainModule();
 	
@@ -9125,34 +9072,6 @@ function showTabs ($pageno, $tabno,$tpl = false)
 		//echo "'>${tabtitle}</a></li>\n";
 	}
 	//echo "</ul></div>";
-	}
-	else
-	{ ////Old version
-		//@TODO Remove Old version, change to TemplateEngine
-		echo "<div class=greynavbar><ul id=foldertab style='margin-bottom: 0px; padding-top: 10px;'>";
-		foreach ($tab[$pageno] as $tabidx => $tabtitle)
-		{
-			// Hide forbidden tabs.
-			if (!permitted ($pageno, $tabidx))
-				continue;
-			// Dynamic tabs should only be shown in certain cases (trigger exists and returns true).
-			if (!isset ($trigger[$pageno][$tabidx]))
-				$tabclass = 'std';
-			elseif (!strlen ($tabclass = call_user_func ($trigger[$pageno][$tabidx])))
-			continue;
-			if ($tabidx == $tabno)
-				$tabclass = 'current'; // override any class for an active selection
-			echo "<li><a class=${tabclass}";
-			echo " href='index.php?page=${pageno}&tab=${tabidx}";
-			$args = array();
-			fillBypassValues ($pageno, $args);
-			foreach ($args as $param_name => $param_value)
-				echo "&" . urlencode ($param_name) . '=' . urlencode ($param_value);
-		
-				echo "'>${tabtitle}</a></li>\n";
-		}
-				echo "</ul></div>";
-	}
 }
 
 // Arg is path page number, which can be different from the primary page number,

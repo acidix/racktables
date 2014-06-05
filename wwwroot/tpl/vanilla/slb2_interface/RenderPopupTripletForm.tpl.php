@@ -15,9 +15,9 @@
 	<?php }?>
 	
 	<p><label>VS config:<br>
-	<textarea name=vsconfig rows=3 cols=80><?php $this->vsconfig ?> </textarea></label>
+	<textarea name=vsconfig rows=3 cols=80><?php $this->vsconfig ?></textarea></label>
 	<p><label>RS config:<br>
-	<textarea name=rsconfig rows=3 cols=80><?php $this->rsconfig ?> </textarea></label>
+	<textarea name=rsconfig rows=3 cols=80><?php $this->rsconfig ?></textarea></label>
 	<p align=center>
 	<?php $this->getH("PrintImageHref", array('SAVE', 'Save changes', TRUE)); ?> 
 	</form>

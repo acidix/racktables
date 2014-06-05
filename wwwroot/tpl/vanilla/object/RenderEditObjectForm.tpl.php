@@ -38,7 +38,7 @@
 		<tr><td>&nbsp;</td><th class=tdright>Actions:</th><td class=tdleft>
 		<?php $this->deleteObjLink ?>&nbsp;<?php $this->resObjLink ?>
 		</td></tr>
-		<tr><td colspan=3><b>Comment:</b><br><textarea name=object_comment rows=10 cols=80><?php $this->object_comment ?></textarea></td></tr>
+		<tr><td colspan=3><b>Comment:</b><br><textarea name=object_comment rows=10 cols=80><?php $this->Obj_comment ?></textarea></td></tr>
 		<tr><th class=submit colspan=3>
 		<?php $this->getH("PrintImageHref", array('SAVE', 'Save changes', TRUE)); ?>
 		</form></th></tr></table>

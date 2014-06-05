@@ -4,7 +4,7 @@
 	<?php $this->deleteImg ?>
 	</a></td>
 	<td class='tdleft' NOWRAP><input type=text name=name class='interactive-portname <?php $this->a_class ?>' value='<?php $this->port_name ?>' size=8></td>
-	<td><input type=text name=label value='<?php $this->label ?>'></td>
+	<td><input type=text name=label value='<?php $this->port_label ?>'></td>
 	<td>
 	<?php if ($this->is("iif_name")) { ?>
 		<label><?php $this->iif_name ?>
@@ -19,7 +19,7 @@
 	<?php if ($this->is("isRemoteObj",true)) { ?>
 		<td><?php $this->logged_span_rem_obj_id ?></td>
 		<td><?php $this->logged_span_rem_name ?><input type=hidden name=reservation_comment value=''></td>
-		<td><input type=text name=cable value='<?php $this->calbeid ?>'></td>
+		<td><input type=text name=cable value='<?php $this->cableid ?>'></td>
 		<td class=tdcenter><?php $this->unlink_op_link ?></td>
 	<?php } elseif ($this->is("hasReservation_comment",true)) { ?>
 		<td><?php $this->logged_span_rem_reserved ?></td>
@@ -30,12 +30,8 @@
 		</td>
 	<?php } else {?>
 		<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td class=tdcenter><span
-		ondblclick='window.open("<?php $this->href_helper_portlist ?>", "findlink", 
-		"height=700, width=400, location=no, menubar=no,
-					resizable=yes, scrollbars=yes, status=no, titlebar=no, toolbar=no");'
-		onclick='window.open("<?php $this->href_helper_portlist ?>", "findlink", 
-		"height=700, width=400, location=no, menubar=no,
-					resizable=yes, scrollbars=yes, status=no, titlebar=no, toolbar=no");'>
+		ondblclick='window.open("<?php $this->href_helper_portlist ?>", "findlink", "height=700, width=400, location=no, menubar=no, resizable=yes, scrollbars=yes, status=no, titlebar=no, toolbar=no");'
+		onclick='window.open("<?php $this->href_helper_portlist ?>", "findlink", "height=700, width=400, location=no, menubar=no, resizable=yes, scrollbars=yes, status=no, titlebar=no, toolbar=no");'>
 		<?php $this->link_img ?>
 		</span>
 		<input type=text name=reservation_comment></td>

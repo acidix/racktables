@@ -47,19 +47,19 @@ $this->setInMemoryTemplate("CellFilterExtraText","<tr><td colspan=2><textarea na
  * Template for: Tablist, the currently active Tab
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabActive","<li><a class=current href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
+$this->setInMemoryTemplate("TabActive","<li><a class=current href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>\n");
 
 /**
  * Template for: Tablist, currently inactive tabs
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabInactive","<li><a class=std href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
+$this->setInMemoryTemplate("TabInactive","<li><a class=std href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>\n");
 
 /**
  * Template for: Tablist, tabs with warnings
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabAttention","<li><a class=attn href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
+$this->setInMemoryTemplate("TabAttention","<li><a class=attn href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>\n");
 
 /**
  * Template for: Part of the path  in the PathAndSearch module
@@ -247,7 +247,7 @@ $this->setInMemoryTemplate('FileSummaryComment','<div class="dashed commentblock
 *	Usage:  interface.php
 *
 **/
-$this->setInMemoryTemplate("RenderConfigVarName",'<span class="varname">{{vname}}</span>\n<p class="vardescr">{{desAndIsDefined}}</p>');
+$this->setInMemoryTemplate("RenderConfigVarName",'<span class="varname">{{vname}}</span><p class="vardescr">{{desAndIsDefined}}</p>');
 
 /**
  * StdTableRowClass
@@ -271,7 +271,7 @@ $this->setInMemoryTemplate('CellLink','<a href="{{Link}}">{{Title}}</a>');
  * Serialized Tag
  * Usage: serializeTags (interface-lib.php)
  */
-$this->setInMemoryTemplate('SerializedTagLink','<a href="{{BaseUrl}}cft[]={{ID}}" class="{{Class}}" title="{{Title}}">{{Tag}}</a> {{Delimiter}}');
+$this->setInMemoryTemplate('SerializedTagLink','<a href="{{BaseUrl}}cft[]={{ID}}" class="{{Class}}" title="{{Title}}">{{Tag}}</a>{{Delimiter}}');
 $this->setInMemoryTemplate('SerializedTag','<span class="{{Class}}" title="{{Title}}">{{Tag}}</span> {{Delimiter}}');
 
 /**
@@ -441,7 +441,7 @@ $this->setInMemoryTemplate("RenderedAllocNetworkNetinfo","<td class='{{TdClass}}
 $this->setInMemoryTemplate("RenderedAllocRoutedByOnly","<td class='{{TdClass}}'>&nbsp;</td>");
 
 $this->setInMemoryTemplate("RenderedAllocPeers","<td class='{{TdClass}}'>{{Prefix}}{{Strong}}{{LocPeers}}</td>");
-$this->setInMemoryTemplate("RenderedAllocLocPeers","{{Prefix}}<a href='{{href}}'>{{Osif}}{{LocPeer}</a>");
+$this->setInMemoryTemplate("RenderedAllocLocPeers","{{Prefix}}<a href='{{Href}}'>{{Osif}}{{LocPeer}}</a>");
 
 /**
 *	RSPoolSrvPortlet Table Filed Templates: 
@@ -466,5 +466,12 @@ $this->setInMemoryTemplate("StdSpan","<span class='{{Class}}'>{{Cont}}</span>");
  **/
 $this->setInMemoryTemplate("VSSLBList","<ul class=\"slb-checks\">{{List}}</ul>");
 $this->setInMemoryTemplate("VSSLBListElement","<li>{{Content}}</li>");
+
+/**
+*	TdAtomState: 
+*	Usage:  renderMolecule -> interface.php
+*
+**/
+$this->setInMemoryTemplate('TdAtomState',"<td class='atom state_{{State}}'>&nbsp;</td>");
 
 ?>

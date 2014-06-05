@@ -2,10 +2,8 @@
 	<?php if($this->is("SingleVal", true)){ ?>
 		<?php $this->val ?>
 	<?php } else {?>
-
 		<?php if($this->is("ShowTags", true)) { ?>
 			<?php $this->getH("PrintTagTRs", array( $this->_Cell, $this->_BaseUrl));  ?> 
-
 		<?php } else {?>
 			<tr><th width='50%' class='<?php $this->Class ?>'><?php $this->Name ?></th><td class=tdleft><?php $this->Val ?></td></tr> 
 		<?php } ?>

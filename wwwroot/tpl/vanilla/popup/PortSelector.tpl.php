@@ -1,4 +1,5 @@
 <?php if (defined("RS_TPL")) { ?>
+<link rel="stylesheet" type="text/css" href="?module=chrome&amp;uri=css/pi.css">
 <div style="background-color: #f0f0f0; border: 1px solid #3c78b5; padding: 10px; height: 100%; text-align: center; margin: 5px;">
 Link <?php $this->Port; ?> to...
 <form method=GET>
@@ -16,8 +17,8 @@ Link <?php $this->Port; ?> to...
 			</tr>
 		</table>
 	</div>
-	<div class=portlet>
-		<?php if($this->is('PortSelect')) { ?>
+	<div class=portlet><h2>Compatible spare ports</h2>
+		<?php if($this->is('Select')) { ?>
 			<?php $this->Select; ?>
 			<p>Cable ID: <input type=text id=cable name=cable>	
 			<p><input type='submit' value='Link' name='do_link'>

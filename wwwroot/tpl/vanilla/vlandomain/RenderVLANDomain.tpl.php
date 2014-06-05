@@ -8,7 +8,7 @@
 		</div>
 	<?php } else { ?> 
 		<div class=portlet>
-			<h2>orders (<?php $this->countDomains ?> )</h2>
+			<h2>orders (<?php $this->countDomains ?>)</h2>
 			<table cellspacing=0 cellpadding=5 align=center class=widetable>
 			<tr><th>switch</th><th>template</th><th>status</th></tr>
 			<?php $this->startLoop("allDomainSwitch"); ?>	

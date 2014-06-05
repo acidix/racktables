@@ -10,9 +10,7 @@
 	<?php $this->endLoop(); ?> 
 	</select>:<input type='text' name='localport' size='4' tabindex=2></td>
 	<td><input type='text' name='remoteip' id='remoteip' size='10' tabindex=3>
-	<a href='javascript:;' onclick='window.open("<?php $this->hrefForHelper ?>",
-	 "findobjectip", "height=700, width=400, location=no, menubar=no, resizable=yes,
-	  scrollbars=no, status=no, titlebar=no, toolbar=no");'>
+	<a href='javascript:;' onclick='window.open("<?php $this->hrefForHelper ?>", "findobjectip", "height=700, width=400, location=no, menubar=no, resizable=yes, scrollbars=no, status=no, titlebar=no, toolbar=no");'>
 	<?php $this->getH("PrintImageHref", array('find', 'Find object')); ?>
 	</a>:<input type='text' name='remoteport' size='4' tabindex=4></td><td></td>
 	<td colspan=1><input type='text' name='description' size='20' tabindex=5></td><td>

@@ -5,6 +5,9 @@
 		<form method=get>
 			<table border=0 align=center cellspacing=0 class="tagtree">
 				<?php $this->TableContent; ?>
+				<?php if ($this->is('EnableSubmitOnClick')) { ?>
+					<?php $this->addRequirement("Header","HeaderJsInline",array("code"=>"tag_cb.enableSubmitOnClick()")); ?>
+				<?php } ?> 
 				<tr>
 					<td class="tdleft">
 						<input type=hidden name=page value=<?php $this->PageNo; ?>>
@@ -23,7 +26,7 @@
 							<img src="pix/pix/pgadmin3-viewdata-grayscale.png" width=32 height=32 border=0>
 						<?php } ?>
 						<?php if ($this->is("EnableReset",true)) { ?>
-							<form method='get'>
+							<form method=get>
 								<input type=hidden name=page value=<?php $this->PageNo; ?>>
 								<input type=hidden name=tab value=<?php $this->TabNo; ?>>
 								<input type=hidden name='cft[]' value=''>

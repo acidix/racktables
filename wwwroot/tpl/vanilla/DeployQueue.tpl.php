@@ -1,5 +1,5 @@
 <?php if (defined("RS_TPL")) {?>
-	<h2 align=center>Queue <?php $this->dqTitle ?> (<?php $this->countData ?> ) </h2>
+	<h2 align=center>Queue <?php $this->dqTitle ?> (<?php $this->countData ?>) </h2>
 	<?php if ($this->is("continue", false)) { ?>
 		<table cellspacing=0 cellpadding=5 align=center class=widetable>
 		<tr><th>switch</th><th>changed</th><th>

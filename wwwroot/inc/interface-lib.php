@@ -941,23 +941,30 @@ function serializeTags ($chain, $baseurl = '', $parent = null, $placeholder = "S
 	$tplm = TemplateManager::getInstance();
 	//$tplm->setTemplate("vanilla");
 
-	if($parent == null)
+	if($parent == null){
 		$globalPlc = $tplm->generateModule('GlobalPlaceholder', true);
+		$modCont = '';
+	}
 
+	
 	foreach ($chain as $nr => $taginfo)
 	{
+		
 		if ($baseurl == ''){
 			if($parent == null)
-				$mod = $tplm->generateSubmodule('Cont', 'SerializedTag', $globalPlc, true);
+				$mod = $tplm->generateModule('SerializedTag', true);
+			//	$mod = $tplm->generateSubmodule('Cont', 'SerializedTag', $globalPlc, true);
 			else
 				$mod = $tplm->generateSubmodule($placeholder, 'SerializedTag', $parent, true);
 		}
 		else
 		{
 			if($parent == null)
-				$mod = $tplm->generateSubmodule('Cont', 'SerializedTagLink', $globalPlc, true);
+				$mod = $tplm->generateModule('SerializedTagLink', true);
+			//	$mod = $tplm->generateSubmodule('Cont', 'SerializedTagLink', $globalPlc, true);
 			else
 				$mod = $tplm->generateSubmodule($placeholder, 'SerializedTagLink', $parent, true);
+
 			$mod->addOutput('BaseUrl', $baseurl);
 			$mod->addOutput('ID', $taginfo['id']);
 			//$tag = 'a';
@@ -987,16 +994,19 @@ function serializeTags ($chain, $baseurl = '', $parent = null, $placeholder = "S
 		//$tmp[] = "<$tag $href $title $class>" . $taginfo['tag'] . "</$tag>";
 		$mod->addOutput('Tag', $taginfo['tag']);
 			 
-
 		if (array_key_exists($nr+1, $chain))
-			$mod->addOutput('Delimiter', '; ');
+			$mod->addOutput('Delimiter', ', ');
 		else
 			$mod->addOutput('Delimiter', '');
-		
+
+		$modCont .= $mod->run();
 	}
 	
-	if($parent == null)
+
+	if($parent == null){
+		$globalPlc->setOutput('Cont', $modCont);
 		return $globalPlc->run();
+	}
 	//return implode (', ', $tmp);
 }
 
@@ -1072,7 +1082,6 @@ function renderEntitySummary ($cell, $title, $values = array(), $parent = null, 
 	
 	foreach ($values as $name => $value)
 	{
-
 		$loopMod = $tplm->generateSubmodule("LoopMod", "RenderEntitySummary_LoopCont" , $mod);
 		//$loopMod->setNamespace("", true);
 		$loopMod->defNamespace();
@@ -1081,7 +1090,7 @@ function renderEntitySummary ($cell, $title, $values = array(), $parent = null, 
 		if (is_array ($value) and count ($value) == 1)
 		{
 			$value = array_shift ($value);
-			$loopMod->setOutput("Val", $value);
+			$loopMod->addOutput("Val", $value);
 			$loopMod->setOutput("SingleValue", true);
 			//echo $value;
 			continue;
@@ -1104,7 +1113,7 @@ function renderEntitySummary ($cell, $title, $values = array(), $parent = null, 
 		$loopMod->setOutput("Class", $class);
 		$loopMod->setOutput("Name", $name);
 		$loopMod->setOutput("Val", $value);
-	
+		
 		if ($name == 'tags:')
 		{
 			$loopMod->setOutput("ShowTags", true);	 
@@ -1268,9 +1277,9 @@ function getRenderedIPPortPair ($ip, $port = NULL, $parent = null, $placeholder 
 	//	$tplm->setTemplate("vanilla");
 	
 	if($parent==null)	
-		$mod = $tplm->generateModule("RenderedIPPortPair", true );
+		$mod = $tplm->generateModule('RenderedIPPortPair', true);
 	else
-		$mod = $tplm->generateSubmodule("RenderedIPPortPair", "RenderedIPPortPair", $parent, true);
+		$mod = $tplm->generateSubmodule($placeholder, 'RenderedIPPortPair', $parent, true);
 	
 	$mod->setNamespace("");
 	$mod->addOutput("href", makeHref (array ('page' => 'ipaddress',  'tab'=>'default', 'ip' => $ip)));
