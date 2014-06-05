@@ -58,8 +58,7 @@ END;
 ?>
 <form method=post>
 	<div class="panel panel-default">
-		<div class="panel-heading">Location filter</div>
-		
+		<div class="panel-heading"><h4 class="panel-title">Location filter</h4></div>
 		<ul class="list-group" id="locationFilter">
     		<input type=hidden name=page value=rackspace>
     		<input type=hidden name=tab value=default>

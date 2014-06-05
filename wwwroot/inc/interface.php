@@ -567,7 +567,7 @@ function renderRackspace ()
 			$order = 'odd';
 			if (count ($rows))
 			{
-
+				
 				//Generate the table module instead.
 
 				//echo '<table border=0 cellpadding=10 class=cooltable>';
@@ -7304,43 +7304,43 @@ function printTagCheckboxTable ($input_name, $preselect, $neg_preselect, $taglis
 		{
 
 			$tag_class = isset ($taginfo['id']) && isset ($taginfo['refcnt']) ? getTagClassName ($row['input_value']) : '';
+			
+			if ($addto != null){
+				if($placeholder == "")
+					$tagobj = $tplm->generateSubmodule("checkbox", "TagTreeCell", $addto);
+				else
+					$tagobj = $tplm->generateSubmodule($placeholder, "TagTreeCell", $addto);
+			}else{
+				$tagobj = $tplm->generateModule("TagTreeCell");
+			}
+			$tagobj->setNamespace("",true);
+			$tagobj->setLock();
+			$tagobj->setOutput("TrClass", 		$row['tr_class']);
+			$tagobj->setOutput("TdClass", 		$row['td_class']);
+			$tagobj->setOutput("LevelPx", 		$row['level'] * 16);
+			$tagobj->setOutput("InputClass",	$row['input_class']);
+			$tagobj->setOutput("InputName",		$row['input_name']);
+			$tagobj->setOutput("InputValue",	$row['input_value']);
+			if (array_key_exists ('input_extraattrs', $row))
+			{
+				$tagobj->setOutput("ExtraAttrs", ' ' . $row['input_extraattrs']);
+			}
+			else
+			{
+				$tagobj->setOutput("ExtraAttrs","");
+			}
+			$tagobj->setOutput("TagClass",		$tag_class);
+			$tagobj->setOutput("TagName", 		$row['text_tagname']);
 
-				if ($addto != null){
-					if($placeholder == "")
-						$tagobj = $tplm->generateSubmodule("checkbox", "TagTreeCell", $addto);
-					else
-						$tagobj = $tplm->generateSubmodule($placeholder, "TagTreeCell", $addto);
-					}else{
-						$tagobj = $tplm->generateModule("TagTreeCell");
-					}
-					$tagobj->setNamespace("",true);
-					$tagobj->setLock();
-					$tagobj->setOutput("TrClass", 		$row['tr_class']);
-					$tagobj->setOutput("TdClass", 		$row['td_class']);
-					$tagobj->setOutput("LevelPx", 		$row['level'] * 16);
-					$tagobj->setOutput("InputClass",	$row['input_class']);
-					$tagobj->setOutput("InputName",		$row['input_name']);
-					$tagobj->setOutput("InputValue",	$row['input_value']);
-					if (array_key_exists ('input_extraattrs', $row))
-					{
-						$tagobj->setOutput("ExtraAttrs", ' ' . $row['input_extraattrs']);
-					}
-					else
-					{
-						$tagobj->setOutput("ExtraAttrs","");
-					}
-					$tagobj->setOutput("TagClass",		$tag_class);
-					$tagobj->setOutput("TagName", 		$row['text_tagname']);
+			if (array_key_exists ('text_refcnt', $row))
+			{
+				$tagobj->setOutput("RefCnt", 	$row['text_refcnt']);
+			}
+		}
 
-					if (array_key_exists ('text_refcnt', $row))
-					{
-						$tagobj->setOutput("RefCnt", 	$row['text_refcnt']);
-					}
-				}
-
-				if($addto == null){
-					return $tagobj->run();
-				}
+	if($addto == null){
+		return $tagobj->run();
+	}
 				//	$tag_class = isset ($taginfo['id']) && isset ($taginfo['refcnt']) ? getTagClassName ($row['input_value']) : '';
 				/*	echo "<tr class='${row['tr_class']}'><td class='${row['td_class']}' style='padding-left: " . ($row['level'] * 16) . "px;'>";
 					echo "<label><input type=checkbox class='${row['input_class']}' name='${row['input_name']}[]' value='${row['input_value']}'";
