@@ -4,8 +4,8 @@
 		 	if ($this->is('EnableSubmitOnClick')) { 
 				$this->addRequirement("Header","HeaderJsInline",array("code"=>"tag_cb.enableSubmitOnClick()"));
 			}  ?>
-	<div class="panel panel-default">
-		<div class="panel-heading">Tag filters</div>
+	<div class="panel panel-default collapse" id="CellFilter">
+		<div class="panel-heading" data-toggle="collapse" data-target="#CellFilter"><h4 class="panel-title">Tag filters</h4></div>
 		<form method=get>
 		<div class="panel-content">
 			<table border=0 align=center cellspacing=0 class="tagtree">
