@@ -74,9 +74,9 @@ END;
 					</td>
 				</tr>
 				<tr>
-					<td class=tagbox><hr>
+					<td class=tagbox>
 						<?php $this->Locations; ?>
-					<hr></td>
+					</td>
 				</tr>
     		<?php } ?>
     		<?php if ($this->is("LocationsExist",false)) { ?>
