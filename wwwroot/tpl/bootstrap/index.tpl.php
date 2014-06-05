@@ -62,7 +62,8 @@
 	<div class="container">
 	 	<div class="msgbar row col-xs-12"><?php $this->Message; //showMessageOrError(); ?></div>
 	 	<div class="container well well-sm col-xs-12"><?php $this->Payload; //echo $payload; ?></div>
- 	</div>
+ 	</div><br />
+ 	<?php $this->Debug; ?>
 </div>
 </body>
 </html>
