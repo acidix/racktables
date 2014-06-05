@@ -40,7 +40,7 @@
 					</div>
 				</nav>
 	 		</div>
-	 	<div class="menubar alert alert-info row" style="padding-top: 75px">
+	 	<div class="menubar alert alert-info row" style="padding-top: 75px; max-heigth: 5px;">
 	 		<div class="alert-link" style="padding: 0 0 0 0; float: left"><?php $this->Path; ?></div>
 	 			<div class='searchbox'  style="padding: 0 0 0 0; float: right">
 				<form name=search method=get>
@@ -54,7 +54,7 @@
 			</div>
 		</div>
 	 	<div class="tabbar row">
-			<ul class="nav nav-pills" id="foldertab" style='margin-bottom: 0px; padding: 0px 5px 20px;'>
+			<ul class="nav nav-tabs" id="foldertab" style='margin-bottom: 10px; padding: 0px 5px 0px;'>
 				<?php $this->Tabs; ?>
 			</ul>
 		</div>
