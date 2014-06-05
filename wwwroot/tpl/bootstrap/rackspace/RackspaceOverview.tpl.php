@@ -1,7 +1,9 @@
 <?php if (defined("RS_TPL")) {?>
 	<div class="row">
 		<div class="col-md-9">
-			<?php $this->getH("H2",array("%%RackspaceOverviewHeadline")); ?>
+			<div class="panel panel-primary">
+				<div class="panel-heading"><h3 class="panel-title"><?php $this->RackspaceOverviewHeadline; ?></h3></div>
+			</div>
 			<?php $this->get("RackspaceOverviewTable"); ?>
 		</div>
 		<div class="col-md-3">
