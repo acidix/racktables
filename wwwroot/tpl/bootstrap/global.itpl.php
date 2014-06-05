@@ -47,13 +47,13 @@ $this->setInMemoryTemplate("CellFilterExtraText","<tr><td colspan=2><textarea na
  * Template for: Tablist, the currently active Tab
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabActive","<li><a class=current href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>\n");
+$this->setInMemoryTemplate("TabActive","<li class='active'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>\n");
 
 /**
  * Template for: Tablist, currently inactive tabs
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabInactive","<li><a class=std href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>\n");
+$this->setInMemoryTemplate("TabInactive","<li style='background-color:brand-warning;'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>\n");
 
 /**
  * Template for: Tablist, tabs with warnings

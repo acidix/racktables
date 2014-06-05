@@ -173,10 +173,10 @@ function renderIndex()
 				else
 				$rowsCont[] = array(
 					'IndexItem' => $tplm->generateModule('IndexItemMod', true, array(
-					'Href' => makeHref (array ('page' => $column)),
-					'PageName' => getPageName ($column),
-					'Image' => getImageHREF ($column))
-						)->run());
+										'Href' => makeHref (array ('page' => $column)),
+										'PageName' => getPageName ($column),
+										'Image' => getImageHREF ($column))
+										)->run());
 			}
 		$rowMod->setOutput("singleRowCont", $rowsCont);
 
@@ -4177,7 +4177,7 @@ function renderIPNetworkProperties ($id)
 function renderIPAddress ($ip_bin)
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
+//	$tplm->setTemplate('vanilla');
 	//$tplm->createMainModule("index");
 
 	$mod = $tplm->generateSubmodule('Payload', 'IPAddress');
@@ -4329,7 +4329,7 @@ function renderIPAddressProperties ($ip_bin)
 	$address = getIPAddress ($ip_bin);
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
+//	$tplm->setTemplate('vanilla');
 	//$tplm->createMainModule("index");
 
 	$mod = $tplm->generateSubmodule('Payload', 'IPAddressProperties');
@@ -11185,7 +11185,7 @@ function renderObject8021QSyncPorts ($object, $D, $placeholder, $parent)
 function renderVSTListEditor()
 {
 	$tplm  =TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
+//	$tplm->setTemplate('vanilla');
 	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'RenderVSTListEditor');
 	$mod->setNamespace('vst', TRUE);
@@ -11193,7 +11193,7 @@ function renderVSTListEditor()
 	function printNewItemTR ($placeholder, $parent)
 	{
 		$tplm  =TemplateManager::getInstance();
-		$tplm->setTemplate('vanilla');
+//		$tplm->setTemplate('vanilla');
 		//$tplm->createMainModule();
 		$submod = $tplm->generateSubmodule($placeholder, 'RenderVSTListEditor_PrintNewItem', $parent);
 
@@ -11236,7 +11236,7 @@ function renderVSTRules ($rules, $title = NULL, $parent = null, $placeholder = '
 {
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
+//	$tplm->setTemplate('vanilla');
 	//$tplm->createMainModule();
 	if($parent == null)
 		$mod = $tplm->generateSubmodule($placeholder, 'RenderVSTRules');
@@ -11285,7 +11285,7 @@ function renderVSTRules ($rules, $title = NULL, $parent = null, $placeholder = '
  function renderVST ($vst_id)
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
+//	$tplm->setTemplate('vanilla');
 	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'RenderVST');
 	$mod->setNamespace('vst', true);
@@ -11343,7 +11343,7 @@ function renderVSTRulesEditor ($vst_id)
 	//addJS ('js/vst_editor.js');
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
+//	$tplm->setTemplate('vanilla');
 	//$tplm->createMainModule();
 	$mod = $tplm->generateSubmodule('Payload', 'VstRulesEditor');
 	$mod->setNamespace('vst',true);
@@ -11853,7 +11853,7 @@ END
 function renderObjectLogEditor ()
 {
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
+//	$tplm->setTemplate('vanilla');
 	//$main = //$tplm->createMainModule();
 
 	$mod = $tplm->generateSubmodule('Payload', 'RenderObjectLogEditor');
@@ -12253,7 +12253,7 @@ function renderIPAddressLog ($ip_bin)
 	echo '</tr>';*/
 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
+//	$tplm->setTemplate('vanilla');
 	//$tplm->createMainModule();
 
 	$mod = $tplm->generateSubmodule('Payload', 'IPAddressLog');

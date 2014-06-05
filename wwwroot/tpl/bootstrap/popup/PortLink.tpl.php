@@ -46,7 +46,7 @@ END
 END
 		, TRUE);
 ?>
-<link rel="stylesheet" type="text/css" href="?module=chrome&amp;uri=css/pi.css">
+<!--<link rel="stylesheet" type="text/css" href="?module=chrome&amp;uri=css/pi.css">-->
 <div style="background-color: #f0f0f0; border: 1px solid #3c78b5; padding: 10px; height: 100%; text-align: center; margin: 5px;">
 <form method=GET>
 	<input type=hidden name="module" value="popup">

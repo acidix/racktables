@@ -721,7 +721,7 @@ function getRenderedIPv4NetCapacity ($range)
 {
 	//Use TemplateEngine 
 	$tplm = TemplateManager::getInstance();
-	$tplm->setTemplate('vanilla');
+//	$tplm->setTemplate('vanilla');
 //	$tplm->createMainModule();
 
 	$class = 'net-usage';
