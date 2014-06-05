@@ -1,7 +1,9 @@
 <?php if (defined("RS_TPL")) {?>
 	<?php 	$this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/tag-cb.js"));
 		 	$this->addRequirement("Header","HeaderJsInline",array("code"=>"tag_cb.enableNegation()")); ?>
-	<div class=portlet><h2><?php $this->get("PortletTitle"); ?></h2>
+	<div class="panel panel-default">
+		<div class="panel-heading">Tag filters</div>
+		<div class="panel-content">
 		<form method=get>
 			<table border=0 align=center cellspacing=0 class="tagtree">
 				<?php $this->TableContent; ?>
@@ -42,6 +44,7 @@
 				</tr>
 			</table>
 		</form>
+		</div>
 	</div>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />

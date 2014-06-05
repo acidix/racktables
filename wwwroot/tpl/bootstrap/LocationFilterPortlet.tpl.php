@@ -1,5 +1,4 @@
 <?php if (defined("RS_TPL")) {?>
-
 <?php $js = <<<END
 function checkAll(bx) {
 	for (var tbls=document.getElementsByTagName("table"), i=tbls.length; i--;)
@@ -55,37 +54,40 @@ function expand(id) {
 	}
 }
 END;
-
-	$this->addRequirement("Header","HeaderJsInline",array("code" => $js));
+	$this->addRequirement("Header","HeaderJsInline",array("code"=>$js));
 ?>
-	<div class=portlet>
-		<h2>Location filter</h2>
-		<table border=0 align=center cellspacing=0 class="tagtree" id="locationFilter">
-    		<form method=post>
-    			<input type=hidden name=page value=rackspace>
-    			<input type=hidden name=tab value=default>
-    			<input type=hidden name=changeLocationFilter value=true>
-    			<?php if($this->is("LocationsExist",true)) { ?>
-    				<tr><td class=tagbox style='padding-left: 0px'><label>
-					<input type=checkbox name='location'  onClick=checkAll(this)> Toggle all
-					<img src=pix/1x1t.gif onLoad=collapseAll(this)>
-					</label></td></tr>
-					<tr><td class=tagbox><hr>
+<form method=post>
+	<div class="panel panel-default">
+		<div class="panel-heading">Location filter</div>
+		
+		<ul class="list-group" id="locationFilter">
+    		<input type=hidden name=page value=rackspace>
+    		<input type=hidden name=tab value=default>
+    		<input type=hidden name=changeLocationFilter value=true>
+    		<?php if($this->is("LocationsExist",true)) { ?>
+    			<li class="list-group-item">
+    					<label>
+						<input type=checkbox name='location'  onClick=checkAll(this)> Toggle all
+						<img src=pix/1x1t.gif onLoad=collapseAll(this)>
+						</label>
+				</li>
+				<li class="list-group-item">
 						<?php $this->Locations; ?>
-					<hr></td></tr>
-					<tr><td>
-						<input class="icon" type="image" border="0" title="set filter" src="?module=chrome&uri=pix/pgadmin3-viewfiltereddata.png" name="submit"></input>
-					</td></tr>
-    			<?php } ?>
-    			<?php if ($this->is("LocationsExist",false)) { ?>
- 					<tr><td class='tagbox sparenetwork'>(no locations exist)</td></tr>
-					<tr><td>
-					<img src="pix/pgadmin3-viewfiltereddata-grayscale.png" width=32 height=32 border=0>
-					</td></tr>		
-    			<?php } ?>
-			</form>
-		</table>
+				</li>
+    		<?php } ?>
+    		<?php if ($this->is("LocationsExist",false)) { ?>
+ 				<li class="list-group-item">(no locations exist)</li>
+    		<?php } ?>
+		</ul>
+		<div class="panel-footer">
+		<?php if ($this->is("LocationsExist",true)) { ?>
+			<button type="submit" class="btn btn-primary" name="submit">Set filter</button>
+		<?php } else { ?>
+			<button type="submit" class="btn btn-primary" name="submit" disabled="disabled">Set filter</button>
+		<?php } ?>
+		</div>
 	</div>	
+</form>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

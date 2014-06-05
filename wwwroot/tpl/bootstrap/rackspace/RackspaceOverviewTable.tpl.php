@@ -1,8 +1,8 @@
 <?php if (defined("RS_TPL")) {?>
-	<table border=0 cellpadding=10 class=cooltable>
-	<tr><th class=tdleft>Location</th><th class=tdleft>Row</th><th class=tdleft>Racks</th></tr>
+	<table border=0 cellpadding=10 class="table table-striped table-bordered">
+	<tr><th>Location</th><th>Row</th><th>Racks</th></tr>
 		<?php $this->startLoop("OverviewTable"); ?>
-			<tr class=row_<?php $this->get("Order");?>>
+			<tr>
 				<th class=tdleft><?php $this->get("LocationTree"); ?></th>
 				<th class=tdleft><?php $this->get("HrefToRow");?></th>
 				<th class=tdleft><table border=0 cellspacing=5><tr><?php $this->get("RowOverview");?></tr></table></th>

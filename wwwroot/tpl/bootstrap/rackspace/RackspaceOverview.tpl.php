@@ -1,11 +1,14 @@
 <?php if (defined("RS_TPL")) {?>
-	<table class=objview border=0 width='100%'><tr><td class=pcleft>
-	<?php $this->getH("H2",array("%%RackspaceOverviewHeadline")); ?>
-	<?php $this->get("RackspaceOverviewTable"); ?>
-	</td><td class=pcright width="25%">
-		<?php $this->get("CellFilter"); ?>
-		<br />
-		<?php $this->get("LocationFilter"); ?>
+	<div class="row">
+		<div class="col-md-9">
+			<?php $this->getH("H2",array("%%RackspaceOverviewHeadline")); ?>
+			<?php $this->get("RackspaceOverviewTable"); ?>
+		</div>
+		<div class="col-md-3">
+			<?php $this->get("CellFilter"); ?><br />
+			<?php $this->get("LocationFilter"); ?>
+		</div>
+	</div>	
 
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />

@@ -12,6 +12,7 @@
 	<?php $this->Header ; //printPageHeaders(); ?>
 </head>
 <body>
+
 	<div class="maintable">
 		<div class="container">
 	 		<div class="row">
@@ -62,8 +63,14 @@
 	</div>
 	<div>
 	 	<div class="msgbar row col-xs-12"><?php $this->Message; //showMessageOrError(); ?></div>
+<<<<<<< HEAD
 	 	<div class="container"><?php $this->Payload; //echo $payload; ?></div>
  	</div>
+=======
+	 	<div class="container well well-sm col-xs-12"><?php $this->Payload; //echo $payload; ?></div>
+ 	</div><br />
+ 	<?php $this->Debug; ?>
+>>>>>>> f72c7b9a7b107668c7ac75f735533b6e1d083f77
 </div>
 </body>
 </html>
