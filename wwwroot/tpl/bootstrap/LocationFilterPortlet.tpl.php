@@ -58,9 +58,10 @@ END;
 ?>
 	<div class="panel panel-default">
 		<div class="panel-heading">Location filter</div>
+		<form method=post>
 		<div class="panel-content">
-		<table border=0 align=center cellspacing=0 class="tagtree" id="locationFilter">
-    		<form method=post>
+		<table border=0 align=center cellspacing=0 class="tagtree table" id="locationFilter">
+    		
     			<input type=hidden name=page value=rackspace>
     			<input type=hidden name=tab value=default>
     			<input type=hidden name=changeLocationFilter value=true>
@@ -72,19 +73,21 @@ END;
 					<tr><td class=tagbox><hr>
 						<?php $this->Locations; ?>
 					<hr></td></tr>
-					<tr><td>
-						<input class="icon" type="image" border="0" title="set filter" src="?module=chrome&uri=pix/pgadmin3-viewfiltereddata.png" name="submit"></input>
-					</td></tr>
     			<?php } ?>
     			<?php if ($this->is("LocationsExist",false)) { ?>
- 					<tr><td class='tagbox sparenetwork'>(no locations exist)</td></tr>
-					<tr><td>
-					<img src="pix/pgadmin3-viewfiltereddata-grayscale.png" width=32 height=32 border=0>
-					</td></tr>		
+ 					<tr><td class='tagbox sparenetwork'>(no locations exist)</td></tr>	
     			<?php } ?>
-			</form>
+			
 		</table>
 		</div>
+		<div class="panel-footer">
+		<?php if ($this->is("LocationsExist",true)) { ?>
+			<button type="submit" class="btn btn-primary" name="submit">Set filter</button>
+		<?php } else { ?>
+			<button type="submit" class="btn btn-primary" name="submit" disabled="disabled">Set filter</button>
+		<?php } ?>
+		</div>
+		</form>
 	</div>	
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
