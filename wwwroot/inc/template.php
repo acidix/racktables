@@ -65,7 +65,7 @@ class TemplateManager
 		{
 			if (!array_search('bootstrap', $template_list))
 			{
-				throw new TemplateException('TplErr: Vanilla template is not installed, can\'t fall back to another template.' . $template_list);
+				throw new TemplateException('TplErr: Bootstrap template is not installed, can\'t fall back to another template.' . $template_list);
 			}
 			else 
 			{

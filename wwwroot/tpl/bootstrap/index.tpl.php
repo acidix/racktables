@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$this->map(array('Path',0),':','');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -19,20 +19,21 @@
 	 			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 	  				<div class="container-fluid">
 			  			<div class="navbar-header">
-					      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar-collapse">
-					        <span class="sr-only">Toggle navigation</span>
+					      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					      	<span class="sr-only">Toggle navigation</span>
+					        <span class="icon-bar"></span>
 					        <span class="icon-bar"></span>
 					        <span class="icon-bar"></span>
 					      </button>
 					      <a class="navbar-brand" href="index.php"><?php $this->Enterprise; //echo getConfigVar ('enterprise') ?></a>
 					    </div>
 					<!-- Collect the nav links, forms, and other content for toggling -->
-					    <div class="collapse navbar-collapse" id="main-navbar-collapse">
-					    <ul class="nav navbar-nav">
-					      	<li class="hidden-sm"><a href="http://racktables.org" title="Visit RackTables site">RackTables <?php echo CODE_VERSION ?></a></li>
-					      	<?php $this->Quicklinks_Table; ?>
-					    </ul>
-					    	<ul class="nav navbar-nav" style='float:right'>
+					    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						    <ul class="nav navbar-nav" style="max-width: 50%;">
+						      	<li class="hidden-sm"><a href="http://racktables.org" title="Visit RackTables site">RackTables <?php echo CODE_VERSION ?></a></li>
+						      	<?php $this->Quicklinks_Table; ?>
+						    </ul>
+					    	<ul class="nav navbar-nav" style='float:right; max-width: 50%;'>
 					      		<li><a href='index.php?page=myaccount&tab=default'><em><?php $this->RemoteDisplayname; ?></em></a></li>
 					    		<li><a href='?logout'><em>[ logout ]</a></em></li>
 					    	</ul>
