@@ -32,11 +32,13 @@
 		
 	</div>
  	<div class="tabbar">
- 		<div class="greynavbar">
-			<ul id="foldertab" style='margin-bottom: 0px; padding-top: 10px;'>
-				<?php $this->Tabs; ?>
-			</ul>
-		</div>
+ 		<?php if ($this->is('Tabs')) { ?>
+ 			<div class="greynavbar">
+				<ul id="foldertab" style='margin-bottom: 0px; padding-top: 10px;'>
+					<?php $this->Tabs; ?>
+				</ul>
+			</div>
+ 		<?php } ?> 
 	</div>
  	<div class="msgbar"><?php $this->Message; //showMessageOrError(); ?></div>
  	<div class="pagebar"><?php $this->Payload; //echo $payload; ?></div>

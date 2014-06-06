@@ -52,8 +52,8 @@ class TemplateManager
 
 		if (!array_key_exists('RacktablesTemplate', $_COOKIE))
 		{
-			setcookie('RacktablesTemplate',$flipped['bootstrap']);
-			$tpl_to_use = $flipped['bootstrap'];
+			setcookie('RacktablesTemplate',$flipped['vanilla']);
+			$tpl_to_use = $flipped['vanilla'];
 			//$_COOKIE['RacktablesTemplate'] = getConfigVar('default_template');
 		}
 		else
@@ -63,14 +63,14 @@ class TemplateManager
 		
 		if (!array_key_exists($_COOKIE['RacktablesTemplate'], $template_list))
 		{
-			if (!array_search('bootstrap', $template_list))
+			if (!array_search('vanilla', $template_list))
 			{
-				throw new TemplateException('TplErr: Bootstrap template is not installed, can\'t fall back to another template.' . $template_list);
+				throw new TemplateException('TplErr: Vanilla template is not installed, can\'t fall back to another template.' . $template_list);
 			}
 			else 
 			{
-				setcookie('RacktablesTemplate',$flipped['bootstrap']);
-				$tpl_to_use = $flipped['bootstrap'];
+				setcookie('RacktablesTemplate',$flipped['vanilla']);
+				$tpl_to_use = $flipped['vanilla'];
 				//$_COOKIE['RacktablesTemplate'] = $flipped['vanilla'];
 			}
 		}

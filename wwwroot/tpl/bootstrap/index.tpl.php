@@ -16,10 +16,10 @@
 	<div class="maintable">
 		<div class="container">
 	 		<div class="row">
-	 			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	 			<nav class="navbar navbar-inverse navbar-fixed-top navbar-default" role="navigation">
 	  				<div class="container-fluid">
 			  			<div class="navbar-header">
-					      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar_collapse_element">
 					      	<span class="sr-only">Toggle navigation</span>
 					        <span class="icon-bar"></span>
 					        <span class="icon-bar"></span>
@@ -28,12 +28,12 @@
 					      <a class="navbar-brand" href="index.php"><?php $this->Enterprise; //echo getConfigVar ('enterprise') ?></a>
 					    </div>
 					<!-- Collect the nav links, forms, and other content for toggling -->
-					    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-						    <ul class="nav navbar-nav" style="max-width: 50%;">
+					    <div class="collapse navbar-collapse" id="navbar_collapse_element">
+						    <ul class="nav navbar-nav" style="float:left;">
 						      	<li class="hidden-sm"><a href="http://racktables.org" title="Visit RackTables site">RackTables <?php echo CODE_VERSION ?></a></li>
 						      	<?php $this->Quicklinks_Table; ?>
 						    </ul>
-					    	<ul class="nav navbar-nav" style='float:right; max-width: 50%;'>
+					    	<ul class="nav navbar-nav" style='float:right;'>
 					      		<li><a href='index.php?page=myaccount&tab=default'><em><?php $this->RemoteDisplayname; ?></em></a></li>
 					    		<li><a href='?logout'><em>[ logout ]</a></em></li>
 					    	</ul>
