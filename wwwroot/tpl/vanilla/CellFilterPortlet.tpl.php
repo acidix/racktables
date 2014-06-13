@@ -23,7 +23,7 @@
 					</td>
 					<td class=tdright>
 						<?php if ($this->is("EnableReset",false)) { ?>
-							<img src="pix/pix/pgadmin3-viewdata-grayscale.png" width=32 height=32 border=0>
+							<img src="pix/pgadmin3-viewdata-grayscale.png" width=32 height=32 border=0>
 						<?php } ?>
 						<?php if ($this->is("EnableReset",true)) { ?>
 							<form method=get>

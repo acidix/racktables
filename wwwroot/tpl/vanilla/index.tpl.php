@@ -5,9 +5,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <!-- Template taken from: interface.php:94 -->
 <head><title><?php $this->PageTitle ; //echo getTitle ($pageno); ?></title>
+	<link rel="ICON" type="image/x-icon" href="?module=chrome&amp;uri=pix/favicon.ico">
+	
 	<link rel="stylesheet" type="text/css" href="?module=chrome&amp;uri=css/pi.css">
 	<script type="text/JavaScript" src="js/jquery-1.4.4.min.js"></script>
-
 	<?php $this->Header ; //printPageHeaders(); ?>
 </head>
 <body>
@@ -32,11 +33,13 @@
 		
 	</div>
  	<div class="tabbar">
- 		<div class="greynavbar">
-			<ul id="foldertab" style='margin-bottom: 0px; padding-top: 10px;'>
-				<?php $this->Tabs; ?>
-			</ul>
-		</div>
+ 		<?php if ($this->is('Tabs')) { ?>
+ 			<div class="greynavbar">
+				<ul id="foldertab" style='margin-bottom: 0px; padding-top: 10px;'>
+					<?php $this->Tabs; ?>
+				</ul>
+			</div>
+ 		<?php } ?> 
 	</div>
  	<div class="msgbar"><?php $this->Message; //showMessageOrError(); ?></div>
  	<div class="pagebar"><?php $this->Payload; //echo $payload; ?></div>

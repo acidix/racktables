@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$this->map(array('Path',0),':','');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -16,23 +16,24 @@
 	<div class="maintable">
 		<div class="container">
 	 		<div class="row">
-	 			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	 			<nav class="navbar navbar-inverse navbar-fixed-top navbar-default" role="navigation">
 	  				<div class="container-fluid">
 			  			<div class="navbar-header">
-					      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar-collapse">
-					        <span class="sr-only">Toggle navigation</span>
+					      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar_collapse_element">
+					      	<span class="sr-only">Toggle navigation</span>
+					        <span class="icon-bar"></span>
 					        <span class="icon-bar"></span>
 					        <span class="icon-bar"></span>
 					      </button>
 					      <a class="navbar-brand" href="index.php"><?php $this->Enterprise; //echo getConfigVar ('enterprise') ?></a>
 					    </div>
 					<!-- Collect the nav links, forms, and other content for toggling -->
-					    <div class="collapse navbar-collapse" id="main-navbar-collapse">
-					    <ul class="nav navbar-nav">
-					      	<li class="hidden-sm"><a href="http://racktables.org" title="Visit RackTables site">RackTables <?php echo CODE_VERSION ?></a></li>
-					      	<?php $this->Quicklinks_Table; ?>
-					    </ul>
-					    	<ul class="nav navbar-nav" style='float:right'>
+					    <div class="collapse navbar-collapse" id="navbar_collapse_element">
+						    <ul class="nav navbar-nav" style="float:left;">
+						      	<li class="hidden-sm"><a href="http://racktables.org" title="Visit RackTables site">RackTables <?php echo CODE_VERSION ?></a></li>
+						      	<?php $this->Quicklinks_Table; ?>
+						    </ul>
+					    	<ul class="nav navbar-nav" style='float:right;'>
 					      		<li><a href='index.php?page=myaccount&tab=default'><em><?php $this->RemoteDisplayname; ?></em></a></li>
 					    		<li><a href='?logout'><em>[ logout ]</a></em></li>
 					    	</ul>
@@ -40,7 +41,7 @@
 					</div>
 				</nav>
 	 		</div>
-	 	<div class="menubar alert alert-info row" style="padding-top: 75px">
+	 	<div class="menubar alert alert-info row" style="padding-top: 75px; max-heigth: 5px;">
 	 		<div class="alert-link" style="padding: 0 0 0 0; float: left"><?php $this->Path; ?></div>
 	 			<div class='searchbox'  style="padding: 0 0 0 0; float: right">
 				<form name=search method=get>
@@ -54,7 +55,7 @@
 			</div>
 		</div>
 	 	<div class="tabbar row">
-			<ul class="nav nav-pills" id="foldertab" style='margin-bottom: 0px; padding: 0px 5px 20px;'>
+			<ul class="nav nav-tabs" id="foldertab" style='margin-bottom: 10px; padding: 0px 5px 0px;'>
 				<?php $this->Tabs; ?>
 			</ul>
 		</div>
