@@ -1,31 +1,49 @@
 <?php if (defined("RS_TPL")) { ?>
-	<table border=0 class=objectview>
-		<tr>
-			<td class=pcleft>
-				<?php if($this->is("NoObjects")) { ?>
-					<h2>No objects exist</h2>
-				<?php } else { ?>
-				<div class=portlet>
-					<h2> Objects (<?php $this->countObjs ?>) </h2>
-					<br><br><table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>
-					<tr><th>Common name</th><th>Visible label</th><th>Asset tag</th><th>Row/Rack or Container</th></tr>
-					<?php $this->startLoop("allObjects"); ?>	
+<div class="row">
+	<div class="col-md-12">
+	<!-- Button trigger modal -->
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#cellFilter">
+  Filter
+</button>
+	<div class="panel">
+		<div class="panel-heading">Objects</div>
+		<table class="table table-striped">
+			<tr><th>Common name</th><th>Visible label</th><th>Asset tag</th><th>Row/Rack or Container</th></tr>
+			<?php if($this->is("NoObjects")) { ?>
+				<tr class="warning"><td colspan="4">No objects exist</td></tr>
+			<?php } else { ?>
+				<?php $this->startLoop("allObjects"); ?>	
 						<tr class='row_<?php $this->order ?> tdleft' valign=top><td> <?php $this->mka ?> 
 						<?php $this->RenderedTags ?>
 						</td><td> <?php $this->label ?> </td>
 						<td><?php $this->asset_no ?> </td>
 						<td> <?php $this->places ?> </td>
 						</tr>
-					<?php $this->endLoop(); ?> 
-					</table>
-				</div>
-				<?php } ?>
+				<?php $this->endLoop(); ?> 
+			<?php } ?>
+		</table>
+	</div>
+	</div>
+</div>	
+	
 
-			</td><td class=pcright width='25%'>
-				<?php $this->CellFilterPortlet; ?>
-			</td>
-		</tr>
-	</table>
+<!-- Modal -->
+<div class="modal fade" id="cellFilter" tabindex="-1" role="dialog" aria-labelledby="cellFilterLabel" aria-hidden="true">
+  	<div class="modal-dialog">
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        		<h4 class="modal-title" id="cellFilterLabel">Tag filters</h4>
+      		</div>
+      		<div class="modal-body">
+      			<?php $this->CellFilterPortlet; ?>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      		</div>
+    	</div>
+  	</div>
+</div>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />
