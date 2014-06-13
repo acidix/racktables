@@ -9,7 +9,7 @@
 		<input type=text name=name tabindex=100 class="form-control">
 	</td>
 	<td>
-		<button type="button" class="btn btn-primary" title="Add new row" tabindex="102" type="submit"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+		<button class="btn btn-primary" title="Add new row" tabindex="102" type="submit"><span class="glyphicon glyphicon-floppy-disk"></span></button>
 	</td>
 	</tr>
 	</form>
