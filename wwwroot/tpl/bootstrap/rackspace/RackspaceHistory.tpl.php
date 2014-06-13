@@ -21,12 +21,10 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
   				<div class="panel-heading"><h4>Rackspace allocation history</h4></div>
-  				<div class="panel-body">
-    				<table border=0 cellpadding=5 cellspacing=0 align=center class="table table-striped">
-    					<tr><th>timestamp</th><th>author</th><th>object</th><th>comment</th></tr>
-						<?php $this->HistoryRows; ?>
-					</table>
- 				</div>
+    			<table border=0 cellpadding=5 cellspacing=0 align=center class="table table-striped">
+    				<tr><th>timestamp</th><th>author</th><th>object</th><th>comment</th></tr>
+					<?php $this->HistoryRows; ?>
+				</table>
 			</div>
 		</div>
 	</div>
