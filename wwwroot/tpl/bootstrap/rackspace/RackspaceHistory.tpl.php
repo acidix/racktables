@@ -1,31 +1,35 @@
 <?php if (defined("RS_TPL")) {?>
-	<table border=0 class=objectview cellspacing=0 cellpadding=0>
-	<tr>
-		<td class=pcleft>
-		<div class=portlet>
-			<h2>Old allocation</h2>
-			<?php $this->OldAlloc; ?>
+	<div class="row">
+		<div class="col-md-9">
+			<div class="panel panel-default">
+  				<div class="panel-heading"><h2>Old allocation</h2></div>
+  				<div class="panel-body">
+    				<?php $this->OldAlloc; ?>
+ 				</div>
+			</div>
 		</div>
-		</td>
-		<td class=pcright>
-		<div class=portlet>
-			<h2>New allocation</h2>
-			<?php $this->NewAlloc; ?>
+		<div class="col-md-9">
+			<div class="panel panel-default">
+  				<div class="panel-heading"><h2>New allocation</h2></div>
+  				<div class="panel-body">
+    				<?php $this->NewAlloc; ?>
+ 				</div>
+			</div>
 		</div>
-		</td>	
-	</tr>
-	<tr>
-		<td colspan=2>
-		<div class=portlet>
-			<h2>Rackspace allocation history</h2>
-			<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>
-				<tr><th>timestamp</th><th>author</th><th>object</th><th>comment</th></tr>
-				<?php $this->HistoryRows; ?>
-			</table>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-default">
+  				<div class="panel-heading"><h2>Rackspace allocation history</h2></div>
+  				<div class="panel-body">
+    				<table border=0 cellpadding=5 cellspacing=0 align=center class="table table-striped">
+    					<tr><th>timestamp</th><th>author</th><th>object</th><th>comment</th></tr>
+						<?php $this->HistoryRows; ?>
+					</table>
+ 				</div>
+			</div>
 		</div>
-		</td>
-	</tr>
-	</table>
+	</div>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />
