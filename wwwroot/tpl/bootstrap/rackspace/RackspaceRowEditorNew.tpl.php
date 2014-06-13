@@ -1,16 +1,15 @@
 <?php if (defined("RS_TPL")) {?>
 	<?php $this->getH("Form","addRow"); ?>
-	<tr><td>
-		<input class="icon" type="image" border="0" title="Add new row" src="?module=chrome&uri=pix/tango-document-new.png" name="submit"></input>
-	</td><td><select name=location_id tabindex=100>
+	<tr>
+	<td><select name=location_id tabindex=100 class="form-control">
 		<?php $this->Options; ?>
 		</select>
 	</td>
 	<td>
-		<input type=text name=name tabindex=100>
+		<input type=text name=name tabindex=100 class="form-control">
 	</td>
 	<td>
-		<input class="icon" type="image" border="0" title="Add new row" tabindex="102" src="?module=chrome&uri=pix/tango-document-new.png" name="submit"></input>
+		<button type="button" class="btn btn-primary" title="Add new row" tabindex="102" type="submit"><span class="glyphicon glyphicon-floppy-disk"></span></button>
 	</td>
 	</tr>
 	</form>

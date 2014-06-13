@@ -830,7 +830,7 @@ class TemplateModule
 		}
 		ob_start();
 		include './tpl/' . $this->tpl . '/' . $this->module . '.tpl.php';
-		return ob_get_clean();
+		return trim(preg_replace('/\t+/', '', ob_get_clean()));
 	}
 	
 	/**
@@ -1473,7 +1473,7 @@ class TemplateInMemory extends TemplateModule
 			$code = str_replace("{{".$name."}}", $value, $code);
 		}
 		
-		$code = preg_replace('(\{\{[^\}]*\}\})', '', $code);
+		$code = trim(preg_replace('/\t+/', '', preg_replace('(\{\{[^\}]*\}\})', '', $code)));
 		
 		return $code ;
 	}
