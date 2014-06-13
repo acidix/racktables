@@ -2,10 +2,10 @@
 <div class="row">
 	<div class="col-md-12">
 	<!-- Button trigger modal -->
-<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#cellFilter">
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#cellFilterModal">
   Filter
 </button>
-	<div class="panel">
+	<div class="panel panel-primary">
 		<div class="panel-heading">Objects</div>
 		<table class="table table-striped">
 			<tr><th>Common name</th><th>Visible label</th><th>Asset tag</th><th>Row/Rack or Container</th></tr>
@@ -28,7 +28,7 @@
 	
 
 <!-- Modal -->
-<div class="modal fade" id="cellFilter" tabindex="-1" role="dialog" aria-labelledby="cellFilterLabel" aria-hidden="true">
+<div class="modal fade" id="cellFilterModal" tabindex="-1" role="dialog" aria-labelledby="cellFilterLabel" aria-hidden="true">
   	<div class="modal-dialog">
     	<div class="modal-content">
       		<div class="modal-header">
@@ -37,9 +37,6 @@
       		</div>
       		<div class="modal-body">
       			<?php $this->CellFilterPortlet; ?>
-      		</div>
-      		<div class="modal-footer">
-        		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       		</div>
     	</div>
   	</div>
