@@ -2,7 +2,6 @@
 	<form method=post id=addLocation name=addLocation action='?module=redirect&page=rackspace&tab=editlocations&op=addLocation'>
 		<tr>
 			<td>
-				<input class="icon" type="image" border="0" title="Add new location" src="?module=chrome&uri=pix/tango-document-new.png" name="submit"></input>
 			</td>
 			<td>
 				<select class="form-control" name=parent_id tabindex=100 >
@@ -10,10 +9,18 @@
 				</select>
 			</td>
 			<td>
+
 				<input class="form-control" type=text size=48 name=name tabindex=101 placeholder="Enter new location">
+
 			</td>
 			<td>
-				<input class="icon" type="image" border="0" title="Add new location" src="?module=chrome&uri=pix/tango-document-new.png" name="submit"></input>
+			<div class="btn-group">
+  				<button type="submit" class="btn btn-primary">
+  				<span class="glyphicon glyphicon-floppy-disk"></span>
+  				</button>
+ 
+</div>
+				
 			</td>
 		</tr>
 	</form>
