@@ -5,12 +5,12 @@
 				<input class="icon" type="image" border="0" title="Add new location" src="?module=chrome&uri=pix/tango-document-new.png" name="submit"></input>
 			</td>
 			<td>
-				<select class="form-control" name=parent_id tabindex=100>
+				<select class="form-control" name=parent_id tabindex=100 >
 				<?php $this->Options; ?>
 				</select>
 			</td>
 			<td>
-				<input class="form-control" type=text size=48 name=name tabindex=101>
+				<input class="form-control" type=text size=48 name=name tabindex=101 placeholder="Enter new location">
 			</td>
 			<td>
 				<input class="icon" type="image" border="0" title="Add new location" src="?module=chrome&uri=pix/tango-document-new.png" name="submit"></input>
