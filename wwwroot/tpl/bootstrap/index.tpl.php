@@ -61,7 +61,7 @@
 		</div>
 	</div>
 	<div>
-	 	<div class="msgbar row col-xs-12"><?php $this->Message; //showMessageOrError(); ?></div>
+	 	<div class="msgbar row col-md-12"><?php $this->Message; //showMessageOrError(); ?></div>
 	 	<div class="container"><?php $this->Payload; //echo $payload; ?></div>
  	</div><br />
  	<?php $this->Debug; ?>

@@ -21,9 +21,13 @@
 		<td>
 			
 			<div class="btn-group">
-  				<button type="submit" class="btn btn-primary">
+  				<button type="submit" title="Save changes" class="btn btn-primary">
+  							<!-- <input class="icon" type="image" border="0" title="Save changes" src="?module=chrome&uri=pix/tango-document-save-16x16.png" name="submit"></input> -->
+
   				<span class="glyphicon glyphicon-floppy-disk"></span>
   				</button>
+
+  				</div>
 
   				<?php if($this->is("IsDeletable")) { ?>
 			<a title="Delete location" class="btn btn-danger" href="?module=redirect&op=deleteLocation&location_id=<?php $this->LocationId; ?>&page=rackspace&tab=editlocations">
@@ -31,20 +35,18 @@
   				<span class="glyphicon glyphicon-floppy-remove"></span>
   					    			
 			</a>
-			</div>
-		<?php } else { ?>
+					<?php } else { ?>
 			<a title="Delete location" class="disabled btn btn-danger" href="">
 
   				<span class="glyphicon glyphicon-floppy-remove"></span>
 	    			
 			</a>
-			</div>
+			
 		<?php } ?>
 
 
 
 
-			<!-- <input class="icon" type="image" border="0" title="Save changes" src="?module=chrome&uri=pix/tango-document-save-16x16.png" name="submit"></input> -->
 		</td>
 	</form>
 	</tr>	

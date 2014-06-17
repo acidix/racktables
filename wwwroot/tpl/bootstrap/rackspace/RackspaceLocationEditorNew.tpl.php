@@ -14,12 +14,12 @@
 
 			</td>
 			<td>
-			<div class="btn-group">
+			
   				<button type="submit" class="btn btn-primary">
   				<span class="glyphicon glyphicon-floppy-disk"></span>
   				</button>
  
-</div>
+
 				
 			</td>
 		</tr>
