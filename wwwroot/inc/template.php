@@ -389,6 +389,22 @@ class TemplateManager
 		return $module;
 	}
 	
+	public function generatePseudoSubmodule($placeholder, TemplateModule $parent = null, $output = array()) {
+		$module = new TemplatePseudo('', '', $output);
+		if ($parent == null)
+		{
+			if ($this->mainmod == null) {
+				throw new TemplateException("TplErr: Can't add an submodule to an non-object. (Main not initialized?)");
+			}
+			$this->mainmod->addOutput($placeholder,$module);
+		}
+		else
+		{
+			$parent->addOutput($placeholder,$module);
+		}
+		return $module;
+	}
+	
 	/**
 	 * Works the same way as generateSubmodule, but without adding it somewhere.
 	 * 
@@ -657,34 +673,30 @@ class TemplateModule
 	protected $locked = false;
 	
 	/**
-	 * Checks how deep we are in isset levels atm.
-	 * @var integer
-	 */
-	protected $islevel = 0;
-	
-	/**
 	 * Used to store a reference to the current output, instead of using the global output array
 	 * @var unknown
 	 */
-	protected $output_reference ;
+	protected $output_reference = array();
 	
 	/**
 	 * True when the referenced var in output_reference should be used instead of the main output
 	 * @var unknown
 	 */
-	protected $use_reference = false ;
+// 	protected $use_reference = false ;
+	
+	protected $reference_level = -1;
 	
 	/**
 	 * Used to store the next key to use with step
 	 * @var unknown
 	 */
-	protected $reference_next = 0;
+	protected $reference_next = array();
 	
 	/**
 	 * Used when reference, dereference and step are used to use an array
 	 * @var unknown
 	 */
-	protected $reference_origin ;
+	protected $reference_origin = array();
 	
 	/**
 	 * Constructor
@@ -854,34 +866,36 @@ class TemplateModule
 	 * 
 	 * @param string $name
 	 */
-	public function get($name,$return = false)
+	public function get($name,$return = false, $enfore_noloop = false)
 	{
-		if ($this->loop == 1)
+		if ($this->loop == 1 && !$enfore_noloop)
 		{
 			echo "{{" . $name . "}}";
 			return "";
 		}
 		else
 		{
-			if ($this->use_reference === true && is_array($this->output_reference) && array_key_exists($name, $this->output_reference))
+			if ($this->reference_level >= 0  && is_array($this->output_reference) && array_key_exists($this->reference_level, $this->output_reference) && array_key_exists($name, $this->output_reference[$this->reference_level]))
 			{
-				if (is_array($this->output_reference[$name]) && !$return)
+				$out = "";
+				if (is_array($this->output_reference[$this->reference_level][$name]) && !$return)
 				{
-					$out = implode($this->output_reference[$name]);
+					$out = implode($this->output_reference[$this->reference_level][$name]);
 				}
 				else
 				{
-					$out = $this->output_reference[$name];
+					$out = $this->output_reference[$this->reference_level][$name];
 				}
 				if ($return)
 				{
 					return $out;
 				}
 				echo $out;
-				return "";
+				return $out;
 			}
 			else
 			{
+				$out = "";
 				if(array_key_exists($name, $this->output))
 				{
 					if (is_array($this->output[$name]) && !$return)
@@ -897,10 +911,11 @@ class TemplateModule
 						return $out;
 					}
 					echo $out;
-					return "";
+					return $out;
 				}
 			}
 		}
+		return null;
 	}
 	
 	/**
@@ -1189,28 +1204,20 @@ class TemplateModule
 	 */
 	public function is($placeholder,$value=null)
 	{
-		$var = 'output';
-		if ($this->use_reference === true)
+		$var = $this->get($placeholder,true,true);
+		if ($value !== null && $var == $value)
 		{
-			$var .= '_reference';
+			return true;
 		}
-		$var = $this->{$var} ;
-		if (array_key_exists($placeholder, $var))
+		else
 		{
-			if ($value !== null && $var[$placeholder] == $value)
+			if ($value===null && $var !== null)
 			{
 				return true;
 			}
 			else
 			{
-				if ($value===null)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
+				return false;
 			}
 		}
 		return false;
@@ -1248,42 +1255,57 @@ class TemplateModule
 	 * @param boolean $forcestart
 	 * @param number $startvar
 	 */
+	public function loop($name, $forcestart = false, $startvar = 0) {
+		$l = $this->reference_level;
+		if ($l >= 0 && $this->reference_origin[$l] == $name) {
+			if ($l > 0 && array_key_exists($this->reference_next[$l], $this->output_reference[$l-1][$this->reference_origin[$l]])) {
+			
+				$l = $this->reference_level;
+				$this->output_reference[$l] = $this->output_reference[$l-1][$this->reference_origin[$l]][$this->reference_next[$l]];
+				$this->reference_next[$l] = $this->reference_next[$l] + 1;
+				return true;
+				
+			} else if ($l == 0 && array_key_exists($this->reference_next[0], $this->output[$this->reference_origin[0]])) {
+			
+				$this->output_reference[0] = $this->output[$this->reference_origin[0]][$this->reference_next[0]];
+				$this->reference_next[0] = $this->reference_next[0] + 1;
+				return true;
+				
+			} else {
+				
+				unset ($this->output_reference[$l]);
+				unset ($this->reference_next[$l]);
+				unset ($this->reference_origin[$l]);
+				
+				--$this->reference_level;
+				
+				return false;			
+				
+			}
+		} else {
+			if ($this->reference_level == -1 && array_key_exists($name, $this->output)) {
+				++$this->reference_level;
+				$this->output_reference = array($this->output[$name][$startvar]);
+				$this->reference_origin = array($name);
+				$this->reference_next = array($startvar + 1);
+				return true;
+			} else if ($this->reference_level >= 0 && array_key_exists($name, $this->output_reference[$this->reference_level])) {
+				++$this->reference_level;
+				$l = $this->reference_level;
+				$this->output_reference[$l] = $this->output_reference[$l - 1][$name][$startvar];
+				$this->reference_origin[$l] = $name;
+				$this->reference_next[$l] = $startvar + 1;
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+	
+	
 	public function refLoop($name, $forcestart = false, $startvar = 0)
 	{
-		if ($this->use_reference === true)
-		{
-			if (array_key_exists($this->reference_next, $this->output[$this->reference_origin]))
-			{
-				$this->output_reference = $this->output[$this->reference_origin][$this->reference_next];
-				$this->reference_next++;
-				$this->use_reference = true;
-				return true;
-			}
-			else
-			{
-				$this->use_reference = false;
-				return false;
-			}
-		}
-		elseif (($this->use_reference === false && $this->reference_origin != $name) || $forcestart === true)
-		{
-			if (array_key_exists($name, $this->output) && is_array($this->output[$name]) && array_key_exists($startvar, $this->output[$name]))
-			{
-				$this->output_reference = $this->output[$name][$startvar];
-				$this->use_reference = true;
-				$this->reference_origin = $name;
-				$this->reference_next = $startvar + 1;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
+		return $this->loop($name, $forcestart, $startvar);
 	}
 	
 	/**
@@ -1479,4 +1501,11 @@ class TemplateInMemory extends TemplateModule
 	}
 	
 	
+}
+
+class TemplatePseudo extends TemplateModule {
+	
+	public function run() {
+		return array_merge_recursive($this->runModules($this->output),$this->localRequirements);	
+	}
 }
