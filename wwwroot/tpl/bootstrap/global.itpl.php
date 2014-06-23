@@ -90,10 +90,10 @@ $this->setInMemoryTemplate("NoSearchItemFound","<center><h2>Nothing found for {{
  * The four error messages.
  * Usage: interface.php (showMessageOrError)
  */
-$this->setInMemoryTemplate("MessageNeutral","<div class=msg_neutral> {{Message}} </div>");
-$this->setInMemoryTemplate("MessageSuccess","<div class=msg_success> {{Message}} </div>");
-$this->setInMemoryTemplate("MessageError","<div class=msg_error> {{Message}} </div>");
-$this->setInMemoryTemplate("MessageWarning","<div class=msg_warning> {{Message}} </div>");
+$this->setInMemoryTemplate("MessageNeutral","<div class=\"alert alert-info \"> <p class=\"text-center\"> {{Message}} </p> </div>");
+$this->setInMemoryTemplate("MessageSuccess","<div class=\"alert alert-success \"> <p class=\"text-center\"> {{Message}} </p></div>");
+$this->setInMemoryTemplate("MessageError","<div class=\"alert alert-danger\"> <p class=\"text-center\"> {{Message}} </p> </div>");
+$this->setInMemoryTemplate("MessageWarning","<div class=\"alert alert-warning\"> <p class=\"text-center\"> {{Message}} </p> </div>");
 
 /**
  * Text to render when no CellList elements are available.
