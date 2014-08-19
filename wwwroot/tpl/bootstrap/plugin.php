@@ -21,11 +21,10 @@ $mainpage_widgets = array();
 function addMainpageWidget($callback,$order = 'last') {
 	global $mainpage_widgets;
 	echo "Adding widget:" . $callback;
-	switch ($callback) {
-		case 'first':
-			array_unshift($mainpage_widgets, $callback);
-		case 'last':
-			array_push($mainpage_widgets, $callback);
+	if ($callback == 'first') {
+		array_unshift($mainpage_widgets, $callback);
+	} else {
+		$mainpage_widgets[] = $callback;
 	}
 }
 
