@@ -627,8 +627,10 @@ class TemplateHelperRunMainpageWidgets extends TemplateHelperAbstract {
 			$mod->setOutput('Col1', array());
 			$mod->setOutput('Col2', array());
 		}
-	
+		
+		
 		global $mainpage_widgets;
+		var_dump($mainpage_widgets);
 		
 		$col1 = true;
 		foreach ($mainpage_widgets as $callback) {
