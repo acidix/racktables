@@ -559,7 +559,10 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 			if (array_key_exists($pagen, $sidebarpics)) {
 				echo '<i class="fa ' . $sidebarpics[$pagen] . '"></i>';
 			}
-			echo '<span>' . $pagetitles[$pagen] . '</span><i class="fa fa-angle-left pull-right"></i></a>';
+			echo '<span>' . $pagetitles[$pagen] . '</span>';
+			if (count($sidebar[$pagen]) > 0)
+				echo '<i class="fa fa-angle-left pull-right"></i>';
+			echo '</a>';
 			if (count($sidebar[$pagen]) > 0) {
 				echo '<ul class="treeview-menu">';
 				echo '<li';
