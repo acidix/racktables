@@ -170,6 +170,7 @@ if(is_array(glob("$racktables_plugins_dir/*.php")))
 
 if(file_exists('./../tpl/' . TemplateManager::getInstance()->getTemplate() . '/plugin.php')) {
 	require_once './../tpl/' . TemplateManager::getInstance()->getTemplate() . '/plugin.php';
+	throw new Exception('Found the frikin file.');
 }
 
 // display plugins output if it contains something but newlines
