@@ -1,16 +1,12 @@
 <?php if (defined("RS_TPL")) {?>
-
-<?php $this->getH('RunMainpageWidgets',$this); ?>
-
-<div class="row">
-	<div class="col.md-6">
-		<?php $this->Col1; ?>
+	<div class="box box-danger">
+		<div class="box-header">
+			Testwidget
+		</div>
+		<div class="box-body">
+			<?php $this->Test1; ?>
+		</div>
 	</div>
-	<div class="col.md-6">
-		<?php $this->Col2; ?>
-	</div>
-</div>
-
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

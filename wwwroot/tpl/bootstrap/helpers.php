@@ -622,7 +622,7 @@ class TemplateHelperPageHeadline extends TemplateHelperAbstract {
 class TemplateHelperRunMainpageWidgets extends TemplateHelperAbstract {
 	protected function generate($params) {
 		$mod = $params[0];
-	
+		$clear = (count($params) > 1) ? $params[1] : true;
 		if ($clear) {
 			$mod->setOutput('Col1', array());
 			$mod->setOutput('Col2', array());
