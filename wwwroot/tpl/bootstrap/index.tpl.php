@@ -1,46 +1,160 @@
-<?php 
-	$this->map(array('Path',0),':','');
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<!-- Template taken from: interface.php:94 -->
-<head><title><?php $this->PageTitle ; //echo getTitle ($pageno); ?></title>
-	<link rel="ICON" type="image/x-icon" href="?module=chrome&amp;uri=pix/favicon.ico">
-	<link rel="stylesheet" type="text/css" href="?module=chrome&amp;uri=css/pi.css">
-	<script type="text/javaScript" src="?module=chrome&amp;uri=js/jquery-1.4.4.min.js"></script>
-	<script type="text/javascript" src="?module=chrome&amp;uri=js/racktables.js"></script>
-	<?php $this->Header; ?>
-</head>
-<body>
-	<div class="maintable">
- 		<div class="mainheader">
-  			<div style="float: right" class=greeting><a href='index.php?page=myaccount&tab=default'><?php $this->RemoteDisplayname; ?></a> [ <a href='?logout'>logout</a> ]</div>
- 			<?php $this->Enterprise; //echo getConfigVar ('enterprise') ?> RackTables <a href="http://racktables.org" title="Visit RackTables site"><?php echo CODE_VERSION ?></a>
- 			<?php $this->Quicklinks_Table; ?>  
- 		</div>
- 	<div class="menubar">
- 		<div class='searchbox' style='float:right'>
-			<form name=search method=get>
-				<input type=hidden name=page value=search>
-				<input type=hidden name=last_page value=<?php $this->PageNo; ?>>
-				<input type=hidden name=last_tab value=<?php $this->TabNo; ?>>
-				<label>Search:<input type=text name=q size=20 tabindex=1000 value='<?php $this->SearchValue; ?>'>
-				</label>
-			</form>
-		</div>
-		<?php $this->Path; ?>
-	</div>
- 	<div class="tabbar">
- 		<?php if ($this->is('Tabs')) { ?>
- 			<div class="greynavbar">
-				<ul id="foldertab" style='margin-bottom: 0px; padding-top: 10px;'>
-					<?php $this->Tabs; ?>
-				</ul>
-			</div>
- 		<?php } ?> 
-	</div>
- 	<div class="msgbar"><?php $this->Message; //showMessageOrError(); ?></div>
- 	<div class="pagebar"><?php $this->Payload; //echo $payload; ?></div>
-</div>
-</body>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title><?php $this->PageTitle ?></title>
+        <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+        <!-- bootstrap 3.0.2 -->
+        <link href="../../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <!-- font Awesome -->
+        <link href="../../css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <!-- Ionicons -->
+        <link href="../../css/ionicons.min.css" rel="stylesheet" type="text/css" />
+        <!-- Theme style -->
+        <link href="../../css/AdminLTE.css" rel="stylesheet" type="text/css" />
+		
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+		
+		<?php $this->Header ?>
+    </head>
+    <body class="skin-blue">
+        <!-- header logo: style can be found in header.less -->
+        <header class="header">
+            <a href="../../index.html" class="logo">
+                <!-- Add the class icon to your logo image or logo icon to add the margining -->
+                <?php $this->Enterprise ?>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <div class="navbar-right">
+                    <ul class="nav navbar-nav">
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="glyphicon glyphicon-user"></i>
+                                <span><?php $this->RemoteDisplayname ?> <i class="caret"></i></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header bg-light-blue">
+                                    <img src="../../img/avatar3.png" class="img-circle" alt="User Image" />
+                                    <p>
+                                        <?php $this->RemoteDisplayname ?>
+										<!-- TODO: Sachen hier anzeigen -->
+                                        <!-- <small>Member since Nov. 2012</small> -->
+                                    </p>
+                                </li>
+                                <!-- Menu Body -->
+                                <li class="user-body">
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">Followers</a>
+                                    </div>
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">Sales</a>
+                                    </div>
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">Friends</a>
+                                    </div>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="?logout" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <div class="wrapper row-offcanvas row-offcanvas-left">
+            <!-- Left side column. contains the logo and sidebar -->
+            <aside class="left-side sidebar-offcanvas">
+                <!-- sidebar: style can be found in sidebar.less -->
+                <section class="sidebar">
+                    <!-- Sidebar user panel -->
+                    <div class="user-panel">
+						<!--
+                        <div class="pull-left image">
+                            <img src="../../img/avatar3.png" class="img-circle" alt="User Image" />
+                        </div>
+						-->
+                        <div class="pull-left info">
+                            <p>Hello, <?php $this->RemoteDisplayname ?></p>
+
+                            <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                        </div>
+                    </div>
+                    <!-- search form -->
+                    <form name=search method=get class="sidebar-form">
+						<input type=hidden name=page value=search>
+						<input type=hidden name=last_page value=<?php $this->PageNo; ?>>
+						<input type=hidden name=last_tab value=<?php $this->TabNo; ?>>
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="Search..." text="<?php $this->SearchValue; ?>"/>
+                            <span class="input-group-btn">
+                                <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                    </form>
+                    <!-- /.search form -->
+                    <!-- sidebar menu: : style can be found in sidebar.less -->
+                    <?php $this->getH('PrintSidebar'); ?>
+                </section>
+                <!-- /.sidebar -->
+            </aside>
+
+            <!-- Right side column. Contains the navbar and content of the page -->
+            <aside class="right-side">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+					<h1>
+						<?php $this->Headline ?>
+						<?php $this->Tabs ?>
+					</h1>
+					<!-- <?php //$this->getH('PageHeadline',array($this->_Headline,$this->_SubHeadline)); ?> -->
+                    <ol class="breadcrumb">
+						<?php $this->Path ?>
+						<!--
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                        <li><a href="#">Examples</a></li>
+                        <li class="active">Blank page</li>
+						-->
+                    </ol>
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+					<?php $this->Message ?>
+					<?php $this->Payload ?>
+                </section><!-- /.content -->
+            </aside><!-- /.right-side -->
+        </div><!-- ./wrapper -->
+
+
+        <!-- jQuery 2.0.2 -->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+        <!-- Bootstrap -->
+        <script src="../../js/bootstrap.min.js" type="text/javascript"></script>
+        <!-- AdminLTE App -->
+        <script src="../../js/AdminLTE/app.js" type="text/javascript"></script>
+        <!-- AdminLTE for demo purposes -->
+        <script src="../../js/AdminLTE/demo.js" type="text/javascript"></script>
+    </body>
 </html>

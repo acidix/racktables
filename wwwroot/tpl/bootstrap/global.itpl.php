@@ -47,26 +47,25 @@ $this->setInMemoryTemplate("CellFilterExtraText","<tr><td colspan=2><textarea na
  * Template for: Tablist, the currently active Tab
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabActive","<li><a class=current href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>\n");
+$this->setInMemoryTemplate("TabActive","<small>|</small> <small class='badge bg-blue'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></small>\n");
 
 /**
  * Template for: Tablist, currently inactive tabs
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabInactive","<li><a class=std href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>\n");
+$this->setInMemoryTemplate("TabInactive","<small>|</small> <small><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></small>\n");
 
 /**
  * Template for: Tablist, tabs with warnings
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabAttention","<li><a class=attn href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>\n");
+$this->setInMemoryTemplate("TabAttention","<small>|</small> <small class='badge bg-yellow'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></small>\n");
 
 /**
  * Template for: Part of the path  in the PathAndSearch module
  * Usage: interface.php (showPathAndSearch)
  */
-$this->setInMemoryTemplate("PathLink"," {{Delimiter}} <a href='index.php?{{Params}}{{AnchorTail}}'>{{Name}}</a>");
-
+$this->setInMemoryTemplate("PathLink",'<li><a href="index.php{{Params}}{{AnchorTail}}">{{Name}}</a></li>');
 /**
  * Template for spacer in CellFilterPortlet
  * UsagE: interface.php (renderCellFilterPortlet)

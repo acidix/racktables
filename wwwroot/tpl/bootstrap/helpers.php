@@ -524,9 +524,9 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 		$sidebar['objectlog'] = array();
 		$sidebar['virtual'] = array();
 		
-		echo '<ul class="cl-vnavigation">/n/r';
+		echo '<ul class="sidebar-menu">/n/r';
 		foreach ($sidebar as $pagen => $pagea) {
-			echo '<li>';
+			echo '<li' . (count($sidebar[$pagen]) == 0 && $pagen == $pageno) ? ' class="active"' : (count($sidebar[$pagen]) > 0 ? ' class="treeview"' : '') . '>';
 			if (count($sidebar[$pagen]) == 0) {
 				echo '<a href="index.php?page=' . $pagen . '">';
 			} else {
@@ -537,7 +537,7 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 			}
 			echo '<span>' . $page[$pagen]['title'] . '</span></a>';
 			if (count($sidebar[$pagen]) > 0) {
-				echo '/n/r<ul class="sub-menu">/n/r';
+				echo '/n/r<ul class="treeview-menu">/n/r';
 				echo '<li' . ($pageno == $pagen && $tabno == 'default' ? ' class="active"' : '') . '><a href="index.php?page=' . $pagen . '">' + $tab[$pagen]['default'] + '</a>/n/r';
 				foreach($pagea as $tabn) {
 					echo '<li' . ($pageno == $pagen && $tabno == $tabn ? ' class="active"' : '') . '><a href="index.php?page=' . $pagen . '&tab=' . $tabn . '">' + $tab[$pagen][$tabn] . '</a></li>/n/r';
@@ -548,5 +548,25 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 		}
 		echo '</ul>';
 	} 
+}
+
+class TemplateHelperPageHeadline extends TemplateHelperAbstract {
+	
+	protected function generate($params) {
+		if (count($params) == 0 || $params[0] == '') {
+			return;
+		}
+		
+		echo '<h1>/n/r';
+		echo $params[0];
+		
+		if (count($params) == 2) {
+			echo '/n/r<small>';
+			echo $params[1];
+			echo '</small>/n/r';
+		}
+		
+		echo '</h1>/n/r';		
+	}
 }
 ?>
