@@ -505,26 +505,25 @@ class TemplateHelperPrintSelect extends TemplateHelperAbstract
 	}
 }
 
-$pagetitles = array();
-$pagetitles['rackspace'] = 'Rackspace';
-$pagetitles['depot'] = 'Objects';
-$pagetitles['ipv4space'] = 'IPv4 Space';
-$pagetitles['ipv6space'] = 'IPv6 Space';
-$pagetitles['files'] = 'Files';
-$pagetitles['reports'] = 'Reports';
-$pagetitles['ipv4slb'] = 'IPv4 SLB';
-$pagetitles['8021q'] = '8021q';
-$pagetitles['config'] = 'Configuration';
-$pagetitles['objectlog'] = 'Object Log';
-$pagetitles['virtual'] = 'Virtual';
-
-
 class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 	
 	protected function generate($params) {
 		global $tab,$page,$pageno,$tabno,$pagetitles;
 		$sidebar = array();
 		$sidebarpics = array();
+		
+		$pagetitles = array();
+		$pagetitles['rackspace'] = 'Rackspace';
+		$pagetitles['depot'] = 'Objects';
+		$pagetitles['ipv4space'] = 'IPv4 Space';
+		$pagetitles['ipv6space'] = 'IPv6 Space';
+		$pagetitles['files'] = 'Files';
+		$pagetitles['reports'] = 'Reports';
+		$pagetitles['ipv4slb'] = 'IPv4 SLB';
+		$pagetitles['8021q'] = '8021q';
+		$pagetitles['config'] = 'Configuration';
+		$pagetitles['objectlog'] = 'Object Log';
+		$pagetitles['virtual'] = 'Virtual';
 		
 		$sidebar['rackspace'] = array('editlocations','editrows','history');
 		$sidebar['depot'] = array('addmore');
@@ -582,7 +581,7 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 class TemplateHelperPageHeadline extends TemplateHelperAbstract {
 	
 	protected function generate($params) {
-		global $pageno, $tabno, $page, $tab;
+		global $pageno, $tabno, $page, $tab,$pagetitles;
 		echo '<h1>';
 		$title = $this->getTitle($pageno);
 		if ($title = 'Main page' && $pageno != 'index') {
