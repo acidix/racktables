@@ -583,7 +583,7 @@ class TemplateHelperPageHeadline extends TemplateHelperAbstract {
 	protected function generate($params) {
 		global $pageno, $tabno, $page, $tab;
 		echo '<h1>' . $this->getTitle($pageno);
-		if (array_key_exists($pageno, $tab) && array_key_exists($tabno, $tab[$pageno])) {
+		if (array_key_exists($pageno, $tab) && array_key_exists($tabno, $tab[$pageno]) && $tabno != 'default') {
 			echo '<small>' . $tab[$pageno][$tabno] . '</small>';
 		}
 		echo '</h1>';
