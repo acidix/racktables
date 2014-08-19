@@ -631,15 +631,10 @@ class TemplateHelperRunMainpageWidgets extends TemplateHelperAbstract {
 		
 		
 		global $mainpage_widgets;
-		var_dump($mainpage_widgets);
-		echo $mainpage_widgets;
 		
 		$col1 = true;
 		foreach ($mainpage_widgets as $callback) {
 			$newmod = call_user_func($callback);
-			if (!$newmod) {
-				echo "Error.";
-			}
 			if ($newmod != null && is_object($newmod)) {
 				$mod->addOutput($col1 ? 'Col1' : 'Col2', $newmod->run());
 				$col1 = !$col1;

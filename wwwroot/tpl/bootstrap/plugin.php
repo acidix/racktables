@@ -20,7 +20,6 @@ $mainpage_widgets = array();
  */
 function addMainpageWidget($callback,$order = 'last') {
 	global $mainpage_widgets;
-	echo "Adding widget:" . $callback;
 	if ($callback == 'first') {
 		array_unshift($mainpage_widgets, $callback);
 	} else {
@@ -28,12 +27,8 @@ function addMainpageWidget($callback,$order = 'last') {
 	}
 }
 
-function runMainpageWidgets($clear = true) {
-	
-}
-
 function testWidget() {
-	return "Testing widgets";
+	return TemplateManager::getInstance()->generateModule('TestWidget',false,array('Test1'=>'Sentence1.'));
 }
 
 addMainpageWidget('testWidget');
