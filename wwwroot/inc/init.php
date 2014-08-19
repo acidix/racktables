@@ -168,9 +168,9 @@ if(is_array(glob("$racktables_plugins_dir/*.php")))
     foreach (glob("$racktables_plugins_dir/*.php") as $filename)
     require_once $filename;
 
-TemplateManager::getInstance()->getMainModule()->addOutput('Payload', './../tpl/' . TemplateManager::getInstance()->getTemplate() . '/plugin.php');
-if(file_exists('./../tpl/' . TemplateManager::getInstance()->getTemplate() . '/plugin.php')) {
-	require_once './../tpl/' . TemplateManager::getInstance()->getTemplate() . '/plugin.php';
+$path = $racktables_rootdir . '/tpl/' . TemplateManager::getInstance()->getTemplate() . '/plugin.php';
+if(file_exists($path)) {
+	require_once $path;
 }
 
 // display plugins output if it contains something but newlines
