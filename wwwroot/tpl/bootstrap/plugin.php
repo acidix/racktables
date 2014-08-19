@@ -33,7 +33,7 @@ function runMainpageWidgets($clear = true) {
 }
 
 function testWidget() {
-	return TemplateManager::getInstance()->generateModule('TestWidget',false,array('Test1'=>'Sentence 1.'));
+	return "Testing widgets";
 }
 
 addMainpageWidget('testWidget');
