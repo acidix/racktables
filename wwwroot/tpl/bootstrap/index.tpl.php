@@ -1,3 +1,4 @@
+<?php $this->map(['Tabs',0],"<small>|</small>","|"); ?>
 <!DOCTYPE html>
 <html>
     <head>
