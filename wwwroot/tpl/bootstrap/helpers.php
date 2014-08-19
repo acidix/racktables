@@ -539,8 +539,17 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 		
 		echo '<ul class="sidebar-menu">';
 		foreach ($sidebar as $pagen => $pagea) {
+			$tabclass = '';
+			if (count($pagea) > 0) {
+				$tabclass .= ' treeview';
+			}
+			if ($pagen == $pageno) {
+				$tabclass .= ' active';
+			}
 			echo '<li';
-			echo (count($sidebar[$pagen]) == 0 && $pagen == $pageno) ? ' class="active"' : (count($sidebar[$pagen]) > 0 ? ' class="treeview"' : '');
+			if ($tabclass != '') {
+				echo ' class="' . $tabclass . '"';
+			}
 			echo '>';
 			if (count($sidebar[$pagen]) == 0) {
 				echo '<a href="index.php?page=' . $pagen . '">';
@@ -550,7 +559,7 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 			if (array_key_exists($pagen, $sidebarpics)) {
 				echo '<i class="fa ' . $sidebarpics[$pagen] . '"></i>';
 			}
-			echo '<span>' . $sidebartitles[$pagen] . '</span></a>';
+			echo '<span>' . $sidebartitles[$pagen] . '</span></a><i class="fa fa-angle-left pull-right"></i>';
 			if (count($sidebar[$pagen]) > 0) {
 				echo '<ul class="treeview-menu">';
 				echo '<li';
