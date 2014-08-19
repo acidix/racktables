@@ -582,14 +582,27 @@ class TemplateHelperPageHeadline extends TemplateHelperAbstract {
 	
 	protected function generate($params) {
 		global $pageno, $tabno, $page, $tab;
-		if (array_key_exists($pageno, $page) && array_key_exists('title', $page[$pageno])) {
-			echo '<h1>' . $page[$pageno]['title'];
-			if (array_key_exists($pageno, $tab) && array_key_exists($tabno, $tab[$pageno])) {
-				echo '<small>' . $tab[$pageno][$tabno] . '</small>';
+		echo '<h1>' . $this->getTitle($pageno);
+		if (array_key_exists($pageno, $tab) && array_key_exists($tabno, $tab[$pageno])) {
+			echo '<small>' . $tab[$pageno][$tabno] . '</small>';
+		}
+		echo '</h1>';
+	}
+	
+	protected function getTitle($pageno) {
+		global $page;
+		if (!array_key_exists($pageno, $page)) {
+			return '';
+		} else {
+			if (array_key_exists('title', $page[$pageno])) {
+				return $page[$pageno]['title'];
+			} else {
+				if (array_key_exists('parent', $page[$pageno])) {
+					return $this->getTitle($page[$pageno]['parent']);
+				} else {
+					return '';
+				}
 			}
-			echo '</h1>';
-		} elseif (array_key_exists($pageno, $tab) && array_key_exists($tabno, $tab[$pageno])) {
-			echo '<h1>' . $tab[$pageno][$tabno] . '</h1>';
 		}
 	}
 }
