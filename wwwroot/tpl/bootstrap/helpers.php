@@ -505,10 +505,24 @@ class TemplateHelperPrintSelect extends TemplateHelperAbstract
 	}
 }
 
+$pagetitles = array();
+$pagetitles['rackspace'] = 'Rackspace';
+$pagetitles['depot'] = 'Objects';
+$pagetitles['ipv4space'] = 'IPv4 Space';
+$pagetitles['ipv6space'] = 'IPv6 Space';
+$pagetitles['files'] = 'Files';
+$pagetitles['reports'] = 'Reports';
+$pagetitles['ipv4slb'] = 'IPv4 SLB';
+$pagetitles['8021q'] = '8021q';
+$pagetitles['config'] = 'Configuration';
+$pagetitles['objectlog'] = 'Object Log';
+$pagetitles['virtual'] = 'Virtual';
+
+
 class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 	
 	protected function generate($params) {
-		global $tab,$page,$pageno,$tabno;
+		global $tab,$page,$pageno,$tabno,$pagetitles;
 		$sidebar = array();
 		$sidebarpics = array();
 		
@@ -523,19 +537,6 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 		$sidebar['config'] = array();
 		$sidebar['objectlog'] = array();
 		$sidebar['virtual'] = array();
-		
-		$sidebartitles = array();
-		$sidebartitles['rackspace'] = 'Rackspace';
-		$sidebartitles['depot'] = 'Objects';
-		$sidebartitles['ipv4space'] = 'IPv4 Space';
-		$sidebartitles['ipv6space'] = 'IPv6 Space';
-		$sidebartitles['files'] = 'Files';
-		$sidebartitles['reports'] = 'Reports';
-		$sidebartitles['ipv4slb'] = 'IPv4 SLB';
-		$sidebartitles['8021q'] = '8021q';
-		$sidebartitles['config'] = 'Configuration';
-		$sidebartitles['objectlog'] = 'Object Log';
-		$sidebartitles['virtual'] = 'Virtual';
 		
 		echo '<ul class="sidebar-menu">';
 		foreach ($sidebar as $pagen => $pagea) {
@@ -559,7 +560,7 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 			if (array_key_exists($pagen, $sidebarpics)) {
 				echo '<i class="fa ' . $sidebarpics[$pagen] . '"></i>';
 			}
-			echo '<span>' . $sidebartitles[$pagen] . '</span><i class="fa fa-angle-left pull-right"></i></a>';
+			echo '<span>' . $pagetitles[$pagen] . '</span><i class="fa fa-angle-left pull-right"></i></a>';
 			if (count($sidebar[$pagen]) > 0) {
 				echo '<ul class="treeview-menu">';
 				echo '<li';
@@ -585,7 +586,11 @@ class TemplateHelperPageHeadline extends TemplateHelperAbstract {
 		echo '<h1>';
 		$title = $this->getTitle($pageno);
 		if ($title = 'Main page' && $pageno != 'index') {
-			$title = ucfirst($pageno);
+			if (array_key_exists($pageno,$pagetitles)) {
+				$title = $pagetitles[$pageno];
+			} else {
+				$title = ucfirst($pageno);
+			}
 		}
 		echo $title;
 		if (array_key_exists($pageno, $tab) && array_key_exists($tabno, $tab[$pageno]) && $tabno != 'default') {
