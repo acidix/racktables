@@ -3,10 +3,10 @@
 <?php $this->getH('RunMainpageWidgets',$this); ?>
 
 <div class="row">
-	<div class="col.md-6">
+	<div class="col-md-6">
 		<?php $this->Col1; ?>
 	</div>
-	<div class="col.md-6">
+	<div class="col-md-6">
 		<?php $this->Col2; ?>
 	</div>
 </div>
