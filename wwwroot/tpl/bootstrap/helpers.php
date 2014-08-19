@@ -618,4 +618,28 @@ class TemplateHelperPageHeadline extends TemplateHelperAbstract {
 		}
 	}
 }
+
+class TemplateHelperRunMainpageWidgets extends TemplateHelperAbstract {
+	protected function generate($params) {
+		$mod = $params[0];
+	
+		if ($clear) {
+			$mod->setOutput('Col1', array());
+			$mod->setOutput('Col2', array());
+		}
+	
+		global $mainpage_widgets;
+		
+		$col1 = false;
+		foreach ($mainpage_widgets as $callback) {
+			if (is_callable($callback)) {
+				$newmod = call_user_func($callback);
+				if ($newmod != null && $newmod instanceof TemplateModule) {
+					$mod->addOutput($col1 ? 'Col1' : 'Col2', $newmod->run());
+					$col1 = !$col1;
+				}
+			}
+		}
+	}
+}
 ?>

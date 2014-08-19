@@ -164,14 +164,16 @@ TemplateManager::changeStaticDir();
 // load additional plugins
 ob_start();
 
-if(is_array(glob("$racktables_plugins_dir/*.php")))
-    foreach (glob("$racktables_plugins_dir/*.php") as $filename)
-    require_once $filename;
-
 $path = $racktables_rootdir . '/tpl/' . TemplateManager::getInstance()->getTemplate() . '/plugin.php';
 if(file_exists($path)) {
 	require_once $path;
 }
+
+if(is_array(glob("$racktables_plugins_dir/*.php")))
+    foreach (glob("$racktables_plugins_dir/*.php") as $filename)
+    require_once $filename;
+
+
 
 // display plugins output if it contains something but newlines
 $tmp = ob_get_clean();
