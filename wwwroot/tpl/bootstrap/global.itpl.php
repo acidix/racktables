@@ -59,7 +59,7 @@ $this->setInMemoryTemplate("TabInactive","<a href='index.php?page={{Page}}&tab={
  * Template for: Tablist, tabs with warnings
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabAttention","<a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}' class='btn btn-attention btn-flat'>{{Title}}</a>");
+$this->setInMemoryTemplate("TabAttention","<a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}' class='btn btn-warning btn-flat'>{{Title}}</a>");
 
 /**
  * Template for: Part of the path  in the PathAndSearch module
