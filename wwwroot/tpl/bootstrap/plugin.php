@@ -27,17 +27,6 @@ function addMainpageWidget($callback,$order = 'last') {
 	}
 }
 
-function testWidget() {
-	return TemplateManager::getInstance()->generateModule('TestWidget',false,array('Test1'=>'Sentence1.'));
-}
-
-function testWidget2() {
-	return TemplateManager::getInstance()->generateModule('TestWidget',false,array('Test1'=>'Sentence2.'));
-}
-
-addMainpageWidget('testWidget');
-addMainpageWidget('testWidget2');
-
 
 
 ?>
