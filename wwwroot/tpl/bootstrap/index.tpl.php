@@ -126,7 +126,7 @@
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
 					<?php $this->getH('PageHeadline'); ?>
-					<?php $this->Tabs ?>
+					<div class="btn-group"><?php $this->Tabs ?></div>
 					<!-- <?php //$this->getH('PageHeadline',array($this->_Headline,$this->_SubHeadline)); ?> -->
                     <ol class="breadcrumb">
 						<?php $this->Path ?>
