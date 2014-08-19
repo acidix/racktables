@@ -168,7 +168,7 @@ if(is_array(glob("$racktables_plugins_dir/*.php")))
     foreach (glob("$racktables_plugins_dir/*.php") as $filename)
     require_once $filename;
 
-if(file_exists('./tpl/' . TemplateManager::getInstance()->getTemplate() . '/plugin.php')) {
+if(file_exists('../tpl/' . TemplateManager::getInstance()->getTemplate() . '/plugin.php')) {
 	require_once './tpl/' . TemplateManager::getInstance()->getTemplate() . '/plugin.php';
 }
 
