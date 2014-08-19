@@ -623,6 +623,7 @@ class TemplateHelperRunMainpageWidgets extends TemplateHelperAbstract {
 	protected function generate($params) {
 		$mod = $params[0];
 		$clear = (count($params) > 1) ? $params[1] : true;
+		
 		if ($clear) {
 			$mod->setOutput('Col1', array());
 			$mod->setOutput('Col2', array());
@@ -631,6 +632,7 @@ class TemplateHelperRunMainpageWidgets extends TemplateHelperAbstract {
 		
 		global $mainpage_widgets;
 		var_dump($mainpage_widgets);
+		echo $mainpage_widgets;
 		
 		$col1 = true;
 		foreach ($mainpage_widgets as $callback) {
