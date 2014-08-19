@@ -621,6 +621,7 @@ class TemplateHelperPageHeadline extends TemplateHelperAbstract {
 
 class TemplateHelperRunMainpageWidgets extends TemplateHelperAbstract {
 	protected function generate($params) {
+		echo "Testing widgets.";
 		$mod = $params[0];
 		$clear = (count($params) > 1) ? $params[1] : true;
 		if ($clear) {
