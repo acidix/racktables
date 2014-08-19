@@ -524,6 +524,19 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 		$sidebar['objectlog'] = array();
 		$sidebar['virtual'] = array();
 		
+		$sidebartitles = array();
+		$sidebartitles['rackspace'] = 'Rackspace';
+		$sidebartitles['depot'] = 'Objects';
+		$sidebartitles['ipv4space'] = 'IPv4 Space';
+		$sidebartitles['ipv6space'] = 'IPv6 Space';
+		$sidebartitles['files'] = 'Files';
+		$sidebartitles['reports'] = 'Reports';
+		$sidebartitles['ipv4slb'] = 'IPv4 SLB';
+		$sidebartitles['8021q'] = '8021q';
+		$sidebartitles['config'] = 'Configuration';
+		$sidebartitles['objectlog'] = 'Object Log';
+		$sidebartitles['virtual'] = 'Virtual';
+		
 		echo '<ul class="sidebar-menu">/n/r';
 		foreach ($sidebar as $pagen => $pagea) {
 			echo '<li' . (count($sidebar[$pagen]) == 0 && $pagen == $pageno) ? ' class="active"' : (count($sidebar[$pagen]) > 0 ? ' class="treeview"' : '') . '>';
@@ -535,7 +548,7 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 			if (array_key_exists($pagen, $sidebarpics)) {
 				echo '<i class="fa ' . $sidebarpics[$pagen] . '"></i>';
 			}
-			echo '<span>' . $page[$pagen]['title'] . '</span></a>';
+			echo '<span>' . $sidebartitles[$pagen] . '</span></a>';
 			if (count($sidebar[$pagen]) > 0) {
 				echo '/n/r<ul class="treeview-menu">/n/r';
 				echo '<li' . ($pageno == $pagen && $tabno == 'default' ? ' class="active"' : '') . '><a href="index.php?page=' . $pagen . '">' + $tab[$pagen]['default'] + '</a>/n/r';
