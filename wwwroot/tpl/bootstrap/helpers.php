@@ -621,7 +621,6 @@ class TemplateHelperPageHeadline extends TemplateHelperAbstract {
 
 class TemplateHelperRunMainpageWidgets extends TemplateHelperAbstract {
 	protected function generate($params) {
-		echo "Testing widgets.";
 		$mod = $params[0];
 		$clear = (count($params) > 1) ? $params[1] : true;
 		if ($clear) {
@@ -631,9 +630,12 @@ class TemplateHelperRunMainpageWidgets extends TemplateHelperAbstract {
 	
 		global $mainpage_widgets;
 		
-		$col1 = false;
+		$col1 = true;
 		foreach ($mainpage_widgets as $callback) {
 			$newmod = call_user_func($callback);
+			if (!$newmod) {
+				echo "Error.";
+			}
 			if ($newmod != null && is_object($newmod)) {
 				$mod->addOutput($col1 ? 'Col1' : 'Col2', $newmod->run());
 				$col1 = !$col1;
