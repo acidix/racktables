@@ -504,4 +504,49 @@ class TemplateHelperPrintSelect extends TemplateHelperAbstract
 		echo $mod->run();			
 	}
 }
+
+class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
+	
+	protected function generate($params) {
+		global $tab,$page,$pageno,$tabno;
+		$sidebar = array();
+		$sidebarpics = array();
+		
+		$sidebar['rackspace'] = array('editlocations','editrows','history');
+		$sidebar['depot'] = array('addmore');
+		$sidebar['ipv4space'] = array('newrange','manage');
+		$sidebar['ipv6space'] = array('newrange','manage');
+		$sidebar['files'] = array('manage');
+		$sidebar['reports'] = array('rackcode','ipv4','ipv6','ports','8021q','warranty','local');
+		$sidebar['ipv4slb'] = array('vs','lbs','rspools','rservers','defconfig','new_vs','new_vsg','new_rs');
+		$sidebar['8021q'] = array();
+		$sidebar['config'] = array();
+		$sidebar['objectlog'] = array();
+		$sidebar['virtual'] = array();
+		
+		echo '<ul class="cl-vnavigation">/n/r';
+		foreach ($sidebar as $pagen => $pagea) {
+			echo '<li>';
+			if (count($sidebar[$pagen]) == 0) {
+				echo '<a href="index.php?page=' . $pagen . '">';
+			} else {
+				echo '<a href="#">';
+			}
+			if (array_key_exists($pagen, $sidebarpics)) {
+				echo '<i class="fa ' . $sidebarpics[$pagen] . '"></i>';
+			}
+			echo '<span>' . $page[$pagen]['title'] . '</span></a>';
+			if (count($sidebar[$pagen]) > 0) {
+				echo '/n/r<ul class="sub-menu">/n/r';
+				echo '<li' . ($pageno == $pagen && $tabno == 'default' ? ' class="active"' : '') . '><a href="index.php?page=' . $pagen . '">' + $tab[$pagen]['default'] + '</a>/n/r';
+				foreach($pagea as $tabn) {
+					echo '<li' . ($pageno == $pagen && $tabno == $tabn ? ' class="active"' : '') . '><a href="index.php?page=' . $pagen . '&tab=' . $tabn . '">' + $tab[$pagen][$tabn] . '</a></li>/n/r';
+				}
+				echo '</ul>/n/r';
+			}
+			echo '</li>';
+		}
+		echo '</ul>';
+	} 
+}
 ?>
