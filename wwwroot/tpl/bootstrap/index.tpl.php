@@ -124,9 +124,7 @@
             <aside class="right-side">
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
-					<h1>
-						<?php $this->Headline ?>
-					</h1>
+					<?php $this->getH('PageHeadline'); ?>
 					<?php $this->Tabs ?>
 					<!-- <?php //$this->getH('PageHeadline',array($this->_Headline,$this->_SubHeadline)); ?> -->
                     <ol class="breadcrumb">
