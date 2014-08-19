@@ -555,7 +555,7 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 				echo '<ul class="treeview-menu">';
 				echo '<li';
 				echo ($pageno == $pagen && $tabno == 'default' ? ' class="active"' : '');
-				echo '><a href="index.php?page=' . $pagen . '">' . $tab[$pagen]['default'] . '</a>';
+				echo '><a href="index.php?page=' . $pagen . '">' . $tab[$pagen]['default'] . '</a></li>';
 				foreach($pagea as $tabn) {
 					echo '<li';
 					echo ($pageno == $pagen && $tabno == $tabn ? ' class="active"' : '');
@@ -566,7 +566,7 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 			echo '</li>';
 		}
 		echo '</ul>';
-	} 
+	}
 }
 
 class TemplateHelperPageHeadline extends TemplateHelperAbstract {
