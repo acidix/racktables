@@ -126,8 +126,8 @@
                 <section class="content-header">
 					<h1>
 						<?php $this->Headline ?>
-						<?php $this->Tabs ?>
 					</h1>
+					<?php $this->Tabs ?>
 					<!-- <?php //$this->getH('PageHeadline',array($this->_Headline,$this->_SubHeadline)); ?> -->
                     <ol class="breadcrumb">
 						<?php $this->Path ?>
