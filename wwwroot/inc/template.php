@@ -44,13 +44,13 @@ class TemplateManager
 	 */
 	public static function initalizeTemplate($mainmod = 'index')
 	{
-		$tpl_to_use = '';
-
+		$tpl_to_use = 0;
+		
 		$template_list = self::getOrderedTemplateList();
 		//TODO Messy code fixit
 		$flipped = array_flip($template_list);
-
-
+		
+		/**
 		if (!array_key_exists('RacktablesTemplate', $_COOKIE))
 		{
 			setcookie('RacktablesTemplate',$flipped['vanilla']);
@@ -76,7 +76,7 @@ class TemplateManager
 				$tpl_to_use = $flipped['vanilla'];
 				//$_COOKIE['RacktablesTemplate'] = $flipped['vanilla']; //@TODO might be nessessary for instant use.
 			}
-		}
+		} */
 		
 		$inst = self::getInstance();
 		
@@ -103,7 +103,7 @@ class TemplateManager
 	 */
 	public static function getOrderedTemplateList()
 	{
-		static $arr = array('vanilla');
+		static $arr = array('bootstrap');
 
 //		$arr = glob('../tpl/*' , GLOB_ONLYDIR); //@TODO Make it work
 
