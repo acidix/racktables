@@ -558,8 +558,8 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 				echo '><a href="index.php?page=' . $pagen . '">' . $tab[$pagen]['default'] . '</a></li>';
 				foreach($sidebar[$pagen] as $tabn) {
 					echo '<li';
-// 					echo (($pageno == $pagen && $tabno == $tabn) ? ' class="active"' : '');
-					echo '><a href="index.php?page=' . $pagen . '&tab=' . $tabn . '">' + $tab[$pagen][$tabn] . '</a></li>';
+					echo (($pageno == $pagen && $tabno == $tabn) ? ' class="active"' : '');
+					echo '><a href="index.php?page=' . $pagen . '&tab=' . $tabn . '">' . $tab[$pagen][$tabn] . '</a></li>';
 				}
 				echo '</ul>';
 			}
