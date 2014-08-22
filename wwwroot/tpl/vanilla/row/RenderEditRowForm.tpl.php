@@ -5,7 +5,7 @@
 		<table border=0 align=center>
 		<tr><td>&nbsp;</td><th class=tdright>Location:</th><td class=tdleft>
 		<?php $this->getH("PrintSelect", array($this->_Locations, array ('name' => 'location_id'), $this->_Location_ID)); ?></td></tr>
-		<tr><td>&nbsp;</td><th class=tdright>Name (required):</th><td class=tdleft><input type=text name=name value='<?php $this->this->Row_name ?>'></td></tr>
+		<tr><td>&nbsp;</td><th class=tdright>Name (required):</th><td class=tdleft><input type=text name=name value='<?php $this->this->Row_Name ?>'></td></tr>
 		
 		<?php $this->startLoop('AllRecords'); ?>
 			<input type=hidden name=<?php $this->I ?>_attr_id value=<?php $this->Record_ID ?>><tr><td>
@@ -18,7 +18,7 @@
 			<?php if ($this->is('PrintInput', true)) { ?>
 				<input type=text name=<?php $this->I ?>_value value='<?php $this->RecordValue ?>'>
 			<?php } else { ?>
-				<?php $this->NifitySelChapter ?>
+				<?php $this->NiftySelChapter ?>
 			<?php } ?> 
 			</td></tr>
 		<?php $this->endLoop(); ?>

@@ -722,7 +722,7 @@ function renderEditRowForm ($row_id)
             $chapter[0] = '-- NOT SET --';
             $chapter = cookOptgroups ($chapter, 1562, $record['key']);
             $singleRow['PrintInput'] = false;
-            $singleRow['NifitySelChapter'] = printNiftySelect ($chapter, array ('name' => "${i}_value"), $record['key']);
+            $singleRow['NiftySelChapter'] = printNiftySelect ($chapter, array ('name' => "${i}_value"), $record['key']);
             break;
         }
         $allRecordsOut[] = $singleRow;
