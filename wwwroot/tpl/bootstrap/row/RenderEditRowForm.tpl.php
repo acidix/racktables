@@ -2,10 +2,10 @@
 	<div class='box'>
 		<div class='box-header'>
 			<h3 class='box-title'>Attributes</h3>
+			<div class="box-tools pull-right">
+        		<button data-original-title="Collapse" class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title=""><i class="fa fa-minus"></i></button>
+        	</div>
 		</div>
-		<div class="box-tools pull-right">
-        	<button data-original-title="Collapse" class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title=""><i class="fa fa-minus"></i></button>
-        </div>
 		<div class='box-body'>
 			<?php $this->getH('PrintOpFormIntro', array('updateRow')); ?>
 				<div class="form-group">
@@ -61,6 +61,9 @@
 	<div class=box>
 		<div class="box-header">
 			<h3 class="box-title">History</h3>
+			<div class="box-tools pull-right">
+        		<button data-original-title="Collapse" class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title=""><i class="fa fa-minus"></i></button>
+        	</div>
 		</div>
 		<div class="box-body no-padding">
 			<?php $this->ObjectHistory ?>
