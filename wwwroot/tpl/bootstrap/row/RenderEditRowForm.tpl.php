@@ -14,7 +14,6 @@
 					</label>
 					<?php $this->getH("PrintSelect", array($this->_Locations, array ('name' => 'location_id','id' => 'location_id', 'class'=>'form-control'), $this->_Location_ID)); ?>
 				</div>
-				<br />
 				
 				<div class="form-group">
 					<label for="name">
@@ -22,7 +21,6 @@
 					</label>
 					<input type=text name=name id=name class='form-control' value='<?php $this->Row_name ?>'>
 				</div>
-				<br />
 				
 				<?php while($this->loop('AllRecords')) { ?>
 					<input type=hidden name='<?php $this->I ?>_attr_id' value=<?php $this->Record_ID ?>>
@@ -45,7 +43,6 @@
 							<?php } ?> 
 						</div>
 					</div>
-					<br />
 				<?php } ?>
 				
 				<div class="text-center">
