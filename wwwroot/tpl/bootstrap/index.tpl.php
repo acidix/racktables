@@ -35,7 +35,7 @@
     <body class="skin-blue">
         <!-- header logo: style can be found in header.less -->
         <header class="header">
-            <a href="../../index.html" class="logo">
+            <a href="index.php" class="logo">
                 <!-- Add the class icon to your logo image or logo icon to add the margining -->
                 <?php $this->Enterprise ?>
             </a>
@@ -58,14 +58,16 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
+                                <!-- 
                                 <li class="user-header bg-light-blue">
                                     <img src="../../img/avatar3.png" class="img-circle" alt="User Image" />
                                     <p>
-                                        <?php $this->RemoteDisplayname ?>
-										<!-- TODO: Sachen hier anzeigen -->
-                                        <!-- <small>Member since Nov. 2012</small> -->
+                                        <?php // $this->RemoteDisplayname ?>
+										<!-- TODO: Sachen hier anzeigen ->
+                                        <!-- <small>Member since Nov. 2012</small> ->
                                     </p>
                                 </li>
+                                -->
                                 <!-- Menu Body -->
                                 <li class="user-body">
                                     <div class="col-xs-4 text-center">
@@ -154,8 +156,5 @@
                 </section><!-- /.content -->
             </aside><!-- /.right-side -->
         </div><!-- ./wrapper -->
-
-
-        
     </body>
 </html>

@@ -338,7 +338,7 @@ class TemplateHelperPrintOpFormIntro extends TemplateHelperAbstract
 class TemplateHelperGetOpLink extends TemplateHelperAbstract
 {
 	protected function generate($params){
-	//	($params, $title,  $img_name = '', $comment = '', $class = '')	
+	//	array($params, $title,  $img_name = '', $comment = '', $class = '')	
 		//Initalise standard parameters
 		if(count($params) < 2)
 			return "";
