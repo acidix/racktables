@@ -694,7 +694,7 @@ function renderEditRowForm ($row_id)
     natcasesort ($locations);
 
     $mod->setOutput('Location_ID', $row['location_id']);
-    $mod->setOutput('Lacations', $locations);
+    $mod->setOutput('Locations', $locations);
     $mod->setOutput('Row_Name', $row['name']);
 
     // optional attributes
