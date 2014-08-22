@@ -12,7 +12,7 @@
 					<label for="location_id">
 						Location:
 					</label>
-					<?php $this->getH("PrintSelect", array($this->_Locations, array ('name' => 'location_id','id' => 'location_id'), $this->_Location_ID)); ?>
+					<?php $this->getH("PrintSelect", array($this->_Locations, array ('name' => 'location_id','id' => 'location_id', 'class'=>'form-control'), $this->_Location_ID)); ?>
 				</div>
 				<br />
 				
@@ -20,7 +20,7 @@
 					<label for="name">
 						Name (required):
 					</label>
-					<input type=text name=name id=name value='<?php $this->Row_name ?>'>
+					<input type=text name=name id=name class='form-control' value='<?php $this->Row_name ?>'>
 				</div>
 				<br />
 				
@@ -33,9 +33,9 @@
 						<div class="input-group">
 							<div class="input-group-btn">
 								<?php if ($this->is('HasValue', true)) { ?>
-									<?php $this->getH('GetOpLink', array(array('op'=>'clearSticker', 'attr_id'=>$this->_Record_ID), '<i class="fa fa-fw fa-times"></i>', '', 'Clear value', 'need-confirmation btn btn-danger')); ?>
+									<?php $this->getH('GetOpLink', array(array('op'=>'clearSticker', 'attr_id'=>$this->_Record_ID), '<i class="fa fa-fw fa-times"></i>', '', 'Clear value', 'need-confirmation btn btn-danger btn-sm')); ?>
 								<?php } else { ?>
-									<a href="#" class="btn btn-danger disabled"><i class="fa fa-fw fa-times"></i></a>
+									<a href="#" class="btn btn-danger btn-sm disabled"><i class="fa fa-fw fa-times"></i></a>
 								<?php } ?>
 							</div>
 							<?php if ($this->is('PrintInput', true)) { ?>
@@ -55,7 +55,7 @@
 						<?php } else { ?>
 							<button type="button" class="btn btn-danger btn-lg disabled">Delete</button>
 						<?php } ?>
-						<button type="submit">Submit</button>
+						<button type="submit" class="btn btn-success btn-lg">Submit</button>
 					</div>
 				</div>
 			</form>
