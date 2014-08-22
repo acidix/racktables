@@ -19,7 +19,7 @@
 					<label for="name">
 						Name (required):
 					</label>
-					<input type=text name=name id=name class='form-control' value='<?php $this->Row_name ?>'>
+					<input type=text name=name id=name class='form-control' value='<?php $this->Row_Name ?>'>
 				</div>
 				
 				<?php while($this->loop('AllRecords')) { ?>
