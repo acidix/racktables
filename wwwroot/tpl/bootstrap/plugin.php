@@ -168,18 +168,18 @@ function renderRackspaceSVG() {
 							$elo->addOutput('Width', ($rackdata[$i][$j]['colspan'] * 60) - 2);
 							$elo->addOutput('Height', $rackData[$i][$locidx]['rowspan'] * 10);
 							 
-							if ($state = 'T') {
+							if ($state == 'T') {
 								$elo->addOutput('Class', 'element');
 								$elo->addOutput('Link', '?page=object&object_id=' . $rackData[$i][$j]['object_id']);
 
 								$object = spotEntity ('object', $rackData[$i][$j]['object_id']);
 
 								$elo->addOutput('Name', $objectData['label']);
-							} elseif ($state = 'U') {
+							} elseif ($state == 'U') {
 								$elo->addOutput('Class', 'unusable');
 								$elo->addOutput('Link', '#');
 								$elo->addOutput('Name', '');
-							} elseif ($state = 'A') {
+							} elseif ($state == 'A') {
 								$elo->addOutput('Class', 'deactivated');
 								$elo->addOutput('Link', '#');
 								$elo->addOutput('Name', '');
