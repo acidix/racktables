@@ -202,18 +202,19 @@ function renderRackspaceSVG() {
 	}
 	$smod->addOutput('OverallWidth', $maxx);
 	$smod->addOutput('OverallHeigh', $rowy + $maxracky + 20);
-}
-}
-else
-{
-	$mod->setOutput("RackspaceOverviewTable", "");
-	$mod->setOutput("RackspaceOverviewHeadline", "No rows found.");
-}
+	}
+	}
+	else
+	{
+		$mod->setOutput("RackspaceOverviewTable", "");
+		$mod->setOutput("RackspaceOverviewHeadline", "No rows found.");
+	}
 }
 renderCellFilterPortlet ($cellfilter, 'rack', $found_racks, array(), $mod, 'CellFilter');
 renderLocationFilterPortlet($mod, 'LocationFilter');
 }
 
-registerTabHandler('rackspace', 'default', 'renderRackspaceSVG');
+global $tabhandler;
+$tabhandler['rackspace']['default'] = 'renderRackspaceSVG';
 
 ?>
