@@ -151,7 +151,7 @@ function renderRackspaceSVG() {
 					
 				$maxracky = (($rackData['height'] * 10) + 10) > $maxracky ? ($rackData['height'] * 10) + 10 : $maxracky;
 					
-				for ($i = 1; $i < $rack['height']; ++$i) {
+				for ($i = $rackData['height']; $i > 0; $i--) {
 					for($j = 0; $j < 3; ++$j) {
 						if (isset ($rackData[$i][$j]['skipped']))
 							continue;
@@ -165,7 +165,7 @@ function renderRackspaceSVG() {
 							$elo = $tplm->generateSubmodule('Elements','renderRackspace_SVGElement', $racko);
 							$elo->addOutput('X', $j * 60);
 							$elo->addOutput('Y', $i * 10);
-							$elo->addOutput('Width', ($rackdata[$i][$j]['colspan'] * 60) - 2);
+							$elo->addOutput('Width', ($rackData[$i][$j]['colspan'] * 60) - 2);
 							$elo->addOutput('Height', $rackData[$i][$j]['rowspan'] * 10);
 							 
 							if ($state == 'T') {
