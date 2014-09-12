@@ -185,8 +185,6 @@ function renderRackspaceSVG() {
 								$elo->addOutput('Name', '');
 							}
 						}
-							
-						spotEntity ('object', $object_id);
 					}
 				}
 					
