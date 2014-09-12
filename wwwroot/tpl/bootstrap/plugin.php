@@ -142,20 +142,20 @@ function renderRackspaceSVG() {
 				$racko->addOutput('X', $rackx);
 				$racko->addOutput('Y', $rowy + 5);
 					
-				$rackdata = spotEntity ('rack', $rack['id']);
-				amplifyCell($rackdata);
-				markAllSpans($rackdata);
+				$rackData = spotEntity ('rack', $rack['id']);
+				amplifyCell($rackData);
+				markAllSpans($rackData);
 					
 				//Height is 10 Pix per HE + 10 for the border
-				$racko->addOutput('Height', ($rackdata['height'] * 10) + 10);
+				$racko->addOutput('Height', ($rackData['height'] * 10) + 10);
 					
-				$maxracky = (($rackdata['height'] * 10) + 10) > $maxracky ? ($rackdata['height'] * 10) + 10 : $maxracky;
+				$maxracky = (($rackdata['height'] * 10) + 10) > $maxracky ? ($rackData['height'] * 10) + 10 : $maxracky;
 					
-				for ($i = 0; $i < $rack['height']; ++$i) {
+				for ($i = 1; $i < $rack['height']; ++$i) {
 					for($j = 0; $j < 4; ++$j) {
-						if (isset ($rackData[$i][$locidx]['skipped']))
+						if (isset ($rackData[$i][$j]['skipped']))
 							continue;
-						$state = $rackData[$i][$locidx]['state'];
+						$state = $rackData[$i][$j]['state'];
 						//F Frei
 						//A Im Design deaktiviert
 						//U Kaputt
