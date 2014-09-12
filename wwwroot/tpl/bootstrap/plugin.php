@@ -1,6 +1,6 @@
 <?php
 
-require_once './_plugin/index_replacement.php';
+require_once '.tpl/bootstrap/_plugin/index_replacement.php';
 
 registerTabHandler('rackspace', 'default', 'renderRackspaceSVG');
 
