@@ -167,7 +167,7 @@ function renderRackspaceSVG() {
 										$elo->addOutput('X', $j * 60);
 										//Height calculations are a bit difficult as the coordinate system within the racks is reversed (1 is low, and 1 is the lowest, not 0).
 										//It is: Rack height - object height - (row height - 1)
-										$y = (($rackData['height'] * 10) + 5) - ($rackData[$i][$j]['rowspan'] * 10) - (($i - 1) * 10);
+										$y = (($rackData['height'] * 10) + 10) - ($rackData[$i][$j]['rowspan'] * 10) - (($i - 1) * 10);
 										$elo->addOutput('Y', $y);
 										$elo->addOutput('Width', ($rackData[$i][$j]['colspan'] * 60) - 2);
 										$elo->addOutput('Height', $rackData[$i][$j]['rowspan'] * 10);
