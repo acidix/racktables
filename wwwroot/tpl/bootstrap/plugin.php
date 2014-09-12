@@ -161,7 +161,7 @@ function renderRackspaceSVG() {
 						//U Kaputt
 						//T In benutzung
 
-						if ($state = 'T' || $state = 'U' || 'A') {
+						if ($state == 'T' || $state == 'U' || $state == 'A') {
 							$elo = $tplm->generateSubmodule('Elements','renderRackspace_SVGElement', $racko);
 							$elo->addOutput('X', $j * 60);
 							$elo->addOutput('Y', $i * 10);
