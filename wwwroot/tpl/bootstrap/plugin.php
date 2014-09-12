@@ -149,10 +149,10 @@ function renderRackspaceSVG() {
 				//Height is 10 Pix per HE + 10 for the border
 				$racko->addOutput('Height', ($rackData['height'] * 10) + 10);
 					
-				$maxracky = (($rackdata['height'] * 10) + 10) > $maxracky ? ($rackData['height'] * 10) + 10 : $maxracky;
+				$maxracky = (($rackData['height'] * 10) + 10) > $maxracky ? ($rackData['height'] * 10) + 10 : $maxracky;
 					
 				for ($i = 1; $i < $rack['height']; ++$i) {
-					for($j = 0; $j < 4; ++$j) {
+					for($j = 0; $j < 3; ++$j) {
 						if (isset ($rackData[$i][$j]['skipped']))
 							continue;
 						$state = $rackData[$i][$j]['state'];
@@ -166,7 +166,7 @@ function renderRackspaceSVG() {
 							$elo->addOutput('X', $j * 60);
 							$elo->addOutput('Y', $i * 10);
 							$elo->addOutput('Width', ($rackdata[$i][$j]['colspan'] * 60) - 2);
-							$elo->addOutput('Height', $rackData[$i][$locidx]['rowspan'] * 10);
+							$elo->addOutput('Height', $rackData[$i][$j]['rowspan'] * 10);
 							 
 							if ($state == 'T') {
 								$elo->addOutput('Class', 'element');
