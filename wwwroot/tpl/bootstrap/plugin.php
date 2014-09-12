@@ -172,7 +172,7 @@ function renderRackspaceSVG() {
 								$elo->addOutput('Class', 'element');
 								$elo->addOutput('Link', '?page=object&object_id=' . $rackData[$i][$j]['object_id']);
 
-// 								$object = spotEntity ('object', $rackData[$i][$j]['object_id']);
+								$object = spotEntity ('object', $rackData[$i][$j]['object_id']);
 
 								$elo->addOutput('Name', 'Texttext'); //$objectData['label']);
 							} elseif ($state == 'U') {
@@ -197,6 +197,9 @@ function renderRackspaceSVG() {
 
 		}
 			
+		$rowo->addOutput('OverallWidth', $rackx + 20);
+		$rowo->addOutput('OverallHeight', $maxracky + 20);
+		
 		$rowy += ($maxracky + 20);
 		$maxx = $maxx < $rackx + 20 ? $rackx + 20 : $maxx;
 	}
