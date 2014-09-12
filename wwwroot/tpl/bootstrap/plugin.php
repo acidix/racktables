@@ -204,7 +204,7 @@ function renderRackspaceSVG() {
 		$maxx = $maxx < $rackx + 20 ? $rackx + 20 : $maxx;
 	}
 	$smod->addOutput('OverallWidth', $maxx);
-	$smod->addOutput('OverallHeigh', $rowy + $maxracky + 20);
+	$smod->addOutput('OverallHeight', $rowy + $maxracky + 20);
 	}
 	}
 	else
