@@ -104,117 +104,118 @@ function renderRackspaceSVG() {
 						{
 							showWarning ("Warning: There is likely a circular reference in the location tree.  Investigate location ${location_id}.");
 							break;
-					}
-					$parentLocation = spotEntity ('location', $location_id);
-					$locationTree = "&raquo; <a href='" .
+						}
+						$parentLocation = spotEntity ('location', $location_id);
+						$locationTree = "&raquo; <a href='" .
 							makeHref(array('page'=>'location', 'location_id'=>$parentLocation['id'])) .
 							"${cellfilter['urlextra']}'>${parentLocation['name']}</a> " .
 							$locationTree;
-					$location_id = $parentLocation['parent_id'];
-					$locationIdx++;
-		}
-		$locationTree = substr ($locationTree, 8);
-			
-		$rowo = $tplm->generateSubmodule('Content', 'renderRackspace_SVGRow', $smod);
-			
-		$rowo->addOutput('LocationName', $locationTree);
-		$rowo->addOutput('RowName', $row_name);
-		$rowo->addOutput('Y', $rowy);
-		$rowo->addOutput('X', 5);
-			
-		$rackx = 10;
-		$maxracky = 20;
-			
-		//@TODO Add link to row
-			
-		// 					$rowo["LocationTree"] = $locationTree;
-		// 					$rowo["HrefToRow"] = makeHref(array('page'=>'row', 'row_id'=>$row_id));
-		// 					$rowo["RowName"] = $row_name;
-		// 					$rowo["CellFilterUrlExtra"] = $cellfilter['urlextra'];
-			
-		if (count ($rackList))
-		{
-			foreach ($rackList as $rack)
-			{
-				$racko = $tplm->generateSubmodule('Racks', 'renderRackspace_SVGRack', $rowo);
-					
-				//Set curent x position
-				$racko->addOutput('X', $rackx);
-				$racko->addOutput('Y', $rowy + 15);
-					
-				$rackData = spotEntity ('rack', $rack['id']);
-				amplifyCell($rackData);
-				markAllSpans($rackData);
-					
-				//Height is 10 Pix per HE + 10 for the border
-				$racko->addOutput('Height', ($rackData['height'] * 10) + 10);
-					
-				$maxracky = (($rackData['height'] * 10) + 10) > $maxracky ? ($rackData['height'] * 10) + 10 : $maxracky;
-					
-				for ($i = $rackData['height']; $i > 0; $i--) {
-					for($j = 0; $j < 3; ++$j) {
-						if (isset ($rackData[$i][$j]['skipped']))
-							continue;
-						$state = $rackData[$i][$j]['state'];
-						//F Frei
-						//A Im Design deaktiviert
-						//U Kaputt
-						//T In benutzung
-
-						if ($state == 'T' || $state == 'U' || $state == 'A') {
-							$elo = $tplm->generateSubmodule('Elements','renderRackspace_SVGElement', $racko);
-							$elo->addOutput('X', $j * 60);
-							$elo->addOutput('Y', $i * 10);
-							$elo->addOutput('Width', ($rackData[$i][$j]['colspan'] * 60) - 2);
-							$elo->addOutput('Height', $rackData[$i][$j]['rowspan'] * 10);
-							 
-							if ($state == 'T') {
-								$elo->addOutput('Class', 'element');
-								$elo->addOutput('Link', '?page=object&object_id=' . $rackData[$i][$j]['object_id']);
-
-								$object = spotEntity ('object', $rackData[$i][$j]['object_id']);
-
-								$elo->addOutput('Name', $objectData['label']);
-							} elseif ($state == 'U') {
-								$elo->addOutput('Class', 'unusable');
-								$elo->addOutput('Link', '#');
-								$elo->addOutput('Name', '');
-							} elseif ($state == 'A') {
-								$elo->addOutput('Class', 'deactivated');
-								$elo->addOutput('Link', '#');
-								$elo->addOutput('Name', '');
-							}
-						}
+						$location_id = $parentLocation['parent_id'];
+						$locationIdx++;
 					}
-				}
+					$locationTree = substr ($locationTree, 8);
+				
+					$rowo = $tplm->generateSubmodule('Content', 'renderRackspace_SVGRow', $smod);
 					
-				//Increase rackx to ensure that the next rack is placed right to this one
-				$rackx += 200;
-					
-				$rackListIdx++;
-			}
-
-
-		}
+					$rowo->addOutput('LocationName', $locationTree);
+					$rowo->addOutput('RowName', $row_name);
+					$rowo->addOutput('Y', $rowy);
+					$rowo->addOutput('X', 5);
+						
+					$rackx = 10;
+					$maxracky = 20;
 			
-		$rowo->addOutput('OverallWidth', $rackx + 20);
-		$rowo->addOutput('OverallHeight', $maxracky + 20);
-		
-		$rowy += ($maxracky + 20);
-		$maxx = $maxx < $rackx + 20 ? $rackx + 20 : $maxx;
+				//@TODO Add link to row
+					
+				// 					$rowo["LocationTree"] = $locationTree;
+				// 					$rowo["HrefToRow"] = makeHref(array('page'=>'row', 'row_id'=>$row_id));
+				// 					$rowo["RowName"] = $row_name;
+				// 					$rowo["CellFilterUrlExtra"] = $cellfilter['urlextra'];
+					
+					if (count ($rackList))
+					{
+						foreach ($rackList as $rack)
+						{
+							$racko = $tplm->generateSubmodule('Racks', 'renderRackspace_SVGRack', $rowo);
+							
+							//Set curent x position
+							$racko->addOutput('X', $rackx);
+							$racko->addOutput('Y', 15);
+								
+							$rackData = spotEntity ('rack', $rack['id']);
+							amplifyCell($rackData);
+							markAllSpans($rackData);
+							
+							//Height is 10 Pix per HE + 10 for the border
+							$racko->addOutput('Height', ($rackData['height'] * 10) + 10);
+								
+							$maxracky = (($rackData['height'] * 10) + 10) > $maxracky ? ($rackData['height'] * 10) + 10 : $maxracky;
+								
+							for ($i = $rackData['height']; $i > 0; $i--) {
+								for($j = 0; $j < 3; ++$j) {
+									if (isset ($rackData[$i][$j]['skipped']))
+										continue;
+									
+									$state = $rackData[$i][$j]['state'];
+									//F Frei
+									//A Im Design deaktiviert
+									//U Kaputt
+									//T In benutzung
+	
+									if ($state == 'T' || $state == 'U' || $state == 'A') {
+										$elo = $tplm->generateSubmodule('Elements','renderRackspace_SVGElement', $racko);
+										$elo->addOutput('X', $j * 60);
+										$elo->addOutput('Y', $i * 10);
+										$elo->addOutput('Width', ($rackData[$i][$j]['colspan'] * 60) - 2);
+										$elo->addOutput('Height', $rackData[$i][$j]['rowspan'] * 10);
+								 
+										if ($state == 'T') {
+											$elo->addOutput('Class', 'element');
+											$elo->addOutput('Link', '?page=object&object_id=' . $rackData[$i][$j]['object_id']);
+	
+											$object = spotEntity ('object', $rackData[$i][$j]['object_id']);
+	
+											$elo->addOutput('Name', $objectData['label']);
+										} elseif ($state == 'U') {
+											$elo->addOutput('Class', 'unusable');
+											$elo->addOutput('Link', '#');
+											$elo->addOutput('Name', '');
+										} elseif ($state == 'A') {
+											$elo->addOutput('Class', 'deactivated');
+											$elo->addOutput('Link', '#');
+											$elo->addOutput('Name', '');
+										}
+									}
+								}
+							}
+						
+							//Increase rackx to ensure that the next rack is placed right to this one
+							$rackx += 200;
+						
+							$rackListIdx++;
+						}
+	
+	
+					}
+			
+					$rowo->addOutput('OverallWidth', $rackx + 20);
+					$rowo->addOutput('OverallHeight', $maxracky + 20);
+				
+					$rowy += ($maxracky + 20);
+					$maxx = $maxx < $rackx + 20 ? $rackx + 20 : $maxx;
+				}
+				$smod->addOutput('OverallWidth', $maxx);
+				$smod->addOutput('OverallHeight', $rowy + $maxracky + 20);
+			}
+		}
+		else
+		{
+			$mod->setOutput("RackspaceOverviewTable", "");
+			$mod->setOutput("RackspaceOverviewHeadline", "No rows found.");
+		}
 	}
-	$smod->addOutput('OverallWidth', $maxx);
-	$smod->addOutput('OverallHeight', $rowy + $maxracky + 20);
-	}
-	}
-	else
-	{
-		$mod->setOutput("RackspaceOverviewTable", "");
-		$mod->setOutput("RackspaceOverviewHeadline", "No rows found.");
-	}
-}
-renderCellFilterPortlet ($cellfilter, 'rack', $found_racks, array(), $mod, 'CellFilter');
-renderLocationFilterPortlet($mod, 'LocationFilter');
+	renderCellFilterPortlet ($cellfilter, 'rack', $found_racks, array(), $mod, 'CellFilter');
+	renderLocationFilterPortlet($mod, 'LocationFilter');
 }
 
 global $tabhandler;
