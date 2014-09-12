@@ -122,7 +122,7 @@ function renderRackspaceSVG() {
 		$rowo->addOutput('Y', $rowy);
 		$rowo->addOutput('X', 5);
 			
-		$rackx = 50;
+		$rackx = 10;
 		$maxracky = 20;
 			
 		//@TODO Add link to row
@@ -140,7 +140,7 @@ function renderRackspaceSVG() {
 					
 				//Set curent x position
 				$racko->addOutput('X', $rackx);
-				$racko->addOutput('Y', $rowy + 5);
+				$racko->addOutput('Y', $rowy + 15);
 					
 				$rackData = spotEntity ('rack', $rack['id']);
 				amplifyCell($rackData);
@@ -174,7 +174,7 @@ function renderRackspaceSVG() {
 
 								$object = spotEntity ('object', $rackData[$i][$j]['object_id']);
 
-								$elo->addOutput('Name', 'Texttext'); //$objectData['label']);
+								$elo->addOutput('Name', $objectData['label']);
 							} elseif ($state == 'U') {
 								$elo->addOutput('Class', 'unusable');
 								$elo->addOutput('Link', '#');
