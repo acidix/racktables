@@ -1,5 +1,9 @@
 <?php
 
+require_once './_plugin/index_replacement.php';
+
+registerTabHandler('rackspace', 'default', 'renderRackspaceSVG');
+
 //This stores the callbacks
 $mainpage_widgets = array();
 
