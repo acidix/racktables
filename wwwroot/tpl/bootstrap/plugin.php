@@ -175,7 +175,7 @@ function renderRackspaceSVG() {
 	
 											$object = spotEntity ('object', $rackData[$i][$j]['object_id']);
 	
-											$elo->addOutput('Name', $objectData['label']);
+											$elo->addOutput('Name', $objectData['name']);
 										} elseif ($state == 'U') {
 											$elo->addOutput('Class', 'unusable');
 											$elo->addOutput('Link', '#');
