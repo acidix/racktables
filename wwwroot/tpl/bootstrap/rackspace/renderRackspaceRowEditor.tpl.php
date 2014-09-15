@@ -34,7 +34,7 @@
 						</td><td>
 							<input type=text name=name value='<?php $this->RowName; ?>' tabindex=100 class="form-control">
 						</td><td>
-							<div class="form-group">
+							<div class="btn-group">
 								<btn class="btn btn-success" name="submit"><span class="glyphicon glyphicon-ok"></span></btn>
 								<?php if($this->is("HasChildren")) { ?>
 									<a href='#' class="btn btn-danger disabled" title="<?php $this->RackCount; ?> rack(s) here"><span class="glyphicon glyphicon-remove"></span></a>
