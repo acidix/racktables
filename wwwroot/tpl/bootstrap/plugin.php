@@ -205,7 +205,7 @@ function renderRackspaceSVG() {
 					}
 			
 					$rowo->addOutput('OverallWidth', $rackx + 20);
-					$rowo->addOutput('OverallHeight', $maxracky + 20);
+					$rowo->addOutput('OverallHeight', $maxracky + 40);
 				
 					$rowy += ($maxracky + 40);
 					$maxx = $maxx < $rackx + 20 ? $rackx + 20 : $maxx;
