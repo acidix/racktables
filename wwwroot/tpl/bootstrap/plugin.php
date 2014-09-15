@@ -141,7 +141,7 @@ function renderRackspaceSVG() {
 							
 							//Set curent x position
 							$racko->addOutput('X', $rackx);
-							$racko->addOutput('Y', 15);
+							$racko->addOutput('Y', 35);
 							
 							$racko->addOutput('RackName',$rack['name']);
 							$racko->addOutput('RackLink', makeHref(array('page'=>'rack', 'rack_id'=>$rack['id'])));
@@ -207,7 +207,7 @@ function renderRackspaceSVG() {
 					$rowo->addOutput('OverallWidth', $rackx + 20);
 					$rowo->addOutput('OverallHeight', $maxracky + 20);
 				
-					$rowy += ($maxracky + 20);
+					$rowy += ($maxracky + 40);
 					$maxx = $maxx < $rackx + 20 ? $rackx + 20 : $maxx;
 				}
 				$smod->addOutput('OverallWidth', $maxx);
