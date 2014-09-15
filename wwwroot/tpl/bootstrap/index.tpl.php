@@ -1,4 +1,13 @@
-<?php $this->map(['Tabs',0],"<small>|</small>","|"); ?>
+<?php 	$this->map(['Tabs',0],"<small>|</small>","|");
+		$this->mapFunction(['Path',[]],'transformPathLink');
+
+		function transformPathLink($old) {
+			if (substr($old,0,3) != ' : ') {
+				return $old;
+			}
+			return '<li>' . substr($old,3) . '</li>';
+		}
+?>
 <!DOCTYPE html>
 <html>
     <head>
