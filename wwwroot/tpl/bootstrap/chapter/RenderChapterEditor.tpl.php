@@ -40,7 +40,7 @@
 					<?php if($this->is('refcnt',true)) { ?>
 						<a href="#" class="btn btn-danger" title="referenced <?php $this->refcnt ?> time(s)"><span class="glyphicon glyphicon-remove"></span></a>
 					<?php } else { ?>
-						<?php $this->getH('GetOpLink', array(array('op'=>'del', 'dict_key'=>$this->_key), '', '', 'Delete word', 'btn btn-danger')); ?>
+						<?php $this->getH('GetOpLink', array(array('op'=>'del', 'dict_key'=>$this->_key), '<span class="glyphicon glyphicon-remove">', '', 'Delete word', 'btn btn-danger')); ?>
 					<?php } ?>
 				</div>
 			</td>	
