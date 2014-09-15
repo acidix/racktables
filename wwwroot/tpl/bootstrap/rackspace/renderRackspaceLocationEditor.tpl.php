@@ -13,25 +13,29 @@
 	</script>
 JS;
 	$this->addJS($js,true);?>
-	<div class=portlet><h2>Locations</h2>
-		<table border=0 cellspacing=0 cellpadding=5 align=center class=widetable>
+	<div class="box box-primary">
+		<div class="box-header">
+			<h3 class="box-title">Locations</h3>
+		</div>
+		<div class="box-body no-padding">
+			<table class=table>
 			<tr><th>&nbsp;</th><th>Parent</th><th>Name</th><th>&nbsp;</th></tr>
 			<?php if($this->is('renderNewTop')) : ?>
 				<form method=post id=addLocation name=addLocation action='?module=redirect&page=rackspace&tab=editlocations&op=addLocation'>
 				<tr>
 					<td>
-						<input class="icon" type="image" border="0" title="Add new location" src="?module=chrome&uri=pix/tango-document-new.png" name="submit"></input>
+						&nbsp;
 					</td>
 					<td>
-						<select name=parent_id tabindex=100>
+						<select name=parent_id tabindex=100 class="form-control">
 							<?php $this->RenderNewFormOptions; ?>
 						</select>
 					</td>
 					<td>
-						<input type=text size=48 name=name tabindex=101>
+						<input type=text size=48 name=name tabindex=101 class="form-control">
 					</td>
 					<td>
-						<input class="icon" type="image" border="0" title="Add new location" src="?module=chrome&uri=pix/tango-document-new.png" name="submit"></input>
+						<btn class="btn btn-primary" title="Add new location" name="submit"><span class="glyphicon glyphicon-plus"></span></btn>
 					</td>
 				</tr>
 				</form>
@@ -40,30 +44,34 @@ JS;
 				<tr>
 					<td align=left style='padding-left: <?php $this->Level; ?>px'>
 					<?php if($this->is("HasSublocations")) { ?>
-						<img src="?module=chrome&uri=pix/node-expanded-static.png" width="16" height="16">
-					<?php } ?>
-					<?php if($this->is("IsDeletable")) { ?>
-						<a title="Delete location" href="?module=redirect&op=deleteLocation&location_id=<?php $this->LocationId; ?>&page=rackspace&tab=editlocations">
-    						<img width="16" height="16" border="0" title="Delete location" src="?module=chrome&uri=pix/tango-user-trash-16x16.png">	    			
-						</a>
-					<?php } else { ?>
-						<img width="16" height="16" border="0" src="?module=chrome&uri=pix/tango-user-trash-16x16-gray.png"></img>
+						<span class="glyphicon glyphicon-chevron-down"></span>
 					<?php } ?>
 					</td>
-					<td class=tdleft>
 					<form method=post id="updateLocation" name="updateLocation" action='?module=redirect&page=rackspace&tab=editlocations&op=updateLocation'>
+					<td class=tdleft>
 						<input type=hidden name="location_id" value="<?php $this->LocationId; ?>">
-						<select name="parent_id" id="locationid_<?php $this->LocationId; ?>" class='locationlist-popup'>
+						<select name="parent_id" id="locationid_<?php $this->LocationId; ?>" class='locationlist-popup form-control'>
 						<?php while ($this->loop('Parentselect')) : ?>
 							<option value='<?php $this->ParenListId; ?>' <?php $this->ParentListSelected; ?>><?php $this->ParentListContent; ?></option>
 						<?php endwhile ?>
 						</select>
 					</td>
 					<td class=tdleft>
-						<input type=text size=48 name=name value='<?php $this->LocationName; ?>'>
+						<input type=text size=48 name=name value='<?php $this->LocationName; ?>' class='form-control'>
 					</td>
 					<td>
-						<input class="icon" type="image" border="0" title="Save changes" src="?module=chrome&uri=pix/tango-document-save-16x16.png" name="submit"></input>
+						<div class='btn-group'>
+							<btn class="btn btn-success" name="submit"><span class="glyphicon glyphicon-ok"></span></btn>
+							<?php if($this->is("IsDeletable")) { ?>
+							<a class="btn btn-danger" title="Delete location" href="?module=redirect&op=deleteLocation&location_id=<?php $this->LocationId; ?>&page=rackspace&tab=editlocations">
+    							<span class="glyphicon glyphicon-remove"></span>
+    						</a>
+							<?php } else { ?>
+							<a class="btn btn-danger disabled" href="#">
+    							<span class="glyphicon glyphicon-remove"></span>
+    						</a>
+							<?php } ?>
+						</div>
 					</td>
 					</form>
 				</tr>
@@ -72,24 +80,25 @@ JS;
 				<form method=post id=addLocation name=addLocation action='?module=redirect&page=rackspace&tab=editlocations&op=addLocation'>
 				<tr>
 					<td>
-						<input class="icon" type="image" border="0" title="Add new location" src="?module=chrome&uri=pix/tango-document-new.png" name="submit"></input>
+						&nbsp;
 					</td>
 					<td>
-						<select name=parent_id tabindex=100>
+						<select name=parent_id tabindex=100 class="form-control">
 							<?php $this->RenderNewFormOptions; ?>
 						</select>
 					</td>
 					<td>
-						<input type=text size=48 name=name tabindex=101>
+						<input type=text size=48 name=name tabindex=101 class="form-control">
 					</td>
 					<td>
-						<input class="icon" type="image" border="0" title="Add new location" src="?module=chrome&uri=pix/tango-document-new.png" name="submit"></input>
+						<btn class="btn btn-primary" title="Add new location" name="submit"><span class="glyphicon glyphicon-plus"></span></btn>
 					</td>
 				</tr>
 				</form>
 			<?php endif ?>
-		</table><br />
+		</table>
 	</div>
+</div>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />
