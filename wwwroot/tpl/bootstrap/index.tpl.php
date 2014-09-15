@@ -1,6 +1,7 @@
 <?php 	$this->map(['Tabs',0],"<small>|</small>","|");
 		$this->mapFunction(['Path',[]],'transformPathLink');
-
+		
+		//A small function that transform static links added by the interface.php file to the list elements we need for the breadcrumbs
 		function transformPathLink($old) {
 			if (substr($old,0,3) != ' : ') {
 				return $old;
