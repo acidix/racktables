@@ -1,6 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
 	<svg width="<?php $this->OverallWidth; ?>" height="<?php $this->OverallHeight; ?>">
-		<script xlink:href="SVGPan.js"/>
+		<script xlink:href="./js/SVGPan.js"/>
 		<g id="viewport">
  			<?php $this->Content; ?>
  		</g>
