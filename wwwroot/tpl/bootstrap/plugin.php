@@ -141,6 +141,9 @@ function renderRackspaceSVG() {
 							//Set curent x position
 							$racko->addOutput('X', $rackx);
 							$racko->addOutput('Y', 15);
+							
+							$racko->addOutput('RackName',$rack['name']);
+							$racko->addOutput('RackLink', makeHref(array('page'=>'rack', 'rack_id'=>$rack['id'])));
 								
 							$rackData = spotEntity ('rack', $rack['id']);
 							amplifyCell($rackData);
