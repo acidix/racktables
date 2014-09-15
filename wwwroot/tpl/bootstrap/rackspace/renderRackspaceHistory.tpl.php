@@ -1,11 +1,11 @@
-<?php if (defined("RS_TPL")) {?>
+<?php if (defined("RS_TPL")) { ?>
 	<div class="row">
 		<div class="col-md-6">
 			<div class="box">
 				<div class="box-header">
 					<h3 class="box-title">Old allocation</h3>
 				</div>
-				<div class="box-content">
+				<div class="box-body no-padding">
 					<?php $this->OldAlloc; ?>
 				</div>
 			</div>
@@ -15,7 +15,7 @@
 				<div class="box-header">
 					<h3 class="box-title">New allocation</h3>
 				</div>
-				<div class="box-content">
+				<div class="box-body no-padding">
 					<?php $this->NewAlloc; ?>
 				</div>
 			</div>
