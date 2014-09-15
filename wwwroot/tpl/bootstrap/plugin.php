@@ -207,11 +207,11 @@ function renderRackspaceSVG() {
 					$rowo->addOutput('OverallWidth', $rackx + 20);
 					$rowo->addOutput('OverallHeight', $maxracky + 40);
 				
-					$rowy += ($maxracky + 40);
+					$rowy += ($maxracky + 60);
 					$maxx = $maxx < $rackx + 20 ? $rackx + 20 : $maxx;
 				}
 				$smod->addOutput('OverallWidth', $maxx);
-				$smod->addOutput('OverallHeight', $rowy + $maxracky + 20);
+				$smod->addOutput('OverallHeight', $rowy + $maxracky + 40);
 			}
 		}
 		else
