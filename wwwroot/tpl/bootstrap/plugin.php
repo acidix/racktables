@@ -167,7 +167,7 @@ function renderRackspaceSVG() {
 										$width = array_key_exists('colspan', $rackData[$i][$j]) && $rackData[$i][$j]['colspan'] > 0 ? $rackData[$i][$j]['colspan'] : 1;
 										$elo = $tplm->generateSubmodule('Elements','renderRackspace_SVGElement', $racko);
 										$elo->addOutput('X', $j * 60);
-										$elo->addOutput('Y', ($rackData['height'] - $height) * 10);
+										$elo->addOutput('Y', ($rackData['height'] - $i) * 10);
 										$elo->addOutput('Width', ($width * 60) - 2);
 										$elo->addOutput('Height', $height * 10);
 								 
