@@ -121,7 +121,8 @@ function renderRackspaceSVG() {
 					$rowo->addOutput('RowName', $row_name);
 					$rowo->addOutput('Y', $rowy);
 					$rowo->addOutput('X', 5);
-						
+					$rowo->addOutput('Link', makeHref(array('page'=>'row', 'row_id'=>$row_id)));
+					
 					$rackx = 10;
 					$maxracky = 20;
 			

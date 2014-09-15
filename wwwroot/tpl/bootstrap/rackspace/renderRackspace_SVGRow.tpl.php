@@ -1,6 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
 	<svg width="<?php $this->OverallWidth; ?>" height="<?php $this->OverallHeight; ?>" x="<?php $this->X ?>" y="<?php $this->Y ?>">
-		<text x="12" y="12" fill="black">Location: <?php $this->LocationName; ?> Row: <?php $this->RowName; ?></text>
+		<a xlink:href="<?php $this->Link ?>"><text x="12" y="12" fill="black">Location: <?php $this->LocationName; ?> | Row: <?php $this->RowName; ?></text></a>
  		<?php $this->Racks; ?>
  	</svg>
 <?php } else { ?>
