@@ -4,11 +4,12 @@
 	<svg width="178" height="<?php echo ($this->_Height - 11) ?>" x="<?php echo ($this->_X + 6) ?>" y="<?php echo ($this->_Y + 6) ?>">
 		<defs>
 			<style>
-				.element { fill: #6555ff; }
-				.element:hover { fill: #3000ff; }
-				.unusable { fill: #ff3c3c; }
-				.unusable :hover { fill: red; }
-				.deactivated { fill: #96A0A0; stroke: #96A0A0 }
+				.element rect{ fill: #6555ff; }
+				.element:hover rect { fill: #3000ff; }
+				.unusable rect { fill: #ff3c3c; }
+				.unusable : hover rect{ fill: red; }
+				.deactivated rect{ fill: #96A0A0; stroke: #96A0A0 }
+				
 			</style>
 		</defs>
 		<?php $this->Elements; ?>
