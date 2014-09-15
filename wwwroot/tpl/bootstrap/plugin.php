@@ -163,11 +163,11 @@ function renderRackspaceSVG() {
 									//T In benutzung
 	
 									if ($state == 'T' || $state == 'U' || $state == 'A') {
-										$height =  $rackData[$i][$j]['rowspan'] > 0 ? $rackData[$i][$j]  : 1 ;
-										$width = $rackData[$i][$j]['colspan'] > 0 ? $rackData[$i][$j]['colspan'] : 1;
+										$height =  array_key_exists('rowspan', $rackData[$i][$j]) && $rackData[$i][$j]['rowspan'] > 0 ? $rackData[$i][$j]['rowspan'] : 1 ;
+										$width = array_key_exists('colspan', $rackData[$i][$j]) && $rackData[$i][$j]['colspan'] > 0 ? $rackData[$i][$j]['colspan'] : 1;
 										$elo = $tplm->generateSubmodule('Elements','renderRackspace_SVGElement', $racko);
 										$elo->addOutput('X', $j * 60);
-										$elo->addOutput('Y', ($rack['height'] - $height) * 10);
+										$elo->addOutput('Y', ($rackData['height'] - $height) * 10);
 										$elo->addOutput('Width', ($width * 60) - 2);
 										$elo->addOutput('Height', $height * 10);
 								 
