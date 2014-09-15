@@ -40,7 +40,7 @@ JS;
 				</tr>
 				</form>
 			<?php endif ?>
-			<?php while($this->loop('LocationList')) : ?>
+			<?php while($this->loop('LocationList')) { ?>
 				<tr>
 					<td align=left style='padding-left: <?php $this->Level; ?>px'>
 					<?php if($this->is("HasSublocations")) { ?>
@@ -75,7 +75,7 @@ JS;
 					</td>
 					</form>
 				</tr>
-			<?php endwhile ?>
+			<?php } ?>
 			<?php if(!$this->is('renderNewTop')) : ?>
 				<form method=post id=addLocation name=addLocation action='?module=redirect&page=rackspace&tab=editlocations&op=addLocation'>
 				<tr>

@@ -1,53 +1,57 @@
 <?php if (defined("RS_TPL")) {?>
-	<table cellspacing=0 cellpadding=5 align=center class=widetable>
-		<tr><th>&nbsp;</th><th>base URL</th><th>username</th><th>password</th><th>graph(s)</th><th>&nbsp;</th></tr>
-		<?php if($this->is('AddTop', true)) { ?>
-			<?php $this->getH("Form","add"); ?>
-			<tr>
-				<td><input class="icon" type="image" border="0" title="add a new server" tabindex="112" src="?module=chrome&uri=pix/tango-document-new.png" name="submit"></input></td>
-				<td><input type=text size=48 name=base_url tabindex=101></td>
-				<td><input type=text size=24 name=username tabindex=102></td>
-				<td><input type=password size=24 name=password tabindex=103></td>
-				<td>&nbsp;</td>
-				<td><input class="icon" type="image" border="0" title="add a new server" tabindex="112" src="?module=chrome&uri=pix/tango-document-new.png" name="submit"></input></td>
-			</tr>
-			</form>
-		<?php } ?>
-		<?php while($this->loop('CactiServers')) { ?>
-			<?php $this->getH("Form","upd"); ?>
-			<input type="hidden" name="id" value="<?php $this->Id; ?>">
-				<tr>
-					<td>
-						<?php if($this->is("NumGraphs", true)) { ?>
-							<img width="16" border="0" height="16" title="cannot delete, graphs exist" src="?module=chrome&uri=pix/tango-user-trash-16x16-gray.png"></img>
-						<?php } else { ?>
-							<a title="delete this server" href="?module=redirect&op=del&id=<?php $this->Id ?>&page=cacti&tab=servers">
-    							<img width="16" border="0" height="16" title="delete this server" src="?module=chrome&uri=pix/tango-user-trash-16x16.png"></img>
-							</a>
-						<?php }?>
-					</td>
-					<td><input type=text size=48 name=base_url value="<?php $this->BaseUrl; ?>"></td>
-					<td><input type=text size=24 name=username value="<?php $this->Username; ?>"></td>
-					<td><input type=password size=24 name=password value="<?php $this->Password; ?>"></td>
-					<td class=tdright><?php $this->NumGraphs; ?></td>
-					<td><input class="icon" type="image" border="0" title="update this server" src="?module=chrome&uri=pix/tango-document-save-16x16.png" name="submit"></input></td>
-					<td></td>
-				</tr>
-			</form>
-		<?php } ?>
-		<?php if($this->is('AddTop', false)) { ?>
-			<?php $this->getH("Form","add"); ?>
-			<tr>
-				<td><input class="icon" type="image" border="0" title="add a new server" tabindex="112" src="?module=chrome&uri=pix/tango-document-new.png" name="submit"></input></td>
-				<td><input type=text size=48 name=base_url tabindex=101></td>
-				<td><input type=text size=24 name=username tabindex=102></td>
-				<td><input type=password size=24 name=password tabindex=103></td>
-				<td>&nbsp;</td>
-				<td><input class="icon" type="image" border="0" title="add a new server" tabindex="112" src="?module=chrome&uri=pix/tango-document-new.png" name="submit"></input></td>
-			</tr>
-			</form>
-		<?php } ?>
-	</table>
+	<div class="box box-primary">
+		<div class="box-header">
+			<h3 class="box-title">Cacti editor</h3>
+		</div>
+		<div class="box-body no-padding">
+			<table class=table>
+				<tr><th>base URL</th><th>username</th><th>password</th><th>graph(s)</th><th>&nbsp;</th></tr>
+				<?php if($this->is('AddTop', true)) { ?>
+					<?php $this->getH("Form","add"); ?>
+					<tr>
+						<td><input type=text size=48 name=base_url tabindex=101></td>
+						<td><input type=text size=24 name=username tabindex=102 class="form-control"></td>
+						<td><input type=password size=24 name=password tabindex=103 class="form-control"></td>
+						<td>&nbsp;</td>
+						<td><button class="btn btn-primary" name="submit" title="add a new server" tabindex="112"><span class="glyphicon glyphicon-plus"></span></button></td>
+					</tr>
+					</form>
+				<?php } ?>
+				<?php while($this->loop('CactiServers')) { ?>
+					<?php $this->getH("Form","upd"); ?>
+					<input type="hidden" name="id" value="<?php $this->Id; ?>">
+					<tr>
+						<td><input type=text size=48 name=base_url value="<?php $this->BaseUrl; ?>" class="form-control"></td>
+						<td><input type=text size=24 name=username value="<?php $this->Username; ?>" class="form-control"></td>
+						<td><input type=password size=24 name=password value="<?php $this->Password; ?>" class="form-control"></td>
+						<td><?php $this->NumGraphs; ?></td>
+						<td>
+							<div class="btn-group">
+								<btn class="btn btn-success" name="submit"><span class="glyphicon glyphicon-ok"></span></btn>
+								<?php if($this->is("NumGraphs", true)) { ?>
+									<a href='#' class="btn btn-danger disabled" title="cannot delete, graphs exist"><span class="glyphicon glyphicon-remove"></span></a>
+								<?php } else { ?>
+									<a href="?module=redirect&op=del&id=<?php $this->Id ?>&page=cacti&tab=servers" class="btn btn-danger" title="Delete this server"><span class="glyphicon glyphicon-remove"></span></a>
+								<?php }?>
+							</div>
+						</td>
+					</tr>
+					</form>
+				<?php } ?>
+				<?php if($this->is('AddTop', false)) { ?>
+					<?php $this->getH("Form","add"); ?>
+					<tr>
+						<td><input type=text size=48 name=base_url tabindex=101></td>
+						<td><input type=text size=24 name=username tabindex=102 class="form-control"></td>
+						<td><input type=password size=24 name=password tabindex=103 class="form-control"></td>
+						<td>&nbsp;</td>
+						<td><button class="btn btn-primary" name="submit" title="add a new server" tabindex="112"><span class="glyphicon glyphicon-plus"></span></button></td>
+					</tr>
+					</form>
+				<?php } ?>
+			</table>
+		</div>
+	</div>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />
