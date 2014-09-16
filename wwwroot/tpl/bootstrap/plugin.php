@@ -237,8 +237,6 @@ function renderDynamicAddMultipleObjectsForm() {
 	if ($key > 0 && in_array($key, $location_obj_types))
 		unset($typelist['other'][$key]);
 	
-	$mod->addOutput('Types', $typelist);
-	
 	$objectListOutput = array();
 	for ($i = 0; $i < $max; $i++)
 	{
@@ -246,7 +244,8 @@ function renderDynamicAddMultipleObjectsForm() {
 	// Don't employ DEFAULT_OBJECT_TYPE to avoid creating ghost records for pre-selected empty rows.
 		$singleEntry['i'] = $i;
 		
-		$singleEntry['tagsPicker'] = '';
+		$singleEntry['tagsPicker'] = 'A';
+		$singleEntry['Types'] = $typelist;
 			
 		$objectListOutput[] = $singleEntry;
 	}
