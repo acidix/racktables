@@ -198,7 +198,6 @@ function renderRackspaceSVG() {
 							//Increase rackx to ensure that the next rack is placed right to this one
 							$rackx += 200;
 						
-							$rackListIdx++;
 						}
 	
 	
@@ -224,7 +223,43 @@ function renderRackspaceSVG() {
 	renderLocationFilterPortlet($mod, 'LocationFilter');
 }
 
+function renderDynamicAddMultipleObjectsForm() {
+	$max = getConfigVar ('MASSCOUNT');
+	
+	$tplm = TemplateManager::getInstance();
+	$tplm->getMainModule()->setOutput('Payload', '');
+	$mod = $tplm->generateSubmodule("Payload","AddMultipleObjects");
+	$mod->setNamespace("depot");
+	
+	// exclude location-related object types
+	global $location_obj_types;
+	foreach ($typelist['other'] as $key => $value)
+	if ($key > 0 && in_array($key, $location_obj_types))
+		unset($typelist['other'][$key]);
+	
+	$mod->addOutput('Types', $typelist);
+	
+	$objectListOutput = array();
+	for ($i = 0; $i < $max; $i++)
+	{
+		$singleEntry = array();
+	// Don't employ DEFAULT_OBJECT_TYPE to avoid creating ghost records for pre-selected empty rows.
+		$singleEntry['i'] = $i;
+		
+		$singleEntry['tagsPicker'] = '';
+			
+		$objectListOutput[] = $singleEntry;
+	}
+	$mod->setOutput("AddTable", $objectListOutput);
+}
+
+function addMultipleObjectsDynamic() {
+	
+}
+
 global $tabhandler;
+
 $tabhandler['rackspace']['default'] = 'renderRackspaceSVG';
+$tabhandler['depot']['addmore'] = 'renderDynamicAddMultipleObjectsForm';
 
 ?>

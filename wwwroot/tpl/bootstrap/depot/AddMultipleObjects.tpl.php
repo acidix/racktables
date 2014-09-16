@@ -1,4 +1,47 @@
 <?php if (defined("RS_TPL")) {?>
+<div class="box box-primary">
+	<?php $this->getH('PrintOpFormIntro','addMultipleObjectDynamically')?>
+	<input type="hidden" name="rowcount" value="<?php $this->rowCountDefault; ?>">
+	<div class="box-header">
+		<h3 class="box-title">Add objects</h3>
+	</div>
+	<div class="box-body no-padding">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Type</th>
+					<th>Common name</th>
+					<th>Visible label</th>
+					<th>Asset tag</th>
+					<th>Tags</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php while($this->loop('AddTable')) { ?>
+				<tr>
+					<td><?php $this->getH('PrintSelect',array($this->_Types,array('name'=>$this->_i . '_object_type','class'=>'form-control'))); ?></td>
+					<td><input type=text size=30 name=<?php $this->i ?>_object_name ></td>
+					<td><input type=text size=30 name=<?php $this->i ?>_object_label ></td>
+					<td><input type=text size=20 name=<?php $this->i ?>_object_asset_no ></td>
+					<td><?php $this->TagsPicker; ?></td>
+					<td>
+						<div class="btn-group">
+							<button class="btn btn-danger" name="<?php $this->i ?>_btn_remove" title="Remove this line"><span class="glyphicon glyphicon-remove"></span></button>
+							<button class="btn btn-primary" name="<?php $this->i ?>_btn_clone" title="Clone this line"><span class="glyphicon glyphicon-plus"></span></button>
+						</div>
+					</td>
+				</tr>
+				<?php } ?>
+			</tbody>
+		</table>
+	</div>
+	<div class="box-footer">
+		<button class="btn btn-success btn-block" name="submit">Submit</button>
+	</div>
+	</form>
+</div>
+<!-- 
 <div class=portlet>
 	<h2>Distinct types, same tags</h2>
 	<?php $this->formIntro ?> 
@@ -37,7 +80,7 @@
 	</form>
 	</div>	
 </div>
-
+ -->
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />
