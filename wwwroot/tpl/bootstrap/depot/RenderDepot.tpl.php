@@ -1,7 +1,7 @@
 <?php if (defined("RS_TPL")) { 
 	$this->addJS(
 		'$(document).ready( function () {' .
-    	'$("#object_table").DataTable(); ' .
+    	'$("#object_table").dataTable(); ' .
 		'} );',
 	true); 
 ?>
@@ -18,7 +18,7 @@
 					</thead>
 					<tbody>
 						<?php $this->startLoop("AllObjects"); ?>	
-							<tr class='<?php $this->Problem ?>'>
+							<tr><!-- class='<?php $this->Problem ?>' -->
 								<td>
 									<?php $this->Mka ?> 
 									<?php $this->RenderedTags ?>
