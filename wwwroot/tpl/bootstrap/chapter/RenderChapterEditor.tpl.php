@@ -21,7 +21,6 @@
 		<tr>
 		<?php if($this->is('lowkey', true)) { ?>
 			<td>
-	    		<?php //$this->getH('PrintImageHref', 'computer'); ?>
 	    		<i class="fa fa-fw fa-desktop"></i>
 			</td>
 			<td><?php $this->key ?></td>
