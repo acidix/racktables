@@ -1,11 +1,12 @@
 <?php if (defined("RS_TPL")) {?>
-
-<div class=portlet><h2><a href='index.php?page=depot'>Objects</a></h2>
-	<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>
-		<tr><th>what</th><th>why</th></tr>
-
-		<?php $this->foundObject ?>
-	</table>
+<div class="box" style="margin-top: 20px">
+	<div class="box-header"><h3 align="center"><a href='index.php?page=depot'>Objects</a></h3></div>
+	<div class="box-body box-body table-responsive no-padding">
+		<table border=0 cellpadding=5 cellspacing=0 align=center class="table table-hover">
+			<tr><th>What was found</th><th>Why</th></tr>
+			<?php $this->foundObject ?>
+		</table>
+	</div>
 </div>
 
 <?php } else { ?>
