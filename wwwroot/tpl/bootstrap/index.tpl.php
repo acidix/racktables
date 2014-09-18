@@ -78,7 +78,7 @@
                                     </p>
                                 </li>
                                 -->
-                                <!-- Menu Body -->
+                                <!-- Menu Body 
                                 <li class="user-body">
                                     <div class="col-xs-4 text-center">
                                         <a href="#">Followers</a>
@@ -89,7 +89,7 @@
                                     <div class="col-xs-4 text-center">
                                         <a href="#">Friends</a>
                                     </div>
-                                </li>
+                                </li>-->
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
@@ -147,7 +147,7 @@
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
 					<?php $this->getH('PageHeadline'); ?>
-					<div class="text-center"><div class="btn-group"><?php $this->Tabs ?></div></div>
+					<div class="text-center"><?php $this->Tabs ?></div>
 					<!-- <?php //$this->getH('PageHeadline',array($this->_Headline,$this->_SubHeadline)); ?> -->
                     <ol class="breadcrumb">
 						<?php $this->Path ?>

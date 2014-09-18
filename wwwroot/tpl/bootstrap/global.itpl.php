@@ -47,19 +47,19 @@ $this->setInMemoryTemplate("CellFilterExtraText","<tr><td colspan=2><textarea na
  * Template for: Tablist, the currently active Tab
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabActive","<a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}' class='btn-sm btn-primary'>{{Title}}</a>");
+$this->setInMemoryTemplate("TabActive","<button class='btn btn-lg btn-primary' style='margin: 0 10px 0 10px;'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}' style='color:white;'>{{Title}}</a></button>");
 
 /**
  * Template for: Tablist, currently inactive tabs
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabInactive","<a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}' class='btn-sm btn-default'>{{Title}}</a>");
+$this->setInMemoryTemplate("TabInactive","<button class='btn btn-default btn-lg' style='margin: 0 10px 0 10px;'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></button>");
 
 /**
  * Template for: Tablist, tabs with warnings
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabAttention","<a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}' class='btn-sm btn-warning'>{{Title}}</a>");
+$this->setInMemoryTemplate("TabAttention","<button class='btn btn-warning btn-lg' style='margin: 0 10px 0 10px;'><color:greena href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></button>");
 
 /**
  * Template for: Part of the path  in the PathAndSearch module
