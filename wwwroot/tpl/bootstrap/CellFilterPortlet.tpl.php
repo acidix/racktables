@@ -1,9 +1,8 @@
 -<?php if (defined("RS_TPL")) {?>
 	<?php 	$this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/tag-cb.js"));
-		 	$this->addRequirement("Header","HeaderJsInline",array("code"=>"tag_cb.enableNegation()")); 
-		 	$this->addRequirement("Header","HeaderCssInclude", array("path" => "css/racktables_bootstrap.css"));?>	
+		 	$this->addRequirement("Header","HeaderJsInline",array("code"=>"tag_cb.enableNegation()"));?>	
     
-	<button class="btn btn-default" onmousedown="$('#cellfilterport').toggle('blind')">Show tag filter</button>
+	<button class="btn btn-default btn-toggle-portlet" onmousedown="$('#cellfilterport').toggle('blind')">Show tag filter</button>
     <div class="panel panel-default overlay" id="cellfilterport">
     	<div class="panel-heading"><h2><?php $this->get("PortletTitle"); ?></h2></div>
 		<div class="panel-body">

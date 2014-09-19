@@ -1,10 +1,17 @@
 div.overlay {
 	display: none;
-	position: relative;
 	z-index: 3;
-	margin: auto auto auto -300px;
+	position: absolute;
+	margin: auto auto auto auto;
+	left: 70%;
 	background: #FFF;
 	color: #000;
+}
+
+.btn-toggle-portlet {
+	position: relative;
+	margin: 5px 5px 5px 5px;
+	left: 70%;
 }
 
 .portletbar {
