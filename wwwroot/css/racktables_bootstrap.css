@@ -1,0 +1,14 @@
+div.overlay {
+	display: none;
+	position: relative;
+	z-index: 3;
+	margin: auto auto auto -300px;
+	background: #FFF;
+	color: #000;
+}
+
+.portletbar {
+	position: absolute;
+	left: 220px;
+	z-index: 3;
+}

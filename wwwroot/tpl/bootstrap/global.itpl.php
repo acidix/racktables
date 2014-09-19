@@ -47,19 +47,22 @@ $this->setInMemoryTemplate("CellFilterExtraText","<tr><td colspan=2><textarea na
  * Template for: Tablist, the currently active Tab
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabActive","<button class='btn btn-lg btn-primary' style='margin: 0 10px 0 10px;'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}' style='color:white;'>{{Title}}</a></button>");
+//$this->setInMemoryTemplate("TabActive","<button class='btn btn-lg btn-primary' style='margin: 10px 10px 10px 10px;'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}' style='color:white;'>{{Title}}</a></button>");
+$this->setInMemoryTemplate("TabActive","<li class='active'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}' style='color:black;'>{{Title}}</a></li>");
 
 /**
  * Template for: Tablist, currently inactive tabs
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabInactive","<button class='btn btn-default btn-lg' style='margin: 0 10px 0 10px;'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></button>");
+//$this->setInMemoryTemplate("TabInactive","<button class='btn btn-default btn-lg' style='margin: 10px 10px 10px 10px;'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></button>");
+$this->setInMemoryTemplate("TabInactive","<li><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
 
 /**
  * Template for: Tablist, tabs with warnings
  * Usage: interface.php (showTabs)
  */
-$this->setInMemoryTemplate("TabAttention","<button class='btn btn-warning btn-lg' style='margin: 0 10px 0 10px;'><color:greena href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></button>");
+//$this->setInMemoryTemplate("TabAttention","<button class='btn btn-warning btn-lg' style='margin: 10px 10px 10px 10px;'><color:greena href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></button>");
+$this->setInMemoryTemplate("TabAttention","<li><color:greena href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
 
 /**
  * Template for: Part of the path  in the PathAndSearch module

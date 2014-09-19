@@ -23,7 +23,9 @@
         <link href="./css/ionicons.min.css" rel="stylesheet" type="text/css" />
         <!-- Theme style -->
         <link href="./css/AdminLTE.css" rel="stylesheet" type="text/css" />
-		
+		<!-- Bootstrap Theme style -->
+        <link href="./css/racktables_bootstrap.css" rel="stylesheet" type="text/css" />
+
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -110,6 +112,10 @@
             <aside class="left-side sidebar-offcanvas">
                 <!-- sidebar: style can be found in sidebar.less -->
                 <section class="sidebar">
+                    <!-- 2nd sidebar toggle -->
+                    <ul class="sidebar-menu" onclick="$('#portletsidebar').toggle('blind')">
+                        <li class="treeview"><a href="#"><span><strong>Navigation<strong></span><i class="fa fa-angle-right pull-right"></i></a></li>
+                    </ul>
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
 						<!--
@@ -119,7 +125,6 @@
 						-->
                         <div class="pull-left info">
                             <p>Hello, <?php $this->RemoteDisplayname ?></p>
-
                             <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                         </div>
                     </div>
@@ -137,17 +142,32 @@
                     </form>
                     <!-- /.search form -->
                     <!-- sidebar menu: : style can be found in sidebar.less -->
+                    
                     <?php $this->getH('PrintSidebar'); ?>
-                </section>
+                
                 <!-- /.sidebar -->
             </aside>
+
+            <aside class="left-side sidebar-offcanvas portletbar" style="min-height: 542px; display: none;" id="portletsidebar">
+                <!-- sidebar: style can be found in sidebar.less -->
+                <section class="sidebar" >
+                    
+                    <ul class="sidebar-menu"><li><strong>Tabs:</strong></li><?php $this->Tabs; ?></ul>
+                    <!-- search form -->
+                    
+                    <!-- /.search form -->
+                    <!-- sidebar menu: : style can be found in sidebar.less -->
+                </section>   
+            </aside>
+
+
 
             <!-- Right side column. Contains the navbar and content of the page -->
             <aside class="right-side">
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
 					<?php $this->getH('PageHeadline'); ?>
-					<div class="text-center"><?php $this->Tabs ?></div>
+					<!--<div class="text-center"><?php $this->Tabs ?></div>-->
 					<!-- <?php //$this->getH('PageHeadline',array($this->_Headline,$this->_SubHeadline)); ?> -->
                     <ol class="breadcrumb">
 						<?php $this->Path ?>
