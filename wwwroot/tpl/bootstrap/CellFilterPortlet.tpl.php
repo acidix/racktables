@@ -1,4 +1,4 @@
--<?php if (defined("RS_TPL")) {?>
+<?php if (defined("RS_TPL")) {?>
 	<?php 	$this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/tag-cb.js"));
 		 	$this->addRequirement("Header","HeaderJsInline",array("code"=>"tag_cb.enableNegation()"));?>	
     

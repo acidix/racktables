@@ -1,6 +1,6 @@
 <?php if (defined("RS_TPL")) { ?>
 <div class='row'>
-	<div class='col-md-10'>
+	<div class='col-md-12'>
 		<div class="box box-primary" style="position: relative;">
 			<div class="box-header">
 				<h3 class="box-title">Objects</h3>

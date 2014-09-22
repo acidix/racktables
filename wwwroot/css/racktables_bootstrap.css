@@ -3,7 +3,7 @@ div.overlay {
 	z-index: 3;
 	position: absolute;
 	margin: auto auto auto auto;
-	left: 70%;
+	left: 75%;
 	background: #FFF;
 	color: #000;
 }
@@ -11,11 +11,35 @@ div.overlay {
 .btn-toggle-portlet {
 	position: relative;
 	margin: 5px 5px 5px 5px;
-	left: 70%;
+	left: 75%;
+}
+
+.extendbar {
+	position: absolute;
+	left: 220px;
+	z-index: 3;
+	width: 10px;
 }
 
 .portletbar {
 	position: absolute;
 	left: 220px;
-	z-index: 3;
+	width: 200px;
+	z-index: 4;
+}
+
+.pulse_ring {
+    border: 3px solid #999;
+    -webkit-border-radius: 30px;
+    height: 18px;
+    width: 18px;
+    position: relative;  
+    -webkit-animation: pulsate 1s ease-out;
+    -webkit-animation-iteration-count: infinite; 
+    opacity: 0.0
+}
+@-webkit-keyframes pulsate {
+    0% {-webkit-transform: scale(0.1, 0.1); opacity: 0.0;}
+    50% {opacity: 1.0;}
+    100% {-webkit-transform: scale(1.2, 1.2); opacity: 0.0;}
 }

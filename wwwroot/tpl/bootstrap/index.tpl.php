@@ -1,13 +1,14 @@
-<?php 	$this->map(['Tabs',0],"<small>|</small>","|");
-		$this->mapFunction(['Path',[]],'transformPathLink');
-		
-		//A small function that transform static links added by the interface.php file to the list elements we need for the breadcrumbs
-		function transformPathLink($old) {
-			if (substr($old,0,3) != ' : ') {
-				return $old;
-			}
-			return '<li>' . substr($old,3) . '</li>';
+<?php 	
+    $this->map(['Tabs',0],"<small>|</small>","|");
+	$this->mapFunction(['Path',[]],'transformPathLink');
+	
+	//A small function that transform static links added by the interface.php file to the list elements we need for the breadcrumbs
+	function transformPathLink($old) {
+		if (substr($old,0,3) != ' : ') {
+			return $old;
 		}
+		return '<li>' . substr($old,3) . '</li>';
+	}
 ?>
 <!DOCTYPE html>
 <html>
@@ -112,10 +113,6 @@
             <aside class="left-side sidebar-offcanvas">
                 <!-- sidebar: style can be found in sidebar.less -->
                 <section class="sidebar">
-                    <!-- 2nd sidebar toggle -->
-                    <ul class="sidebar-menu" onclick="$('#portletsidebar').toggle('blind')">
-                        <li class="treeview"><a href="#"><span><strong>Navigation<strong></span><i class="fa fa-angle-right pull-right"></i></a></li>
-                    </ul>
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
 						<!--
@@ -147,8 +144,16 @@
                 
                 <!-- /.sidebar -->
             </aside>
+            
+            <aside class="left-side sidebar-offcanvas extendbar" onmouseover="$('#portletsidebar').toggle('blind')" style="min-height: 542px;">  
+                <strong>T<br>
+                A<br>
+                B<br>
+                S<br></strong>
+                <div class="pulse_ring"></div>
+            </aside>
 
-            <aside class="left-side sidebar-offcanvas portletbar" style="min-height: 542px; display: none;" id="portletsidebar">
+            <aside class="left-side sidebar-offcanvas portletbar" onmouseout="$('#portletsidebar').toggle('blind')" style="min-height: 542px; display: none;" id="portletsidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
                 <section class="sidebar" >
                     
