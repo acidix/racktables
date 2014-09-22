@@ -43,3 +43,16 @@ div.overlay {
     50% {opacity: 1.0;}
     100% {-webkit-transform: scale(1.2, 1.2); opacity: 0.0;}
 }
+
+.save_overlay {
+	left: 85%;
+	background-color: white;
+	padding: 10px 10px 10px 10px;
+    width:auto;
+    text-align:left;
+    position: fixed;
+    z-index: 2;
+    border:2px solid gray;
+    border-radius: 10px;
+    box-shadow: 5px 5px 2px #888888;
+}

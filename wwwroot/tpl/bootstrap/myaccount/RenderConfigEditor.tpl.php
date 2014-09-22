@@ -1,5 +1,4 @@
 <?php if (defined("RS_TPL")) {?>
-
 	<div class=portlet><h2>Current configuration</h2>
 	<table cellspacing=0 cellpadding=5 align=center class=widetable width='50%'>
 	<tr><th class=tdleft>Option</th>
@@ -20,10 +19,15 @@
 	<tr><td colspan=3>
 	<?php $this->getH('PrintImageHref', array('SAVE', 'Save changes', TRUE)); ?>
 	</td></tr>
+	<!-- Save button overlay -->
+	<div class="save_overlay">
+		<input type="submit" value="Save" class="btn btn-success btn-lg" style="margin-right: 5px;">
+		<a class="btn btn-warning btn-lg" style="margin-left: 5px;" href="javascript:history.go(0)">Abort</a> 
+	</div>
 	</form>
 	</div>
-
-<?php } else { ?>
+	
+<?php } else { ?>	
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />
 Return to the index. <br />
