@@ -145,7 +145,7 @@
                 <!-- /.sidebar -->
             </aside>
             
-            <aside class="left-side sidebar-offcanvas extendbar" onmouseover="$('#portletsidebar').toggle('blind')" style="min-height: 542px;">  
+            <aside class="left-side sidebar-offcanvas extendbar" onmouseover="$('#portletsidebar').show('blind')" style="min-height: 542px;">  
                 <strong>T<br>
                 A<br>
                 B<br>
@@ -153,7 +153,7 @@
                 <div class="pulse_ring"></div>
             </aside>
 
-            <aside class="left-side sidebar-offcanvas portletbar" onmouseout="$('#portletsidebar').toggle('blind')" style="min-height: 542px; display: none;" id="portletsidebar">
+            <aside class="left-side sidebar-offcanvas portletbar" onmouseout="$('#portletsidebar').hide('blind')" style="min-height: 542px; display: none;" id="portletsidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
                 <section class="sidebar" >
                     
