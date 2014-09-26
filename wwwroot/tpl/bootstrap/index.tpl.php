@@ -42,9 +42,21 @@
         <script src="./js/AdminLTE/app.js" type="text/javascript"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="./js/AdminLTE/demo.js" type="text/javascript"></script>
-       
+        <!-- Parsley for form validation -->
+        <script src="./js/parsley.min.js" type="text/javascript"></script>
+        
 		<?php $this->Header ?>
+        <script type="text/javascript">
+            // Add a callback for the error message
+            $.listen('parsley:field:error', function () {
+                alert('Search form has to be filled');
+            })
+        
+        </script> 
+        
+
     </head>
+    
     <body class="skin-blue">
         <!-- header logo: style can be found in header.less -->
         <header class="header">
@@ -126,12 +138,12 @@
                         </div>
                     </div>
                     <!-- search form -->
-                    <form name=search method=get class="sidebar-form">
+                    <form name=search method=get class="sidebar-form" data-parsley-ui-enabled="false" data-parsley-validate>
 						<input type=hidden name=page value=search>
 						<input type=hidden name=last_page value=<?php $this->PageNo; ?>>
 						<input type=hidden name=last_tab value=<?php $this->TabNo; ?>>
                         <div class="input-group">
-                            <input type="text" name="q" class="form-control" placeholder="Search..." text="<?php $this->SearchValue; ?>"/>
+                            <input type="text" name="q" class="form-control" placeholder="Search..." text="<?php $this->SearchValue; ?>" required/>
                             <span class="input-group-btn">
                                 <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
                             </span>
