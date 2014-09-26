@@ -1,0 +1,58 @@
+div.overlay {
+	display: none;
+	z-index: 3;
+	position: absolute;
+	margin: auto auto auto auto;
+	left: 75%;
+	background: #FFF;
+	color: #000;
+}
+
+.btn-toggle-portlet {
+	position: relative;
+	margin: 5px 5px 5px 5px;
+	left: 75%;
+}
+
+.extendbar {
+	position: absolute;
+	left: 220px;
+	z-index: 2;
+	width: 10px;
+}
+
+.portletbar {
+	position: absolute;
+	left: 220px;
+	width: 200px;
+	z-index: 4;
+}
+
+.pulse_ring {
+    border: 3px solid #999;
+    -webkit-border-radius: 30px;
+    height: 18px;
+    width: 18px;
+    position: relative;  
+    -webkit-animation: pulsate 1s ease-out;
+    -webkit-animation-iteration-count: infinite; 
+    opacity: 0.0
+}
+@-webkit-keyframes pulsate {
+    0% {-webkit-transform: scale(0.1, 0.1); opacity: 0.0;}
+    50% {opacity: 1.0;}
+    100% {-webkit-transform: scale(1.2, 1.2); opacity: 0.0;}
+}
+
+.save_overlay {
+	left: 85%;
+	background-color: white;
+	padding: 10px 10px 10px 10px;
+    width:auto;
+    text-align:left;
+    position: fixed;
+    z-index: 2;
+    border:2px solid gray;
+    border-radius: 10px;
+    box-shadow: 5px 5px 2px #888888;
+}

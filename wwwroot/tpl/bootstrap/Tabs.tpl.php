@@ -1,9 +1,7 @@
 <?php if (defined("RS_TPL")) {?>
-	<div class=greynavbar>
-		<ul id=foldertab style='margin-bottom: 0px; padding-top: 10px;'>
-			<?php $this->Tabs; ?>
-		</ul>
-	</div>
+	<!--<ul class="nav nav-tabs" id="foldertab" style='margin-bottom: 0px; padding-top: 10px;'> -->
+		<ul class="sidebar-menu"><?php $this->Tabs; ?></ul>
+	<!--</ul> -->
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

@@ -1,4 +1,25 @@
 <?php if (defined("RS_TPL")) {?>
+<?php $js = <<<END
+
+	var addNewFunc = function ()
+	{	
+		// Copy last line and remove values
+		var lastLineCont = $(".lastLine").clone().find("input:text").val("").end();
+		
+		$(".lastLine").off("change");
+		$(".lastLine").removeClass("lastLine");
+		$("tr").last().after(lastLineCont);
+		$("tr").last().change(addNewFunc);
+	}
+
+	// Init on load 
+	$(function () {
+		$("tr").last().addClass("lastLine");
+		$(".lastLine").change(addNewFunc);
+	});
+END;
+	$this->addRequirement("Header","HeaderJsInline",array("code"=>$js));
+?>
 <div class="box box-primary">
 	<?php $this->getH('PrintOpFormIntro','addMultipleObjectDynamically')?>
 	<input type="hidden" name="rowcount" value="<?php $this->rowCountDefault; ?>">
@@ -17,7 +38,7 @@
 					<th></th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody onload="initDynamicRows()">
 				<?php while($this->loop('AddTable')) { ?>
 				<tr>
 					<td><?php $this->getH('PrintSelect',array($this->_Types,array('name'=>$this->_i . '_object_type','class'=>'form-control'))); ?></td>
