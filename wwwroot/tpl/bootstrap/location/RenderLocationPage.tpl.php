@@ -1,56 +1,55 @@
 <?php if (defined("RS_TPL")) {?>
-
-	<table border=0 class=objectview cellspacing=0 cellpadding=0><tr>
-	<!--  left collum with information  -->
-	<td class=pcleft>
-	<?php 
-		$this->EntitySummary;
-		$this->FilesPortlet;
-      $this->LocComment;
-	?>
-	</td>	
-   <!-- Right column with list of rows and child locations -->
-
-   <td class=pcright>
-
-
-   <div class=portlet><h2>Rows (<?php $this->CountRows; ?>)</h2>
-
-   	<table border=0 cellspacing=0 cellpadding=5 align=center>
-
-   		<?php 
-   			if ($this->is('Rows')) {
-   			$this->startLoop('Rows');
-   		?> 
-   			<tr><td>
-   				<?php $this->Link; ?>
-   			</td></tr>	
-
-   		<?php 
-   			$this->endLoop(); }
-   		 ?>
-
-   		 </table></div>
-
-   		    <div class=portlet><h2>Child Locations (<?php $this->CountLocations; ?>)</h2>
-
-   		    	<table border=0 cellspacing=0 cellpadding=5 align=center>
-
-   		    	<?php 
-   		    	if ($this->is('ChildLocations')) {
-   		    		$this->startLoop('Looparray2');
-   		    	?>
-   		    		<tr><td>
-   		    	<?php $this->LocationLink; ?>	
-   		    		</td></tr>
-   		    	<?php 
-   		    		$this->endLoop(); } 
-   		    	?>
-							</table>
-						</div>
-					</td>
-				</tr>
-			</table>	   		    	
+	<div class="row">
+		<div class="col-md-6">
+			<?php 
+				$this->EntitySummary;
+				$this->FilesPortlet;
+      			$this->LocComment;
+			?>
+		</div>
+		<div class="col-md-6">
+			<div class="box">
+				<div class="box-header">
+					<h3 class="box-title">
+						Rows (<?php $this->CountRows; ?>)
+					</h3>
+				</div>
+				<div class="box-content no-padding">
+					<table class="table table-striped">
+						<tbody>
+							<?php while($this->loop('Rows')) { ?>
+								<tr>
+									<td align="center">
+										<?php $this->Link; ?>
+									</td>
+								</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="box">
+				<div class="box-header">
+					<h3 class="box-title">
+						Child Locations (<?php $this->CountLocation; ?>)
+					</h3>
+				</div>
+				<div class="box-content no-padding">
+					<table class="table table-striped">
+						<tbody>
+							<?php while($this->loop('Looparray2')) { ?>
+								<tr>
+									<td align="center">
+										<?php $this->LcationLink; ?>
+									</td>
+								</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>   		    	
 
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
