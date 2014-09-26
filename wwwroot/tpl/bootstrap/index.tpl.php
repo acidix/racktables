@@ -35,7 +35,8 @@
         <![endif]-->	
 
 		<!-- jQuery 2.0.2 -->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+       <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script> -->
+        <script src="./js/jquery-2.0.2.min.js" type="text/javascript"></script>
         <!-- Bootstrap -->
         <script src="./js/bootstrap.min.js" type="text/javascript"></script>
         <!-- AdminLTE App -->
@@ -47,14 +48,12 @@
         
 		<?php $this->Header ?>
         <script type="text/javascript">
-            // Add a callback for the error message
-            $.listen('parsley:field:error', function () {
-                alert('Search form has to be filled');
-            })
-        
-        </script> 
-        
+// Add a callback for the error message
 
+$.listen('parsley:field:error', function () {
+    alert('Search must not be empty');
+});        
+        </script> 
     </head>
     
     <body class="skin-blue">

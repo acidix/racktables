@@ -1,22 +1,21 @@
 <?php if (defined("RS_TPL")) {?>
 <?php $js = <<<END
+var addNewFunc = function ()
+{	
+// Copy last line and remove values
+var lastLineCont = $(".lastLine").clone().find("input:text").val("").end();
+	
+	$(".lastLine").off("change");
+	$(".lastLine").removeClass("lastLine");
+	$("tr").last().after(lastLineCont);
+	$("tr").last().change(addNewFunc);
+}
 
-	var addNewFunc = function ()
-	{	
-		// Copy last line and remove values
-		var lastLineCont = $(".lastLine").clone().find("input:text").val("").end();
-		
-		$(".lastLine").off("change");
-		$(".lastLine").removeClass("lastLine");
-		$("tr").last().after(lastLineCont);
-		$("tr").last().change(addNewFunc);
-	}
-
-	// Init on load 
-	$(function () {
-		$("tr").last().addClass("lastLine");
-		$(".lastLine").change(addNewFunc);
-	});
+// Init on load 
+$(function () {
+	$("tr").last().addClass("lastLine");
+	$(".lastLine").change(addNewFunc);
+});
 END;
 	$this->addRequirement("Header","HeaderJsInline",array("code"=>$js));
 ?>
@@ -38,7 +37,7 @@ END;
 					<th></th>
 				</tr>
 			</thead>
-			<tbody onload="initDynamicRows()">
+			<tbody>
 				<?php while($this->loop('AddTable')) { ?>
 				<tr>
 					<td><?php $this->getH('PrintSelect',array($this->_Types,array('name'=>$this->_i . '_object_type','class'=>'form-control'))); ?></td>

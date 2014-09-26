@@ -1,11 +1,15 @@
 div.overlay {
 	display: none;
-	z-index: 3;
+	z-index: 4;
 	position: absolute;
 	margin: auto auto auto auto;
 	left: 75%;
 	background: #FFF;
 	color: #000;
+}
+
+section.content {
+	overflow: visible;
 }
 
 .btn-toggle-portlet {
