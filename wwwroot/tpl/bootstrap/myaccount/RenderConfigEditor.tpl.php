@@ -19,11 +19,10 @@
 	<tr><td colspan=3>
 	<?php $this->getH('PrintImageHref', array('SAVE', 'Save changes', TRUE)); ?>
 	</td></tr>
-	<!-- Save button overlay -->
-	<div class="save_overlay">
-		<input type="submit" value="Save" class="btn btn-success btn-lg" style="margin-right: 5px;">
-		<a class="btn btn-warning btn-lg" style="margin-left: 5px;" href="javascript:history.go(0)">Abort</a> 
-	</div>
+	<!-- Save button operators -->
+	<input id='confirm-btn' class='tab-operator' type="submit" value="Save" class="btn btn-success btn-lg" style="margin-right: 5px;">
+	<a id='abort-btn' class="btn btn-warning btn-lg tab-operator" style="margin-left: 5px;" href="javascript:history.go(0)">Abort</a> 
+	
 	</form>
 	</div>
 	

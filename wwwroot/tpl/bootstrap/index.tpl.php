@@ -35,7 +35,6 @@
         <![endif]-->	
 
 		<!-- jQuery 2.0.2 -->
-       <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script> -->
         <script src="./js/jquery-2.0.2.min.js" type="text/javascript"></script>
         <!-- Bootstrap -->
         <script src="./js/bootstrap.min.js" type="text/javascript"></script>
@@ -45,14 +44,75 @@
         <script src="./js/AdminLTE/demo.js" type="text/javascript"></script>
         <!-- Parsley for form validation -->
         <script src="./js/parsley.min.js" type="text/javascript"></script>
-        
-		<?php $this->Header ?>
-        <script type="text/javascript">
-// Add a callback for the error message
 
-$.listen('parsley:field:error', function () {
-    alert('Search must not be empty');
-});        
+		<?php $this->Header ?>
+        
+        <script type="text/javascript">
+        // Add a callback for the error message
+        $.listen('parsley:field:error', function () {
+            alert('Search must not be empty');
+        });
+
+        // Setup page when loaded
+        (function($) {
+            $(document).ready(function() { 
+                // Add glyphicons to all tabs
+                var tabs = $("li.tab");
+
+                for (var i = 0; i < tabs.length; i++) {
+                    var link = tabs.eq(i).children('a')[0].href;
+                    tabs.eq(i).prepend(getGlyphicon(tabs[i].id));
+                    tabs.eq(i).children().eq(0).attr('href', link);
+                };
+                $(".tab_link").hide();
+
+                // Set timeout for showing tab names
+                var tabTimeout;
+                $('#tabsidebar').mouseenter(function() {
+                    console.log("start timeout");
+                    tabTimeout = setTimeout(function() {
+                        $(".tab_link").show('blind');            
+                    }, 1000);
+                }).mouseleave(function() {
+                    $(".tab_link").hide('blind');     
+                    clearTimeout(tabTimeout);
+                });
+
+                // Add all operators to bar on the left
+                var operatorstabs = $('.tab-operator');
+                for (var i = 0; i < operatorstabs.length; i++) {
+                    $('.operator-list').append( $('<li/>').append(operatorstabs.eq(i).clone()));
+                    $('.operator-list').children().last().prepend(getGlyphicon(operatorstabs[i].id));
+                    operatorstabs.eq(i).remove();
+                }
+            });
+        })(jQuery);
+
+
+        function getGlyphicon(glyphiconID) {
+            console.log(glyphiconID);
+            switch (glyphiconID){
+                case 'rackspacedefault':
+                    return "<a class='glyphicon tab_glyph glyphicon-search'></a>";
+                case 'rackspaceeditlocations':
+                    return "<a class='glyphicon tab_glyph glyphicon-bookmark'></a>";
+                case 'rackspacehistory':
+                    return "<a class='glyphicon tab_glyph glyphicon-list-alt'></a>";       
+                case 'uidefault':
+                    return "<a class='glyphicon tab_glyph glyphicon-list-home'></a>";            
+                case 'uireset':
+                    return "<a class='glyphicon tab_glyph glyphicon-list-flash'></a>";       
+                case 'confirm-btn':
+                    return "<span class='glyphicon tab_glyph glyphicon-list-ok'></span>";
+                case 'uiedit':
+                case 'rackspaceeditrows':
+                    return "<span class='glyphicon tab_glyph glyphicon-edit'></span>";       
+                case 'abort-btn':
+                    return "<span class='glyphicon tab_glyph glyphicon-remove'></span>";       
+
+            }
+        }
+
         </script> 
     </head>
     
@@ -121,7 +181,7 @@ $.listen('parsley:field:error', function () {
         </header>
         <div class="wrapper row-offcanvas row-offcanvas-left">
             <!-- Left side column. contains the logo and sidebar -->
-            <aside class="left-side sidebar-offcanvas">
+            <aside class="sidebar-offcanvas most-left-bar">
                 <!-- sidebar: style can be found in sidebar.less -->
                 <section class="sidebar">
                     <!-- Sidebar user panel -->
@@ -156,18 +216,19 @@ $.listen('parsley:field:error', function () {
                 <!-- /.sidebar -->
             </aside>
             
-            <aside class="left-side sidebar-offcanvas extendbar" onmouseover="$('#portletsidebar').show('blind')" style="min-height: 542px;">  
+        <!--    <aside class="left-side sidebar-offcanvas extendbar" onmouseover="$('#portletsidebar').show('blind')" style="min-height: 542px;">  
                 <strong>T<br>
                 A<br>
-                B<br>
+                B<br>onmouseleave="$('#portletsidebar').hide('blind')"
                 S<br></strong>
                 <div class="pulse_ring"></div>
-            </aside>
+            </aside> -->
 
-            <aside class="left-side sidebar-offcanvas portletbar" onmouseleave="$('#portletsidebar').hide('blind')" style="min-height: 542px; display: none;" id="portletsidebar">
+            <aside class="left-side sidebar-offcanvas tabbar" style="min-height: 20px;" id="tabsidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
                 <section class="sidebar">
-                    <ul class="sidebar-menu"><li><strong>Tabs:</strong></li><?php $this->Tabs; ?></ul>
+                    <ul class="sidebar-menu"><?php $this->Tabs; ?></ul>
+                    <ul class="sidebar-menu operator-list"></ul>
                    <!-- sidebar menu: : style can be found in sidebar.less -->
                 </section>   
             </aside>

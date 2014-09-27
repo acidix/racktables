@@ -48,21 +48,21 @@ $this->setInMemoryTemplate("CellFilterExtraText","<tr><td colspan=2><textarea na
  * Usage: interface.php (showTabs)
  */
 //$this->setInMemoryTemplate("TabActive","<button class='btn btn-lg btn-primary' style='margin: 10px 10px 10px 10px;'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}' style='color:white;'>{{Title}}</a></button>");
-$this->setInMemoryTemplate("TabActive","<li class='active'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}' style='color:black;'>{{Title}}</a></li>");
+$this->setInMemoryTemplate("TabActive","<li class='tab active' id='{{Page}}{{Tab}}{{Args}}'><a class='tab_link' href='index.php?page={{Page}}&tab={{Tab}}{{Args}}' style='color:black;'>{{Title}}</a></li>");
 
 /**
  * Template for: Tablist, currently inactive tabs
  * Usage: interface.php (showTabs)
  */
 //$this->setInMemoryTemplate("TabInactive","<button class='btn btn-default btn-lg' style='margin: 10px 10px 10px 10px;'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></button>");
-$this->setInMemoryTemplate("TabInactive","<li><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
+$this->setInMemoryTemplate("TabInactive","<li class='tab inactive' id='{{Page}}{{Tab}}{{Args}}'><a class='tab_link' href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
 
 /**
  * Template for: Tablist, tabs with warnings
  * Usage: interface.php (showTabs)
  */
 //$this->setInMemoryTemplate("TabAttention","<button class='btn btn-warning btn-lg' style='margin: 10px 10px 10px 10px;'><color:greena href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></button>");
-$this->setInMemoryTemplate("TabAttention","<li><color:greena href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
+$this->setInMemoryTemplate("TabAttention","<li class='tab attention' id='{{Page}}{{Tab}}{{Args}}'><a class='tab_link' color:green href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
 
 /**
  * Template for: Part of the path  in the PathAndSearch module
