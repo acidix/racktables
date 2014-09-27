@@ -869,8 +869,8 @@ class TemplateModule
 		
 		ob_start();	
 		include dirname(__FILE__) . '/../tpl/' . $this->tpl . '/' . $this->module . '.tpl.php';
-		// Make sure comments are in a separate line
-		$output_cont = preg_replace(array("(^.*//.*\n)"),'dfasdfsdfsdf\n' , ob_get_clean());
+		// Remove comments from js code
+		$output_cont = preg_replace("(.*//.*\n)",'', ob_get_clean());
 		// Replace whitespace in the output 
 		return str_replace(array("\r\n", "\r", "\n\t", "\t", '  ', '    ', '    '), '', $output_cont);
 	}
