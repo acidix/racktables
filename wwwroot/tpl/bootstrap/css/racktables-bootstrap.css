@@ -1,0 +1,89 @@
+/* Font face for the template */
+@font-face {
+    font-family: SourceSansPro;
+    src: url(../fonts/SourceSansPro-SemiboldItalic.ttf);
+}
+
+body > .header .logo {
+	font-family: SourceSansPro;
+	font-size: 25px;
+}
+
+.left-side.sidebar-offcanvas {
+	background-color: rgba(51, 153, 170, 0.14);
+}
+ 
+div.overlay {
+	display: none;
+	z-index: 4;
+	position: absolute;
+	margin: auto auto auto auto;
+	left: 75%;
+	background: #FFF;
+	color: #000;
+}
+
+section.content {
+	overflow: visible;
+}
+
+.btn-toggle-portlet {
+	position: relative;
+	margin: 5px 5px 5px 5px;
+	left: 75%;
+}
+
+.left-side.sidebar-offcanvas.tabbar {
+	background-image: linear-gradient(to right, rgba(51, 153, 170, 0.14) -30%, rgba(255,255,255, 0.7) 50%);
+	position: absolute;
+	left: 220px;
+	min-width: 40px;
+	max-height: 100%;
+	width: auto;
+	z-index: 4;
+}
+
+.right-side {
+	position: absolute;
+	left: 40px;
+}
+
+.save_overlay {
+	left: 85%;
+	background-color: white;
+	padding: 10px 10px 10px 10px;
+    width: auto;
+    text-align:left;
+    position: fixed;
+    z-index: 2;
+    border:2px solid gray;
+    border-radius: 10px;
+    box-shadow: 5px 5px 2px #888888;
+}
+
+.sidebar > .sidebar-menu > li > .tab-glyph {
+	font-size: 20px;
+	display: inline-block;
+	color: black;
+	padding: 10px 10px 10px 10px;
+}
+
+.sidebar .sidebar-menu > li > .tab-link {
+	display: inline-block; /*
+	overflow: auto;
+	float: right;*/
+}
+
+.sidebar > .sidebar-menu > li > a.tab-glyph:hover,
+.sidebar > .sidebar-menu > li.active > a.tab-glyph {
+	background: transparent;
+}
+
+.sidebar > .sidebar-menu > li.active > a.tab-link:not(:hover) {
+	background: transparent;
+}
+
+.operator-list {
+	position: relative;
+	top: 200px;
+}
