@@ -1,9 +1,10 @@
 <?php if (defined("RS_TPL")) {?>
-	<div class=portlet><h2>Current configuration</h2>
+	<div class=portlet id='current-config'><h2>Current configuration</h2>
 	<table cellspacing=0 cellpadding=5 align=center class=widetable width='50%'>
+	<tbody>
 	<tr><th class=tdleft>Option</th>
 	<th class=tdleft>Value</th></tr>
-	<?php $this->getH('PrintOpFormIntro', 'upd'); ?> 
+	<form method="post" id="updname=upd" action="?module=redirect&amp;page=ui&amp;tab=edit&amp;op=upd">
 
 	<?php $this->startLoop('LoopArray'); ?>
 		<input type=hidden name=<?php $this->Index; ?>_varname value='<?php $this->VarName; ?>'>
@@ -20,9 +21,8 @@
 	<?php $this->getH('PrintImageHref', array('SAVE', 'Save changes', TRUE)); ?>
 	</td></tr>
 	<!-- Save button operators -->
-	<input id='confirm-btn' class='tab-operator' type="submit" value="Save" class="btn btn-success btn-lg" style="margin-right: 5px;">
-	<a id='abort-btn' class="btn btn-warning btn-lg tab-operator" style="margin-left: 5px;" href="javascript:history.go(0)">Abort</a> 
-	
+	<a id='confirm-btn' type='submit' class='tab-operator tab-link' target='#updname=upd'>Save</a>
+	<a id='abort-btn' type='abort' class="tab-operator tab-link">Abort</a> 
 	</form>
 	</div>
 	

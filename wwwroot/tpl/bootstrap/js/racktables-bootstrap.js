@@ -1,3 +1,11 @@
+/*
+*   Javascript for racktables bootstrap theme
+*
+*   needs:
+*   - jquery
+*   - jquery getpath plugin
+*/
+
 // Setup page when loaded
 (function($) {
     $(document).ready(function() { 
@@ -26,8 +34,21 @@
         // Add all operators to bar on the left
         var operatorstabs = $('.tab-operator');
         for (var i = 0; i < operatorstabs.length; i++) {
+            switch(operatorstabs[i].type){
+                case 'submit':
+                    //Set target 
+                    operatorstabs.eq(i).attr('href', 'javascript:$("' + operatorstabs[i].target.replace( /(:|=|\.|\[|\])/g, "\\\\$1" ) + '").submit();')  
+                    break;
+                case 'abort':
+                    operatorstabs.eq(i).attr('href', 'javascript:history.go(0);')
+                    break;
+            }
+
             $('.operator-list').append( $('<li/>').append(operatorstabs.eq(i).clone()));
-            $('.operator-list').children().last().prepend(getGlyphicon(operatorstabs[i].id));
+
+            // Add links if any 
+            ($('.operator-list').children().last().prepend(getGlyphicon(operatorstabs[i].id)))
+            .children().eq(0).attr('href', operatorstabs[i].href);
             operatorstabs.eq(i).remove();
         }
     });
@@ -49,16 +70,17 @@ function getGlyphicon(glyphiconID) {
         case 'rackspacehistory':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-list-alt'></span></a>";
         case 'uidefault':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-list-home'></span></a>";
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-home'></span></a>";
         case 'uireset':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-list-flash'></span></a>";
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-flash'></span></a>";
         case 'confirm-btn':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-list-ok'></span></a>";
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-ok'></span></a>";
         case 'uiedit':
         case 'rackspaceeditrows':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span></a>";
         case 'abort-btn':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-remove'></span></a>";       
-
+        default:
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-exclamation-sign'></span></a>";
     }
 }

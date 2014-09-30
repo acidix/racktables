@@ -44,6 +44,8 @@
         <script src="./js/AdminLTE/demo.js" type="text/javascript"></script>
         <!-- Parsley for form validation -->
         <script src="./js/parsley.min.js" type="text/javascript"></script>
+        <!-- Get path jquery plugin -->
+        <script src="./tpl/bootstrap/js/jquery-getpath.js" type="text/javascript"></script>
         <!-- Bootstrap theme javascript -->
         <script src="./tpl/bootstrap/js/racktables-bootstrap.js" type="text/javascript"></script>
 
@@ -150,7 +152,7 @@
                 <!-- /.sidebar -->
             </aside>
 
-            <aside class="left-side sidebar-offcanvas tabbar" style="min-height: 20px;" id="tabsidebar">
+            <aside class="right-side sidebar-offcanvas tabbar" style="min-height: 20px;" id="tabsidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
                 <section class="sidebar">
                     <ul class="sidebar-menu"><?php $this->Tabs; ?></ul>
