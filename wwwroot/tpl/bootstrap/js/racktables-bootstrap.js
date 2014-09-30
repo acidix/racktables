@@ -3,9 +3,8 @@
 *
 *   needs:
 *   - jquery
-*   - jquery getpath plugin
+*   - enquiere
 */
-
 // Setup page when loaded
 (function($) {
     $(document).ready(function() { 
@@ -17,16 +16,21 @@
             tabs.eq(i).prepend(getGlyphicon(tabs[i].id));
             tabs.eq(i).children().eq(0).attr('href', link);
         };
-        $(".tab-link").hide();
 
         // Set timeout for showing tab names
         var tabTimeout;
         $('#tabsidebar').mouseenter(function() {
+            if($('#tabsidebar').hasClass('horizontal-tabbar'))
+                return;
+
             console.log("start timeout");
             tabTimeout = setTimeout(function() {
-                $(".tab-link").show();    
+                $(".tab-link").fadeIn("slow");
             }, 1000);
         }).mouseleave(function() {
+            if($('#tabsidebar').hasClass('horizontal-tabbar'))
+                return;
+
             $(".tab-link").hide();     
             clearTimeout(tabTimeout);
         });
@@ -51,6 +55,18 @@
             .children().eq(0).attr('href', operatorstabs[i].href);
             operatorstabs.eq(i).remove();
         }
+
+        // Check for orientation
+        enquire.register("screen and (max-width:560px)", {
+        match : function () {
+            // Add css class to tabbar 
+            $('#tabsidebar').addClass('horizontal-tabbar'); 
+        },
+        unmatch : function () {
+            $('#tabsidebar').remove('horizontal-tabbar');
+        }
+        });
+
     });
 })(jQuery);
 

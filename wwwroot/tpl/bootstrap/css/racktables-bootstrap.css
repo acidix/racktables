@@ -46,24 +46,6 @@ section.content {
 	z-index: 4;
 }
 
-.right-side {
-	position: absolute;
-	left: 40px;
-}
-
-.save_overlay {
-	left: 85%;
-	background-color: white;
-	padding: 10px 10px 10px 10px;
-    width: auto;
-    text-align:left;
-    position: fixed;
-    z-index: 2;
-    border:2px solid gray;
-    border-radius: 10px;
-    box-shadow: 5px 5px 2px #888888;
-}
-
 .sidebar > .sidebar-menu > li > .tab-glyph {
 	font-size: 20px;
 	display: inline-block;
@@ -72,7 +54,7 @@ section.content {
 }
 
 .sidebar .sidebar-menu > li > .tab-link {
-	display: inline-block;
+	display: none;
 }
 
 .sidebar > .sidebar-menu > li.active > a.tab-glyph {
@@ -94,6 +76,69 @@ section.content {
 .sidebar > .sidebar-menu > li:hover {
 	background: white;
 }
+
+/* Make tabbar horizontal on small screens */
+@media (max-width: 560px) { 
+
+	.right-side.sidebar-offcanvas.tabbar.horizontal-tabbar {
+	/*	background-image: linear-gradient(to right, rgba(51, 153, 170, 0.14) 20%, rgba(255, 255, 255, 0.75) 50%);
+		*/
+		display: inline-block;
+		background-color: white;
+		position: absolute;
+		left: 0px;
+		width: 100%;
+		height: auto;
+		z-index: 1;
+	}
+
+	.right-side:not(.horizontal-tabbar) {
+		position: absolute;
+		top: 100px;
+	}
+	
+	.horizontal-tabbar > .sidebar > .sidebar-menu {
+		display: block;
+		white-space: nowrap;
+		overflow-x: scroll; 
+		overflow-y: hidden;
+  		-webkit-overflow-scrolling: touch;
+	}
+
+	.horizontal-tabbar > .sidebar > .sidebar-menu > li {
+		display: inline-block;
+	}
+
+	.horizontal-tabbar > .sidebar > .sidebar-menu > li > .tab-glyph {
+		font-size: 20px;
+		display: inline-block;
+		color: black;
+		padding: 10px 10px 10px 10px;
+	}
+	.horizontal-tabbar > .sidebar .sidebar-menu > li > .tab-link {
+		display: inline-block;
+	}
+
+}
+
+.right-side {
+	position: absolute;
+	left: 40px;
+}
+
+.save_overlay {
+	left: 85%;
+	background-color: white;
+	padding: 10px 10px 10px 10px;
+    width: auto;
+    text-align:left;
+    position: fixed;
+    z-index: 2;
+    border:2px solid gray;
+    border-radius: 10px;
+    box-shadow: 5px 5px 2px #888888;
+}
+
 
 .operator-list {
 	position: relative;

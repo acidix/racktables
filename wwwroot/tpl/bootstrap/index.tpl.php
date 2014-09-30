@@ -27,6 +27,8 @@
 		<!-- Bootstrap Theme style -->
         <link href="./tpl/bootstrap/css/racktables-bootstrap.css" rel="stylesheet" type="text/css" />
 
+        <link rel="stylesheet" href="//cdn.mobify.com/modules/scooch/0.3.3/scooch.min.css">
+
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -44,10 +46,12 @@
         <script src="./js/AdminLTE/demo.js" type="text/javascript"></script>
         <!-- Parsley for form validation -->
         <script src="./js/parsley.min.js" type="text/javascript"></script>
-        <!-- Get path jquery plugin -->
-        <script src="./tpl/bootstrap/js/jquery-getpath.js" type="text/javascript"></script>
+        <!-- Enquire for responsive media query -->
+        <script src="./tpl/bootstrap/js/enquire.js" type="text/javascript"></script>
         <!-- Bootstrap theme javascript -->
         <script src="./tpl/bootstrap/js/racktables-bootstrap.js" type="text/javascript"></script>
+
+        <link rel="stylesheet" href="//cdn.mobify.com/modules/scooch/0.3.3/scooch.min.css">
 
 		<?php $this->Header ?>
     </head>
@@ -151,39 +155,42 @@
                 
                 <!-- /.sidebar -->
             </aside>
+            <div class="container-fluid">
 
-            <aside class="right-side sidebar-offcanvas tabbar" style="min-height: 20px;" id="tabsidebar">
-                <!-- sidebar: style can be found in sidebar.less -->
-                <section class="sidebar">
-                    <ul class="sidebar-menu"><?php $this->Tabs; ?></ul>
-                    <ul class="sidebar-menu operator-list"></ul>
-                   <!-- sidebar menu: : style can be found in sidebar.less -->
-                </section>   
-            </aside>
+                <aside class="right-side sidebar-offcanvas tabbar" style="min-height: 20px;" id="tabsidebar">
+                    <!-- sidebar: style can be found in sidebar.less -->
+                    <section class="sidebar">
+                        <ul class="sidebar-menu"><?php $this->Tabs; ?></ul>
+                        <ul class="sidebar-menu operator-list"></ul>
+                       <!-- sidebar menu: : style can be found in sidebar.less -->
+                    </section>   
+                </aside>
 
-            <!-- Right side column. Contains the navbar and content of the page -->
-            <aside class="right-side">
-                <!-- Content Header (Page header) -->
-                <section class="content-header">
-					<?php $this->getH('PageHeadline'); ?>
-					<!--<div class="text-center"><?php $this->Tabs ?></div>-->
-					<!-- <?php //$this->getH('PageHeadline',array($this->_Headline,$this->_SubHeadline)); ?> -->
-                    <ol class="breadcrumb">
-						<?php $this->Path ?>
-						<!--
-                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                        <li><a href="#">Examples</a></li>
-                        <li class="active">Blank page</li>
-						-->
-                    </ol>
-                </section>
+                <!-- Right side column. Contains the navbar and content of the page -->
+                <aside class="right-side" >
+                
+                    <!-- Content Header (Page header) -->
+                    <section class="content-header">
+    					<?php $this->getH('PageHeadline'); ?>
+    					<!--<div class="text-center"><?php $this->Tabs ?></div>-->
+    					<!-- <?php //$this->getH('PageHeadline',array($this->_Headline,$this->_SubHeadline)); ?> -->
+                        <ol class="breadcrumb">
+    						<?php $this->Path ?>
+    						<!--
+                            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                            <li><a href="#">Examples</a></li>
+                            <li class="active">Blank page</li>
+    						-->
+                        </ol>
+                    </section>
 
-                <!-- Main content -->
-                <section class="content">
-					<?php $this->Message ?>
-					<?php $this->Payload ?>
-                </section><!-- /.content -->
-            </aside><!-- /.right-side -->
+                    <!-- Main content -->
+                    <section class="content">
+    					<?php $this->Message ?>
+    					<?php $this->Payload ?>
+                    </section><!-- /.content -->
+                </aside><!-- /.right-side -->
+            </div>
         </div><!-- ./wrapper -->
     </body>
 </html>
