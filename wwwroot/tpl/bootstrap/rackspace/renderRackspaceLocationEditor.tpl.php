@@ -2,7 +2,6 @@
 	
 	if (defined("RS_TPL")) {
 	$js = <<<JS
-	<script type="text/javascript">
 	function locationeditor_showselectbox(e) {
 		$(this).load('index.php', {module: 'ajax', ac: 'get-location-select', locationid: this.id});
 		$(this).unbind('mousedown', locationeditor_showselectbox);
@@ -10,7 +9,6 @@
 	$(document).ready(function () {
 		$('select.locationlist-popup').bind('mousedown', locationeditor_showselectbox);
 	});
-	</script>
 JS;
 	$this->addJS($js,true);?>
 	<div class="box box-primary">

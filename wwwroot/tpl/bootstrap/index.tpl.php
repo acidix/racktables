@@ -155,42 +155,39 @@
                 
                 <!-- /.sidebar -->
             </aside>
-            <div class="container-fluid">
-
-                <aside class="right-side sidebar-offcanvas tabbar" style="min-height: 20px;" id="tabsidebar">
-                    <!-- sidebar: style can be found in sidebar.less -->
-                    <section class="sidebar">
-                        <ul class="sidebar-menu"><?php $this->Tabs; ?></ul>
-                        <ul class="sidebar-menu operator-list"></ul>
-                       <!-- sidebar menu: : style can be found in sidebar.less -->
+            <!-- Right side column. Contains the tabs, navbar and content of the page -->
+            <aside class="right-side">
+                <div class="container-fluid">
+                <div class="row">
+                     <!-- sidebar for tabs and operator -->
+                    <section class="sidebar tabbar col-sm-1" id="tabsidebar">
+                        <ul class="sidebar-menu tabs-list"><?php $this->Tabs; ?></ul>
                     </section>   
-                </aside>
+                    <div class="col-sm-11" id='contentarea'>
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header" style='padding-left: 15px'>
+            				<?php $this->getH('PageHeadline'); ?>
+            				<!--<div class="text-center"><?php $this->Tabs ?></div>-->
+            				<!-- <?php //$this->getH('PageHeadline',array($this->_Headline,$this->_SubHeadline)); ?> -->
+                            <ol class="breadcrumb">
+            					<?php $this->Path ?>
+            					<!--
+                                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                                <li><a href="#">Examples</a></li>
+                                <li class="active">Blank page</li>
+            					-->
+                            </ol>
+                        </section>
 
-                <!-- Right side column. Contains the navbar and content of the page -->
-                <aside class="right-side" >
-                
-                    <!-- Content Header (Page header) -->
-                    <section class="content-header">
-    					<?php $this->getH('PageHeadline'); ?>
-    					<!--<div class="text-center"><?php $this->Tabs ?></div>-->
-    					<!-- <?php //$this->getH('PageHeadline',array($this->_Headline,$this->_SubHeadline)); ?> -->
-                        <ol class="breadcrumb">
-    						<?php $this->Path ?>
-    						<!--
-                            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                            <li><a href="#">Examples</a></li>
-                            <li class="active">Blank page</li>
-    						-->
-                        </ol>
-                    </section>
-
-                    <!-- Main content -->
-                    <section class="content">
-    					<?php $this->Message ?>
-    					<?php $this->Payload ?>
-                    </section><!-- /.content -->
-                </aside><!-- /.right-side -->
-            </div>
+                        <!-- Main content -->
+                        <section class="content">
+            				<?php $this->Message ?>
+            				<?php $this->Payload ?>
+                        </section><!-- /.content -->
+                    </div>
+                </div>
+                </div>
+            </aside><!-- /.right-side -->
         </div><!-- ./wrapper -->
     </body>
 </html>

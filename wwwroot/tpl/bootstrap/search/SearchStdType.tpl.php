@@ -1,6 +1,11 @@
 <?php if (defined("RS_TPL")) {?>
-<div class="box" style="margin-top: 20px">
-	<div class="box-header"><h3 align="center"><a href='index.php?page=<?php $this->page ?>'><?php $this->title ?></a></h3></div>
+<div class="box box-solid box-primary" style="margin-top: 20px">
+	<div class="box-header"><h3 class='box-title'><a href='index.php?page=<?php $this->page ?>'><?php $this->title ?></a></h3>
+		<div class="box-tools pull-right" >
+	        <button class="btn btn-primary btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+	        <button class="btn btn-primary btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>
+	    </div>
+    </div>
 	<div class="box-body box-body table-responsive no-padding">
 		<table border=0 cellpadding=5 cellspacing=0 align=center class="table table-hover">
 		<?php $this->startLoop("searchLoopObjs"); ?>
