@@ -30,7 +30,6 @@ section.content {
 .btn-toggle-portlet {
 	position: relative;
 	margin: 5px 5px 5px 5px;
-	left: 75%;
 }
 
 .sidebar.tabbar {
@@ -77,6 +76,32 @@ section.content {
 	background: transparent;
 }
 
+.sidebar.tabbar > .sidebar-menu > li.tab-operator[type='submit'] {
+	background: green;
+	color: white;
+	padding: 0px 3px 0px 3px;
+}
+
+
+.sidebar.tabbar > .sidebar-menu > li.tab-operator > a {
+	background: inherit;
+	color: inherit;
+}
+
+.sidebar.tabbar > .sidebar-menu > li.tab-operator > .tab-glyph > span {
+	background: inherit;
+	color: inherit;
+}
+
+.sidebar.tabbar > .sidebar-menu > li.tab-operator[type='abort'] {
+	background: #D00000;
+	color: white;
+}
+
+.sidebar.tabbar > .sidebar-menu > li.tab-operator[type='warning'] {
+	background: #FFCC33;
+	color: white;
+}
 
 /* Make tabbar horizontal on small screens */
 @media (max-width: 750px) { 
@@ -146,17 +171,62 @@ section.content {
 
 	.sidebar.tabbar > .sidebar-menu > li.operator-spacer {
 		padding: 0px 10px 0px 10px;
-	/*  border-top: transparent;
-		box-shadow: none;
-		background: transparent; */
+	}
+
+	.sidebar.tabbar > .sidebar-menu > li.tab-operator[type='submit'] {
+		padding: 0px 3px 0px 3px;
+	}
+
+	.sidebar.tabbar > .sidebar-menu > li.tab-operator[type='abort'] {
+		padding: 0px 3px 0px 3px;
+	}
+
+	.sidebar.tabbar > .sidebar-menu > li.tab-operator[type='warning'] {
+		padding: 0px 3px 0px 3px;
 	}
 }
-/*
-.right-side:not(.tabbar) {
-	position: absolute;
-	width: 100%;
-}
-*/
+
 .box.box-solid.box-primary > .box-header a {
 	color: white;
+}
+
+/* Rackcode terminal */
+
+.rackcode-console > textarea {
+	width: 100%;
+	height: 150px;
+}
+
+.box.box-primary.terminal-box {
+	border-top-color: black
+}
+.box.box-primary.terminal-box > .box-header > .box-tools .btn.btn-default.btn-sm {
+	border: none;
+	box-shadow: none;
+	background-color: inherit;
+}
+
+.rackcode-console-btn-overlay {
+	background-color: rgba(0, 0, 0, 0.75);
+	padding: 0px 10px 0px 10px;
+	/*width: 80%;*/
+	z-index: 3;
+	position: absolute;
+	height: 30px;
+	left: 10px;
+	display:  none;
+}
+
+.rackcode-console-btn-overlay > .rackcode-console-btn {
+	background: transparent;
+	border: white;
+	height: inherit;
+	border-right: solid rgba(255, 255, 255, 0.75);
+	float: right;
+	color: white;
+	top: 0;
+}
+
+.rackcode-console-btn-overlay > .rackcode-console-btn:last-child {
+	border-left: solid rgba(255, 255, 255, 0.75);
 }

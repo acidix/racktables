@@ -51,7 +51,7 @@
                 $('.tabs-list').append( $('<li/>').addClass('operator-spacer'));
             }
 
-            $('.tabs-list').append( $('<li/>').addClass('tab tab-operator').append(operatorstabs.eq(i).clone()));
+            $('.tabs-list').append( $('<li/>').addClass('tab tab-operator').attr('type', operatorstabs[i].type).append(operatorstabs.eq(i).clone()));
             
             // Add links if any 
             ($('.tabs-list').children().last().prepend(getGlyphicon(operatorstabs[i].id)))
@@ -106,4 +106,17 @@ function getGlyphicon(glyphiconID) {
         default:
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-exclamation-sign'></span></a>";
     }
+}
+
+function showConsoleBtns(rackconsole) {
+    if(this.finished == true)
+        return;
+    this.finished = true;
+  
+    $('.rackcode-console-btn-overlay').css('width', $(rackconsole).css('width'));
+    $('.rackcode-console-btn-overlay').css('top', (parseInt($(rackconsole).outerHeight()) +21) + "px");
+    $('.rackcode-console-btn-overlay').fadeIn();
+    $(window).resize(function() {
+        $('.rackcode-console-btn-overlay').css('width', $(rackconsole).css('width'));   
+    });
 }

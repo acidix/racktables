@@ -4,7 +4,9 @@
 		<div class="box box-primary" style="position: relative;">
 			<div class="box-header">
 				<h3 class="box-title">Objects</h3>
-				<?php $this->CellFilterPortlet; ?>
+				<div class='box-tools pull-right'>
+					<?php $this->CellFilterPortlet; ?>
+				</div>
 			</div>
 			<div class="box-body">
 				<table id="object_table" class="table table-bordered table-striped">
@@ -40,7 +42,34 @@
 	<div class='col-md-2'>
 	</div>
 </div>
-
+<div class="row">
+	<div class='col-md-12'>
+		<div class="box box-primary terminal-box" style="position: relative;">
+			<div class="box-header">
+				<h3 class="box-title">Rackcode</h3>
+				<div class="box-tools pull-right">
+                <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                </div>
+			</div>
+			<div class="box-body">
+				<div class="row">
+					<form method=get>
+				    <div class='rackcode-console col-sm-12'> 
+				    	<textarea onchange="showConsoleBtns('#rackcodeconsol')" onkeyup="showConsoleBtns('#rackcodeconsole')" id='rackcodeconsole' name="cfe"></textarea>
+				    </div>
+				    	<input type="hidden" name="page" value="depot">
+				    	<input type="hidden" name="tab" value="default">
+				    	<div class='rackcode-console-btn-overlay'>
+				    		<input class='rackcode-console-btn' type="submit" value="Submit" name="submit"></input>
+				    		<button class='rackcode-console-btn' onclick="$('#rackcodeconsole').val('');">Reset</button>
+						</div>
+					</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 <!-- DATA TABES SCRIPT -->
 <script src="./js/plugins/datatables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="./js/plugins/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
