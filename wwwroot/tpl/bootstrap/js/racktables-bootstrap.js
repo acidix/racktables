@@ -47,10 +47,12 @@
                     operatorstabs.eq(i).attr('href', 'javascript:history.go(0);')
                     break;
             }
+            if(i == 0) {
+                $('.tabs-list').append( $('<li/>').addClass('operator-spacer'));
+            }
 
             $('.tabs-list').append( $('<li/>').addClass('tab tab-operator').append(operatorstabs.eq(i).clone()));
             
-            if(i == 0) $('.tabs-list').children().last().addClass('first-operator');
             // Add links if any 
             ($('.tabs-list').children().last().prepend(getGlyphicon(operatorstabs[i].id)))
             .children().eq(0).attr('href', operatorstabs[i].href);
@@ -64,15 +66,11 @@
             $('#tabsidebar').addClass('horizontal-tabbar');
             $('.tab-link').css('display', 'inline-block');
             $('#contentarea').css('margin-left', '0px');
-         //    , parseInt($('#tabsidebar').next().attr('inital-left')) + "px"); 
-        //    $('#tabsidebar').next().css('top', (parseInt($('#tabsidebar').height()) + parseInt($('#tabsidebar').next().attr('inital-top'))) + "px");
         },
         unmatch : function () {
             $('#tabsidebar').removeClass('horizontal-tabbar');
             $('.tab-link').css('display', 'none');      
             $('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
-        //    $('#tabsidebar').next().css('top', parseInt($('#tabsidebar').next().attr('inital-top')) + "px");  
-        //    $('#tabsidebar').next().css('left', (parseInt($('#tabsidebar').width()) + parseInt($('#tabsidebar').next().attr('inital-left'))) + "px");
         }
         });
 
