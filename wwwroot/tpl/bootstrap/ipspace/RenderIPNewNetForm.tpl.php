@@ -5,7 +5,7 @@
 		$this->addRequirement("Header","HeaderJsInline",array("code"=>"$(document).ready(function () {
 			$('form#add input[name=\"range\"]').attr('match', '${myregexp}');
 			Validate.init();
-		});")); ?>
+		});"));  ?>
 	<div class=portlet>
 		<h2>Add new</h2><?php $this->getH("PrintOpFormIntro", array('add')); ?>
 		<table border=0 cellpadding=5 cellspacing=0 align=center>

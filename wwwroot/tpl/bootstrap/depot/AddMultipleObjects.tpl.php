@@ -7,36 +7,38 @@
 	<div class="box-header">
 		<h3 class="box-title">Add objects</h3>
 	</div>
-	<div class="box-body no-padding">
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Type</th>
-					<th>Common name</th>
-					<th>Visible label</th>
-					<th>Asset tag</th>
-					<th>Tags</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php while($this->loop('AddTable')) { ?>
-				<tr count="<?php $this->i ?>" >
-					<td><?php $this->NiftySelect; ?></td>
-					<td><input type=text size=30 name=<?php $this->i ?>_object_name ></td>
-					<td><input type=text size=30 name=<?php $this->i ?>_object_label ></td>
-					<td><input type=text size=20 name=<?php $this->i ?>_object_asset_no ></td>
-					<td><?php $this->TagsPicker; ?></td>
-					<td>
-						<div class="btn-group">
-							<a class="btn btn-danger" name="<?php $this->i ?>_btn_remove" title="Remove this line" onclick="removeLine(<?php $this->i ?>)"><span class="glyphicon glyphicon-remove"></span></a>
-							<a class="btn btn-primary" name="<?php $this->i ?>_btn_clone" title="Clone this line" onclick="cloneLine(<?php $this->i ?>)"><span class="glyphicon glyphicon-plus"></span></a>
-						</div>
-					</td>
-				</tr>
-				<?php } ?>
-			</tbody>
-		</table>
+	<div class="box-body no-padding" style="overflow-x: auto">
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Type</th>
+						<th>Common name</th>
+						<th>Visible label</th>
+						<th>Asset tag</th>
+						<th>Tags</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php while($this->loop('AddTable')) { ?>
+					<tr count="<?php $this->i ?>" >
+						<td><?php $this->NiftySelect; ?></td>
+						<td><input type=text name=<?php $this->i ?>_object_name ></td>
+						<td><input type=text name=<?php $this->i ?>_object_label ></td>
+						<td><input type=text name=<?php $this->i ?>_object_asset_no ></td>
+						<td><?php $this->TagsPicker; ?></td>
+						<td style="min-width: 100px">
+							<div class="btn-group" style="inline-table">
+								<a class="btn btn-danger" name="<?php $this->i ?>_btn_remove" title="Remove this line" onclick="removeLine(<?php $this->i ?>)"><span class="glyphicon glyphicon-remove"></span></a>
+								<a class="btn btn-primary" name="<?php $this->i ?>_btn_clone" title="Clone this line" onclick="cloneLine(<?php $this->i ?>)"><span class="glyphicon glyphicon-plus"></span></a>
+							</div>
+						</td>
+					</tr>
+					<?php } ?>
+				</tbody>
+			</table>
+		</div>
 	</div>
 	<div class="box-footer">
 		<button class="btn btn-success btn-block" submit>Submit</button>

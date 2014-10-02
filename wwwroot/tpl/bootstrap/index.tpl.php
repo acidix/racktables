@@ -16,6 +16,8 @@
         <meta charset="UTF-8">
         <title><?php $this->PageTitle ?></title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+        <!-- JQuery ui -->
+        <link href="./css/jquery-ui.min.css" rel="stylesheet" type="text/css" />
         <!-- bootstrap 3.0.2 -->
         <link href="./css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <!-- font Awesome -->
@@ -27,8 +29,6 @@
 		<!-- Bootstrap Theme style -->
         <link href="./tpl/bootstrap/css/racktables-bootstrap.css" rel="stylesheet" type="text/css" />
 
-        <link rel="stylesheet" href="//cdn.mobify.com/modules/scooch/0.3.3/scooch.min.css">
-
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -38,6 +38,8 @@
 
 		<!-- jQuery 2.0.2 -->
         <script src="./js/jquery-2.0.2.min.js" type="text/javascript"></script>
+        <!-- jQuery UI-->
+        <script src="./js/jquery-ui.min.js" type="text/javascript"></script>
         <!-- Bootstrap -->
         <script src="./js/bootstrap.min.js" type="text/javascript"></script>
         <!-- AdminLTE App -->
@@ -51,8 +53,7 @@
         <!-- Bootstrap theme javascript -->
         <script src="./tpl/bootstrap/js/racktables-bootstrap.js" type="text/javascript"></script>
 
-        <link rel="stylesheet" href="//cdn.mobify.com/modules/scooch/0.3.3/scooch.min.css">
-
+        
 		<?php $this->Header ?>
     </head>
     
