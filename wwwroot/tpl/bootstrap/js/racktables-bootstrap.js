@@ -11,11 +11,17 @@
         // Add glyphicons to all tabs
         var tabs = $("li.tab");
 
+        var maxchildren = 0;
         for (var i = 0; i < tabs.length; i++) {
             var link = tabs.eq(i).children('a')[0].href;
             tabs.eq(i).prepend(getGlyphicon(tabs[i].id));
+
             tabs.eq(i).children().eq(0).attr('href', link);
+            
+            if(maxchildren < tabs.eq(i).children().eq(0).children().length)
+                maxchildren = tabs.eq(i).children().eq(0).children().length;
         };
+        $('.tab-glyph').css('min-width', (maxchildren * 30) + 'px');
 
         // Set timeout for showing tab names
         var tabTimeout;
@@ -37,6 +43,7 @@
     
         // Add all operators to bar on the left
         var operatorstabs = $('.tab-operator');
+        
         for (var i = 0; i < operatorstabs.length; i++) {
             switch(operatorstabs[i].type){
                 case 'submit':
@@ -54,10 +61,16 @@
             $('.tabs-list').append( $('<li/>').addClass('tab tab-operator').attr('type', operatorstabs[i].type).append(operatorstabs.eq(i).clone()));
             
             // Add links if any 
-            ($('.tabs-list').children().last().prepend(getGlyphicon(operatorstabs[i].id)))
+            var test = ($('.tabs-list').children().last().prepend(getGlyphicon(operatorstabs[i].id)))
             .children().eq(0).attr('href', operatorstabs[i].href);
+            
+            
             operatorstabs.eq(i).remove();
         }
+        
+        //$('.tabs-glyph').css('width', maxwidth + 'px');
+        //console.log('max width is' + maxwidth);
+
         $('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
         // Check for orientation
         enquire.register("screen and (max-width:750px)", {
@@ -97,8 +110,10 @@ function getGlyphicon(glyphiconID) {
         case 'depotaddmore':
         case 'ipv4spacenewrange':
         case 'ipv6spacenewrange':
+        case 'rownewrack':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-plus'></span></a>";
         case 'rackspacehistory':
+        case 'rowfiles':
         case 'reportsrackcode':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-list-alt'></span></a>";
         case 'uidefault':
@@ -112,9 +127,10 @@ function getGlyphicon(glyphiconID) {
         case 'ipv4spacemanage':
         case 'ipv6spacemanage':
         case 'filesmanage':
+        case 'rowedit':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span></a>";
         case 'abort-btn':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-list-alt'></span></a>";       
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-remove'></span></a>";       
         case 'reportsrackcode':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-hdd'></span></a>"; 
         case 'reportsintegrity':
@@ -124,12 +140,16 @@ function getGlyphicon(glyphiconID) {
         case '8021qdefault':
         case 'virtualdefault':
         case 'objectlogdefault':
+        case 'rowdefault':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-eye-open'></span></a>";  
         case '8021qvdlist':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span><span class='glyphicon glyphicon-home'></span></a>";  
+        case 'rowtagroller':
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-tag'></span></a>";   
+        case 'roweditracks':
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span><span class='glyphicon glyphicon-home'></span></a>";   
         case '8021qvstlist':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span><span class='glyphicon glyphicon-align-justify'></span></a>";  
-        
         default:
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-exclamation-sign'></span></a>";
         

@@ -103,6 +103,10 @@ section.content {
 	color: white;
 }
 
+.sidebar.tabbar > .sidebar-menu > li:first-of-type > a {
+	border-top: none;
+}
+
 /* Make tabbar horizontal on small screens */
 @media (max-width: 750px) { 
 
