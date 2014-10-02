@@ -395,7 +395,7 @@ function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree =
         {
             $ret = '<select';
             foreach ($select_attrs as $attr_name => $attr_value)
-            $ret .= " ${attr_name}=${attr_value}";
+                $ret .= " ${attr_name}=${attr_value} ";
             $ret .= ">\n";
             foreach ($groupList as $groupname => $groupdata)
             {
@@ -442,7 +442,6 @@ function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree =
         }
         else
         {
-
             $mod->setOutput("isTree", false);
             $selectAttrArr = array();
             foreach ($select_attrs as $attr_name => $attr_value)
