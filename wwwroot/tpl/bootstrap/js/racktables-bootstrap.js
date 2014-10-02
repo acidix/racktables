@@ -87,10 +87,19 @@ function getGlyphicon(glyphiconID) {
     console.log(glyphiconID);
     switch (glyphiconID){
         case 'rackspacedefault':
+        case 'depotdefault':
+        case 'ipv4spacedefault':
+        case 'ipv6spacedefault':
+        case 'filesdefault':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-search'></span></a>";
         case 'rackspaceeditlocations':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-bookmark'></span></a>";
+        case 'depotaddmore':
+        case 'ipv4spacenewrange':
+        case 'ipv6spacenewrange':
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-plus'></span></a>";
         case 'rackspacehistory':
+        case 'reportsrackcode':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-list-alt'></span></a>";
         case 'uidefault':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-home'></span></a>";
@@ -100,11 +109,30 @@ function getGlyphicon(glyphiconID) {
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-ok'></span></a>";
         case 'uiedit':
         case 'rackspaceeditrows':
+        case 'ipv4spacemanage':
+        case 'ipv6spacemanage':
+        case 'filesmanage':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span></a>";
         case 'abort-btn':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-remove'></span></a>";       
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-list-alt'></span></a>";       
+        case 'reportsrackcode':
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-hdd'></span></a>"; 
+        case 'reportsintegrity':
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-hdd'></span></a>";  
+        case 'reportswarranty':
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-time'></span></a>";  
+        case '8021qdefault':
+        case 'virtualdefault':
+        case 'objectlogdefault':
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-eye-open'></span></a>";  
+        case '8021qvdlist':
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span><span class='glyphicon glyphicon-home'></span></a>";  
+        case '8021qvstlist':
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span><span class='glyphicon glyphicon-align-justify'></span></a>";  
+        
         default:
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-exclamation-sign'></span></a>";
+        
     }
 }
 

@@ -567,7 +567,7 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 				echo '<ul class="treeview-menu">';
 				echo '<li';
 				echo ($pageno == $pagen && $tabno == 'default' ? ' class="active"' : '');
-				echo '><a href="index.php?page=' . $pagen . '">' . $tab[$pagen]['default'] . '</a></li>';
+				echo '><a href="index.php?page=' . $pagen . '&tab=default">' . $tab[$pagen]['default'] . '</a></li>';
 				foreach($sidebar[$pagen] as $tabn) {
 					echo '<li';
 					echo (($pageno == $pagen && $tabno == $tabn) ? ' class="active"' : '');
