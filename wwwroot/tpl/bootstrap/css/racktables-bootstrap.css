@@ -234,3 +234,15 @@ section.content {
 .rackcode-console-btn-overlay > .rackcode-console-btn:last-child {
 	border-left: solid rgba(255, 255, 255, 0.75);
 }
+
+.ui-menu .ui-menu-item {
+	background: white;
+	font-family: 'Source Sans Pro', sans-serif;
+	color: #3c8dbc;
+	font-size: 14px;
+	border: 1px solid #ddd;
+}
+
+.ui-state-focus, .ui-widget-content .ui-state-focus {
+	background-color: #f3f4f5;
+}

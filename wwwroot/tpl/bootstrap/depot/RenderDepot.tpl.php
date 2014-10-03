@@ -73,10 +73,34 @@
 <!-- DATA TABES SCRIPT -->
 <script src="./js/plugins/datatables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="./js/plugins/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
+<!-- DATA Tables CSS -->
+<link href="./css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
      $(function() {
-          $("#object_table").dataTable();
+     	// Add tags to autocomplete
+	 	// has to be done before tags are hidden
+     	
+     	var taglist = [];
+     	var possTags = $('#object_table > tbody > tr > td > small > a');
+     	for (var i = 0; i < possTags.length; i++) {
+     		// No duplicates
+     		if($.inArray(possTags[i].innerHTML, taglist) === -1) taglist.push(possTags[i].innerHTML);
+     	};
+     	console.log(taglist);
+     	console.log($('#object_table_filter > label > input[type="text"]').autocomplete);
+     	
+     	$("#object_table").dataTable();
+	 	$('#object_table_filter > label > input[type="text"]').autocomplete({
+     		source: taglist
+     	}).onclick(function() {
+     		$('#object_table_filter > label > input[type="text"]').trigger('submit');
+     	}).keydown(function(e){
+			if (e.keyCode === 13){
+				$('#object_table_filter > label > input[type="text"]').trigger('submit');
+			}
+		});
+
      });
 </script>
 <?php } else { ?>

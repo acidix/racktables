@@ -266,6 +266,4 @@ global $tabhandler;
 
 $tabhandler['rackspace']['default'] = 'renderRackspaceSVG';
 $tabhandler['depot']['addmore'] = 'renderDynamicAddMultipleObjectsForm';
-
-$tabhandler['favicon']['default'] = '<span class="glyphicon-class">glyphicon glyphicon-dashboard</span>';
 ?>
