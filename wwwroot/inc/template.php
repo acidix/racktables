@@ -872,7 +872,8 @@ class TemplateModule
 		// Remove comments from js code
 		$output_cont = preg_replace("(.*//.*\n)",'', ob_get_clean());
 		// Replace whitespace in the output 
-		return str_replace(array("\r\n", "\r", "\n\t", "\t", '  ', '    ', '    '), '', $output_cont);
+		$output_cont = str_replace(array("\t\t", '    ', '  ', '   '), array("\t", ' ', ' ', ' '),$output_cont);
+		return str_replace(array("\r\n", "\r", "\n\t", "\n\t\t\t", "\n\t\t"), '', $output_cont);
 	}
 	
 	/**
