@@ -1,8 +1,8 @@
 <?php if (defined("RS_TPL")) {?>
 		<br>
 		<center>
-			<a target='_blank' href='?module=download&file_id=<?php $this->Id; ?>&asattach=1'>
-				<?php $this->getH('PrintImageHREF','DOWNLOAD'); ?>
+			<a target='_blank' href='?module=download&file_id=<?php $this->Id; ?>&asattach=1' class="btn btn-primary btn-large">
+				<span class="glyphicon glyphicon-cloud-download"></span>
 			</a>
 		</center>
 <?php } else { ?>

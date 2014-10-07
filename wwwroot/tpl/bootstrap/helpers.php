@@ -306,11 +306,15 @@ class TemplateHelperPrintOpFormIntro extends TemplateHelperAbstract
 		$opname = $params[0];
 		$extra = array();
 		$upload = FALSE;
+		$extra_attr = array();
 
 		if(count($params) > 1)
 			$extra = $params[1];
 		if(count($params) > 2)
 			$upload = $params[2];
+		if(count($params) > 3) {
+			$extra_attr = $params[3];
+		}
 
 		global $pageno, $tabno, $page;
 		$tplm = TemplateManager::getInstance();
@@ -322,6 +326,12 @@ class TemplateHelperPrintOpFormIntro extends TemplateHelperAbstract
 		if ($upload)
 			$mod->setOutput("isUpload", true);	 
 	//		echo " enctype='multipart/form-data'";
+		
+		$extra_attr_looparr = array();
+		foreach ($extra_attr as $name => $value) {
+			$extra_attr_looparr[] = array('Param'=>$name,'Value'=>$value);
+		}
+		$mod->addOutput('Params', $extra_attr_looparr);
 
 	//	echo ">";
 		fillBypassValues ($pageno, $extra);
