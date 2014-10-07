@@ -233,6 +233,12 @@ function renderDynamicAddMultipleObjectsForm() {
 	
 	// exclude location-related object types
 	global $location_obj_types;
+	$tabindex = 100;
+
+	$typelist = readChapter (CHAP_OBJTYPE, 'o');
+    $typelist[0] = 'select type...';
+    $typelist = cookOptgroups ($typelist);
+
 	foreach ($typelist['other'] as $key => $value)
 	if ($key > 0 && in_array($key, $location_obj_types))
 		unset($typelist['other'][$key]);
@@ -245,8 +251,8 @@ function renderDynamicAddMultipleObjectsForm() {
 		$singleEntry['i'] = $i;
 		
 		$singleEntry['tagsPicker'] = 'A';
-		$singleEntry['Types'] = $typelist;
-			
+		$singleEntry['NiftySelect'] = printNiftySelect ($typelist, array ('name' => "${i}_object_type_id", 'tabindex' => $tabindex), 0);
+					
 		$objectListOutput[] = $singleEntry;
 	}
 	$mod->setOutput("AddTable", $objectListOutput);
@@ -260,5 +266,4 @@ global $tabhandler;
 
 $tabhandler['rackspace']['default'] = 'renderRackspaceSVG';
 $tabhandler['depot']['addmore'] = 'renderDynamicAddMultipleObjectsForm';
-
 ?>

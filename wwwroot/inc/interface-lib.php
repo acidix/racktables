@@ -395,7 +395,7 @@ function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree =
         {
             $ret = '<select';
             foreach ($select_attrs as $attr_name => $attr_value)
-            $ret .= " ${attr_name}=${attr_value}";
+                $ret .= " ${attr_name}=${attr_value} ";
             $ret .= ">\n";
             foreach ($groupList as $groupname => $groupdata)
             {
@@ -410,9 +410,7 @@ function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree =
     }
     else
     {
-
         $tplm = TemplateManager::getInstance();
-
 
         if($parent == null)
             $mod = $tplm->generateModule("GetNiftySelect");
@@ -444,7 +442,6 @@ function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree =
         }
         else
         {
-
             $mod->setOutput("isTree", false);
             $selectAttrArr = array();
             foreach ($select_attrs as $attr_name => $attr_value)
@@ -468,7 +465,6 @@ function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree =
 
         if($parent==null)
             return $mod->run();
-
     }
 }
 

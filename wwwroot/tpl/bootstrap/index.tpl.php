@@ -16,6 +16,8 @@
         <meta charset="UTF-8">
         <title><?php $this->PageTitle ?></title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+        <!-- JQuery ui -->
+        <link href="./css/jquery-ui.min.css" rel="stylesheet" type="text/css" />
         <!-- bootstrap 3.0.2 -->
         <link href="./css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <!-- font Awesome -->
@@ -25,7 +27,7 @@
         <!-- Theme style -->
         <link href="./css/AdminLTE.css" rel="stylesheet" type="text/css" />
 		<!-- Bootstrap Theme style -->
-        <link href="./css/racktables_bootstrap.css" rel="stylesheet" type="text/css" />
+        <link href="./tpl/bootstrap/css/racktables-bootstrap.css" rel="stylesheet" type="text/css" />
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -35,7 +37,9 @@
         <![endif]-->	
 
 		<!-- jQuery 2.0.2 -->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+        <script src="./js/jquery-2.0.2.min.js" type="text/javascript"></script>
+        <!-- jQuery UI-->
+        <script src="./js/jquery-ui.min.js" type="text/javascript"></script>
         <!-- Bootstrap -->
         <script src="./js/bootstrap.min.js" type="text/javascript"></script>
         <!-- AdminLTE App -->
@@ -44,17 +48,13 @@
         <script src="./js/AdminLTE/demo.js" type="text/javascript"></script>
         <!-- Parsley for form validation -->
         <script src="./js/parsley.min.js" type="text/javascript"></script>
+        <!-- Enquire for responsive media query -->
+        <script src="./tpl/bootstrap/js/enquire.js" type="text/javascript"></script>
+        <!-- Bootstrap theme javascript -->
+        <script src="./tpl/bootstrap/js/racktables-bootstrap.js" type="text/javascript"></script>
+
         
 		<?php $this->Header ?>
-        <script type="text/javascript">
-            // Add a callback for the error message
-            $.listen('parsley:field:error', function () {
-                alert('Search form has to be filled');
-            })
-        
-        </script> 
-        
-
     </head>
     
     <body class="skin-blue">
@@ -134,7 +134,6 @@
 						-->
                         <div class="pull-left info">
                             <p>Hello, <?php $this->RemoteDisplayname ?></p>
-                            <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                         </div>
                     </div>
                     <!-- search form -->
@@ -156,47 +155,38 @@
                 
                 <!-- /.sidebar -->
             </aside>
-            
-            <aside class="left-side sidebar-offcanvas extendbar" onmouseover="$('#portletsidebar').show('blind')" style="min-height: 542px;">  
-                <strong>T<br>
-                A<br>
-                B<br>
-                S<br></strong>
-                <div class="pulse_ring"></div>
-            </aside>
-
-            <aside class="left-side sidebar-offcanvas portletbar" onmouseleave="$('#portletsidebar').hide('blind')" style="min-height: 542px; display: none;" id="portletsidebar">
-                <!-- sidebar: style can be found in sidebar.less -->
-                <section class="sidebar">
-                    <ul class="sidebar-menu"><li><strong>Tabs:</strong></li><?php $this->Tabs; ?></ul>
-                   <!-- sidebar menu: : style can be found in sidebar.less -->
-                </section>   
-            </aside>
-
-
-
-            <!-- Right side column. Contains the navbar and content of the page -->
+            <!-- Right side column. Contains the tabs, navbar and content of the page -->
             <aside class="right-side">
-                <!-- Content Header (Page header) -->
-                <section class="content-header">
-					<?php $this->getH('PageHeadline'); ?>
-					<!--<div class="text-center"><?php $this->Tabs ?></div>-->
-					<!-- <?php //$this->getH('PageHeadline',array($this->_Headline,$this->_SubHeadline)); ?> -->
-                    <ol class="breadcrumb">
-						<?php $this->Path ?>
-						<!--
-                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                        <li><a href="#">Examples</a></li>
-                        <li class="active">Blank page</li>
-						-->
-                    </ol>
-                </section>
+                <div class="container-fluid">
+                <div class="row">
+                     <!-- sidebar for tabs and operator -->
+                    <section class="sidebar tabbar col-sm-1" id="tabsidebar">
+                        <ul class="sidebar-menu tabs-list"><?php $this->Tabs; ?></ul>
+                    </section>   
+                    <div class="col-sm-11" id='contentarea'>
+                        <!-- Content Header (Page header) -->
+                        <section class="content-header" style='padding-left: 15px'>
+            				<?php $this->getH('PageHeadline'); ?>
+            				<!--<div class="text-center"><?php $this->Tabs ?></div>-->
+            				<!-- <?php //$this->getH('PageHeadline',array($this->_Headline,$this->_SubHeadline)); ?> -->
+                            <ol class="breadcrumb">
+            					<?php $this->Path ?>
+            					<!--
+                                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                                <li><a href="#">Examples</a></li>
+                                <li class="active">Blank page</li>
+            					-->
+                            </ol>
+                        </section>
 
-                <!-- Main content -->
-                <section class="content">
-					<?php $this->Message ?>
-					<?php $this->Payload ?>
-                </section><!-- /.content -->
+                        <!-- Main content -->
+                        <section class="content">
+            				<?php $this->Message ?>
+            				<?php $this->Payload ?>
+                        </section><!-- /.content -->
+                    </div>
+                </div>
+                </div>
             </aside><!-- /.right-side -->
         </div><!-- ./wrapper -->
     </body>

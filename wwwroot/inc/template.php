@@ -50,7 +50,7 @@ class TemplateManager
 		//TODO Messy code fixit
 		$flipped = array_flip($template_list);
 		
-		/**
+		/*
 		if (!array_key_exists('RacktablesTemplate', $_COOKIE))
 		{
 			setcookie('RacktablesTemplate',$flipped['vanilla']);
@@ -869,7 +869,10 @@ class TemplateModule
 		
 		ob_start();	
 		include dirname(__FILE__) . '/../tpl/' . $this->tpl . '/' . $this->module . '.tpl.php';
-		return str_replace(array("\r\n", "\r", "\n\t", "\t", '  ', '    ', '    '), '', ob_get_clean());
+		// Remove comments from js code
+		$output_cont = preg_replace("(.*//.*\n)",'', ob_get_clean());
+		// Replace whitespace in the output 
+		return str_replace(array("\r\n", "\r", "\n\t", "\t", '  ', '    ', '    '), '', $output_cont);
 	}
 	
 	/**

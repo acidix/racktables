@@ -11,7 +11,7 @@
 					<tr>
 						<td>
 							<select name=location_id tabindex=100 class="form-control">
-								<?php $this->Options; ?>
+								<?php $this->LocationNewOptions; ?>
 							</select>
 						</td>
 						<td>
@@ -51,7 +51,7 @@
 					<tr>
 						<td>
 							<select name=location_id tabindex=100 class="form-control">
-								<?php $this->Options; ?>
+								<?php $this->LocationNewOptions; ?>
 							</select>
 						</td>
 						<td>
