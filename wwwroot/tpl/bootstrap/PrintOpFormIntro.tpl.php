@@ -4,6 +4,9 @@
 		<?php if ($this->is("isUpload",true)) { ?>
 			enctype='multipart/form-data'
 		<?php } ?> 
+		<?php while($this->loop('Params') { ?>
+			<?php $this->Param; ?>="<?php $this->Value; ?>" 
+		<?php } ?>
 	>
 	<?php $this->startLoop("loopArray"); ?>	
 		<input type=hidden name="<?php $this->name ?>" value="<?php $this->val ?>">
