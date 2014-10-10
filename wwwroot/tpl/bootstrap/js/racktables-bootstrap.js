@@ -168,3 +168,32 @@ function showConsoleBtns(rackconsole) {
         $('.rackcode-console-btn-overlay').css('width', $(rackconsole).css('width'));   
     });
 }
+
+// Make data table with tag completion
+function tagsDataTable(table_id) {
+    // Add tags to autocomplete
+    // has to be done before tags are hidden    
+    var taglist = [];
+    var possTags = $('#' + table_id + ' > tbody > tr > td > small > a');
+    for (var i = 0; i < possTags.length; i++) {
+        // No duplicates
+        if($.inArray(possTags[i].innerHTML, taglist) === -1) taglist.push(possTags[i].innerHTML);
+    };
+    
+    var datatab = $('#' + table_id).dataTable();
+    
+    $('#' + table_id + '_filter > label > input[type="text"]').autocomplete({
+        source: taglist,
+        minLength : -1,
+        select: function( event, ui ) {
+            datatab.fnFilter(ui.item.value);
+        }
+    }).focus(function(){            
+        console.log("show");
+        $(this).autocomplete('search');
+    }).keydown(function(e){
+        if (e.keyCode === 13){
+            $('#' + table_id + '_filter > label > input[type="text"]').trigger('submit');
+        }
+    });
+}

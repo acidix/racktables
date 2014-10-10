@@ -107,6 +107,18 @@ section.content {
 	border-top: none;
 }
 
+#contentarea > section.content > div > div.box-header > small {
+	display: inline-block;
+	padding: 14px 10px 10px 4px;
+	margin: 0;
+	font-size: 15px;
+	line-height: 1;
+	color: #999;
+	font-weight: 300;
+	float: left;
+	cursor: default;
+}
+
 /* Make tabbar horizontal on small screens */
 @media (max-width: 750px) { 
 

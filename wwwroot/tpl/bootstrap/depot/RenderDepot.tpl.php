@@ -78,28 +78,7 @@
 
 <script type="text/javascript">
      $(function() {
-     	// Add tags to autocomplete
-	 	// has to be done before tags are hidden
-     	
-     	var taglist = [];
-     	var possTags = $('#object_table > tbody > tr > td > small > a');
-     	for (var i = 0; i < possTags.length; i++) {
-     		// No duplicates
-     		if($.inArray(possTags[i].innerHTML, taglist) === -1) taglist.push(possTags[i].innerHTML);
-     	};
-     	
-        var datatab = $("#object_table").dataTable();
-        
-	 	$('#object_table_filter > label > input[type="text"]').autocomplete({
-     		source: taglist,
-     		select: function( event, ui ) {
-     			datatab.fnFilter(ui.item.value);
-     		}
-     	}).keydown(function(e){
-			if (e.keyCode === 13){
-				$('#object_table_filter > label > input[type="text"]').trigger('submit');
-			}
-		});
+     	tagsDataTable('object_table');
      });
 </script>
 <?php } else { ?>

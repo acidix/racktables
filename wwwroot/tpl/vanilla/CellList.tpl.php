@@ -1,8 +1,12 @@
 <?php if (defined("RS_TPL")) {?>
+
+	<?php if(!$this->is("EmptyResults")) { ?>
+	<div class="box box-info" style="position: relative; overflow-x: auto">
+		<div class="box-header">
+
 	<table border=0 class=objectview>
 		<tr>
 			<td class=pcleft>
-				<?php if(!$this->is("EmptyResults")) { ?>
 				<div class=portlet><h2><?php $this->Title; ?> (<?php $this->CellCount; ?>) </h2>
 						<table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>
 						<?php $this->startLoop("CellListContent"); ?>

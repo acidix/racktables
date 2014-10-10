@@ -48,21 +48,24 @@ $this->setInMemoryTemplate("CellFilterExtraText","<tr><td colspan=2><textarea na
  * Usage: interface.php (showTabs)
  */
 //$this->setInMemoryTemplate("TabActive","<button class='btn btn-lg btn-primary' style='margin: 10px 10px 10px 10px;'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}' style='color:white;'>{{Title}}</a></button>");
-$this->setInMemoryTemplate("TabActive","<li class='tab active' id='{{Page}}{{Tab}}'><a class='tab-link' href='index.php?page={{Page}}&tab={{Tab}}{{Args}}' style='color:black;'>{{Title}}</a></li>");
+$this->setInMemoryTemplate("TabActive","<li class='tab active' id='{{Page}}{{Tab}}'><a class='tab-link'" .
+							"href='index.php?page={{Page}}&tab={{Tab}}{{Args}}' style='color:black;'>{{Title}}</a></li>");
 
 /**
  * Template for: Tablist, currently inactive tabs
  * Usage: interface.php (showTabs)
  */
 //$this->setInMemoryTemplate("TabInactive","<button class='btn btn-default btn-lg' style='margin: 10px 10px 10px 10px;'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></button>");
-$this->setInMemoryTemplate("TabInactive","<li class='tab inactive' id='{{Page}}{{Tab}}'><a class='tab-link' href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
+$this->setInMemoryTemplate("TabInactive","<li class='tab inactive' id='{{Page}}{{Tab}}'><a class='tab-link' " .
+							"href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
 
 /**
  * Template for: Tablist, tabs with warnings
  * Usage: interface.php (showTabs)
  */
 //$this->setInMemoryTemplate("TabAttention","<button class='btn btn-warning btn-lg' style='margin: 10px 10px 10px 10px;'><color:greena href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></button>");
-$this->setInMemoryTemplate("TabAttention","<li class='tab attention' id='{{Page}}{{Tab}}'><a class='tab-link' color:green href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
+$this->setInMemoryTemplate("TabAttention","<li class='tab attention' id='{{Page}}{{Tab}}'><a class='tab-link' color:green " .
+											"href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
 
 /**
  * Template for: Part of the path  in the PathAndSearch module
@@ -192,7 +195,8 @@ $this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{Title}}:</td
 *	Usage: interface-lib-php
 *
 **/
-$this->setInMemoryTemplate("GetProgressBar","<img width=100 height=10 border=0 title='{{done}}%' src='{{src}}'>");
+$this->setInMemoryTemplate("GetProgressBar",'<div class="progress progress-striped active">' .
+						'<div class="progress-bar progress-bar-info" style="width: {{done}}%">{{done}}%</div></div>');
 
 
 /**
