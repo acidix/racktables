@@ -11,18 +11,14 @@ END
 		, TRUE);
 	}
 	?>
-
 	<?php if ($this->is('HasPagination')) { ?>
 		<h3><?php $this->StartIP; ?> ~ <?php $this->EndIP; ?></h3>
 	<?php } ?>
-	
 	<?php $this->Pager; ?>
-	
 	<table class='widetable' border=0 cellspacing=0 cellpadding=5 align='center' width='100%'>
 		<tr><th>Address</th><th>Name</th><th>Comment</th><th>Allocation</th></tr>
 		<?php $this->IPList; ?>
 	</table>
-	
 	<?php if ($this->is('Pager')) { ?>
 	<p><?php $this->Pager; ?></p>
 	<?php } ?>

@@ -87,20 +87,19 @@
      		// No duplicates
      		if($.inArray(possTags[i].innerHTML, taglist) === -1) taglist.push(possTags[i].innerHTML);
      	};
-     	console.log(taglist);
-     	console.log($('#object_table_filter > label > input[type="text"]').autocomplete);
      	
-     	$("#object_table").dataTable();
+        var datatab = $("#object_table").dataTable();
+        
 	 	$('#object_table_filter > label > input[type="text"]').autocomplete({
-     		source: taglist
-     	}).onclick(function() {
-     		$('#object_table_filter > label > input[type="text"]').trigger('submit');
+     		source: taglist,
+     		select: function( event, ui ) {
+     			datatab.fnFilter(ui.item.value);
+     		}
      	}).keydown(function(e){
 			if (e.keyCode === 13){
 				$('#object_table_filter > label > input[type="text"]').trigger('submit');
 			}
 		});
-
      });
 </script>
 <?php } else { ?>

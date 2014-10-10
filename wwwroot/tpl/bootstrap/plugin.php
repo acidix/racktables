@@ -77,7 +77,7 @@ function renderRackspaceSVG() {
 				$smod = $tplm->generateSubmodule('RackspaceSVG', 'renderRackspace_SVG', $mod);
 				$rowy = 5;
 				$maxx = 50;
-
+				$rack_counter = 0;
 				foreach ($rows as $row)
 				{
 					$location_id = $row['location_id'];
@@ -121,6 +121,7 @@ function renderRackspaceSVG() {
 					$rowo->addOutput('RowName', $row_name);
 					$rowo->addOutput('Y', $rowy);
 					$rowo->addOutput('X', 5);
+					$rowo->addOutput('Counter', $rack_counter++);
 					$rowo->addOutput('Link', makeHref(array('page'=>'row', 'row_id'=>$row_id)));
 					
 					$rackx = 10;
@@ -135,11 +136,12 @@ function renderRackspaceSVG() {
 					
 					if (count ($rackList))
 					{
+						
 						foreach ($rackList as $rack)
 						{
 							$racko = $tplm->generateSubmodule('Racks', 'renderRackspace_SVGRack', $rowo);
 							
-							//Set curent x position
+							//Set curent x position and current index
 							$racko->addOutput('X', $rackx);
 							$racko->addOutput('Y', 35);
 							

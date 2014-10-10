@@ -246,3 +246,37 @@ section.content {
 .ui-state-focus, .ui-widget-content .ui-state-focus {
 	background-color: #f3f4f5;
 }
+
+.zoom-overlay {
+	background-color: rgba(0, 0, 0, 0.75);
+	padding: 0px 10px 0px 10px;
+	/*width: 80%;*/
+	z-index: 4;
+	left: 90%;
+	top: 20%;
+	box-shadow: 0px 5px 1px rgba(0, 0, 0, 0.2);
+	position: absolute;
+	display: none;
+	border-radius: 5px;
+}
+
+.zoom-overlay > .zoom-overlay-btn {
+	background: transparent;
+	font-size: 20px;
+	margin: 5px 5px 5px 5px;
+	border: white;
+	height: inherit;
+	border-radius: 10px;
+	border: solid rgba(255, 255, 255, 0.75);
+	float: right;
+	color: white;
+	top: 0;
+}
+
+.zoom-overlay > .zoom-overlay-btn:first-child {
+	margin-top: 10px;
+}
+
+.zoom-overlay > .zoom-overlay-btn:last-child {
+	margin-bottom: 10px;
+}

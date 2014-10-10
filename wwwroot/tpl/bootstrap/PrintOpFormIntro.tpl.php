@@ -4,7 +4,7 @@
 		<?php if ($this->is("isUpload",true)) { ?>
 			enctype='multipart/form-data'
 		<?php } ?> 
-		<?php while($this->loop('Params') { ?>
+		<?php while($this->loop('Params')) { ?>
 			<?php $this->Param; ?>="<?php $this->Value; ?>" 
 		<?php } ?>
 	>
