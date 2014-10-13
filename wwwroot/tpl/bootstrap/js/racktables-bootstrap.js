@@ -86,6 +86,14 @@
             $('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
         }
         });
+        enquire.register("screen and (max-width:560px)", {
+            match : function () {
+                $('#tabsidebar').css('top', '100px');
+            },
+            unmatch : function () {
+                $('#tabsidebar').css('top', '');
+            }
+        });
 
     });
 })(jQuery);
@@ -181,19 +189,62 @@ function tagsDataTable(table_id) {
     };
     
     var datatab = $('#' + table_id).dataTable();
-    
+    /*
     $('#' + table_id + '_filter > label > input[type="text"]').autocomplete({
         source: taglist,
         minLength : -1,
+        multiple: tru
         select: function( event, ui ) {
             datatab.fnFilter(ui.item.value);
         }
     }).focus(function(){            
-        console.log("show");
         $(this).autocomplete('search');
     }).keydown(function(e){
-        if (e.keyCode === 13){
-            $('#' + table_id + '_filter > label > input[type="text"]').trigger('submit');
+        console.log('keydown ' + e.keyCode);
+        if (e.keyCode === 32){
+            console.log('test');
+            $('#' + table_id + '_filter > label > input[type="text"]').autocomplete("search");
+           // $('#' + table_id + '_filter > label > input[type="text"]').trigger('submit');
         }
+    });*/
+    
+    function split( val ) {
+      return val.split( / \s*/ );
+    }
+    function extractLast( term ) {
+      return split( term ).pop();
+    }
+ 
+    $( '#' + table_id + '_filter > label > input[type="text"' )
+      // don't navigate away from the field on tab when selecting an item
+      .bind( "keydown", function( event ) {
+        if ( event.keyCode === $.ui.keyCode.TAB &&
+            $( this ).autocomplete( "instance" ).menu.active ) {
+          event.preventDefault();
+        }
+      })
+      .autocomplete({
+        minLength: 0,
+        source: function( request, response ) {
+          // delegate back to autocomplete, but extract the last term
+          response( $.ui.autocomplete.filter(
+            taglist, extractLast( request.term ) ) );
+        },
+        focus: function() {
+          return false;
+        },
+        select: function( event, ui ) {
+          var terms = split( this.value );
+          // remove the current input
+          terms.pop();
+          // add the selected item
+          terms.push( ui.item.value );
+          // add placeholder to get the comma-and-space at the end
+          terms.push( "" );
+          this.value = terms.join( " " );
+          return false;
+        }
+      }).focus(function(){            
+        $(this).autocomplete('search');
     });
 }

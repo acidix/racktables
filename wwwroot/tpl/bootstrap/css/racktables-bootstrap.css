@@ -11,6 +11,8 @@ body > .header .logo {
 
 .left-side.sidebar-offcanvas {
 	/*background-color: rgba(51, 153, 170, 0.14);*/
+	position: fixed;
+	left: 0px;
 }
  
 div.overlay {
@@ -32,14 +34,23 @@ section.content {
 	margin: 5px 5px 5px 5px;
 }
 
+body > div.wrapper.row-offcanvas.row-offcanvas-left > aside.right-side {
+	top: 50px;
+	position: relative;
+}
+
+#contentarea > section.content-header > h1 > small {
+	margin-left: 15px;
+}
+
 .sidebar.tabbar {
 	/*background-image: linear-gradient(to right, rgba(51, 153, 170, 0.14) 20%, rgba(255, 255, 255, 0.75) 50%);*/
 	background: transparent;
 	padding: 0px 0px 0px 0px;	
-	position: absolute;
+	position: fixed;
 	min-width: 20px;
-	margin-left: 15px;
 	height: 100%;
+	margin-left: -15px;
 	width: auto;
 	z-index: 4;
 }
@@ -126,8 +137,7 @@ section.content {
 		display: inline-block;
 		position: relative;
 		background-color: #f4f4f4;
-		left: 0px;
-		width: 100%;
+		width: 110%;
 		height: auto;
 		min-height: 40px;
 		z-index: 3;
@@ -216,7 +226,8 @@ section.content {
 .box.box-primary.terminal-box {
 	border-top-color: black
 }
-.box.box-primary.terminal-box > .box-header > .box-tools .btn.btn-default.btn-sm {
+.box.box-primary.terminal-box > .box-header > .box-tools .btn.btn-default.btn-sm,
+.box.box-info.rackbox> .box-header > .box-tools .btn.btn-default.btn-sm {
 	border: none;
 	box-shadow: none;
 	background-color: inherit;
@@ -291,4 +302,27 @@ section.content {
 
 .zoom-overlay > .zoom-overlay-btn:last-child {
 	margin-bottom: 10px;
+}
+
+.tab_small {	
+	line-height: 35px;
+}
+
+.tab_small > a {
+	display: inline-block;
+	line-height: 18px;
+	font-family: 'Source Sans Pro', sans-serif;
+	-webkit-font-smoothing: antialiased;
+	font-size: 13px;
+	font-weight: bold;
+	border-radius: 3px;
+	padding: 3px 3px 3px 3px;
+	box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.2);
+	margin: 0px 5px 0px 5px;
+	color: white;
+	background-color: #0073b7 !important;
+}
+
+.rackbox > div.box-body {
+	overflow-x: touch;
 }

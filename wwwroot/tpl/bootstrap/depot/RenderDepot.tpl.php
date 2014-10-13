@@ -44,14 +44,14 @@
 </div>
 <div class="row">
 	<div class='col-md-12'>
-		<div class="box box-primary terminal-box" style="position: relative;">
+		<div class="box box-primary terminal-box collapsed-box" style="position: relative;">
 			<div class="box-header">
 				<h3 class="box-title">Rackcode</h3>
 				<div class="box-tools pull-right">
-                <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i></button>
                 </div>
 			</div>
-			<div class="box-body">
+			<div class="box-body" style="display: none;">
 				<div class="row">
 					<form method=get>
 				    <div class='rackcode-console col-sm-12'> 

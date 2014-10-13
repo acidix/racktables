@@ -59,7 +59,7 @@
     
     <body class="skin-blue">
         <!-- header logo: style can be found in header.less -->
-        <header class="header">
+        <header class="header" style='position: fixed'>
             <a href="index.php" class="logo">
                 <!-- Add the class icon to your logo image or logo icon to add the margining -->
                 <?php $this->Enterprise ?>
@@ -150,20 +150,18 @@
                     </form>
                     <!-- /.search form -->
                     <!-- sidebar menu: : style can be found in sidebar.less -->
-                    
-                    <?php $this->getH('PrintSidebar'); ?>
-                
+                    <?php $this->getH('PrintSidebar'); ?>      
                 <!-- /.sidebar -->
             </aside>
             <!-- Right side column. Contains the tabs, navbar and content of the page -->
-            <aside class="right-side">
-                <div class="container-fluid">
-                <div class="row">
+            <aside class="right-side col-xs-12 col-md-10" style='position: absolute'>
+                <div class="container-fluid ">
+                <div >
                      <!-- sidebar for tabs and operator -->
-                    <section class="sidebar tabbar col-sm-1" id="tabsidebar">
+                    <section class="sidebar tabbar col-xs-1" id="tabsidebar" style='position: fixed'>
                         <ul class="sidebar-menu tabs-list"><?php $this->Tabs; ?></ul>
                     </section>   
-                    <div class="col-sm-11" id='contentarea'>
+                    <div id='contentarea' class="row col-xs-11">
                         <!-- Content Header (Page header) -->
                         <section class="content-header" style='padding-left: 15px'>
             				<?php $this->getH('PageHeadline'); ?>

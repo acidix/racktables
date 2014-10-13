@@ -48,6 +48,34 @@
 			</script>
 		</div>
 	</div>
+	<div class="row">
+	<div class='col-md-12'>
+		<div class="box box-primary terminal-box collapsed-box" style="position: relative;">
+			<div class="box-header">
+				<h3 class="box-title">Rackcode</h3>
+				<div class="box-tools pull-right">
+                <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                </div>
+			</div>
+			<div class="box-body" style="display: none;">
+				<div class="row">
+					<form method=get>
+				    <div class='rackcode-console col-sm-12'> 
+				    	<textarea onchange="showConsoleBtns('#rackcodeconsol')" onkeyup="showConsoleBtns('#rackcodeconsole')" id='rackcodeconsole' name="cfe"></textarea>
+				    </div>
+				    	<input type="hidden" name="page" value="depot">
+				    	<input type="hidden" name="tab" value="default">
+				    	<div class='rackcode-console-btn-overlay'>
+				    		<input class='rackcode-console-btn' type="submit" value="Submit" name="submit"></input>
+				    		<button class='rackcode-console-btn' onclick="$('#rackcodeconsole').val('');">Reset</button>
+						</div>
+					</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 <?php } ?>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />

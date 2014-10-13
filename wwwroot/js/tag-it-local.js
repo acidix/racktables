@@ -342,10 +342,10 @@ function generateTagList(input, ul, taglist, preselect, value_name, tag_limit, e
 								source: suggest_wrapper,
 								open: autocomplete_open,
 								create: function(event, ui){
-									$(this).data("autocomplete")._renderItem = function(ul, item) {
+									$(this).data("ui-autocomplete")._renderItem = function(ul, item) {
 										renderItem.call(this, ul, item);
 									};
-									$(this).data("autocomplete")._renderMenu = function(ul, items) {
+									$(this).data("ui-autocomplete")._renderMenu = function(ul, items) {
 										oldRenderMenu.call(this, ul, items);
 										afetrRenderMenu.call(this, ul, items);
 									};
@@ -397,10 +397,10 @@ function generateTagList(input, ul, taglist, preselect, value_name, tag_limit, e
 			available_tags: available_tags,
 			all_tags: all_tags,
 			create: function(event, ui){
-				$(this).data("autocomplete")._renderItem = function(event, ui) {
+				$(this).data("ui-autocomplete")._renderItem = function(event, ui) {
 					renderItem.call(this, event, ui);
 				};
-				$(this).data("autocomplete")._renderMenu = function(ul, items) {
+				$(this).data("ui-autocomplete")._renderMenu = function(ul, items) {
 					oldRenderMenu.call(this, ul, items);
 					afetrRenderMenu.call(this, ul, items);
 				};
