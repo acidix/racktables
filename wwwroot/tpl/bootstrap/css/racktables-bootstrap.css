@@ -43,6 +43,20 @@ body > div.wrapper.row-offcanvas.row-offcanvas-left > aside.right-side {
 	margin-left: 15px;
 }
 
+#contentarea > section.content-header {
+	margin-top: 20px;
+}
+
+#contentarea > section.content-header > h1 {
+	display: inline;
+}
+
+#contentarea > section.content-header > ol {
+	top: 10px;
+	display: inline-block;
+	float: right;
+}
+
 .sidebar.tabbar {
 	/*background-image: linear-gradient(to right, rgba(51, 153, 170, 0.14) 20%, rgba(255, 255, 255, 0.75) 50%);*/
 	background: transparent;
