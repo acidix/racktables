@@ -2,7 +2,7 @@
 	$this->addJs('js/lineeditor.js');
 ?>
 <div class="box box-primary">
-	<?php $this->getH('PrintOpFormIntro','addMultipleObjectDynamically')?>
+	<?php $this->getH('PrintOpFormIntro','addObjects')?>
 	<input type="hidden" name="rowcount" value="<?php $this->rowCountDefault; ?>">
 	<div class="box-header">
 		<h3 class="box-title">Add objects</h3>
@@ -41,7 +41,7 @@
 		</div>
 	</div>
 	<div class="box-footer">
-		<button class="btn btn-success btn-block" submit>Submit</button>
+		<button class="btn btn-success btn-block" type=submit name=got_fast_data>Submit</button>
 	</div>
 	</form>
 </div>

@@ -82,17 +82,10 @@
         },
         unmatch : function () {
             $('#tabsidebar').removeClass('horizontal-tabbar');
-            $('.tab-link').css('display', 'none');      
+            $('.tab-link').css('display', 'none');
+            $('body > div.wrapper.row-offcanvas.row-offcanvas-left.active.relative > aside.left-side.sidebar-offcanvas').css('top', '');
             $('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
         }
-        });
-        enquire.register("screen and (max-width:560px)", {
-            match : function () {
-                $('#tabsidebar').css('top', '100px');
-            },
-            unmatch : function () {
-                $('#tabsidebar').css('top', '');
-            }
         });
 
     });
@@ -189,24 +182,6 @@ function tagsDataTable(table_id) {
     };
     
     var datatab = $('#' + table_id).dataTable();
-    /*
-    $('#' + table_id + '_filter > label > input[type="text"]').autocomplete({
-        source: taglist,
-        minLength : -1,
-        multiple: tru
-        select: function( event, ui ) {
-            datatab.fnFilter(ui.item.value);
-        }
-    }).focus(function(){            
-        $(this).autocomplete('search');
-    }).keydown(function(e){
-        console.log('keydown ' + e.keyCode);
-        if (e.keyCode === 32){
-            console.log('test');
-            $('#' + table_id + '_filter > label > input[type="text"]').autocomplete("search");
-           // $('#' + table_id + '_filter > label > input[type="text"]').trigger('submit');
-        }
-    });*/
     
     function split( val ) {
       return val.split( / \s*/ );
@@ -229,9 +204,6 @@ function tagsDataTable(table_id) {
           // delegate back to autocomplete, but extract the last term
           response( $.ui.autocomplete.filter(
             taglist, extractLast( request.term ) ) );
-        },
-        focus: function() {
-          return false;
         },
         select: function( event, ui ) {
           var terms = split( this.value );
