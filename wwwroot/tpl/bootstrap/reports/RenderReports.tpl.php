@@ -3,8 +3,7 @@
 	<tbody>
 	<?php $this->startLoop("ItemContent"); ?>	
 		<tr><th><h3><?php $this->Title; ?> </h3></th></tr>
-		<?php $this->Cont; ?> 
-		<tr><td><hr></td></tr>
+		<?php $this->Cont; ?>
 	<?php $this->endLoop(); ?>
 	</tbody> 
 	</table>
