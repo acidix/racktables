@@ -1,16 +1,22 @@
 <?php if (defined("RS_TPL")) {?>
-	<div class=portlet>
-		<h2>VLAN existence per domain</h2>
-		<table border=1 cellspacing=0 cellpadding=5 align=center class=rackspace>
-		<?php $this->startLoop("OutputArr"); ?>	
-			<?php $this->Header; ?>
-			<tr class="state_<?php $this->CountStats ?>"><th class=tdright><?php $this->VlanId ?></th>
-			<?php $this->Domains; ?> 
-			</tr>
-			<?php $this->TbcLine ?>  
-		<?php $this->endLoop(); ?> 
+<div class="box">
+	<div class="box-header">
+		<h3 class="box-title">VLAN existence per domain</h3>
+	</div>
+	<div class="box-content no-padding">
+		<table class="table">
+			<tbody>
+				<?php while($this->loop("OutputArr")) { ?>	
+					<?php $this->Header; ?>
+					<tr class="state_<?php $this->CountStats ?>"><th class=tdright><?php $this->VlanId ?></th>
+						<?php $this->Domains; ?> 
+					</tr>
+					<?php $this->TbcLine ?>  
+				<?php } ?> 
+			</tbody>
 		</table>
 	</div>
+</div>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />
