@@ -196,7 +196,7 @@ $this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{Title}}:</td
 *
 **/
 $this->setInMemoryTemplate("GetProgressBar",'<div class="progress progress-striped active">' .
-						'<div class="progress-bar progress-bar-info" style="width: {{done}}%">{{done}}%</div></div>');
+						'<div class="progress-bar progress-bar" style="width: {{done}}%">{{done}}%</div></div>');
 
 
 /**

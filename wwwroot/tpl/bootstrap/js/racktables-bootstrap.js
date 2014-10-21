@@ -88,6 +88,26 @@
         }
         });
 
+        // Load tagpicker 
+        console.log('This is the setup function');
+            if(typeof(GLOBAL_TAGLIST) != 'undefined') {
+            var tags_list = [];
+            for (var counter = 1; counter < 100; counter++) {
+                if(typeof(GLOBAL_TAGLIST[counter]) == 'undefined')   
+                    continue;
+
+                tags_list.push(GLOBAL_TAGLIST[counter].tag);
+            }
+
+            if(tags_list.length > 0) {
+                console.log(tags_list);
+
+                $('input.ui-autocomplete-input.tagspicker').autocomplete({
+                    minLength: 0,
+                    source: tags_list,
+                });
+            }
+        }   // Adding tagspicker
     });
 })(jQuery);
 

@@ -1,10 +1,9 @@
 <?php if (defined("RS_TPL")) {?>
-
-	<ul>
+<div class="list-group">
 	<?php $this->startLoop('allPages');?>
-		<li><a href='index.php?page=<?php $this->Cpageno; ?>'><?php $this->Title; ?></li>
+		<a href='index.php?page=<?php $this->Cpageno; ?>' class="list-group-item"><?php $this->Title; ?></a>
 	<?php $this->endLoop(); ?>
-	</ul>
+</div>
 <?php  } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />
