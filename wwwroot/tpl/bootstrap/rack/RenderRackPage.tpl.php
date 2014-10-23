@@ -1,16 +1,20 @@
 <?php if (defined("RS_TPL")) {?>
-	<table border=0 class=objectview cellspacing=0 cellpadding=0><tr>
-		<td class=pcleft>
+	<div class="row">
+		<div class="col-md-6">
 			<?php $this->InfoPortlet ?>
 			<?php $this->FilesPortlet ?>
-		</td>
-		<td class=pcright>
-		<div class=portlet>
-				<h2>Rack diagram</h2>
-				<?php $this->RenderedRack ?>
-			</div>	
-		</td>
-	</tr></table>
+		</div>
+		<div class="col-md-6">
+			<div class="box">
+				<div class="box-header">
+					<h3 class="box-title">Rack diagram</h3>
+				</div>
+				<div class="box-content">
+					<?php $this->RenderedRack ?>		
+				</div>
+			</div>
+		</div>
+	</div>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

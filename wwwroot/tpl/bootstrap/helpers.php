@@ -54,6 +54,12 @@ class TemplateHelperForm extends TemplateHelperAbstract
 					
 				}
 			}
+			
+			if (count($params)>2 && is_array($params[2])) {
+				foreach ($params[2] as $name => $value) {
+					echo " " . $name . "=\"" . $value . "\"";
+				}
+			}
 			echo ">";
 		}
 		
