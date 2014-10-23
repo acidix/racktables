@@ -7,6 +7,7 @@
 */
 // Setup page when loaded
 (function($) {
+
     $(document).ready(function() { 
         // Add glyphicons to all tabs
         var tabs = $("li.tab");
@@ -26,24 +27,23 @@
         // Set timeout for showing tab names
         var tabTimeout;
         $('#tabsidebar').mouseenter(function() {
-            if($('#tabsidebar').hasClass('horizontal-tabbar'))
-                return;
+           // if($('#tabsidebar').hasClass('horizontal-tabbar'))
+           //     return;
 
             tabTimeout = setTimeout(function() {
-                $(".tab-link").fadeIn("slow");
-                $('tabsidebar').css('posititon', 'fixed');
+           //     $(".tab-link").fadeIn("slow");
+           //     $('tabsidebar').css('posititon', 'fixed');
             }, 1000);
         }).mouseleave(function() {
-            if($('#tabsidebar').hasClass('horizontal-tabbar'))
-                return;
+         //   if($('#tabsidebar').hasClass('horizontal-tabbar'))
+         //       return;
 
-            $(".tab-link").hide();     
+         //   $(".tab-link").hide();     
             clearTimeout(tabTimeout);
         });
     
         // Add all operators to bar on the left
         var operatorstabs = $('.tab-operator');
-        
         for (var i = 0; i < operatorstabs.length; i++) {
             switch(operatorstabs[i].type){
                 case 'submit':
@@ -70,19 +70,19 @@
         
         //$('.tabs-glyph').css('width', maxwidth + 'px');
         //console.log('max width is' + maxwidth);
-
-        $('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
+        $('#tabsidebar').scrollupbar();
+        //$('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
         // Check for orientation
         enquire.register("screen and (max-width:750px)", {
         match : function () {
             // Add css class to tabbar 
-            $('#tabsidebar').addClass('horizontal-tabbar');
-            $('.tab-link').css('display', 'inline-block');
+            //$('#tabsidebar').addClass('horizontal-tabbar');
+            //$('.tab-link').css('display', 'inline-block');
             $('#contentarea').css('margin-left', '0px');
         },
         unmatch : function () {
-            $('#tabsidebar').removeClass('horizontal-tabbar');
-            $('.tab-link').css('display', 'none');
+            //$('#tabsidebar').addClass('horizontal-tabbar');
+            //$('.tab-link').css('display', 'inline-block');
             $('body > div.wrapper.row-offcanvas.row-offcanvas-left.active.relative > aside.left-side.sidebar-offcanvas').css('top', '');
             $('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
         }
@@ -90,21 +90,43 @@
 
         // Load tagpicker 
         console.log('This is the setup function');
-            if(typeof(GLOBAL_TAGLIST) != 'undefined') {
+        if(typeof(GLOBAL_TAGLIST) != 'undefined') {
             var tags_list = [];
-            for (var counter = 1; counter < 100; counter++) {
-                if(typeof(GLOBAL_TAGLIST[counter]) == 'undefined')   
-                    continue;
-
-                tags_list.push(GLOBAL_TAGLIST[counter].tag);
+            for (var key in GLOBAL_TAGLIST) {
+                tags_list.push(GLOBAL_TAGLIST[key].tag);
             }
 
             if(tags_list.length > 0) {
                 console.log(tags_list);
 
-                $('input.ui-autocomplete-input.tagspicker').autocomplete({
-                    minLength: 0,
-                    source: tags_list,
+                $('input.ui-autocomplete-input.tagspicker').select2({
+                    tags: tags_list,
+                    tokenSeparators: [",", " "]
+                }).on('change', function (e){
+                    // Added the tags to add
+                    if(typeof(e.added) != 'undefined') {
+                        console.log(e.added);
+                        // Check if existing
+                        var tag_val = 0;
+                        if(!$.inArray(e.text, tags_list)) {
+                            console.log("id not known");
+                            return 0;
+                        }
+                        // Get id
+                        for( var tag_key in GLOBAL_TAGLIST ) {
+                            if( GLOBAL_TAGLIST[tag_key].tag == e.added.id ) {
+                                tag_val = GLOBAL_TAGLIST[tag_key].id;
+                            }
+                        }
+
+                        console.log("value is " +  tag_val);
+                        $('form[name="add"]').append('<input type="hidden" style="display:none;" value="' + tag_val + '" name="taglist[]">');
+                        
+                    }
+                    if(typeof(e.removed) != 'undefined') {
+                        console.log(e.removed);
+                    }
+
                 });
             }
         }   // Adding tagspicker

@@ -26,7 +26,9 @@
         <link href="./css/ionicons.min.css" rel="stylesheet" type="text/css" />
         <!-- Theme style -->
         <link href="./css/AdminLTE.css" rel="stylesheet" type="text/css" />
-		<!-- Bootstrap Theme style -->
+		<!-- Select2 style -->
+        <link href="./tpl/bootstrap/css/select2.css" rel="stylesheet" type="text/css" />
+        <!-- Bootstrap Theme style -->
         <link href="./tpl/bootstrap/css/racktables-bootstrap.css" rel="stylesheet" type="text/css" />
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -50,6 +52,10 @@
         <script src="./js/parsley.min.js" type="text/javascript"></script>
         <!-- Enquire for responsive media query -->
         <script src="./tpl/bootstrap/js/enquire.js" type="text/javascript"></script>
+        <!-- Scrolled up bar -->
+        <script src="./tpl/bootstrap/js/scroll-up-bar.min.js" type="text/javascript"></script>
+        <!-- Select2 javascript -->
+        <script src="./tpl/bootstrap/js/select2.min.js" type="text/javascript"></script>
         <!-- Bootstrap theme javascript -->
         <script src="./tpl/bootstrap/js/racktables-bootstrap.js" type="text/javascript"></script>
 
@@ -158,10 +164,10 @@
                 <div class="container-fluid ">
                 <div >
                      <!-- sidebar for tabs and operator -->
-                    <section class="sidebar tabbar col-xs-1" id="tabsidebar" style='position: fixed'>
+                    <section class="row sidebar tabbar col-xs-12" id="tabsidebar">
                         <ul class="sidebar-menu tabs-list"><?php $this->Tabs; ?></ul>
                     </section>   
-                    <div id='contentarea' class="row col-xs-11">
+                    <section id='contentarea' class="row col-xs-12">
                         <!-- Content Header (Page header) -->
                         <section class="content-header" style='padding-left: 15px'>
             				<?php $this->getH('PageHeadline'); ?>
@@ -182,7 +188,7 @@
             				<?php $this->Message ?>
             				<?php $this->Payload ?>
                         </section><!-- /.content -->
-                    </div>
+                    </section>
                 </div>
                 </div>
             </aside><!-- /.right-side -->

@@ -5198,13 +5198,14 @@ function renderTagTreeEditor ()
     $options = array (0 => '-- NONE --');
     foreach ($taglist as $taginfo)
         $options[$taginfo['id']] = htmlspecialchars ($taginfo['tag']);
-    $mod->setOutput('CreateNewOptions', $options);
+    
 
     $tplm = TemplateManager::getInstance();
 
     $mod = $tplm->generateSubmodule('Payload', 'renderTagtreeEditor');
     $mod->setNamespace('tagtree');
-
+    $mod->setOutput('CreateNewOptions', $options);
+    
     $otags = getOrphanedTags();
     if (count ($otags))
     {
@@ -5219,7 +5220,6 @@ function renderTagTreeEditor ()
 
         }
     }
-
 
     if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
         $mod->addOutput("NewTop", true);

@@ -49,7 +49,7 @@ $this->setInMemoryTemplate("CellFilterExtraText","<tr><td colspan=2><textarea na
  */
 //$this->setInMemoryTemplate("TabActive","<button class='btn btn-lg btn-primary' style='margin: 10px 10px 10px 10px;'><a href='index.php?page={{Page}}&tab={{Tab}}{{Args}}' style='color:white;'>{{Title}}</a></button>");
 $this->setInMemoryTemplate("TabActive","<li class='tab active' id='{{Page}}{{Tab}}'><a class='tab-link'" .
-							"href='index.php?page={{Page}}&tab={{Tab}}{{Args}}' style='color:black;'>{{Title}}</a></li>");
+							"href='index.php?page={{Page}}&tab={{Tab}}{{Args}}'>{{Title}}</a></li>");
 
 /**
  * Template for: Tablist, currently inactive tabs
