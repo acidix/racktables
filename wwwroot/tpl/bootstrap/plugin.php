@@ -264,8 +264,19 @@ function addMultipleObjectsDynamic() {
 	
 }
 
+function renderIPSpaceWithAdd() {
+	renderIPSpace();
+	$tplm = TemplateManager::getInstance();
+	$tplm->getMainModule()->addOutput('Payload', '<div class="addcontainer">');
+	renderIPNewNetForm();
+	$tplm->getMainModule()->addOutput('Payload', '</div>');
+}
+
 global $tabhandler;
 
 $tabhandler['rackspace']['default'] = 'renderRackspaceSVG';
 $tabhandler['depot']['addmore'] = 'renderDynamicAddMultipleObjectsForm';
+
+$tabhandler['ipv4space']['default'] = 'renderIPSpaceWithAdd';
+
 ?>

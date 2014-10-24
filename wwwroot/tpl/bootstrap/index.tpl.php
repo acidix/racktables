@@ -28,6 +28,8 @@
         <link href="./css/AdminLTE.css" rel="stylesheet" type="text/css" />
 		<!-- Select2 style -->
         <link href="./tpl/bootstrap/css/select2.css" rel="stylesheet" type="text/css" />
+        <!-- Bootstrapdialog javascript -->
+        <link href="./tpl/bootstrap/css/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
         <!-- Bootstrap Theme style -->
         <link href="./tpl/bootstrap/css/racktables-bootstrap.css" rel="stylesheet" type="text/css" />
 
@@ -56,6 +58,13 @@
         <script src="./tpl/bootstrap/js/scroll-up-bar.min.js" type="text/javascript"></script>
         <!-- Select2 javascript -->
         <script src="./tpl/bootstrap/js/select2.min.js" type="text/javascript"></script>
+        <!-- Bootstrapdialog javascript -->
+        <script src="./tpl/bootstrap/js/bootstrap-dialog.min.js" type="text/javascript"></script>
+        <!-- Highlight plugin javascript -->
+        <script src="./tpl/bootstrap/js/jquery.highlight.js" type="text/javascript"></script>
+        <!-- Highlight plugin javascript -->
+        <script src="./tpl/bootstrap/js/jquery-svgpan.js" type="text/javascript"></script>
+        
         <!-- Bootstrap theme javascript -->
         <script src="./tpl/bootstrap/js/racktables-bootstrap.js" type="text/javascript"></script>
 

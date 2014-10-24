@@ -1,20 +1,41 @@
 <?php if (defined("RS_TPL")) {?>
-	<section class="connectedSortable ui-sortable">
-		<?php $this->Content; ?>
- 	</section>
- 	<?php $this->addJS('js/jquery.mousewheel.min.js');?> 
+	<?php $this->addJS('js/jquery.mousewheel.min.js');?> 
  	<?php $this->addJS('js/jquery.panzoom.min.js');?> 
+ 	<input class="form-control input-lg" type="text" placeholder="Search rackspace" onkeyup="highlightRacktables($(this).val())">
+	<br>
+	<div class="box box-info rackbox" style="position: relative; overflow-x: auto">
+		<div class="box-header" style="cursor: move;">
+	        <i class="fa fa-hdd-o"></i>
+	        <h3 class="box-title"></h3>
+	    	<div class="box-tools pull-right">
+	            <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+	        </div>
+	    </div>
+	    <div class="box-body" onmouseenter="showZoomNav(<?php $this->Counter; ?>);" onmouseleave="hideZoomNav(<?php $this->Counter; ?>);" style="position: relative">
+		    <div class='zoom-overlay'>
+			    <button class="zoom-overlay-btn zoom-in"><span class='glyphicon glyphicon-plus'></span></button></br>
+			    <button class="zoom-overlay-btn reset"><span class='glyphicon glyphicon-refresh'></span></button></br>
+				<button class="zoom-overlay-btn zoom-out"><span class='glyphicon glyphicon-minus'></span></button>
+				<input type="range" class="zoom-range"></br>
+			</div>	
+	    	<svg class="rackspace-svg-container" counter="<?php $this->Counter; ?>" width="<?php $this->OverallWidth; ?>" height="<?php $this->OverallHeight; ?>" x="<?php $this->X ?>" y="<?php $this->Y ?>">	
+			<g id="viewport">
+			<?php $this->Content; ?>
+			</g>
+	 		</svg>
+	    </div>
+	</div>
  	<script type="text/javascript">
  	// Make sortable
  	$(function() {
-	 	$(".connectedSortable").sortable({
+	 	/*$(".connectedSortable").sortable({
 	        placeholder: "sort-highlight",
 	        connectWith: ".connectedSortable",
 	        handle: ".box-header, .nav-tabs",
 	        forcePlaceholderSize: true,
 	        zIndex: 999999
 	    }).disableSelection();
-	    $(".connectedSortable .box-header, .connectedSortable .nav-tabs-custom").css("cursor", "move");
+	    $(".connectedSortable .box-header, .connectedSortable .nav-tabs-custom").css("cursor", "move");*/
 		// Zoom function vor svgs:
 		var rackDivs = $('#contentarea > section.content > div > div.col-md-12 > section > .rackbox');
 		

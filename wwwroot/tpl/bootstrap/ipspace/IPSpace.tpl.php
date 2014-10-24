@@ -23,7 +23,7 @@
 					<!-- None --><a href='<?php $this->CollapseAll; ?>'>collapse&nbsp;all</a><!-- EndNone -->)
 			<?php }	 ?>
 			</small>
-			<div class="pull-right"><?php $this->CellFilter; ?></div>
+			<div class="pull-right"><button class="btn btn-default" type=button style="margin: 10px;" onclick="showAddDialog();"><span class="glyphicon glyphicon-plus"></span></button></div>
 		</div>
 		<div class="box-body" style="position: relative">
 			<table class="table table-bordered table-striped" id="ipspaceTable">

@@ -78,18 +78,18 @@
             // Add css class to tabbar 
             //$('#tabsidebar').addClass('horizontal-tabbar');
             //$('.tab-link').css('display', 'inline-block');
-            $('#contentarea').css('margin-left', '0px');
+            //$('#contentarea').css('margin-left', '0px');
         },
         unmatch : function () {
             //$('#tabsidebar').addClass('horizontal-tabbar');
             //$('.tab-link').css('display', 'inline-block');
             $('body > div.wrapper.row-offcanvas.row-offcanvas-left.active.relative > aside.left-side.sidebar-offcanvas').css('top', '');
-            $('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
+            //$('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
         }
         });
 
         // Load tagpicker 
-        console.log('This is the setup function');
+        
         if(typeof(GLOBAL_TAGLIST) != 'undefined') {
             var tags_list = [];
             for (var key in GLOBAL_TAGLIST) {
@@ -130,6 +130,42 @@
                 });
             }
         }   // Adding tagspicker
+        console.log('This is the setup function');
+
+        // Check for ajax form 
+        for(var i = 0; i < $('button.ajax_form').length; i++) {
+            console.log($('button.ajax_form').eq(i).attr('targetform'));
+            var form = $('form[name=' + $('button.ajax_form').eq(i).attr('targetform') + ']');
+            console.log(form);
+
+            form.submit(function (e) {
+                e.preventDefault();
+                var fd = new FormData($(this)[0]);
+                $.ajax({
+                    url: window.location.pathname + form.attr('action'),
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    success: function(data){
+                        bodytxt = '<div id="body-mock">' + data.replace(/^[\s\S]*<body.*?>|<\/body>[\s\S]*$/g, '') + '</div>';
+                        var bodyelem = $(bodytxt);
+                        console.log(data);
+                        
+                        if(bodyelem.find('.alert.alert-success').length > 0) {
+                            form.attr('succeeded', 'true');
+                            console.log('setting success!');
+                            console.log(bodyelem.find('.alert.alert-success'));
+                        }
+                        form.prepend(bodyelem.find('.alert'));
+                    }
+                });
+            });
+            console.log('sended ajax');
+        }
+
+        // Set svgs 
+        $('svg').svgPan('viewport');
     });
 })(jQuery);
 
@@ -261,4 +297,70 @@ function tagsDataTable(table_id) {
       }).focus(function(){            
         $(this).autocomplete('search');
     });
+}
+
+function clearForm( form_name ) {
+    console.log(form_name);
+    $(':input',form_name.selector)
+      .not(':button, :submit, :reset, :hidden')
+      .val('')
+      .removeAttr('checked')
+      .removeAttr('selected');
+}
+
+function showAddDialog() {
+    var dialog_html = $('.addcontainer').children().clone()
+
+    BootstrapDialog.show({
+        title: 'Add new',
+        type: BootstrapDialog.TYPE_SUCCESS,
+        closeByBackdrop: true,
+        draggable: true,
+        message: $('.addcontainer').children(),
+        onshown : function(dialogRef) {
+            var form = $('form[name=' + $('button.ajax_form').eq(0).attr('targetform') + ']');
+            form.attr('succeeded','false');
+        },
+        onhide: function(dialogRef) {
+            // On hide reload the view if necessary
+            var form = $('form[name=' + $('button.ajax_form').eq(0).attr('targetform') + ']').eq(0);
+            console.log(form);
+            if(typeof(form.attr('succeeded')) != "undefined" && form.attr('succeeded') == "true")
+                //Load the page new 
+                $.ajax({
+                    url: document.URL,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    success: function(data){
+                        bodytxt = '<div id="body-mock">' + data.replace(/^[\s\S]*<body.*?>|<\/body>[\s\S]*$/g, '') + '</div>';
+                        var bodyelem = $(bodytxt);
+                        console.log('setting new content');
+                        $('.content').html(bodyelem.find('.content').html());
+                        //form.prepend(bodyelem.find('.alert'));
+                    }
+                });
+
+            $('.addcontainer').append(dialog_html);
+                      
+        },
+    });
+}
+
+function highlightRacktables( text ) {
+    var text_elems = $('g > a > text');
+    for(var i = 0; i < text_elems.length; i++) {
+        text_elem = text_elems.eq(i);
+        console.log(text_elem.text() + " and " + text);
+
+        if(text_elem.text().indexOf(text) > -1 && text != "") {
+            text_elem.siblings('rect').css('fill', 'yellow');
+            text_elem.css('font-weight', 'bold');
+        }
+        else {
+            text_elem.siblings('rect').css('fill', '');
+            text_elem.css('font-weight', '');
+        }
+
+    }
 }

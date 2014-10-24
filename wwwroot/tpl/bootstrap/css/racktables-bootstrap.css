@@ -392,3 +392,27 @@ body > header > nav.navbar.navbar-static-top {
 .select2-container.select2-container-multi {
 	min-width: 200px;
 }
+
+#add > table > tbody > tr > td.tdleft > input {
+	min-width: 100%;
+}
+
+#add > table > tbody > tr > td > select {
+	margin-right: 10px;
+}
+
+input.live-validate.validation-error {
+	box-shadow: 0px 3px 1px rgba(255, 0, 0, 0.5);
+}
+
+input.live-validate.validation-success {
+	box-shadow: 0px 3px 1px rgba(0, 255, 0, 0.5);
+}
+
+.addcontainer {
+	visibility: hidden;
+}
+
+.bootstrap-dialog-message {
+/*visibility: visible;*/
+}

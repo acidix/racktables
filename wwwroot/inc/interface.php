@@ -2552,12 +2552,13 @@ function renderIPNewNetForm ()
 
     // IP prefix validator
     $regexp = addslashes ($regexp);
-    $mod->addOutput("regexp", $regexp);
+    $mod->addOutput("Regexp", $regexp);
+    $mod->addOutput("Page", $pageno);
 
     // tags column
     // inputs column
     $prefix_value = empty ($_REQUEST['set-prefix']) ? '' : $_REQUEST['set-prefix'];
-    $mod->addOutput("prefix_value", $prefix_value);
+    $mod->addOutput("Prefix_value", $prefix_value);
     getOptionTree ('vlan_ck', getAllVLANOptions(), array ('select_class' => 'vertical', 'tabindex' => 2), $mod, 'optionTree');
     printTagsPicker (null, $mod);
 }
@@ -4534,7 +4535,7 @@ function renderEditAttrMapForm ()
     {
         if ($chapter['sticky'] != 'yes')
             $allChaptersOut[] = array('Id' => $chapter['id'], 'Name' => $chapter['name']);
-        $submod->setOutput('CreateNewChapters', $allChaptersOut);
+        $mod->setOutput('CreateNewChapters', $allChaptersOut);
     }
 
 
