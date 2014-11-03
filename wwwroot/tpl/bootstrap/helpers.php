@@ -554,28 +554,49 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 		$sidebar['virtual'] = array();
 		
 		echo '<ul class="sidebar-menu">';
+
+		$parent_page = '';
+		# Get only fist part 
+		$start_page = explode(':', $pageno)[0];
+
+		# Find the parent section for page 
+		if(array_key_exists('parent',$page[$start_page]) && $page[$start_page]['parent'] != "index") {
+			$parent_page = explode(':', $page[$start_page]['parent'])[0];
+			while($page[$parent_page]['parent'] != "index") { 
+				$parent_page = $page[$parent_page]['parent'];
+			}
+		}
+		
+
 		foreach ($sidebar as $pagen => $pagea) {
 			$tabclass = '';
 			if (count($pagea) > 0) {
 				$tabclass .= ' treeview';
 			}
-			if ($pagen == $pageno) {
+			# Expand active sideclass only if not tab navigation
+			if($pagen == $parent_page)
+			#if ($pagen == $pageno) {
 				$tabclass .= ' active';
-			}
+			#}
 			echo '<li';
 			if ($tabclass != '') {
 				echo ' class="' . $tabclass . '"';
 			}
 			echo '>';
+			echo '<a class="sidebar-parenttab"';
 			if (count($sidebar[$pagen]) == 0) {
-				echo '<a href="index.php?page=' . $pagen . '">';
-			} else {
-				echo '<a href="#">';
-			}
+				echo 'href="index.php?page=' . $pagen . '"';
+			} 
+			echo ' >';
+			
 			if (array_key_exists($pagen, $sidebarpics)) {
 				echo '<i class="fa ' . $sidebarpics[$pagen] . '"></i>';
 			}
-			echo '<span>' . $pagetitles[$pagen] . '</span>';
+			echo '<span';
+			if (count($sidebar[$pagen]) != 0) {
+				echo ' onclick="window.location.href=\'index.php?page=' . $pagen . '&tab=default\'"';
+			}
+			echo ' >' . $pagetitles[$pagen] . '</span>';
 			if (count($sidebar[$pagen]) > 0)
 				echo '<i class="fa fa-angle-left pull-right"></i>';
 			echo '</a>';

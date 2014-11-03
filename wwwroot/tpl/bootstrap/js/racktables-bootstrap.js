@@ -23,22 +23,24 @@
                 maxchildren = tabs.eq(i).children().eq(0).children().length;
         };
         $('.tab-glyph').css('min-width', (maxchildren * 30) + 'px');
-
+        var userboxHeight = 20 + $('.user-panel').outerHeight() + $('body > div > .sidebar-offcanvas > section > form').outerHeight();
+        console.log('height is ' + userboxHeight);
+        $('.sidebar.tabbar > .sidebar-menu:first-child').css('margin-top', userboxHeight + 'px' );
         // Set timeout for showing tab names
         var tabTimeout;
         $('#tabsidebar').mouseenter(function() {
-           // if($('#tabsidebar').hasClass('horizontal-tabbar'))
-           //     return;
+            if($('#tabsidebar').hasClass('horizontal-tabbar'))
+                return;
 
             tabTimeout = setTimeout(function() {
-           //     $(".tab-link").fadeIn("slow");
-           //     $('tabsidebar').css('posititon', 'fixed');
+                 $(".tab-link").fadeIn("slow");
+                 $('tabsidebar').css('posititon', 'fixed');
             }, 1000);
         }).mouseleave(function() {
-         //   if($('#tabsidebar').hasClass('horizontal-tabbar'))
-         //       return;
+            if($('#tabsidebar').hasClass('horizontal-tabbar'))
+                return;
 
-         //   $(".tab-link").hide();     
+            $(".tab-link").hide();     
             clearTimeout(tabTimeout);
         });
     
@@ -70,19 +72,18 @@
         
         //$('.tabs-glyph').css('width', maxwidth + 'px');
         //console.log('max width is' + maxwidth);
-        $('#tabsidebar').scrollupbar();
         //$('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
         // Check for orientation
         enquire.register("screen and (max-width:750px)", {
         match : function () {
             // Add css class to tabbar 
-            //$('#tabsidebar').addClass('horizontal-tabbar');
-            //$('.tab-link').css('display', 'inline-block');
+            $('#tabsidebar').addClass('horizontal-tabbar');
+            $('.tab-link').css('display', 'inline-block');
             //$('#contentarea').css('margin-left', '0px');
         },
         unmatch : function () {
-            //$('#tabsidebar').addClass('horizontal-tabbar');
-            //$('.tab-link').css('display', 'inline-block');
+            $('#tabsidebar').addClass('horizontal-tabbar');
+            $('.tab-link').css('display', 'inline-block');
             $('body > div.wrapper.row-offcanvas.row-offcanvas-left.active.relative > aside.left-side.sidebar-offcanvas').css('top', '');
             //$('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
         }

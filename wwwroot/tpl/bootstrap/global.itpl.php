@@ -348,7 +348,7 @@ $this->setInMemoryTemplate("GlobalPlaceholder","{{Cont}}");
 *	Usage:  render8021QStatus -> interface.php
 *
 **/
-$this->setInMemoryTemplate("ETagsLine","<br><small class='tab_small'>{{cont}}</small>");
+$this->setInMemoryTemplate("ETagsLine","<br><small class='tag_small'>{{cont}}</small>");
 
 /**
 *	PCodeLine: 

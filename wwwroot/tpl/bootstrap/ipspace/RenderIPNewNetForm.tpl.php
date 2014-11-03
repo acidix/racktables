@@ -14,7 +14,7 @@
 	       	<table border=0 cellpadding=5 cellspacing=0 align=center>
 			<tr><td rowspan=5>
 			</td>
-			<th class=tdright>Prefix</th><td class=tdleft><input type=text name='range' size=36 class='live-validate' tabindex=1 value='<?php $this->Prefix_value ?>'></td>
+			<th class=tdright>Prefix</th><td class=tdleft><input type=text name='range' size=36 class='live-validate' autofocus tabindex=1 value='<?php $this->Prefix_value ?>'></td>
 			<tr><th class=tdright>VLAN</th><td class=tdleft>
 			<?php $this->optionTree ?><tr>
 			<th class=tdright>Name:</th><td class=tdleft><input type=text name='name' size='20' tabindex=3></td></tr>
