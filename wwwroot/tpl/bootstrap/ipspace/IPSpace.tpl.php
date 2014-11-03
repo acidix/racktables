@@ -3,7 +3,7 @@
 <?php if($this->is('hasResults')) { ?>
 	<div class="box box-info" style="position: relative; overflow-x: auto">
 		<div class="box-header">
-		    <h3 class="box-title">Networks (<?php $this->NetCount; ?>)</h3>
+		    <h3 class="box-title">Networks <small class="tag_small"><a style="font-size: 14px;" class="tag_small_a_inv"><?php $this->NetCount; ?></a></small></h3>
 		    <small>
 			<?php 	if($this->is('CollapseExpandOptions','allnone')) { ?>
 				auto-collapsing at threshold <?php $this->TreeThreshold; ?> (<!-- All --><a href='<?php $this->ExpandAll; ?>'>expand&nbsp;all</a><!-- EndAll --> / 

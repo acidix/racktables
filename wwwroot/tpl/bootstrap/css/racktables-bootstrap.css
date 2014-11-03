@@ -388,21 +388,27 @@ body > header > nav.navbar.navbar-static-top {
 	border-radius: 3px;
 	padding: 3px 3px 3px 3px;
 	margin: 0px 5px 0px 5px;
-	color: white;
+	color: white !important;
 	background-color: #0073b7 !important;
+}
+
+.tag_small > a.tag_small_a_inv {
+	background-color: white !important;
+	color: #0073b7 !important;
 }
 
 .rackbox > div.box-body {
 	overflow-x: touch;
 }
 
-.select2-container.select2-container-multi {
-	min-width: 200px;
+#add > table > tbody > tr > td.tdleft > input {
+	min-width: 100%; 
 }
 
-#add > table > tbody > tr > td.tdleft > input {
+.select2-container.select2-container-multi {
 	min-width: 100%;
 }
+
 
 #add > table > tbody > tr > td > select {
 	margin-right: 10px;

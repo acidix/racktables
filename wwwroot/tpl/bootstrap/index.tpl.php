@@ -64,7 +64,8 @@
         <script src="./tpl/bootstrap/js/jquery.highlight.js" type="text/javascript"></script>
         <!-- Highlight plugin javascript -->
         <script src="./tpl/bootstrap/js/jquery-svgpan.js" type="text/javascript"></script>
-        
+        <!-- Inputmask plugin javascript -->
+        <script src="./tpl/bootstrap/js/jquery.inputmask.js" type="text/javascript"></script>
         <!-- Bootstrap theme javascript -->
         <script src="./tpl/bootstrap/js/racktables-bootstrap.js" type="text/javascript"></script>
 

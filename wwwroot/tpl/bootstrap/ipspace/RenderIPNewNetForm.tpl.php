@@ -4,6 +4,7 @@
 		$myregexp = $this->_Regexp ; 
 		$this->addRequirement("Header","HeaderJsInline",array("code"=>"$(document).ready(function () {
 			$('form#add input[name=\"range\"]').attr('match', '${myregexp}');
+			$('form#add input[name=\"range\"]').inputmask();
 			Validate.init();
 		});"));  ?>
 	<div class="add-box box box-success">
@@ -14,7 +15,10 @@
 	       	<table border=0 cellpadding=5 cellspacing=0 align=center>
 			<tr><td rowspan=5>
 			</td>
-			<th class=tdright>Prefix</th><td class=tdleft><input type=text name='range' size=36 class='live-validate' autofocus tabindex=1 value='<?php $this->Prefix_value ?>'></td>
+			<th class=tdright>Prefix</th><td class=tdleft>
+			<!-- <input type=text name='range' size=36 class='live-validate' autofocus tabindex=1 value='<?php $this->Prefix_value ?>'> -->
+			<input data-inputmask="'mask': '999.999.999/99'" type=text name='range' size=36 autofocus tabindex=1 value='<?php $this->Prefix_value ?>'>
+			</td>
 			<tr><th class=tdright>VLAN</th><td class=tdleft>
 			<?php $this->optionTree ?><tr>
 			<th class=tdright>Name:</th><td class=tdleft><input type=text name='name' size='20' tabindex=3></td></tr>
@@ -25,9 +29,7 @@
 			</table>
 			<div style="text-align: center">
 				<button class="btn btn-success ajax_form" targetform="add">Add new</button>
-			
 				<button class="btn btn-default" type=button onclick="clearForm( add );"><span class="glyphicon glyphicon-refresh"></span></button>
-				<?php $this->getH("PrintImageHref", array('CREATE', 'Add a new network', TRUE, 5)); ?>
 			</div>
 			</form>
         </div><!-- /.box-body -->

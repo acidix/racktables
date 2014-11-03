@@ -98,9 +98,11 @@
             }
 
             if(tags_list.length > 0) {
-                console.log(tags_list);
-
-                $('input.ui-autocomplete-input.tagspicker').select2({
+                // console.log(tags_list);
+                $('input.ui-autocomplete-input.tagspicker')
+                // Make size fixed
+                .css('max-width', $('input.ui-autocomplete-input.tagspicker').css('height'))
+                .select2({
                     tags: tags_list,
                     tokenSeparators: [",", " "]
                 }).on('change', function (e){
@@ -119,15 +121,15 @@
                                 tag_val = GLOBAL_TAGLIST[tag_key].id;
                             }
                         }
-
-                        console.log("value is " +  tag_val);
-                        $('form[name="add"]').append('<input type="hidden" style="display:none;" value="' + tag_val + '" name="taglist[]">');
-                        
+                        // console.log("value is " +  tag_val);
+                        $('form[name="add"]').append('<input type="hidden" style="display:none;" value="' + tag_val + '" name="taglist[]">');                       
                     }
-                    if(typeof(e.removed) != 'undefined') {
+                    /*if(typeof(e.removed) != 'undefined') {
                         console.log(e.removed);
-                    }
-
+                    } */
+                }).on('select2-focus', function() {
+                    if(!$(this).data('select2').opened())
+                        $(this).data('select2').open();
                 });
             }
         }   // Adding tagspicker
@@ -266,9 +268,8 @@ function tagsDataTable(table_id) {
       return val.split( / \s*/ );
     }
     function extractLast( term ) {
-      return split( term ).pop();
+      return split(term).pop();
     }
- 
     $( '#' + table_id + '_filter > label > input[type="text"' )
       // don't navigate away from the field on tab when selecting an item
       .bind( "keydown", function( event ) {
@@ -293,10 +294,14 @@ function tagsDataTable(table_id) {
           // add placeholder to get the comma-and-space at the end
           terms.push( "" );
           this.value = terms.join( " " );
+         
+          // show next search
+          console.log('select');
           return false;
         }
-      }).focus(function(){            
-        $(this).autocomplete('search');
+      }).css('margin-left', '10px')
+      .focus(function(){            
+        $(this).autocomplete('search',this.value);
     });
 }
 
