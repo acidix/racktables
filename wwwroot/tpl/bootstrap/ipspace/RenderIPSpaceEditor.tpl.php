@@ -6,21 +6,33 @@
      <div class="box-body" style="position: relative">
 	
 	<?php if ($this->is("hasAddrspaceList", true)) { ?>
-		<table class='widetable' id="addrspacelist_table" border=0 cellpadding=5 cellspacing=0 align='center'>
-		<tr><th>&nbsp;</th><th>prefix</th><th>name</th><th>capacity</th></tr>
-		<?php $this->startLoop("allNetinfo"); ?>	
-			<tr valign=top><td>
-			<?php $this->destroyItem ?>
-			</td><td class=tdleft><?php $this->mkAIpmask ?></td>
-			<td class=tdleft><?php $this->name ?>
-			<?php $this->RendTags ?>
-			</td><td>
-			<?php $this->ipnetCap ?>
-			</tr>
-		<?php $this->endLoop(); ?> 
+		<table class="table table-bordered table-striped" id="addrspacelist_table" border=0 cellpadding=5 cellspacing=0 align='center'>
+			<thead><tr><th>&nbsp;</th><th>prefix</th><th>name</th><th>capacity</th></tr></thead>
+			<tbody>
+			<?php $this->startLoop("allNetinfo"); ?>	
+				<tr valign=top><td>
+				<?php $this->destroyItem ?>
+				</td><td class=tdleft><?php $this->mkAIpmask ?></td>
+				<td class=tdleft><?php $this->name ?>
+				<?php $this->RendTags ?>
+				</td>
+				<td>
+				<?php $this->ipnetCap ?>
+				</td>
+				</tr>
+			<?php $this->endLoop(); ?>
+			</tbody>
 		</table>
+		<!-- DATA TABES SCRIPT -->
+		<script src="./js/plugins/datatables/jquery.dataTables.js" type="text/javascript"></script>
+		<script src="./js/plugins/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
+		<!-- DATA Tables CSS -->
+		<link href="./css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
-		var datatab = $("#addrspacelist_table").dataTable();
+		$(function() {
+			tagsDataTable('addrspacelist_table');
+		});
+		// var datatab = $("#addrspacelist_table").dataTable();
 		</script>
 	<?php } ?> 
 	</div>

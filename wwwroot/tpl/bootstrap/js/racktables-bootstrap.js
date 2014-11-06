@@ -143,6 +143,15 @@
 
             form.submit(function (e) {
                 e.preventDefault();
+                // Check for validation
+                if(!$('input.live-validate').hasClass('validation-success')) {
+                    $('input.live-validate').tooltip('show');
+                    $('input.live-validate').hover(function () {
+                         $('input.live-validate').tooltip('hide');
+                    });
+                    return;
+                }
+
                 var fd = new FormData($(this)[0]);
                 $.ajax({
                     url: window.location.pathname + form.attr('action'),
@@ -256,7 +265,7 @@ function tagsDataTable(table_id) {
     // Add tags to autocomplete
     // has to be done before tags are hidden    
     var taglist = [];
-    var possTags = $('#' + table_id + ' > tbody > tr > td > small > a');
+    var possTags = $('#' + table_id + ' > tbody > tr > td > small').children();
     for (var i = 0; i < possTags.length; i++) {
         // No duplicates
         if($.inArray(possTags[i].innerHTML, taglist) === -1) taglist.push(possTags[i].innerHTML);

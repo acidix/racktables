@@ -536,7 +536,7 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 		$pagetitles['files'] = 'Files';
 		$pagetitles['reports'] = 'Reports';
 		$pagetitles['ipv4slb'] = 'IPv4 SLB';
-		$pagetitles['8021q'] = '8021q';
+		$pagetitles['8021q'] = '802.1Q';
 		$pagetitles['config'] = 'Configuration';
 		$pagetitles['objectlog'] = 'Object Log';
 		$pagetitles['virtual'] = 'Virtual';
