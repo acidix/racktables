@@ -116,10 +116,9 @@ $this->setInMemoryTemplate("GetImageHrefNoInput", "<img src={{SrcPath}} width={{
 *	Usage: interface.php, interface-lib.php
 *
 **/
-$this->setInMemoryTemplate("RenderedIPv4NetCapacityAddrc", '<div class="progress">' .
-															'<div class="progress-bar progress-bar" style="width: {{width}}%">{{width}}%</div></div>' .
-															"<img class='test' width='{{width}}' height=10 border=0 title='{{title2}}' src='?module=progressbar4&px1={{px1}}" . 
-															"&px2={{px2}}&px3={{px3}}'><small style='margin-left: 5px' class='title'>{{title}}</small>");
+$this->setInMemoryTemplate("RenderedIPv4NetCapacityAddrc", '<div style="vertical-align: middle"><input type="text" value="{{px1}}" class="ipv4-net-capacity-addr">' .
+															"<!--<img class='test' width='{{width}}' height=10 border=0 title='{{title2}}' src='?module=progressbar4&px1={{px1}}" . 
+															"&px2={{px2}}&px3={{px3}}'>--><small style='margin-left: 5px' class='title'>{{title}}</small></div>");
 $this->setInMemoryTemplate("RenderedIPv4NetCapacityReturn","<div class=\"{{class}}\" id=\"{{div_id}}\"> {{textVal}}</div>");
 
 /**

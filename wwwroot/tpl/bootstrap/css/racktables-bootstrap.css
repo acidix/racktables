@@ -439,12 +439,20 @@ input.live-validate.validation-success {
 	/*box-shadow: 0px 3px 1px rgba(0, 255, 0, 0.5);*/ 
 }
 
-.addcontainer {
+.addContainer, .removeContainer {
 	visibility: hidden;
+}
+
+.modal-dialog {
+	width: 75%;
 }
 
 .bootstrap-dialog-message {
 /*visibility: visible;*/
 }
 
+.rackspace-svg-container {
+	border-radius: 3px;
+  	border: 2px solid rgba(0,0,0, 0.5);
+}
 

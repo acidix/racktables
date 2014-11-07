@@ -6,8 +6,13 @@
 *   - enquiere
 */
 // Setup page when loaded
-(function($) {
+// Setup namespace and intial global variables
+// Create global messenger for inter modul communication
+document.bootstrap_template = {};
+document.bootstrap_template.event_messenger = [];
+document.bootstrap_template.modal_window = null;
 
+(function($) {
     $(document).ready(function() { 
         // Add glyphicons to all tabs
         var tabs = $("li.tab");
@@ -70,9 +75,6 @@
             operatorstabs.eq(i).remove();
         }
         
-        //$('.tabs-glyph').css('width', maxwidth + 'px');
-        //console.log('max width is' + maxwidth);
-        //$('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
         // Check for orientation
         enquire.register("screen and (max-width:750px)", {
         match : function () {
@@ -136,48 +138,19 @@
         console.log('This is the setup function');
 
         // Check for ajax form 
-        for(var i = 0; i < $('button.ajax_form').length; i++) {
-            console.log($('button.ajax_form').eq(i).attr('targetform'));
-            var form = $('form[name=' + $('button.ajax_form').eq(i).attr('targetform') + ']');
-            console.log(form);
-
-            form.submit(function (e) {
-                e.preventDefault();
-                // Check for validation
-                if(!$('input.live-validate').hasClass('validation-success')) {
-                    $('input.live-validate').tooltip('show');
-                    $('input.live-validate').hover(function () {
-                         $('input.live-validate').tooltip('hide');
-                    });
-                    return;
-                }
-
-                var fd = new FormData($(this)[0]);
-                $.ajax({
-                    url: window.location.pathname + form.attr('action'),
-                    data: fd,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    success: function(data){
-                        bodytxt = '<div id="body-mock">' + data.replace(/^[\s\S]*<body.*?>|<\/body>[\s\S]*$/g, '') + '</div>';
-                        var bodyelem = $(bodytxt);
-                        console.log(data);
-                        
-                        if(bodyelem.find('.alert.alert-success').length > 0) {
-                            form.attr('succeeded', 'true');
-                            console.log('setting success!');
-                            console.log(bodyelem.find('.alert.alert-success'));
-                        }
-                        form.prepend(bodyelem.find('.alert'));
-                    }
-                });
-            });
-            console.log('sended ajax');
-        }
+        checkAjaxFormBtn();
+        
+        // Check for ajax href
+        checkAjaxHrefBtn();
 
         // Set svgs 
         $('svg').svgPan('viewport');
+
+        $('.ipv4-net-capacity-addr').knob({
+            "readOnly": true,
+            "width": 50,
+            "height": 50
+        });
     });
 })(jQuery);
 
@@ -205,6 +178,7 @@ function getGlyphicon(glyphiconID) {
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-plus'></span></a>";
         case 'rackspacehistory':
         case 'rowfiles':
+        case 'ipv4netfiles':
         case 'reportsrackcode':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-list-alt'></span></a>";
         case 'uidefault':
@@ -218,6 +192,7 @@ function getGlyphicon(glyphiconID) {
         case 'ipv4spacemanage':
         case 'ipv6spacemanage':
         case 'filesmanage':
+        case 'ipv4netproperties':
         case 'rowedit':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span></a>";
         case 'abort-btn':
@@ -232,10 +207,15 @@ function getGlyphicon(glyphiconID) {
         case 'virtualdefault':
         case 'objectlogdefault':
         case 'rowdefault':
+        case 'ipv4netdefault':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-eye-open'></span></a>";  
         case '8021qvdlist':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span><span class='glyphicon glyphicon-home'></span></a>";  
+        case 'ipv4net8021q':
+            return "<a class='tab-glyph'><strong class='glyphicon'>Q</strong></a>"; 
+        case 'ipv4netliveptr':
+            return "<a class='tab-glyph'><strong class='glyphicon'>L</strong></a>"; 
         case 'rowtagroller':
+        case 'ipv4nettags':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-tag'></span></a>";   
         case 'roweditracks':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span><span class='glyphicon glyphicon-home'></span></a>";   
@@ -244,6 +224,118 @@ function getGlyphicon(glyphiconID) {
         default:
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-exclamation-sign'></span></a>";
         
+    }
+}
+
+function addAlertMessage(message) {
+    if(document.bootstrap_template.modal_window != null) {
+        // Add to modal window
+        document.bootstrap_template.modal_window.prepend(message);
+    } else {
+        $('.content').prepend(message);
+    }
+    setTimeout(function() {
+        message.fadeOut();
+        message.remove();
+    }, 3000);
+}
+
+
+// Chech for ajax hrefs
+function checkAjaxHrefBtn() {
+    for(var i = 0; i < $('button.ajax_href').length; i++) {
+        var btn = $('button.ajax_href').eq(i);
+        btn.click(function (event){
+            $.ajax({
+                url: window.location.pathname + $(this).attr('href'),
+                type: 'GET',
+                success: function(data){
+                    bodytxt = '<div id="body-mock">' + data.replace(/^[\s\S]*<body.*?>|<\/body>[\s\S]*$/g, '') + '</div>';
+                    var bodyelem = $(bodytxt);
+                    console.log(data);
+                    
+                    if(bodyelem.find('.alert.alert-success').length > 0) {
+                    //    form.attr('succeeded', 'true');
+                        console.log('setting success!');
+                        console.log(bodyelem.find('.alert.alert-success'));
+                        //$('.content').html(bodyelem.find('.content').html());
+                        //check_ajax_href_btn();
+                    }
+                    
+                    // Issue an event to the messenger
+                    document.bootstrap_template.event_messenger.push({ name: 'ajax_reguest', success : bodyelem.find('.alert.alert-success').length > 0});
+                    
+                    // If target to reload is set, set html
+                    if(bodyelem.find('.alert.alert-success').length > 0 && btn.attr('reload-target') != "") {
+                        $(btn.attr('reload-target')).html(bodyelem.find(btn.attr('reload-target')).html()); 
+                    }
+                   
+                    if(bodyelem.find('.alert').length > 0)
+                        addAlertMessage(bodyelem.find('.alert'));
+                    else
+                        addAlertMessage($('<div class="alert alert-danger"></div').append(bodyelem));
+                  // else
+                   //     $('.content').prepend(bodyelem.find('.alert'));
+                }
+            });    
+        });
+        console.log('setting ' + btn.attr('href'));
+    }
+}
+
+// Check for ajax form 
+function checkAjaxFormBtn() {
+    for(var i = 0; i < $('button.ajax_form').length; i++) {
+        console.log($('button.ajax_form').eq(i).attr('targetform'));
+        var form = $('form[name=' + $('button.ajax_form').eq(i).attr('targetform') + ']');
+        console.log(form);
+
+        form.submit(function (e) {
+            e.preventDefault();
+            // Check for validation
+            if(!form.find('input.live-validate').hasClass('validation-success')) {
+                form.find('input.live-validate').tooltip('show');
+                form.find('input.live-validate').hover(function () {
+                    form.find('input.live-validate').tooltip('hide');
+                });
+                return;
+            }
+
+            var fd = new FormData($(this)[0]);
+            $.ajax({
+                url: window.location.pathname + form.attr('action'),
+                data: fd,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                success: function(data){
+                    bodytxt = '<div id="body-mock">' + data.replace(/^[\s\S]*<body.*?>|<\/body>[\s\S]*$/g, '') + '</div>';
+                    var bodyelem = $(bodytxt);
+                    console.log(data);
+                    
+                    if(bodyelem.find('.alert.alert-success').length > 0) {
+                    //    form.attr('succeeded', 'true');
+                        
+                        console.log('setting success!');
+                        console.log(bodyelem.find('.alert.alert-success'));
+                    }
+
+                    // Issue an event to the messenger
+                    document.bootstrap_template.event_messenger.push({ name: 'ajax_reguest', success : bodyelem.find('.alert.alert-success').length > 0});
+                    
+                    // If target to reload is set, set html
+                    if(bodyelem.find('.alert.alert-success').length > 0 && form.attr('reload-target') != "") {
+                        $(form.attr('reload-target')).html(bodyelem.find(form.attr('reload-target')).html()); 
+                    }
+
+                    if(bodyelem.find('.alert').length > 0)
+                        addAlertMessage(bodyelem.find('.alert'));
+                    else
+                        addAlertMessage($('<div class="alert alert-danger"></div').append(bodyelem));
+                }
+            });
+        });
+        console.log('sended ajax');
     }
 }
 
@@ -323,24 +415,29 @@ function clearForm( form_name ) {
       .removeAttr('selected');
 }
 
-function showAddDialog() {
-    var dialog_html = $('.addcontainer').children().clone()
+function showDataEditDialog(title, content_selector, dialog_type) {
+    var dialog_html = $(content_selector).children().clone();
 
+    // Leave link to modal window data -
+    document.bootstrap_template.modal_window = $(content_selector).children();
     BootstrapDialog.show({
-        title: 'Add new',
-        type: BootstrapDialog.TYPE_SUCCESS,
+        title: title,
+        type: dialog_type,
         closeByBackdrop: true,
         draggable: true,
-        message: $('.addcontainer').children(),
+        message: $(content_selector).children(),
         onshown : function(dialogRef) {
-            var form = $('form[name=' + $('button.ajax_form').eq(0).attr('targetform') + ']');
-            form.attr('succeeded','false');
+            //var form = $('form[name=' + $('button.ajax_form').eq(0).attr('targetform') + ']');
+            //form.attr('succeeded','false');
+            // reset messenger
+            document.bootstrap_template.event_messenger = [];
         },
         onhide: function(dialogRef) {
             // On hide reload the view if necessary
-            var form = $('form[name=' + $('button.ajax_form').eq(0).attr('targetform') + ']').eq(0);
-            console.log(form);
-            if(typeof(form.attr('succeeded')) != "undefined" && form.attr('succeeded') == "true")
+            //var form = $('form[name=' + $('button.ajax_form').eq(0).attr('targetform') + ']').eq(0);
+            //console.log(form);
+            var messenger = document.bootstrap_template.event_messenger;
+            if(messenger.length > 0 && messenger[messenger.length - 1].success)
                 //Load the page new 
                 $.ajax({
                     url: document.URL,
@@ -356,11 +453,23 @@ function showAddDialog() {
                     }
                 });
 
-            $('.addcontainer').append(dialog_html);
-                      
+            $(content_selector).append(dialog_html);
+            document.bootstrap_template.modal_window = null;         
         },
-    });
+    });   
 }
+
+
+// Show an adding dialog from template
+function showAddDialog() {
+    showDataEditDialog('Add new', '.addContainer', BootstrapDialog.TYPE_SUCCESS);
+}
+
+
+function showRemoveDialog() {
+    showDataEditDialog('Edit rows', '.removeContainer', BootstrapDialog.TYPE_DANGER);
+}
+
 
 function highlightRacktables( text ) {
     var text_elems = $('g > a > text');

@@ -18,10 +18,10 @@
 				<button class="zoom-overlay-btn zoom-out"><span class='glyphicon glyphicon-minus'></span></button>
 				<input type="range" class="zoom-range"></br>
 			</div>	
-	    	<svg class="rackspace-svg-container" counter="<?php $this->Counter; ?>" width="<?php $this->OverallWidth; ?>" height="<?php $this->OverallHeight; ?>" x="<?php $this->X ?>" y="<?php $this->Y ?>">	
-			<g id="viewport">
-			<?php $this->Content; ?>
-			</g>
+	    	<svg class="rackspace-svg-container" counter="<?php $this->Counter; ?>" width="100%" height="<?php $this->OverallHeight; ?>" x="<?php $this->X ?>" y="<?php $this->Y ?>">	
+				<g id="viewport">
+					<?php $this->Content; ?>
+				</g>
 	 		</svg>
 	    </div>
 	</div>

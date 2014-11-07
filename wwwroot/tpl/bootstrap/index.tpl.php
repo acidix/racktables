@@ -51,7 +51,7 @@
         <!-- AdminLTE for demo purposes -->
         <script src="./js/AdminLTE/demo.js" type="text/javascript"></script>
         <!-- Parsley for form validation -->
-        <script src="./js/parsley.min.js" type="text/javascript"></script>
+        <script src="./tpl/bootstrap/js/parsley.min.js" type="text/javascript"></script>
         <!-- Enquire for responsive media query -->
         <script src="./tpl/bootstrap/js/enquire.js" type="text/javascript"></script>
         <!-- Scrolled up bar -->
@@ -66,9 +66,10 @@
         <script src="./tpl/bootstrap/js/jquery-svgpan.js" type="text/javascript"></script>
         <!-- Inputmask plugin javascript -->
         <script src="./tpl/bootstrap/js/jquery.inputmask.js" type="text/javascript"></script>
+        <!-- Knob plugin javascript -->
+        <script src="./tpl/bootstrap/js/jquery.knob.min.js" type="text/javascript"></script>
         <!-- Bootstrap theme javascript -->
         <script src="./tpl/bootstrap/js/racktables-bootstrap.js" type="text/javascript"></script>
-
         
 		<?php $this->Header ?>
     </head>

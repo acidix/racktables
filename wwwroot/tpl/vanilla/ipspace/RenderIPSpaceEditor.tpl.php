@@ -4,7 +4,7 @@
 		<?php if ($this->is("hasAddrspaceList", true)) { ?>
 			<table class='widetable' border=0 cellpadding=5 cellspacing=0 align='center'>
 			<tr><th>&nbsp;</th><th>prefix</th><th>name</th><th>capacity</th></tr>
-			<?php  while($this->refLoop('allNetinfo')) { ?>	
+			<?php while($this->refLoop('allNetinfo')) { ?>	
 				<tr valign=top><td>	
 				<?php if ($this->is('IsDestroyable', true)) { ?>
 					<?php $this->getH('PrintImageHREF', array('nodestroy', 'There are ' . $this->_CountNetInfo . ' allocations inside')); ?>

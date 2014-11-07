@@ -117,13 +117,6 @@ function renderRackspaceSVG() {
 				
 					$rowo = $tplm->generateSubmodule('Content', 'renderRackspace_SVGRow', $smod);
 					
-					$rowo->addOutput('LocationName', $locationTree);
-					$rowo->addOutput('RowName', $row_name);
-					$rowo->addOutput('Y', $rowy);
-					$rowo->addOutput('X', 5);
-					$rowo->addOutput('Counter', $rack_counter++);
-					$rowo->addOutput('Link', makeHref(array('page'=>'row', 'row_id'=>$row_id)));
-					
 					$rackx = 10;
 					$maxracky = 20;
 			
@@ -133,10 +126,9 @@ function renderRackspaceSVG() {
 				// 					$rowo["HrefToRow"] = makeHref(array('page'=>'row', 'row_id'=>$row_id));
 				// 					$rowo["RowName"] = $row_name;
 				// 					$rowo["CellFilterUrlExtra"] = $cellfilter['urlextra'];
-					
+		
 					if (count ($rackList))
 					{
-						
 						foreach ($rackList as $rack)
 						{
 							$racko = $tplm->generateSubmodule('Racks', 'renderRackspace_SVGRack', $rowo);
@@ -196,19 +188,28 @@ function renderRackspaceSVG() {
 									}
 								}
 							}
-						
 							//Increase rackx to ensure that the next rack is placed right to this one
 							$rackx += 200;
-						
 						}
-	
-	
 					}
-			
+					
 					$rowo->addOutput('OverallWidth', $rackx + 20);
 					$rowo->addOutput('OverallHeight', $maxracky + 60);
-				
-					$rowy += ($maxracky + 60);
+					$rowo->addOutput('LocationName', $locationTree);
+					$rowo->addOutput('RowName', $row_name);
+					$rowo->addOutput('Y', $rowy + 10);
+					
+					if($rack_counter % 2)
+						$rowo->addOutput('X', 5);
+					else
+						$rowo->addOutput('X', 5  + $rackx + 50);
+
+					$rowo->addOutput('Counter', $rack_counter++);
+					$rowo->addOutput('Link', makeHref(array('page'=>'row', 'row_id'=>$row_id)));
+
+					if($rack_counter % 2 == 0)
+						$rowy += ($maxracky + 100);
+					
 					$maxx = $maxx < $rackx + 20 ? $rackx + 20 : $maxx;
 				}
 				$smod->addOutput('OverallWidth', $maxx);
@@ -264,19 +265,24 @@ function addMultipleObjectsDynamic() {
 	
 }
 
-function renderIPSpaceWithAdd() {
+function renderIPSpaceWithAddRem() {
 	renderIPSpace();
 	$tplm = TemplateManager::getInstance();
-	$tplm->getMainModule()->addOutput('Payload', '<div class="addcontainer">');
+
+	// Add an add + remove dialog at the end
+	$tplm->getMainModule()->addOutput('Payload', '<div class="addContainer">');
 	renderIPNewNetForm();
 	$tplm->getMainModule()->addOutput('Payload', '</div>');
+	$tplm->getMainModule()->addOutput('Payload', '<div class="removeContainer">');
+	renderIPSpaceEditor();
+	$tplm->getMainModule()->addOutput('Payload', '</div>');
+
 }
 
 global $tabhandler;
 
 $tabhandler['rackspace']['default'] = 'renderRackspaceSVG';
 $tabhandler['depot']['addmore'] = 'renderDynamicAddMultipleObjectsForm';
-
-$tabhandler['ipv4space']['default'] = 'renderIPSpaceWithAdd';
+$tabhandler['ipv4space']['default'] = 'renderIPSpaceWithAddRem';
 
 ?>

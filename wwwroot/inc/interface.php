@@ -2520,6 +2520,7 @@ function renderIPSpaceEditor()
                                     'name' => niftyString ($netinfo['name']));
             $singleNetinfo['IsDestroyable'] = (! isIPNetworkEmpty ($netinfo));
             $singleNetinfo['NetInfo_Id'] = $netinfo['id'];
+                        
             if (count ($netinfo['etags']))
             {
                 $etagsMod = $tplm->generateModule('ETagsLine', true, array('cont' => serializeTags ($netinfo['etags'])));
