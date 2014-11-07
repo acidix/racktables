@@ -3,7 +3,17 @@
  		<div class="box-header"><h3 class="box-title"><?php $this->Title ?></h3></div>
  		<div class="box-body">
 			<table border=0 cellspacing=0 cellpadding=3 class="table table-condensed">
-				<?php $this->LoopMod ?>
+				<?php while($this->refLoop("LoopMod")) { ?>
+					<?php if($this->is("SingleVal", true)){ ?>
+						<?php $this->val ?>
+					<?php } else {?>
+						<?php if($this->is("ShowTags", true)) { ?>
+							<?php $this->getH("PrintTagTRs", array( $this->_Cell, $this->_BaseUrl));  ?> 
+						<?php } else {?>
+							<tr><th width='50%' class='<?php $this->Class ?>'><?php $this->Name ?></th><td class=tdleft><?php $this->Val ?></td></tr> 
+						<?php } ?>
+					<?php } ?>
+				<?php } ?>
 			</table>
 		</div>
 	</div>

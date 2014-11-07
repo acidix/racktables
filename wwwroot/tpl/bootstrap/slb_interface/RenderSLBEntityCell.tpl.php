@@ -10,7 +10,7 @@
 	<?php } ?>
 
 	<?php if ($this->is("typeIPV4s",true)) { ?>
-		<tr><td rowspan=3 width='5%'>
+		<tr><td rowspan=3>
 		<?php $this->getH("PrintImageHref",array('VS'));?>
 		</td><td>
 		<a class='<?php $this->aClass ?>' href='index.php?page=ipv4vs&vs_id=<?php $this->cellID ?>'>
@@ -19,7 +19,7 @@
 	<?php } ?>
 	
 	<?php if ($this->is("typeIPVs",true)) { ?>
-		<tr><td rowspan=3 width='5%'>
+		<tr><td rowspan=3>
 		<?php $this->getH("PrintImageHref",array('VS'));?>
 		</td><td>
 		<a class='<?php $this->aClass ?>' href='index.php?page=ipvs&vs_id=<?php $this->cellID ?>'>

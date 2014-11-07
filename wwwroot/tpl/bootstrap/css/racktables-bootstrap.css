@@ -456,3 +456,31 @@ input.live-validate.validation-success {
   	border: 2px solid rgba(0,0,0, 0.5);
 }
 
+.table.table-condensed td.msg_error {
+	background-color: rgba(255, 0, 0, 0.5);
+	font-weight: bold;
+}
+
+td.atom {
+	text-align: center;
+	
+}
+
+td.atom.state_F {
+}
+
+td.atom.state_T {
+	background-color: #3c8dbc;
+}
+
+td.atom.state_T  a {
+	color: black;
+}
+
+td.atom.state_Th {
+	background-color: #a9cee3;
+}
+
+td.atom.state_Th  a {
+	color: black;
+}

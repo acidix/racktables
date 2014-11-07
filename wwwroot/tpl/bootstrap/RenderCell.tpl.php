@@ -2,7 +2,7 @@
 
 	<?php if ($this->is("typeUser",true)) { ?>
 
-		<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>
+		<table class='slbcell vscell'><tr><td>
 		<?php $this->getH("PrintImageHref","USER") ?> 
 		</td><td> <?php $this->get("UserRef") ?> </td></tr>
 		
@@ -17,7 +17,7 @@
 	<?php } ?>
 
 	<?php if ($this->is("typeFile",true)) { ?>
-		<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>
+		<table class='slbcell vscell'><tr><td>
 		<?php $this->get("fileImgSpace"); ?>
 		</td><td>
 		<?php $this->get("nameAndID") ?>
@@ -39,8 +39,8 @@
 	<?php } ?>
 
 	<?php if ($this->is("typeIPNet",true)) { ?>
-		<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>
-		<?php  $this->getH("PrintImageHref", "NET");?>
+		<table class='slbcell vscell'><tr><td>
+		<div class="pull-left" style=""><?php $this->getH("PrintImageHref","NET") ?></div>
 		</td><td><?php $this->get("mkACell"); ?><?php $this->get("renderdIPNetCap"); ?></td></tr>
 		<tr><td>
 		<?php if($this->is("cellName",true)) { ?>
@@ -58,7 +58,7 @@
 
 	<?php if ($this->is("typeRack",true)) { ?>
 
-		<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>
+		<table class='slbcell vscell'><tr><td>
 		<img border=0 width=<?php $this->thumbWidth ?> 
 					height=<?php $this->thumbHeight ?> title='<?php $this->cellHeight ?> units' 
 			src='?module=image&img=minirack&rack_id=<?php $this->get("cellID")?>'>
@@ -72,8 +72,8 @@
 	<?php } ?>
 	
 	<?php if ($this->is("typeLocation",true)) { ?>	
-		<table class='slbcell vscell'><tr><td rowspan=3 width='5%'>
-		<?php $this->getH("PrintImageHref","LOCATION") ?> 
+		<table class='slbcell vscell'><tr><td>
+		<div class="pull-left"><?php $this->getH("PrintImageHref","LOCATION") ?> </div>
 		</td><td>
 		<?php $this->mkACell ?> 
 		</td></tr><tr><td>
@@ -84,7 +84,7 @@
 	<?php } ?>
 
 	<?php if ($this->is("typeObject",true)) { ?>	
-		<table class='slbcell vscell'><tr><td rowspan=2 width='5%'>
+		<table class='slbcell vscell'><tr><td>
 		<?php $this->getH("PrintImageHref","OBJECT") ?> 
 		</td><td>
 		<?php $this->get("mkACell") ?> 
