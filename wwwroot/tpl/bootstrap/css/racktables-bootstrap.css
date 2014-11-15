@@ -33,8 +33,12 @@ section.content {
 	overflow: visible;
 }
 
+.box.box-info {
+	border-radius: 0px;
+}
+
 #contentarea {
-	margin-left: 10px;
+	margin-left: 20px;
 }
 
 .btn-toggle-portlet {
@@ -77,9 +81,9 @@ body > header > nav.navbar.navbar-static-top {
 }
 
 .sidebar.tabbar {
-	/*background-image: linear-gradient(to right, rgba(51, 153, 170, 0.14) 20%, rgba(255, 255, 255, 0.75) 50%);*/
+	/*background-image: linear-gradient(to right, rgba(51, 153, 170, 0.14) 20%, rgba(255, 255, 255, 0.75) 50%);
+	min-width: 20px; */
 	padding: 0px 0px 0px 0px;	
-	min-width: 20px;
 	background: #f4f4f4;
 	height: 100%;
 	margin-left: -15px;
@@ -116,8 +120,28 @@ body > header > nav.navbar.navbar-static-top {
 }
 
 .sidebar.tabbar > .sidebar-menu > li.active {
-	background-color: #f9f9f9;
+	/*background-color: #f9f9f9;*/
+	-webkit-animation: tabs-animation 2s linear 0s infinite alternate; /* Chrome, Safari, Opera */
+    animation: tabs-animation 2s linear 0s infinite alternate;
 }
+
+/* Sidebar tabbar animation */
+/* Chrome, Safari, Opera */
+@-webkit-keyframes tabs-animation {
+    0% {background-color: white;}
+    100% {background-color: #CCCCCC;}
+}
+
+/* Standard syntax */
+@keyframes tabs-animation {
+    0% {background-color: white;}
+    100% {background-color: #CCCCCC;}
+}
+
+.skin-blue .sidebar > .sidebar-menu > li.active > a, .sidebar-menu > li > a > .glyphicon {
+	background-color: inherit;
+}
+
 
 .sidebar.tabbar > .sidebar-menu > li.operator-spacer {
 	padding-top: 50px;
@@ -156,6 +180,7 @@ body > header > nav.navbar.navbar-static-top {
 
 .sidebar.tabbar > .sidebar-menu > li:first-of-type > a {
 	border-top: none;
+	background-color: inherit;
 }
 
 #contentarea > section.content > div > div.box-header > small {
@@ -467,6 +492,8 @@ td.atom {
 }
 
 td.atom.state_F {
+	border: none;
+	background-color: lightblue;
 }
 
 td.atom.state_T {
@@ -483,4 +510,10 @@ td.atom.state_Th {
 
 td.atom.state_Th  a {
 	color: black;
+}
+
+.form-control {
+	padding:  3px;
+	display: inline-block;
+	width: auto;
 }

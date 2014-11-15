@@ -1,5 +1,5 @@
 <?php if (defined("RS_TPL")) {?>
-	<select 
+	<select class="form-control">
 	<?php $this->startLoop("selectedList"); ?>	
 		<?php $this->attr_name ?>=<?php $this->attr_val ?> 
 	<?php $this->endLoop(); ?> 

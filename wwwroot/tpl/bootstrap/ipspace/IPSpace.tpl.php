@@ -44,7 +44,7 @@
 			<link href="./css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
 			<script type="text/javascript">
 			$(function() {
-				tagsDataTable('ipspaceTable');
+				tagsDataTable('#ipspaceTable');
 			});
 			</script>
 		</div>

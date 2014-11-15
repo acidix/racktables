@@ -309,7 +309,7 @@ function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $
     if (count ($optionList) == 1 && $treat_single_special)
     {
         foreach ($optionList as $key => $value)
-        break;
+            break;
         $mod = $tplm->generateModule("GetSelectInLine",  true, array("selectName" => $select_attrs['name'], "keyValue" => $key, "value" => $value ));
         $mod->setNamespace("");
         return $mod->run();

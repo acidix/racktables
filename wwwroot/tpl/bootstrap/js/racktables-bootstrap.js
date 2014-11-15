@@ -180,8 +180,12 @@ function getGlyphicon(glyphiconID) {
         case 'rowfiles':
         case 'ipv4netfiles':
         case 'reportsrackcode':
+        case 'objectfiles':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-list-alt'></span></a>";
+        case 'objectrackspace':
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-align-justify'></span></a>";
         case 'uidefault':
+        case 'reportsdefault':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-home'></span></a>";
         case 'uireset':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-flash'></span></a>";
@@ -194,33 +198,57 @@ function getGlyphicon(glyphiconID) {
         case 'filesmanage':
         case 'ipv4netproperties':
         case 'rowedit':
+        case 'objectedit':
+        case 'portifcompatedit':
+        case 'attrseditattrs':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span></a>";
         case 'abort-btn':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-remove'></span></a>";       
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-remove'></span></a>";
         case 'reportsrackcode':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-hdd'></span></a>"; 
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-hdd'></span></a>";
         case 'reportsintegrity':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-hdd'></span></a>";  
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-hdd'></span></a>";
+        case 'attrseditmap':
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-random'></span></a>";
         case 'reportswarranty':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-time'></span></a>";  
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-time'></span></a>";
         case '8021qdefault':
         case 'virtualdefault':
         case 'objectlogdefault':
         case 'rowdefault':
+        case 'objectdefault':
         case 'ipv4netdefault':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-eye-open'></span></a>";  
+        case 'portifcompatdefault':
+        case 'attrsdefault':
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-eye-open'></span></a>";
+        case 'objectlog':
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-list'></span></a>";
+        case 'objectports':
+        case 'reportsports':
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-record'></span></a>";
+        case 'objectnat4':
+            return "<a class='tab-glyph'><strong class='glyphicon'>N4</strong></a>";
+        case 'objectip':
+            return "<a class='tab-glyph'><strong class='glyphicon'>IP</strong></a>";  
         case '8021qvdlist':
+        case 'object8021qorder':
         case 'ipv4net8021q':
+        case 'reports8021q':
             return "<a class='tab-glyph'><strong class='glyphicon'>Q</strong></a>"; 
         case 'ipv4netliveptr':
-            return "<a class='tab-glyph'><strong class='glyphicon'>L</strong></a>"; 
+            return "<a class='tab-glyph'><strong class='glyphicon'>L</strong></a>";
+        case 'reportsipv4':
+            return "<a class='tab-glyph'><strong class='glyphicon'>4</strong></a>"; 
+        case 'reportsipv6':
+            return "<a class='tab-glyph'><strong class='glyphicon'>6</strong></a>"; 
         case 'rowtagroller':
         case 'ipv4nettags':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-tag'></span></a>";   
+        case 'objecttags':
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-tag'></span></a>"; 
         case 'roweditracks':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span><span class='glyphicon glyphicon-home'></span></a>";   
         case '8021qvstlist':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span><span class='glyphicon glyphicon-align-justify'></span></a>";  
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span></a>";
         default:
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-exclamation-sign'></span></a>";
         
@@ -353,17 +381,17 @@ function showConsoleBtns(rackconsole) {
 }
 
 // Make data table with tag completion
-function tagsDataTable(table_id) {
+function tagsDataTable(table_selector) {
     // Add tags to autocomplete
     // has to be done before tags are hidden    
     var taglist = [];
-    var possTags = $('#' + table_id + ' > tbody > tr > td > small').children();
+    var possTags = $(table_selector + ' > tbody > tr > td > small').children();
     for (var i = 0; i < possTags.length; i++) {
         // No duplicates
         if($.inArray(possTags[i].innerHTML, taglist) === -1) taglist.push(possTags[i].innerHTML);
     };
     
-    var datatab = $('#' + table_id).dataTable();
+    var datatab = $(table_selector).dataTable();
     
     function split( val ) {
       return val.split( / \s*/ );
@@ -371,7 +399,7 @@ function tagsDataTable(table_id) {
     function extractLast( term ) {
       return split(term).pop();
     }
-    $( '#' + table_id + '_filter > label > input[type="text"' )
+    $( table_selector + '_filter > label > input[type="text"' )
       // don't navigate away from the field on tab when selecting an item
       .bind( "keydown", function( event ) {
         if ( event.keyCode === $.ui.keyCode.TAB &&

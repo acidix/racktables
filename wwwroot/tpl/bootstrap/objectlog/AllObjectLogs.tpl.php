@@ -1,5 +1,4 @@
 <?php if (defined("RS_TPL")) {?>
-
 <br><table width='80%' align=center border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>
 <tr valign=top><th class=tdleft>Object</th><th class=tdleft>Date/user</th>
 	<th class=tdcenter> <?php $this->get("Image_Href"); ?>  </th></tr>

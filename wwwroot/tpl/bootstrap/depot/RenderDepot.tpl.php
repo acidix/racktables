@@ -78,7 +78,7 @@
 
 <script type="text/javascript">
      $(function() {
-     	tagsDataTable('object_table');
+     	tagsDataTable('#object_table');
      });
 </script>
 <?php } else { ?>

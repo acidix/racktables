@@ -4,7 +4,6 @@
         <h3 class="box-title">Manage existing (<?php $this->countAddrspaceList ?>)</h3>
     </div>
     <div class="box-body" style="position: relative">
-	
 	<?php if ($this->is("hasAddrspaceList", true)) { ?>
 		<table class="table table-bordered table-striped" id="addrspacelist_table" border=0 cellpadding=5 cellspacing=0 align='center'>
 			<thead><tr><th>&nbsp;</th><th>prefix</th><th>name</th><th>capacity</th></tr></thead>
@@ -35,9 +34,8 @@
 		<link href="./css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
 		$(function() {
-			tagsDataTable('addrspacelist_table');
+			tagsDataTable('#addrspacelist_table');
 		});
-		// var datatab = $("#addrspacelist_table").dataTable();
 		</script>
 	<?php } ?> 
 	</div>
