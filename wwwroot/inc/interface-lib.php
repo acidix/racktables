@@ -309,7 +309,7 @@ function getSelect ($optionList, $select_attrs = array(), $selected_id = NULL, $
     if (count ($optionList) == 1 && $treat_single_special)
     {
         foreach ($optionList as $key => $value)
-            break;
+        break;
         $mod = $tplm->generateModule("GetSelectInLine",  true, array("selectName" => $select_attrs['name'], "keyValue" => $key, "value" => $value ));
         $mod->setNamespace("");
         return $mod->run();
@@ -367,105 +367,61 @@ function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree =
     if (!array_key_exists ('id', $select_attrs))
         $select_attrs['id'] = $select_attrs['name'];
 
+    $tplm = TemplateManager::getInstance();
+
     if($parent == null)
+        $mod = $tplm->generateModule("GetNiftySelect");
+    else
+        $mod = $tplm->generateSubmodule($placeholder, "GetNiftySelect", $parent);
+
+    $mod->setNamespace("");
+
+    if($tree)
     {
-        if ($tree)
+        $mod->setOutput("isTree", true);
+        //		$script .= "<script type='text/javascript'>\n";
+        $script .= "\$(function() {\n";
+        $ret .= "    var option_tree = {\n";
+        foreach ($groupList as $groupname => $groupdata)
         {
-            //TODO remove after port
-            // it is safe to call many times for the same file
-            addJS ('js/jquery.optionTree.js');
-            $ret  = "<input type=hidden name=${select_attrs['name']}>\n";
-            $ret .= "<script type='text/javascript'>\n";
-            $ret .= "\$(function() {\n";
-            $ret .= "    var option_tree = {\n";
-            foreach ($groupList as $groupname => $groupdata)
-            {
-                $ret .= "        '${groupname}': {";
-                foreach ($groupdata as $dict_key => $dict_value)
-                $ret .= "\"${dict_value}\":'${dict_key}', ";
-                $ret .= "},\n";
-            }
-            $ret .= "    };\n";
-            $ret .= "    var options = {empty_value: '', choose: 'select...'};\n";
-            $ret .= "    \$('input[name=${select_attrs['name']}]').optionTree(option_tree, options);\n";
-            $ret .= "});\n";
-            $ret .= "</script>\n";
+            $script .= "        '${groupname}': {";
+            foreach ($groupdata as $dict_key => $dict_value)
+            $script .= "\"${dict_value}\":'${dict_key}', ";
+            $script .= "},\n";
         }
-        else
-        {
-            $ret = '<select';
-            foreach ($select_attrs as $attr_name => $attr_value)
-                $ret .= " ${attr_name}=${attr_value} ";
-            $ret .= ">\n";
-            foreach ($groupList as $groupname => $groupdata)
-            {
-                $ret .= "<optgroup label='${groupname}'>\n";
-                foreach ($groupdata as $dict_key => $dict_value)
-                $ret .= "<option value='${dict_key}'" . ($dict_key == $selected_id ? ' selected' : '') . ">${dict_value}</option>\n";
-                $ret .= "</optgroup>\n";
-            }
-            $ret .= "</select>\n";
-        }
-        return $ret;
+        $script .= "    };\n";
+        $script .= "    var options = {empty_value: '', choose: 'select...'};\n";
+        $script .= "    \$('input[name=${select_attrs['name']}]').optionTree(option_tree, options);\n";
+        $script .= "});\n";
+        //		$script .= "</script>\n";
+        $mod->setOutput("jsScript", $script);
+
     }
     else
     {
-        $tplm = TemplateManager::getInstance();
+        $mod->setOutput("isTree", false);
+        $selectAttrArr = array();
+        foreach ($select_attrs as $attr_name => $attr_value)
+        $selectAttrArr[] = array("attrName" => $attr_name,"attrVal" => $attr_value);
+        $mod->setOutput("selectAttrs", $selectAttrArr);
 
-        if($parent == null)
-            $mod = $tplm->generateModule("GetNiftySelect");
-        else
-            $mod = $tplm->generateSubmodule($placeholder, "GetNiftySelect", $parent);
-
-        $mod->setNamespace("");
-
-        if($tree)
+        $groupListArr = array();
+        foreach ($groupList as $groupname => $groupdata)
         {
-            $mod->setOutput("isTree", true);
-            //		$script .= "<script type='text/javascript'>\n";
-            $script .= "\$(function() {\n";
-            $ret .= "    var option_tree = {\n";
-            foreach ($groupList as $groupname => $groupdata)
-            {
-                $script .= "        '${groupname}': {";
-                foreach ($groupdata as $dict_key => $dict_value)
-                $script .= "\"${dict_value}\":'${dict_key}', ";
-                $script .= "},\n";
-            }
-            $script .= "    };\n";
-            $script .= "    var options = {empty_value: '', choose: 'select...'};\n";
-            $script .= "    \$('input[name=${select_attrs['name']}]').optionTree(option_tree, options);\n";
-            $script .= "});\n";
-            //		$script .= "</script>\n";
-            $mod->setOutput("jsScript", $script);
+            $optListArr = array();
+            foreach ($groupdata as $dict_key => $dict_value)
+            $optListArr[] = array("dictKey" => $dict_key, "dictVal" => $dict_value, "selected" => ($dict_key == $selected_id ? ' selected' : ''));
 
+            $optList = $tplm->generateModule("GetNiftySelect_optList");
+            $optList->setOutput("optListArray", $optListArr);
+
+            $groupListArr[] = array('groupName' => $groupname, 'optionList' => $optList);
         }
-        else
-        {
-            $mod->setOutput("isTree", false);
-            $selectAttrArr = array();
-            foreach ($select_attrs as $attr_name => $attr_value)
-            $selectAttrArr[] = array("attrName" => $attr_name,"attrVal" => $attr_value);
-            $mod->setOutput("selectAttrs", $selectAttrArr);
-
-            $groupListArr = array();
-            foreach ($groupList as $groupname => $groupdata)
-            {
-                $optListArr = array();
-                foreach ($groupdata as $dict_key => $dict_value)
-                $optListArr[] = array("dictKey" => $dict_key, "dictVal" => $dict_value, "selected" => ($dict_key == $selected_id ? ' selected' : ''));
-
-                $optList = $tplm->generateModule("GetNiftySelect_optList");
-                $optList->setOutput("optListArray", $optListArr);
-
-                $groupListArr[] = array('groupName' => $groupname, 'optionList' => $optList);
-            }
-            $mod->setOutput("groupListArr", $groupListArr);
-        }
-
-        if($parent==null)
-            return $mod->run();
+        $mod->setOutput("groupListArr", $groupListArr);
     }
+
+    if($parent==null)
+            return $mod->run();
 }
 
 function getOptionTree ($tree_name, $tree_options, $tree_config = array(), $parent = null , $placeholder = "optionTreeJS")
@@ -1288,7 +1244,7 @@ function niftyString ($string, $maxlen = 30, $usetags = TRUE)
         ($usetags ? '</span>' : '');
 }
 
-function printTagsPicker ($a = NULL, $parent = NULL, $placeholder = 'TagsPicker')
+function printTagsPicker ($preselect = NULL, $parent = NULL, $placeholder = 'TagsPicker')
 {
     if($parent != null)
     {
@@ -1300,6 +1256,7 @@ function printTagsPicker ($a = NULL, $parent = NULL, $placeholder = 'TagsPicker'
     {
         $output = printTagsPickerInput() . printTagsPickerUl() . enableTagsPicker();
     }
+
 
     if($parent == null)
         return $output;
@@ -1393,10 +1350,10 @@ function makeIPAllocLink ($ip_bin, $alloc, $display_ifname = FALSE)
     $tplm = TemplateManager::getInstance();
     return
         $tplm->generateModule('MakeIPAllocLink', true, array(
-                              'Href' => makeHref (array ('page' => 'object', 'tab' => 'default', 'object_id' => $alloc['object_id'], 'hl_ip' => ip_format ($ip_bin))),
-                              'Title' => htmlspecialchars ($title, ENT_QUOTES),
-                              'IsDisplayName' => ($display_ifname ? $alloc['name'] . '@' : ''),
-                              'ObjectName' => $object_name))->run();
+                                  'Href' => makeHref (array ('page' => 'object', 'tab' => 'default', 'object_id' => $alloc['object_id'], 'hl_ip' => ip_format ($ip_bin))),
+                                  'Title' => htmlspecialchars ($title, ENT_QUOTES),
+                                  'IsDisplayName' => ($display_ifname ? $alloc['name'] . '@' : ''),
+                                  'ObjectName' => $object_name))->run();
 }
 
 ?>
