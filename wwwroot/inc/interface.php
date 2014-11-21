@@ -3400,7 +3400,7 @@ function renderAddMultipleObjectsForm ()
         if ($i == 0)
         {
             $singleEntry['Max'] = $max;
-            $singleEntry['TagsPicker'] = printTagsPicker ();
+            $singleEntry['TagsPicker'] = printTagsPicker();
         }
         else
             $singleEntry['TagsPicker'] = "";
@@ -4473,7 +4473,7 @@ function renderEditAttributesForm ()
         if($attr['id'] < 10000)
             $singleAttrMap['DestroyImg'] = printImageHREF ('nodestroy', 'system attribute');
         elseif (count ($attr['application']))
-        $singleAttrMap['DestroyImg'] = printImageHREF ('nodestroy', count ($attr['application']) . ' reference(s) in attribute map');
+            $singleAttrMap['DestroyImg'] = printImageHREF ('nodestroy', count ($attr['application']) . ' reference(s) in attribute map');
         else
             $singleAttrMap['DestroyImg'] = getOpLink (array('op'=>'del', 'attr_id'=>$attr['id']), '', 'destroy', 'Remove attribute');
         $singleAttrMap['SaveImg'] = printImageHREF ('save', 'Save changes', TRUE);

@@ -14,143 +14,7 @@ document.bootstrap_template.modal_window = null;
 
 (function($) {
     $(document).ready(function() { 
-        // Add glyphicons to all tabs
-        var tabs = $("li.tab");
-
-        var maxchildren = 0;
-        for (var i = 0; i < tabs.length; i++) {
-            var link = tabs.eq(i).children('a')[0].href;
-            tabs.eq(i).prepend(getGlyphicon(tabs[i].id));
-
-            tabs.eq(i).children().eq(0).attr('href', link);
-            
-            if(maxchildren < tabs.eq(i).children().eq(0).children().length)
-                maxchildren = tabs.eq(i).children().eq(0).children().length;
-        };
-        $('.tab-glyph').css('min-width', (maxchildren * 30) + 'px');
-        var userboxHeight = 20 + $('.user-panel').outerHeight() + $('body > div > .sidebar-offcanvas > section > form').outerHeight();
-        console.log('height is ' + userboxHeight);
-        $('.sidebar.tabbar > .sidebar-menu:first-child').css('margin-top', userboxHeight + 'px' );
-        // Set timeout for showing tab names
-        var tabTimeout;
-        $('#tabsidebar').mouseenter(function() {
-            if($('#tabsidebar').hasClass('horizontal-tabbar'))
-                return;
-
-            tabTimeout = setTimeout(function() {
-                 $(".tab-link").fadeIn("slow");
-                 $('tabsidebar').css('posititon', 'fixed');
-            }, 1000);
-        }).mouseleave(function() {
-            if($('#tabsidebar').hasClass('horizontal-tabbar'))
-                return;
-
-            $(".tab-link").hide();     
-            clearTimeout(tabTimeout);
-        });
-    
-        // Add all operators to bar on the left
-        var operatorstabs = $('.tab-operator');
-        for (var i = 0; i < operatorstabs.length; i++) {
-            switch(operatorstabs[i].type){
-                case 'submit':
-                    //Set target 
-                    operatorstabs.eq(i).attr('href', 'javascript:$("' + operatorstabs[i].target.replace( /(:|=|\.|\[|\])/g, "\\\\$1" ) + '").submit();')  
-                    break;
-                case 'abort':
-                    operatorstabs.eq(i).attr('href', 'javascript:history.go(0);')
-                    break;
-            }
-            if(i == 0) {
-                $('.tabs-list').append( $('<li/>').addClass('operator-spacer'));
-            }
-
-            $('.tabs-list').append( $('<li/>').addClass('tab tab-operator').attr('type', operatorstabs[i].type).append(operatorstabs.eq(i).clone()));
-            
-            // Add links if any 
-            var test = ($('.tabs-list').children().last().prepend(getGlyphicon(operatorstabs[i].id)))
-            .children().eq(0).attr('href', operatorstabs[i].href);
-            
-            
-            operatorstabs.eq(i).remove();
-        }
-        
-        // Check for orientation
-        enquire.register("screen and (max-width:750px)", {
-        match : function () {
-            // Add css class to tabbar 
-            $('#tabsidebar').addClass('horizontal-tabbar');
-            $('.tab-link').css('display', 'inline-block');
-            //$('#contentarea').css('margin-left', '0px');
-        },
-        unmatch : function () {
-            $('#tabsidebar').addClass('horizontal-tabbar');
-            $('.tab-link').css('display', 'inline-block');
-            $('body > div.wrapper.row-offcanvas.row-offcanvas-left.active.relative > aside.left-side.sidebar-offcanvas').css('top', '');
-            //$('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
-        }
-        });
-
-        // Load tagpicker 
-        
-        if(typeof(GLOBAL_TAGLIST) != 'undefined') {
-            var tags_list = [];
-            for (var key in GLOBAL_TAGLIST) {
-                tags_list.push(GLOBAL_TAGLIST[key].tag);
-            }
-
-            if(tags_list.length > 0) {
-                // console.log(tags_list);
-                $('input.ui-autocomplete-input.tagspicker')
-                // Make size fixed
-                .css('max-width', $('input.ui-autocomplete-input.tagspicker').css('height'))
-                .select2({
-                    tags: tags_list,
-                    tokenSeparators: [",", " "]
-                }).on('change', function (e){
-                    // Added the tags to add
-                    if(typeof(e.added) != 'undefined') {
-                        console.log(e.added);
-                        // Check if existing
-                        var tag_val = 0;
-                        if(!$.inArray(e.text, tags_list)) {
-                            console.log("id not known");
-                            return 0;
-                        }
-                        // Get id
-                        for( var tag_key in GLOBAL_TAGLIST ) {
-                            if( GLOBAL_TAGLIST[tag_key].tag == e.added.id ) {
-                                tag_val = GLOBAL_TAGLIST[tag_key].id;
-                            }
-                        }
-                        // console.log("value is " +  tag_val);
-                        $('form[name="add"]').append('<input type="hidden" style="display:none;" value="' + tag_val + '" name="taglist[]">');                       
-                    }
-                    /*if(typeof(e.removed) != 'undefined') {
-                        console.log(e.removed);
-                    } */
-                }).on('select2-focus', function() {
-                    if(!$(this).data('select2').opened())
-                        $(this).data('select2').open();
-                });
-            }
-        }   // Adding tagspicker
-        console.log('This is the setup function');
-
-        // Check for ajax form 
-        checkAjaxFormBtn();
-        
-        // Check for ajax href
-        checkAjaxHrefBtn();
-
-        // Set svgs 
-        $('svg').svgPan('viewport');
-
-        $('.ipv4-net-capacity-addr').knob({
-            "readOnly": true,
-            "width": 50,
-            "height": 50
-        });
+        prepareContent();
     });
 })(jQuery);
 
@@ -158,6 +22,162 @@ document.bootstrap_template.modal_window = null;
 $.listen('parsley:field:error', function () {
     alert('Search must not be empty');
 });
+
+// Prepare content
+
+function prepareContent(selector) {
+    if(selector == null)
+        selector = 'body'
+
+    function $$(elem) {
+        return $(selector).find(elem);
+    }
+
+    // Add glyphicons to all tabs
+    var tabs = $$("li.tab");
+
+    var maxchildren = 0;
+    for (var i = 0; i < tabs.length; i++) {
+        var link = tabs.eq(i).children('a')[0].href;
+        tabs.eq(i).prepend(getGlyphicon(tabs[i].id));
+
+        tabs.eq(i).children().eq(0).attr('href', link);
+        
+        if(maxchildren < tabs.eq(i).children().eq(0).children().length)
+            maxchildren = tabs.eq(i).children().eq(0).children().length;
+    };
+    $$('.tab-glyph').css('min-width', (maxchildren * 30) + 'px');
+    var userboxHeight = 20 + $$('.user-panel').outerHeight() + $$('body > div > .sidebar-offcanvas > section > form').outerHeight();
+    console.log('height is ' + userboxHeight);
+    $$('.sidebar.tabbar > .sidebar-menu:first-child').css('margin-top', userboxHeight + 'px' );
+    // Set timeout for showing tab names
+    var tabTimeout;
+    $$('#tabsidebar').mouseenter(function() {
+        if($$('#tabsidebar').hasClass('horizontal-tabbar'))
+            return;
+
+        tabTimeout = setTimeout(function() {
+            $$(".tab-link").fadeIn("slow");
+            $$('tabsidebar').css('posititon', 'fixed');
+        }, 1000);
+    }).mouseleave(function() {
+        if($$('#tabsidebar').hasClass('horizontal-tabbar'))
+            return;
+
+        $$(".tab-link").hide();     
+        clearTimeout(tabTimeout);
+    });
+
+    // Add all operators to bar on the left
+    var operatorstabs = $$('.tab-operator');
+    for (var i = 0; i < operatorstabs.length; i++) {
+        switch(operatorstabs[i].type){
+            case 'submit':
+                //Set target 
+                operatorstabs.eq(i).attr('href', 'javascript:$("' + operatorstabs[i].target.replace( /(:|=|\.|\[|\])/g, "\\\\$1" ) + '").submit();')  
+                break;
+            case 'abort':
+                operatorstabs.eq(i).attr('href', 'javascript:history.go(0);')
+                break;
+        }
+        if(i == 0) {
+            $$('.tabs-list').append( $('<li/>').addClass('operator-spacer'));
+        }
+
+        $$('.tabs-list').append( $('<li/>').addClass('tab tab-operator').attr('type', operatorstabs[i].type).append(operatorstabs.eq(i).clone()));
+        
+        // Add links if any 
+        var test = ($$('.tabs-list').children().last().prepend(getGlyphicon(operatorstabs[i].id)))
+        .children().eq(0).attr('href', operatorstabs[i].href);
+        
+        
+        operatorstabs.eq(i).remove();
+    }
+    
+    // Check for orientation
+    enquire.register("screen and (max-width:750px)", {
+    match : function () {
+        // Add css class to tabbar 
+        $$('#tabsidebar').addClass('horizontal-tabbar');
+        $$('.tab-link').css('display', 'inline-block');
+        //$('#contentarea').css('margin-left', '0px');
+    },
+    unmatch : function () {
+        $$('#tabsidebar').addClass('horizontal-tabbar');
+        $$('.tab-link').css('display', 'inline-block');
+        $$('body > div.wrapper.row-offcanvas.row-offcanvas-left.active.relative > aside.left-side.sidebar-offcanvas').css('top', '');
+        //$('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
+    }
+    });
+
+    // Load tagpicker 
+    
+    if(typeof(GLOBAL_TAGLIST) != 'undefined') {
+        var tags_list = [];
+        for (var key in GLOBAL_TAGLIST) {
+            tags_list.push(GLOBAL_TAGLIST[key].tag);
+        }
+
+        if(tags_list.length > 0) {
+            // console.log(tags_list);
+            $$('input.ui-autocomplete-input.tagspicker')
+            // Make size fixed
+            .css('max-width', $('input.ui-autocomplete-input.tagspicker').css('height'))
+            .select2({
+                tags: tags_list,
+                tokenSeparators: [",", " "]
+            }).on('change', function (e){
+                // Added the tags to add
+                if(typeof(e.added) != 'undefined') {
+                    console.log(e.added);
+                    // Check if existing
+                    var tag_val = 0;
+                    if(!$.inArray(e.text, tags_list)) {
+                        console.log("id not known");
+                        return 0;
+                    }
+                    // Get id
+                    for( var tag_key in GLOBAL_TAGLIST ) {
+                        if( GLOBAL_TAGLIST[tag_key].tag == e.added.id ) {
+                            tag_val = GLOBAL_TAGLIST[tag_key].id;
+                        }
+                    }
+                    // console.log("value is " +  tag_val);
+                    $$('form[name="add"]').append('<input type="hidden" style="display:none;" value="' + tag_val + '" name="taglist[]">');                       
+                }
+                /*if(typeof(e.removed) != 'undefined') {
+                    console.log(e.removed);
+                } */
+            }).on('select2-focus', function() {
+                if(!$(this).data('select2').opened())
+                    $(this).data('select2').open();
+            });
+        }
+    }   // Adding tagspicker
+    console.log('This is the setup function');
+
+    // Check for ajax form 
+    checkAjaxFormBtn();
+    
+    // Check for ajax href
+    checkAjaxHrefBtn();
+
+    // Set svgs 
+    $$('svg').svgPan('viewport');
+
+    $$('.ipv4-net-capacity-addr').knob({
+        "readOnly": true,
+        "width": 50,
+        "height": 50
+    });
+
+    console.log('setting datatables');
+    dataTables = $$('table.table.datatable');
+    for(var c = 0; c < dataTables.length; c++)
+        tagsDataTable(dataTables);
+
+}
+
 
 // Returns an corresponding glyphicon for the id
 function getGlyphicon(glyphiconID) {
@@ -176,6 +196,8 @@ function getGlyphicon(glyphiconID) {
         case 'ipv6spacenewrange':
         case 'rownewrack':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-plus'></span></a>";
+        case 'ipv4spacemanage':
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-minus'></span></a>";
         case 'rackspacehistory':
         case 'rowfiles':
         case 'ipv4netfiles':
@@ -193,7 +215,6 @@ function getGlyphicon(glyphiconID) {
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-ok'></span></a>";
         case 'uiedit':
         case 'rackspaceeditrows':
-        case 'ipv4spacemanage':
         case 'ipv6spacemanage':
         case 'filesmanage':
         case 'ipv4netproperties':
@@ -248,20 +269,24 @@ function getGlyphicon(glyphiconID) {
         case 'roweditracks':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span><span class='glyphicon glyphicon-home'></span></a>";   
         case '8021qvstlist':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span></a>";
+            return "<a class='tab-glyph'>Q<span class='glyphicon glyphicon-edit'></span></a>";
         default:
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-exclamation-sign'></span></a>";
         
     }
 }
 
+function getAlertContext() {
+    if(document.bootstrap_template.modal_window != null)
+        return document.bootstrap_template.modal_window;
+    else 
+        return $('.content');
+}
+
 function addAlertMessage(message) {
-    if(document.bootstrap_template.modal_window != null) {
-        // Add to modal window
-        document.bootstrap_template.modal_window.prepend(message);
-    } else {
-        $('.content').prepend(message);
-    }
+    console.log('adding alert message',document.bootstrap_template.modal_window);
+    getAlertContext().prepend(message);
+    
     setTimeout(function() {
         message.fadeOut();
         message.remove();
@@ -276,11 +301,12 @@ function checkAjaxHrefBtn() {
         btn.click(function (event){
             $.ajax({
                 url: window.location.pathname + $(this).attr('href'),
+                dataType: 'html',
                 type: 'GET',
                 success: function(data){
                     bodytxt = '<div id="body-mock">' + data.replace(/^[\s\S]*<body.*?>|<\/body>[\s\S]*$/g, '') + '</div>';
                     var bodyelem = $(bodytxt);
-                    console.log(data);
+                    //console.log(data);
                     
                     if(bodyelem.find('.alert.alert-success').length > 0) {
                     //    form.attr('succeeded', 'true');
@@ -295,15 +321,27 @@ function checkAjaxHrefBtn() {
                     
                     // If target to reload is set, set html
                     if(bodyelem.find('.alert.alert-success').length > 0 && btn.attr('reload-target') != "") {
-                        $(btn.attr('reload-target')).html(bodyelem.find(btn.attr('reload-target')).html()); 
+                        $(btn.attr('reload-target')).html(bodyelem.find(btn.attr('reload-target')).html());
+                       // $('.content').html(bodyelem.find('.content'));
+                        // Load and evaluate javascript
+                        //  var scripts = $(bodytxt).find('script');
+                        // console.log('scripts are all', scripts);
+                        prepareContent(btn.attr('reload-target'));
+                        //for(var ind = 0; ind < scripts.length; ind++)
+                        //   if(scripts[ind].src == "") {
+                        //       console.log('script is', scripts[ind].innerHTML);
+                        //       eval(scripts[ind].innerHTML);
+                        //   }
                     }
                    
                     if(bodyelem.find('.alert').length > 0)
                         addAlertMessage(bodyelem.find('.alert'));
                     else
-                        addAlertMessage($('<div class="alert alert-danger"></div').append(bodyelem));
-                  // else
-                   //     $('.content').prepend(bodyelem.find('.alert'));
+                        // Don't show full loaded pages
+                        if(bodyelem.find('.content').length == 0)
+                            addAlertMessage($('<div class="alert alert-danger"></div>').append(bodyelem));
+                        else
+                            getAlertContext().html(bodyelem.find('.content').html());
                 }
             });    
         });
@@ -314,21 +352,18 @@ function checkAjaxHrefBtn() {
 // Check for ajax form 
 function checkAjaxFormBtn() {
     for(var i = 0; i < $('button.ajax_form').length; i++) {
-        console.log($('button.ajax_form').eq(i).attr('targetform'));
         var form = $('form[name=' + $('button.ajax_form').eq(i).attr('targetform') + ']');
-        console.log(form);
-
+        var btn = $('button.ajax_form').eq(i);
         form.submit(function (e) {
             e.preventDefault();
             // Check for validation
-            if(!form.find('input.live-validate').hasClass('validation-success')) {
+            if(form.find('input.live-validate').length != 0 && !form.find('input.live-validate').hasClass('validation-success')) {
                 form.find('input.live-validate').tooltip('show');
                 form.find('input.live-validate').hover(function () {
                     form.find('input.live-validate').tooltip('hide');
                 });
                 return;
             }
-
             var fd = new FormData($(this)[0]);
             $.ajax({
                 url: window.location.pathname + form.attr('action'),
@@ -339,11 +374,10 @@ function checkAjaxFormBtn() {
                 success: function(data){
                     bodytxt = '<div id="body-mock">' + data.replace(/^[\s\S]*<body.*?>|<\/body>[\s\S]*$/g, '') + '</div>';
                     var bodyelem = $(bodytxt);
-                    console.log(data);
+                    //console.log(data);
                     
                     if(bodyelem.find('.alert.alert-success').length > 0) {
                     //    form.attr('succeeded', 'true');
-                        
                         console.log('setting success!');
                         console.log(bodyelem.find('.alert.alert-success'));
                     }
@@ -352,18 +386,23 @@ function checkAjaxFormBtn() {
                     document.bootstrap_template.event_messenger.push({ name: 'ajax_reguest', success : bodyelem.find('.alert.alert-success').length > 0});
                     
                     // If target to reload is set, set html
-                    if(bodyelem.find('.alert.alert-success').length > 0 && form.attr('reload-target') != "") {
-                        $(form.attr('reload-target')).html(bodyelem.find(form.attr('reload-target')).html()); 
+                    if(bodyelem.find('.alert.alert-success').length > 0 && btn.attr('reload-target') != "") {
+                        $(btn.attr('reload-target')).html(bodyelem.find(btn.attr('reload-target')).html()); 
+                        prepareContent(btn.attr('reload-target'));
                     }
 
                     if(bodyelem.find('.alert').length > 0)
                         addAlertMessage(bodyelem.find('.alert'));
                     else
-                        addAlertMessage($('<div class="alert alert-danger"></div').append(bodyelem));
+                        // Don't show full loaded pages
+                        if(bodyelem.find('.content').length == 0)
+                            addAlertMessage($('<div class="alert alert-danger"></div>').append(bodyelem));
+                        else
+                            getAlertContext().html(bodyelem.find('.content').html());
                 }
             });
         });
-        console.log('sended ajax');
+        console.log('set ajax form buttons');
     }
 }
 
@@ -385,7 +424,8 @@ function tagsDataTable(table_selector) {
     // Add tags to autocomplete
     // has to be done before tags are hidden    
     var taglist = [];
-    var possTags = $(table_selector + ' > tbody > tr > td > small').children();
+    var possTags = $(table_selector).find('tbody > tr > td > small').children();
+    //var possTags = $(table_selector + ' > tbody > tr > td > small').children();
     for (var i = 0; i < possTags.length; i++) {
         // No duplicates
         if($.inArray(possTags[i].innerHTML, taglist) === -1) taglist.push(possTags[i].innerHTML);
@@ -399,7 +439,7 @@ function tagsDataTable(table_selector) {
     function extractLast( term ) {
       return split(term).pop();
     }
-    $( table_selector + '_filter > label > input[type="text"' )
+    $( $(table_selector).attr('id') + '_filter > label > input[type="text"]' )
       // don't navigate away from the field on tab when selecting an item
       .bind( "keydown", function( event ) {
         if ( event.keyCode === $.ui.keyCode.TAB &&
@@ -477,11 +517,15 @@ function showDataEditDialog(title, content_selector, dialog_type) {
                         var bodyelem = $(bodytxt);
                         console.log('setting new content');
                         $('.content').html(bodyelem.find('.content').html());
+                        //console.log('javascript', $('.content').find('script').innerHTML());
+                        /*dataTables = $('table.table.datatables');
+                        for(var c = 0; c < dataTables.length; c++)
+                            tagsDataTable(dataTables);*/
+                        prepareContent('.content');
                         //form.prepend(bodyelem.find('.alert'));
                     }
                 });
-
-            $(content_selector).append(dialog_html);
+            $(content_selector).append(this.message);
             document.bootstrap_template.modal_window = null;         
         },
     });   
@@ -505,7 +549,7 @@ function highlightRacktables( text ) {
         text_elem = text_elems.eq(i);
         console.log(text_elem.text() + " and " + text);
 
-        if(text_elem.text().indexOf(text) > -1 && text != "") {
+        if(text_elem.text().toLowerCase().indexOf(text.toLowerCase()) > -1 && text != "") {
             text_elem.siblings('rect').css('fill', 'yellow');
             text_elem.css('font-weight', 'bold');
         }

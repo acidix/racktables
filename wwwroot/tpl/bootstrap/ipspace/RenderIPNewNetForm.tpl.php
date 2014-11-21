@@ -17,7 +17,11 @@
 			</td>
 			<th class=tdright>Prefix</th><td class=tdleft>
 			<!-- <input type=text name='range' size=36 class='live-validate' autofocus tabindex=1 value='<?php $this->Prefix_value ?>'> -->
-			<input data-inputmask="'mask': '999.999.999.999/99'" title="Please enter valid ipv4 address" data-placement="right" class='live-validate' type=text name='range' size=36 autofocus tabindex=1 value='<?php $this->Prefix_value ?>'>
+			<?php if ($this->is('Page', 'ipv6space')) { ?>
+				<input data-inputmask-regex='9{1,3}.9{1,3}.9{1,3}.9{1,3}/9{1,3}' title="Please enter valid ipv6 address" data-placement="right" class='live-validate' type=text name='range' size=36 autofocus tabindex=1 value='<?php $this->Prefix_value ?>'>		
+			<?php } else { ?>
+				<input data-inputmask="'mask': '999.999.999.999/99'" title="Please enter valid ipv4 address" data-placement="right" class='live-validate' type=text name='range' size=36 autofocus tabindex=1 value='<?php $this->Prefix_value ?>'>
+			<?php } ?> 
 			<i class="fa fa-fw fa-question-circle pull-right"></i><i class="fa fa-fw fa-check-circle pull-right"></i></td>
 			<tr><th class=tdright>VLAN</th><td class=tdleft>
 			<?php $this->optionTree ?><tr>

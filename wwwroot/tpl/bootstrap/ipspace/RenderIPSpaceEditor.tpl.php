@@ -3,9 +3,9 @@
 	<div class="box-header" style="cursor: move;">
         <h3 class="box-title">Manage existing (<?php $this->countAddrspaceList ?>)</h3>
     </div>
-    <div class="box-body" style="position: relative">
+    <div class="box-body" id="addrspacelist_table" style="position: relative">
 	<?php if ($this->is("hasAddrspaceList", true)) { ?>
-		<table class="table table-bordered table-striped" id="addrspacelist_table" border=0 cellpadding=5 cellspacing=0 align='center'>
+		<table class="table table-bordered table-striped datatable" border=0 cellpadding=5 cellspacing=0 align='center'>
 			<thead><tr><th>&nbsp;</th><th>prefix</th><th>name</th><th>capacity</th></tr></thead>
 			<tbody>
 			<?php while($this->refLoop('allNetinfo')) { ?>	
@@ -34,7 +34,10 @@
 		<link href="./css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
 		$(function() {
-			tagsDataTable('#addrspacelist_table');
+		//function loadSpacelistDataTable () {
+		//	console.log('Setting data table');
+		//	tagsDataTable('#addrspacelist_table');
+		//}
 		});
 		</script>
 	<?php } ?> 

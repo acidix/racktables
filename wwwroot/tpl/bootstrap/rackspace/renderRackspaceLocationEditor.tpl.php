@@ -33,7 +33,7 @@ JS;
 						<input type=text size=48 name=name tabindex=101 class="form-control">
 					</td>
 					<td>
-						<btn class="btn btn-primary" title="Add new location" name="submit"><span class="glyphicon glyphicon-plus"></span></btn>
+						<button type="submit" class="btn btn-primary btn-sm" border="0" tabindex="102" title="Add new location"><span class="glyphicon glyphicon-plus"></span></button>
 					</td>
 				</tr>
 				</form>
@@ -89,7 +89,7 @@ JS;
 						<input type=text size=48 name=name tabindex=101 class="form-control">
 					</td>
 					<td>
-						<btn class="btn btn-primary" title="Add new location" name="submit"><span class="glyphicon glyphicon-plus"></span></btn>
+						<button type="submit" class="btn btn-primary btn-sm" border="0" tabindex="102" title="Add new location"><span class="glyphicon glyphicon-plus"></span></button>
 					</td>
 				</tr>
 				</form>

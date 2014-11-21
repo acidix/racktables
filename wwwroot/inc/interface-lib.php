@@ -1288,7 +1288,7 @@ function niftyString ($string, $maxlen = 30, $usetags = TRUE)
         ($usetags ? '</span>' : '');
 }
 
-function printTagsPicker ($preselect = NULL, $parent = NULL, $placeholder = 'TagsPicker')
+function printTagsPicker ($a = NULL, $parent = NULL, $placeholder = 'TagsPicker')
 {
     if($parent != null)
     {
@@ -1300,7 +1300,6 @@ function printTagsPicker ($preselect = NULL, $parent = NULL, $placeholder = 'Tag
     {
         $output = printTagsPickerInput() . printTagsPickerUl() . enableTagsPicker();
     }
-
 
     if($parent == null)
         return $output;
@@ -1394,10 +1393,10 @@ function makeIPAllocLink ($ip_bin, $alloc, $display_ifname = FALSE)
     $tplm = TemplateManager::getInstance();
     return
         $tplm->generateModule('MakeIPAllocLink', true, array(
-                                  'Href' => makeHref (array ('page' => 'object', 'tab' => 'default', 'object_id' => $alloc['object_id'], 'hl_ip' => ip_format ($ip_bin))),
-                                  'Title' => htmlspecialchars ($title, ENT_QUOTES),
-                                  'IsDisplayName' => ($display_ifname ? $alloc['name'] . '@' : ''),
-                                  'ObjectName' => $object_name))->run();
+                              'Href' => makeHref (array ('page' => 'object', 'tab' => 'default', 'object_id' => $alloc['object_id'], 'hl_ip' => ip_format ($ip_bin))),
+                              'Title' => htmlspecialchars ($title, ENT_QUOTES),
+                              'IsDisplayName' => ($display_ifname ? $alloc['name'] . '@' : ''),
+                              'ObjectName' => $object_name))->run();
 }
 
 ?>

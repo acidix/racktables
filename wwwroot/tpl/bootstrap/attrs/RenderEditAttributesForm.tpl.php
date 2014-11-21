@@ -10,11 +10,11 @@
 		<?php if($this->is('NewTop')) : ?>
 			<?php $this->getH('PrintOpFormIntro', 'add'); ?>
 			<tr><td>
-				<?php $this->getH('PrintImageHref', array('create', 'Create attribute', TRUE)); ?>
+				<button type="submit" class="btn btn-success btn-sm" border="0" title="Create attribute"><span class='glyphicon glyphicon-plus'></span></button>
 			</td><td><input type=text tabindex=100 name=attr_name></td><td>
 				<?php $this->CreateNewSelect; ?>
 			</td><td>
-				<?php $this->getH('PrintImageHref', array('create', 'Create attribute', TRUE, 102)); ?>
+				<button type="submit" class="btn btn-success btn-sm" border="0" tabindex="102" title="Create attribute"><span class='glyphicon glyphicon-plus'></span></button>
 			</td></tr></form>
 		<?php endif ?>
 		<?php	$this->startLoop('AllAttrMaps'); ?>
@@ -23,18 +23,17 @@
 			<?php $this->DestroyImg ?>
 			</td><td><input type=text name=attr_name value='<?php $this->Name; ?>'></td>
 			<td class=tdleft><?php $this->Type; ?></td><td>
-			<input type="image" name="submit" class="icon" src="?module=chrome&amp;uri=pix/tango-document-save-16x16.png" border="0" title="Save changes">
+				<input type="image" name="submit" class="icon" src="?module=chrome&amp;uri=pix/tango-document-save-16x16.png" border="0" title="Save changes">
 			</td></tr></form>
-			
 		<?php $this->endLoop(); ?>
 		<?php if(!$this->is('NewTop')) : ?>
 			<?php $this->getH('PrintOpFormIntro', 'add'); ?>
 			<tr><td>
-				<?php $this->getH('PrintImageHref', array('create', 'Create attribute', TRUE)); ?>
+				<button type="submit" class="btn btn-success btn-sm" border="0" title="Create attribute"><span class='glyphicon glyphicon-plus'></span></button>
 			</td><td><input type=text tabindex=100 name=attr_name></td><td>
 				<?php $this->CreateNewSelect; ?>
 			</td><td>
-				<?php $this->getH('PrintImageHref', array('create', 'Create attribute', TRUE, 102)); ?>
+				<button type="submit" class="btn btn-success btn-sm" border="0" tabindex="102" title="Create attribute"><span class='glyphicon glyphicon-plus'></span></button>
 			</td></tr></form>
 		<?php endif ?>
 		</tbody>
@@ -46,7 +45,7 @@
 		<link href="./css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css"/>
 		<script type="text/javascript">
 		$(function() {
-			tagsDataTables('#attrs_table');
+			tagsDataTable('#attrs_table');
 		});
 		</script>
 	</div>

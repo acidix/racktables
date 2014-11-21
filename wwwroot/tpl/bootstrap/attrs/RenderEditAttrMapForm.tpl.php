@@ -4,7 +4,7 @@
         <h3 class="box-title">Attribute map</h3>
     </div>
     <div class="box-body" style="position: relative">
-		<table class="table table-bordered table-striped" id="attribute_map_table" border=0 cellpadding=5 cellspacing=0 align='center'>
+		<table class="table table-bordered table-striped" id='attribute_map_table' border=0 cellpadding=5 cellspacing=0 align='center'>
 			<thead><tr><th class=tdleft>Attribute name</th><th class=tdleft>Attribute type</th><th class=tdleft>Applies to</th></tr></thead>
 			<tbody>
 			<?php if ($this->is('NewTop')) : ?>

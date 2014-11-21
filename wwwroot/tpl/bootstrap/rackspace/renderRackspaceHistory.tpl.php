@@ -5,7 +5,7 @@
 				<div class="box-header">
 					<h3 class="box-title">Old allocation</h3>
 				</div>
-				<div class="box-body no-padding">
+				<div class="box-body no-padding" align="center">
 					<?php $this->OldAlloc; ?>
 				</div>
 			</div>
@@ -15,7 +15,7 @@
 				<div class="box-header">
 					<h3 class="box-title">New allocation</h3>
 				</div>
-				<div class="box-body no-padding">
+				<div class="box-body no-padding" align="center">
 					<?php $this->NewAlloc; ?>
 				</div>
 			</div>
@@ -27,7 +27,7 @@
 				<div class="box-header">
 					<h3 class="box-title">Rackspace allocation history</h3>
 				</div>
-				<div class="box-body no-padding">
+				<div class="box-body no-padding" align="center">
 					<table class=table>
 						<tbody>
 						<tr><th>timestamp</th><th>author</th><th>object</th><th>comment</th></tr>

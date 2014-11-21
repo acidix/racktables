@@ -4,24 +4,24 @@
 			<div class="box-header">
 				<h3 class="box-title">Upload new</h3>
 			</div>
-			<div class="box-content">
+			<div class="box-content" style="text-align: center;">
 				<?php $this->getH('PrintOpFormIntro',array('addFile', array (), TRUE)); ?>
 				<div class="row">
 					<div class="col-md-4"><label for="comment">Comment:</label></div>
-					<div class="col-md-12"><textarea tabindex=101 name=comment rows=10 cols=80 class="form-control"></textarea></div>
+					<div class="col-md-8"><textarea tabindex=101 name=comment rows=10 cols=80 class="form-control"></textarea></div>
 				</div>
 				<div class="row">
 					<div class="col-md-4"><label>Tags:</label></div>
-					<div class="col-md-12"><?php $this->TagsPicker; ?></div>
+					<div class="col-md-8"><?php $this->TagsPicker; ?></div>
 				</div>
-				<div class="row">
+				<div class="row" style="text-align: center;">
 					<div class="col-md-4"><label for="file">File:</label></div>
-					<div class="col-md-12"><input type='file' size='10' name='file' tabindex=100></textarea></div>
+					<div class="col-md-8"><input type='file' size='10' name='file' tabindex=100></textarea></div>
 				</div>
 				<div class="row">
 					<div class="col-md-4"><label>Upload:</label></div>
-					<div class="col-md-12">
-						<button class="btn btn-success"><span class="glyphicon glyphicon-ok"></span></button>
+					<div class="col-md-8">
+						<button type="submit" class="btn btn-success" border="0" tabindex="102" title="Upload file"><span class="glyphicon glyphicon-ok"></span></button>	
 					</div>
 				</div>
 				</form>
@@ -78,8 +78,8 @@
 				</div>
 				<div class="row">
 					<div class="col-md-4"><label>Upload:</label></div>
-					<div class="col-md-12">
-						<button class="btn btn-success"><span class="glyphicon glyphicon-ok"></span></button>
+					<div class="col-md-8">
+						<button type="submit" class="btn btn-success" border="0" tabindex="102" title="Upload file"><span class="glyphicon glyphicon-ok"></span></button>	
 					</div>
 				</div>
 				</form>

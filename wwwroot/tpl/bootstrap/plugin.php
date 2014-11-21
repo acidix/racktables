@@ -230,7 +230,7 @@ function renderDynamicAddMultipleObjectsForm() {
 	$max = getConfigVar ('MASSCOUNT');
 	
 	$tplm = TemplateManager::getInstance();
-	$tplm->getMainModule()->setOutput('Payload', '');
+	$tplm->getMainModule()->addOutput('Payload', '');
 	$mod = $tplm->generateSubmodule("Payload","AddMultipleObjects");
 	$mod->setNamespace("depot");
 	
@@ -252,8 +252,9 @@ function renderDynamicAddMultipleObjectsForm() {
 		$singleEntry = array();
 	// Don't employ DEFAULT_OBJECT_TYPE to avoid creating ghost records for pre-selected empty rows.
 		$singleEntry['i'] = $i;
-		
-		$singleEntry['tagsPicker'] = 'A';
+		if($i == 0)
+			$singleEntry['TagsPicker'] = printTagsPicker();
+
 		$singleEntry['NiftySelect'] = printNiftySelect ($typelist, array ('name' => "${i}_object_type_id", 'tabindex' => $tabindex), 0);
 					
 		$objectListOutput[] = $singleEntry;
@@ -261,9 +262,6 @@ function renderDynamicAddMultipleObjectsForm() {
 	$mod->setOutput("AddTable", $objectListOutput);
 }
 
-function addMultipleObjectsDynamic() {
-	
-}
 
 function renderIPSpaceWithAddRem() {
 	renderIPSpace();
@@ -276,7 +274,17 @@ function renderIPSpaceWithAddRem() {
 	$tplm->getMainModule()->addOutput('Payload', '<div class="removeContainer">');
 	renderIPSpaceEditor();
 	$tplm->getMainModule()->addOutput('Payload', '</div>');
+}
 
+
+function renderDepotWithAdd() {
+	renderDepot();
+	$tplm = TemplateManager::getInstance();
+
+	// Add an add + remove dialog at the end
+	$tplm->getMainModule()->addOutput('Payload', '<div class="addContainer">');
+	renderDynamicAddMultipleObjectsForm();
+	$tplm->getMainModule()->addOutput('Payload', '</div>');
 }
 
 global $tabhandler;
@@ -284,5 +292,6 @@ global $tabhandler;
 $tabhandler['rackspace']['default'] = 'renderRackspaceSVG';
 $tabhandler['depot']['addmore'] = 'renderDynamicAddMultipleObjectsForm';
 $tabhandler['ipv4space']['default'] = 'renderIPSpaceWithAddRem';
+$tabhandler['depot']['default'] = 'renderDepotWithAdd';
 
 ?>

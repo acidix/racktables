@@ -9,7 +9,7 @@
 				<?php if ($this->is('NewTop')) : ?>
 					<?php $this->getH("Form","addRow"); ?>
 					<tr>
-						<td>
+						<td align="center">
 							<select name=location_id tabindex=100 class="form-control">
 								<?php $this->LocationNewOptions; ?>
 							</select>
@@ -27,7 +27,7 @@
 				<form method=post id="updateRow" name="updateRow" action='?module=redirect&page=rackspace&tab=editrows&op=updateRow'>
 					<input type=hidden name="row_id" value="<?php $this->RowId; ?>">
 					<tr>
-						<td>
+						<td align="center" style='padding-left: <?php $this->Level; ?>px'>
 							<select name=location_id tabindex=100 class="form-control">
 								<?php $this->LocationEditOptions; ?>
 							</select>
@@ -49,7 +49,7 @@
 			<?php if (!$this->is('NewTop')) : ?>
 				<?php $this->getH("Form","addRow"); ?>
 					<tr>
-						<td>
+						<td align="center"s>
 							<select name=location_id tabindex=100 class="form-control">
 								<?php $this->LocationNewOptions; ?>
 							</select>

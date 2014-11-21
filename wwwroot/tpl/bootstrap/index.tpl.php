@@ -65,7 +65,7 @@
         <!-- Highlight plugin javascript -->
         <script src="./tpl/bootstrap/js/jquery-svgpan.js" type="text/javascript"></script>
         <!-- Inputmask plugin javascript -->
-        <script src="./tpl/bootstrap/js/jquery.inputmask.js" type="text/javascript"></script>
+        <script src="./tpl/bootstrap/js/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
         <!-- Knob plugin javascript -->
         <script src="./tpl/bootstrap/js/jquery.knob.min.js" type="text/javascript"></script>
         <!-- Bootstrap theme javascript -->

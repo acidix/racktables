@@ -5,11 +5,11 @@
 			<div class="box-header">
 				<h3 class="box-title">Objects</h3>
 				<div class='box-tools pull-right'>
-					<?php $this->CellFilterPortlet; ?>
+					<button class="btn btn-default" type=button style="margin: 10px;" onclick="showAddDialog();"><span class="glyphicon glyphicon-plus"></span></button>
 				</div>
 			</div>
 			<div class="box-body">
-				<table id="object_table" class="table table-bordered table-striped">
+				<table id="object_table" class="table table-bordered table-striped datatable">
 					<thead>
 						<tr><th>Common name</th><th>Visible label</th><th>Asset tag</th><th>Row/Rack or Container</th></tr>
 					</thead>
@@ -77,9 +77,9 @@
 <link href="./css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
-     $(function() {
-     	tagsDataTable('#object_table');
-     });
+   //  $(function() {
+   //  	tagsDataTable('#object_table');
+   //  });
 </script>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />

@@ -4,7 +4,7 @@
 	    <h3 class="box-title">Optional attributes</h3>
 	</div>
 	<div class="box-body" style="position: relative">
-		<table class="table table-bordered table-striped" id='attrs_table' border=0 cellpadding=5 cellspacing=0 align='center'>
+		<table class="table table-bordered table-striped datatable" id='attrs_table' border=0 cellpadding=5 cellspacing=0 align='center'>
 		<thead><tr><th class=tdleft>Attribute name</th><th class=tdleft>Attribute type</th><th class=tdleft>Applies to</th></tr></thead>
 		<tbody>
 		<?php while($this->refLoop('AllAttrs')) { ?>	
@@ -28,11 +28,6 @@
 		<script src="./js/plugins/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
 		<!-- DATA Tables CSS -->
 		<link href="./css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css"/>
-		<script type="text/javascript">
-		$(function() {
-			tagsDataTable('#attrs_table');
-		});
-		</script>
 	</div>
 </div>
 <?php } else { ?>
