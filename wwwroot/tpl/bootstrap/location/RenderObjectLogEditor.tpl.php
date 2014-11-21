@@ -4,16 +4,15 @@
 			<h3 class="box-title">Log records for this object (<a href=?page=objectlog>complete list</a>)</h3>
 		</div>
 		<div class="box-body no-padding">
-			<tbody>
-				<tr>
 					<?php $this->getH('PrintOpFormIntro', array('add')); ?>
-						<td></td>
-						<td><textarea name=logentry rows=10 cols=80 tabindex=100></textarea></td>
-						<td><button class="btn btn-danger"><span class="glyphicon glyphicon-ok"></span></button></td>
+						<div class="row edit_row" align="center"><textarea name=logentry rows=10 cols=80 tabindex=100></textarea></div>
+						<div class="row edit_row" align="center"><button class="btn btn-large btn-success"><span class="glyphicon glyphicon-ok"></span></button></div>
 					</form>
-				</tr>
-				<?php $this->Rows; ?>
-			</tbody>
+				<table class="table table-bordered table-striped" align='center'>
+					<tbody>
+						<?php $this->Rows; ?>
+					</tbody>
+				</table>
 		</div>
 	</div>
 <?php } else { ?>

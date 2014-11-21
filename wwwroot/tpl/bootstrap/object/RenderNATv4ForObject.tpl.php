@@ -1,7 +1,12 @@
 <?php if (defined("RS_TPL")) {?>
-	<center><h2>locally performed NAT</h2></center>
-	<table class='widetable' cellpadding=5 cellspacing=0 border=0 align='center'>
-	<tr><th></th><th>Match endpoint</th><th>Translate to</th><th>Target object</th><th>Comment</th><th>&nbsp;</th></tr>
+<div class="box box-primary">
+	<div class="box-header">
+		<h3 class="box-title">locally performed NAT</h3>
+	</div>
+	<div class="box-body no-padding">
+
+	<table class='table widetable' style="background-color: #f9f9f9" cellpadding=5 cellspacing=0 border=0 align='center'>
+	<tr style="text-align: center;"><th></th><th>Match endpoint</th><th>Translate to</th><th>Target object</th><th>Comment</th><th>&nbsp;</th></tr>
 	<?php $this->printNewItemTop_mod ?>
 	
 	<?php while ($this->loop('AllNatv4Ports')) : ?>
@@ -40,6 +45,8 @@
 		<?php $this->endLoop(); ?> 
 		</table><br><br>
 	<?php } ?> 
+	</div>
+</div>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

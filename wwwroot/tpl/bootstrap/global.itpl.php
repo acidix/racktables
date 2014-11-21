@@ -162,7 +162,7 @@ $this->setInMemoryTemplate("FormatVSIPInMem","<a href='{{href}}'>{{fmt_ip}}</a>"
 *	Usage:  slb-interface.php
 *
 **/
-$this->setInMemoryTemplate("GetSelectInLine","<input type=hidden name={{selectName}} id={{selectName}} value={{keyValue}}>{{value}}");
+$this->setInMemoryTemplate("GetSelectInLine","<input class=form-control type=hidden name={{selectName}} id={{selectName}} value={{keyValue}}>{{value}}");
 
 /**
 *	RenderNewEntityTags: 

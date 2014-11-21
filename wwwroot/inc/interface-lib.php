@@ -395,14 +395,13 @@ function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree =
         $script .= "});\n";
         //		$script .= "</script>\n";
         $mod->setOutput("jsScript", $script);
-
     }
     else
     {
         $mod->setOutput("isTree", false);
         $selectAttrArr = array();
         foreach ($select_attrs as $attr_name => $attr_value)
-        $selectAttrArr[] = array("attrName" => $attr_name,"attrVal" => $attr_value);
+            $selectAttrArr[] = array("attrName" => $attr_name,"attrVal" => $attr_value);
         $mod->setOutput("selectAttrs", $selectAttrArr);
 
         $groupListArr = array();
@@ -421,7 +420,7 @@ function getNiftySelect ($groupList, $select_attrs, $selected_id = NULL, $tree =
     }
 
     if($parent==null)
-            return $mod->run();
+        return $mod->run();
 }
 
 function getOptionTree ($tree_name, $tree_options, $tree_config = array(), $parent = null , $placeholder = "optionTreeJS")

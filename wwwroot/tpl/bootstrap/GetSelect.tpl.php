@@ -8,7 +8,6 @@
 		<option value='<?php $this->dict_key ?>' <?php $this->isSelected ?> ><?php $this->dict_val ?> </option>
 	<?php $this->endLoop(); ?> 
 	</select>
-
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

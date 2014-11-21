@@ -2,8 +2,8 @@
 	<?php if ($this->is("isTree",true)) { ?>
 		<?php $this->addRequirement("Header","HeaderJsInclude",array("path"=>"js/jquery.optionTree.js")); ?>
 		<?php $this->addRequirement("Header","HeaderJsInline",array("code"=>$this->script)); ?>
-	<?php } else {?>
-		<select
+	<?php } else {?>	
+		<select class="form-control" style="width: 100%"
 		<?php $this->startLoop("selectAttrs"); ?>	
 		 	 <?php $this->attrName ?>=<?php $this->attrVal ?>  
 		 <?php $this->endLoop(); ?>  
@@ -12,9 +12,9 @@
 			<optgroup label='<?php $this->groupName ?>'>
 			<?php $this->optionList ?> 
 			</optgroup>
-		<?php $this->endLoop(); ?></select>
+		<?php $this->endLoop(); ?>
+		</select>
 	<?php } ?> 
-
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

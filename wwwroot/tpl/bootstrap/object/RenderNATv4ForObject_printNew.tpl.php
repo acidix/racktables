@@ -2,9 +2,9 @@
 	<?php $this->getH("PrintOpFormIntro", array('addNATv4Rule')); ?>
 	<tr align='center'><td>
 	<?php $this->getH("PrintImageHref", array('add', 'Add new NAT rule', TRUE)); ?>
-	</td><td>
+	</td><td class="multi-td">
 	<?php $this->printTcpUdpSel ?>
-	<select name='localip' tabindex=1>
+	<select class="form-control" name='localip' tabindex=1>
 	<?php $this->startLoop("allAlloc"); ?>	
 		<option value="<?php $this->ip ?>"><?php $this->osif ?><?php $this->ip ?><?php $this->name ?></option>
 	<?php $this->endLoop(); ?> 

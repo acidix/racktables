@@ -1709,7 +1709,8 @@ function renderPortsForObject ($object_id)
     if (getConfigVar ('ADDNEW_AT_TOP') != 'yes' && getConfigVar('ENABLE_BULKPORT_FORM') == 'yes')
     {
         $mod->addOutput("isBulkportForm", true);
-        printNiftySelect (getNewPortTypeOptions(), array ('name' => 'port_type_id', 'tabindex' => 107), $prefs['selected'], false, $mod, 'bulkPortsNiftySel');
+        $mod->addOutput('bulkPortsNiftySel', printNiftySelect (getNewPortTypeOptions(), array ('name' => 'port_type_id', 'tabindex' => 107), $prefs['selected']));
+     //   printNiftySelect (getNewPortTypeOptions(), array ('name' => 'port_type_id', 'tabindex' => 107), $prefs['selected'], false, $mod, 'bulkPortsNiftySel');
     }
     if (getConfigVar('ENABLE_MULTIPORT_FORM') == 'yes')
     {
@@ -1720,8 +1721,8 @@ function renderPortsForObject ($object_id)
         $mod->addOutput("isShowAddMultiPorts", false);
         return;
     }
-
-    printNiftySelect (getNewPortTypeOptions(), array ('name' => 'port_type', 'tabindex' => 202), $prefs['selected'], false, $mod, 'portTypeNiftySel');
+    $mod->addOutput('portTypeNiftySel', printNiftySelect (getNewPortTypeOptions(), array ('name' => 'port_type', 'tabindex' => 202), $prefs['selected']));
+   // printNiftySelect (getNewPortTypeOptions(), array ('name' => 'port_type', 'tabindex' => 202), $prefs['selected'], false, $mod, 'portTypeNiftySel');
 }
 
 function renderIPForObject ($object_id)
@@ -1769,7 +1770,9 @@ function renderIPForObject ($object_id)
 
     if ($list_on_top = (getConfigVar ('ADDNEW_AT_TOP') != 'yes'))
         $mod->addOutput("isAddNewOnTop", true);
-
+    else
+        $mod->addOutput("isAddNewOnTop", false);
+    
     $newmod = $tplm->generatePseudoSubmodule("RenderIPForObject_printNew", $mod);
 
     if (getConfigVar ('EXT_IPV4_VIEW') == 'yes')

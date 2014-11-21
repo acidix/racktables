@@ -267,8 +267,9 @@ body > header > nav.navbar.navbar-static-top {
 	}
 
 	#tabsidebar {
-		top: 50px;
+		top: 0px;
 	}
+
 	#contentarea {
 		top: 50px;
 	}
@@ -291,7 +292,7 @@ body > header > nav.navbar.navbar-static-top {
 }
 @media (max-width: 560px) { 
 	#tabsidebar {
-		top: 100px;
+		top: 50px;
 	}
 	#contentarea {
 		top: 100px;
@@ -508,12 +509,41 @@ td.atom.state_Th {
 	background-color: #a9cee3;
 }
 
-td.atom.state_Th  a {
+td.atom.state_Th a {
 	color: black;
 }
 
 .form-control {
 	padding:  3px;
 	display: inline-block;
+	width: auto;
+}
+
+.edit_row {
+	padding: 0px 10px 0px 10px;
+	margin: 5px 0px 5px 0px;
+}
+
+.edit_row > div > input {
+	width: 100%
+}
+
+.edit_row > .header {
+	font-weight: bold;
+}
+
+.edit_row > div {
+	text-align: left;
+}
+
+.edit_row > .sticker {
+	background-color: #a9cee3;
+}
+
+td > .form-control, .edit_row .form-control {
+	width: 100%;
+}
+
+.multi-td > .form-control {
 	width: auto;
 }
