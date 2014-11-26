@@ -49,10 +49,10 @@ function prepareContent(selector) {
             maxchildren = tabs.eq(i).children().eq(0).children().length;
     };
     $$('.tab-glyph').css('min-width', (maxchildren * 30) + 'px');
-    var top_offset = 20;
+    var top_offset = 21;
     var userboxHeight = top_offset + $('.user-panel').outerHeight() + $('body > div > .sidebar-offcanvas > section > form').outerHeight();
     console.log('height is ' + userboxHeight);
-    $$('.sidebar.tabbar > .sidebar-menu:first-child').css('margin-top', userboxHeight + 'px' );
+    $$('.sidebar.tabbar > .sidebar-menu > li:first-of-type').css('height', userboxHeight + 'px' );
     // Set timeout for showing tab names
     var tabTimeout;
     $$('#tabsidebar').mouseenter(function() {
@@ -109,7 +109,7 @@ function prepareContent(selector) {
         $$('.tab-link').css('display', 'inline-block');
         $$('body > div.wrapper.row-offcanvas.row-offcanvas-left.active.relative > aside.left-side.sidebar-offcanvas').css('top', '');
         var userboxHeight = top_offset + $('.user-panel').outerHeight() + $('body > div.wrapper.row-offcanvas.row-offcanvas-left > aside.left-side.sidebar-offcanvas > section > form').outerHeight();
-        $$('.sidebar.tabbar > .sidebar-menu:first-child').css('margin-top', userboxHeight + 'px' );
+        $$('.sidebar.tabbar > .sidebar-menu > li:first-of-type').css('height', userboxHeight + 'px' );
         //$('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
     }
     });
