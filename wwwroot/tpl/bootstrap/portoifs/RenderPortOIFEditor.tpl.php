@@ -1,10 +1,10 @@
 <?php if (defined("RS_TPL")) {?>
 <div class="box">
 	<div class="box-header">
-		Port OIF Editor
+		<h3 class="box-title">Port OIF Editor</h3>
 	</div>
 	<div class="box-content no-padding">
-		<table class="table">
+		<table class="table table-striped">
 			<thead>
 				<tr><th>Origin</th><th>Key</th><th>Refcnt</th><th>&nbsp;</th><th>Outer Interface</th><th>&nbsp;</th></tr>	
 			</thead>
@@ -63,10 +63,6 @@
 		</table>
 	</div>
 </div>
-	<table class=widetable border=0 cellpadding=5 cellspacing=0 align=center>
-		<tr><th class=tdleft>Origin</th><th>Key</th><th>Refcnt</th><th>&nbsp;</th><th>Outer Interface</th><th>&nbsp;</th></tr>
-		
-	</table>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />
