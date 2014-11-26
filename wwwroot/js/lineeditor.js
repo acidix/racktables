@@ -1,6 +1,6 @@
 // Init on load 
 $(function () {
-	$("tr").last().addClass("lastLine");
+	$(".lineeditor-table > tbody > tr").last().addClass("lastLine");
 	$(".lastLine").attr("onchange", "addToLast()");
 });
 
@@ -8,8 +8,8 @@ function addToLast () {
 	// Copy last line and remove values
 	
 	// Check for the last line
-	if($("tr").length == 2) {
-		var first_remv_btn = $("tr").eq(1).find("a").eq(0); 
+	if($(".lineeditor-table > tbody > tr").length == 1) {
+		var first_remv_btn = $(".lineeditor-table > tbody > tr").eq(0).find("a").eq(0); 
 		first_remv_btn.attr("onclick", "removeLine(0)");
 		first_remv_btn.addClass("btn-danger");
 		first_remv_btn.removeClass("btn-default");
@@ -22,42 +22,54 @@ function addToLast () {
 	var number = parseInt($(".lastLine").attr("count"));
 	$(".lastLine").removeClass("lastLine");
 	
-	$("tr").last().after(lastLineCont);
-	updateNumber($("tr").last(), number+1);
-	$("tr").last().attr("onchange", "addToLast()");
+	$(".lineeditor-table > tbody > tr").last().after(lastLineCont);
+	updateNumber($(".lineeditor-table > tbody > tr").last(), number+1);
+	$(".lineeditor-table > tbody > tr").last().attr("onchange", "addToLast()");
 }
 
 function cloneLine (position) {
 	// Clone and update numbers in lines
-	
+	console.log('pos:',position);	
 	// Check for the last line
-	if($("tr").length == 2) {
-		var first_remv_btn = $("tr").eq(1).find("a").eq(0); 
+	if($(".lineeditor-table > tbody > tr").length == 1) {
+		var first_remv_btn = $(".lineeditor-table > tbody > tr").eq(0).find("a").eq(0); 
 		first_remv_btn.attr("onclick", "removeLine(0)");
 		first_remv_btn.addClass("btn-danger");
 		first_remv_btn.removeClass("btn-default");
 	}
 
-	$("tr[count='" + position + "']").after($("tr[count='" + position + "']").clone());
-	var allRows = $("tr");
+	$(".lineeditor-table > tbody > tr[count='" + position + "']").after($("tr[count='" + position + "']").clone());
 	
-	for(var i = position+1; i < allRows.length; i++) {
-		updateNumber(allRows.eq(i), i-1);
+	var allRows = $(".lineeditor-table > tbody > tr");
+	
+	for(var i = position; i < allRows.length; i++) {
+		updateNumber(allRows.eq(i), i);
 	}
+	$(".lineeditor-table > tbody > tr[count='" + (position + 1) + "'] > td > .select2-container").remove();
 }
 
 function removeLine (position) {
-	$("tr[count='" + position + "']").remove();
-	var allRows = $("tr");
-	for(var i = position+1; i < allRows.length; i++) {
-		updateNumber(allRows.eq(i), i-1);
+	if(position == 0) {
+		var tagsSelector = $(".lineeditor-table > tbody > tr[count='0'] > td").eq(4).clone();
+	}
+
+	$(".lineeditor-table > tbody > tr[count='" + position + "']").remove();
+	var allRows = $(".lineeditor-table > tbody > tr");
+	for(var i = position; i < allRows.length; i++) {
+		updateNumber(allRows.eq(i), i);
+	}
+
+	if(position == 0) {
+		$(".lineeditor-table > tbody > tr[count='0'] > td").eq(4).append("<input class='ui-autocomplete-input tagspicker'/>");
+		prepareContent($(".lineeditor-table > tbody > tr[count='0']> td").eq(4));
+	//	$(".lineeditor-table > tbody > tr[count='0'] > td").eq(4).html(tagsSelector);
 	}
 	
 	// Check for the last line
-	if(allRows.length == 2) {
-		allRows.eq(1).find("a").eq(0).removeAttr("onclick");
-		allRows.eq(1).find("a").eq(0).removeClass("btn-danger");
-		allRows.eq(1).find("a").eq(0).addClass("btn-default");
+	if(allRows.length == 1) {
+		allRows.eq(0).find("a").eq(0).removeAttr("onclick");
+		allRows.eq(0).find("a").eq(0).removeClass("btn-danger");
+		allRows.eq(0).find("a").eq(0).addClass("btn-default");
 	}
 }
 
@@ -77,4 +89,13 @@ function updateNumber (table_row, number) {
 	buttonfields.eq(0).attr("onclick", "removeLine(" + number + ")");
 	buttonfields[1].name = number + "_btn_clone";
 	buttonfields.eq(1).attr("onclick", "cloneLine(" + number + ")");
+
+	// Ensure last line
+	table_row.removeAttr("onchange");
+	table_row.removeClass("lastLine");
+	
+	if(number == $(".lineeditor-table > tbody > tr").length - 1) {
+		table_row.addClass('lastLine');
+		table_row.attr("onchange", "addToLast()");
+	}
 }

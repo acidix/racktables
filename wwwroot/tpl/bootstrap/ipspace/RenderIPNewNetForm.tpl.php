@@ -32,7 +32,7 @@
 			<tr><th class=tdright><input type=checkbox name="is_connected" tabindex=4></th><th class=tdleft>reserve subnet-router anycast address</th></tr>
 			</table>
 			<div style="text-align: center">
-				<button class="btn btn-success ajax_form" targetform="add">Add new</button>
+				<button class="btn btn-success ajax_form" targetform="#add">Add new</button>
 				<button class="btn btn-default" type=button onclick="clearForm( add );"><span class="glyphicon glyphicon-refresh"></span></button>
 			</div>
 			</form>

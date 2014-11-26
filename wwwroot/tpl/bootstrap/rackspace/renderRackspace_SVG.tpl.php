@@ -1,9 +1,7 @@
 <?php if (defined("RS_TPL")) {?>
 	<?php $this->addJS('js/jquery.mousewheel.min.js');?> 
  	<?php $this->addJS('js/jquery.panzoom.min.js');?> 
- 	<input class="form-control input-lg" type="text" placeholder="Search rackspace" onkeyup="highlightRacktables($(this).val())">
-	<br>
-	<div class="box box-info rackbox" style="position: relative; overflow-x: auto">
+ 	<div class="box box-info rackbox" style="position: relative; overflow-x: auto">
 		<div class="box-header" style="cursor: move;">
 	        <i class="fa fa-hdd-o"></i>
 	        <h3 class="box-title"></h3>
@@ -12,7 +10,9 @@
 	        </div>
 	    </div>
 	    <div class="box-body" onmouseenter="showZoomNav(<?php $this->Counter; ?>);" onmouseleave="hideZoomNav(<?php $this->Counter; ?>);" style="position: relative">
-		    <div class='zoom-overlay'>
+			<input class="form-control input-lg col-xs-12" style="width: 100%; margin-bottom: 5px" type="text" placeholder="Search rackspace" onkeyup="highlightRacktables($(this).val())">
+			<br>
+			<div class='zoom-overlay'>
 			    <button class="zoom-overlay-btn zoom-in"><span class='glyphicon glyphicon-plus'></span></button></br>
 			    <button class="zoom-overlay-btn reset"><span class='glyphicon glyphicon-refresh'></span></button></br>
 				<button class="zoom-overlay-btn zoom-out"><span class='glyphicon glyphicon-minus'></span></button>

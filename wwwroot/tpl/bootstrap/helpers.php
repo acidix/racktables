@@ -574,10 +574,9 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 				$tabclass .= ' treeview';
 			}
 			# Expand active sideclass only if not tab navigation
-			if($pagen == $parent_page)
-			#if ($pagen == $pageno) {
+			if($pagen == $parent_page || $pagen == $pageno) {
 				$tabclass .= ' active';
-			#}
+			}
 			echo '<li';
 			if ($tabclass != '') {
 				echo ' class="' . $tabclass . '"';
