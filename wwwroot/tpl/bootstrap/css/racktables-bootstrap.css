@@ -98,7 +98,7 @@ body > header > nav.navbar.navbar-static-top {
 	/*background-color: #f4f4f4;*/
 	background-color: #f4f4f4;
 /*	max-height: 45px; */
-	height: 45px;
+	height: 46px;
 	/*box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);*/
 }
 
@@ -199,7 +199,7 @@ body > header > nav.navbar.navbar-static-top {
 }
 
 .skin-blue .sidebar > .sidebar-menu > li.active > a, .sidebar-menu > li > a > .glyphicon {
-	background-color: inherit;
+	/*background-color: inherit;*/
 }
 
 .sidebar.tabbar > .sidebar-menu > li.operator-spacer {
@@ -217,7 +217,7 @@ body > header > nav.navbar.navbar-static-top {
 }
 
 .sidebar.tabbar > .sidebar-menu > li.tab-operator > a {
-	background: inherit;
+	/*background: inherit;*/
 	color: inherit;
 }
 

@@ -175,7 +175,7 @@
                 <div >
                      <!-- sidebar for tabs and operator -->
                     <section class="row sidebar tabbar col-xs-12" id="tabsidebar">  
-                        <ul class="sidebar-menu tabs-list"><?php $this->Tabs; ?></ul><div class="highlight-ring"></div>
+                        <ul class="sidebar-menu tabs-list"><li></li><?php $this->Tabs; ?></ul><div class="highlight-ring"></div>
                     </section>   
                     <section id='contentarea' class="row col-xs-12">
                         <!-- Content Header (Page header) -->
