@@ -90,12 +90,15 @@ body > header > nav.navbar.navbar-static-top {
 	width: auto;
 	position: fixed;
 	z-index: 4;
-	box-shadow: 0px 1px 1px -1px rgba(0, 0, 0, 0.7);
+	box-shadow: 1px 0px 3px rgba(0, 0, 0, 0.7);
+	/*border-right: solid 2px rgba(0,0,0,0.2);*/
 }
 
 .sidebar.tabbar > .sidebar-menu > li {
 	/*background-color: #f4f4f4;*/
 	background-color: #f4f4f4;
+/*	max-height: 45px; */
+	height: 45px;
 	/*box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);*/
 }
 
@@ -113,42 +116,98 @@ body > header > nav.navbar.navbar-static-top {
 
 .sidebar.tabbar .sidebar-menu > li > .tab-link {
 	display: none;
+	padding-right: 30px;
 }
 
 .sidebar.tabbar > .sidebar-menu > li:hover {
 	background-color: #f9f9f9;
+/*	border-bottom: 1px solid #dbdbdb; */ 
 }
 
+.sidebar.tabbar > .sidebar-menu > li:hover > .tab-link {
+	/*border-bottom: inherit;*/
+}
+
+.highlight-ring.hidden-ring {
+	display: none;
+}
+
+.highlight-ring {
+	display: auto;
+    width: 40px;
+    height: 40px;
+    left 20px;
+    border-radius: 50%;
+    position: absolute;
+    background-color: transparent;
+    border: 2px gray solid;
+    -webkit-animation-name: ring-ani; 
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-duration: 3s;
+    -webkit-animation-direction: normal;
+   animation: ring-ani;
+   animation-iteration-count: infinite;
+   animation-timing-function: linear;
+   animation-duration: 3s;
+   animation-direction: normal;
+}
+
+@-webkit-keyframes ring-ani { 
+    5% {-webkit-transform: scale(0.1); } 
+    95% {-webkit-transform: scale(1);}
+    100% {-webkit-transform: scale(1);}
+}
+
+@keyframes ring-ani {
+   5% {transform: scale(0.1); } 
+    95% {transform: scale(1);}
+    100% {transform: scale(1);}
+}
+
+/*
 .sidebar.tabbar > .sidebar-menu > li.active {
-	/*background-color: #f9f9f9;*/
-	-webkit-animation: tabs-animation 2s linear 0s infinite alternate; /* Chrome, Safari, Opera */
+	/*background-color: #f9f9f9;
+	-webkit-animation: tabs-animation 2s linear 0s infinite alternate; /* Chrome, Safari, Opera
     animation: tabs-animation 2s linear 0s infinite alternate;
 }
 
-/* Sidebar tabbar animation */
-/* Chrome, Safari, Opera */
+/* Sidebar tabbar animation 
+/* Chrome, Safari, Opera 
 @-webkit-keyframes tabs-animation {
     0% {background-color: white;}
     100% {background-color: #CCCCCC;}
 }
 
-/* Standard syntax */
+/* Standard syntax 
 @keyframes tabs-animation {
     0% {background-color: white;}
     100% {background-color: #CCCCCC;}
+}*/
+
+.sidebar.tabbar > .sidebar-menu > li.active {
+	background-color: #f9f9f9;
+	border-bottom: 1px solid #dbdbdb;
+}
+
+.skin-blue .sidebar > .sidebar-menu > li.active > .tab-glyph {
+	/*border-bottom: inherit;*/
+}
+
+.skin-blue .sidebar > .sidebar-menu > li.active > .tab-link {
+	/*border-bottom: inherit;*/
 }
 
 .skin-blue .sidebar > .sidebar-menu > li.active > a, .sidebar-menu > li > a > .glyphicon {
 	background-color: inherit;
 }
 
-
 .sidebar.tabbar > .sidebar-menu > li.operator-spacer {
 	padding-top: 50px;
 	padding-bottom: 50px;
-	border-top: transparent;
+	/*border-top: transparent; */
 	box-shadow: none;
-	background: transparent;
+/*	background: transparent; */
 }
 
 .sidebar.tabbar > .sidebar-menu > li.tab-operator[type='submit'] {
@@ -156,7 +215,6 @@ body > header > nav.navbar.navbar-static-top {
 	color: white;
 	padding: 0px 3px 0px 3px;
 }
-
 
 .sidebar.tabbar > .sidebar-menu > li.tab-operator > a {
 	background: inherit;
@@ -181,6 +239,7 @@ body > header > nav.navbar.navbar-static-top {
 .sidebar.tabbar > .sidebar-menu > li:first-of-type > a {
 	border-top: none;
 	background-color: inherit;
+	border-bottom: inherit;
 }
 
 #contentarea > section.content > div > div.box-header > small {
@@ -259,6 +318,7 @@ body > header > nav.navbar.navbar-static-top {
 	
 	.horizontal-tabbar > .sidebar .sidebar-menu > li > .tab-link {
 		display: inline-block;
+		border-bottom: inherit;
 	}
 
 	li.tab.tab-operator.first-operator {
@@ -547,3 +607,4 @@ td > .form-control, .edit_row .form-control {
 .multi-td > .form-control {
 	width: auto;
 }
+

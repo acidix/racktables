@@ -35,9 +35,11 @@ function prepareContent(selector) {
 
     // Add glyphicons to all tabs
     var tabs = $$("li.tab");
-
     var maxchildren = 0;
+
+    $$('.highlight-ring').addClass('hidden-ring');
     for (var i = 0; i < tabs.length; i++) {
+        $$('.highlight-ring').removeClass('hidden-ring');
         var link = tabs.eq(i).children('a')[0].href;
         tabs.eq(i).prepend(getGlyphicon(tabs[i].id));
 
@@ -47,7 +49,8 @@ function prepareContent(selector) {
             maxchildren = tabs.eq(i).children().eq(0).children().length;
     };
     $$('.tab-glyph').css('min-width', (maxchildren * 30) + 'px');
-    var userboxHeight = 20 + $('.user-panel').outerHeight() + $('body > div > .sidebar-offcanvas > section > form').outerHeight();
+    var top_offset = 20;
+    var userboxHeight = top_offset + $('.user-panel').outerHeight() + $('body > div > .sidebar-offcanvas > section > form').outerHeight();
     console.log('height is ' + userboxHeight);
     $$('.sidebar.tabbar > .sidebar-menu:first-child').css('margin-top', userboxHeight + 'px' );
     // Set timeout for showing tab names
@@ -88,9 +91,7 @@ function prepareContent(selector) {
         
         // Add links if any 
         var test = ($$('.tabs-list').children().last().prepend(getGlyphicon(operatorstabs[i].id)))
-        .children().eq(0).attr('href', operatorstabs[i].href);
-        
-        
+        .children().eq(0).attr('href', operatorstabs[i].href);      
         operatorstabs.eq(i).remove();
     }
     
@@ -107,14 +108,13 @@ function prepareContent(selector) {
         $$('#tabsidebar').addClass('horizontal-tabbar');
         $$('.tab-link').css('display', 'inline-block');
         $$('body > div.wrapper.row-offcanvas.row-offcanvas-left.active.relative > aside.left-side.sidebar-offcanvas').css('top', '');
-        var userboxHeight = 20 + $('.user-panel').outerHeight() + $('body > div.wrapper.row-offcanvas.row-offcanvas-left > aside.left-side.sidebar-offcanvas > section > form').outerHeight();
+        var userboxHeight = top_offset + $('.user-panel').outerHeight() + $('body > div.wrapper.row-offcanvas.row-offcanvas-left > aside.left-side.sidebar-offcanvas > section > form').outerHeight();
         $$('.sidebar.tabbar > .sidebar-menu:first-child').css('margin-top', userboxHeight + 'px' );
         //$('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
     }
     });
 
-    // Load tagpicker 
-    
+    // Load tagpicker  
     if(typeof(GLOBAL_TAGLIST) != 'undefined') {
         var tags_list = [];
         for (var key in GLOBAL_TAGLIST) {
@@ -151,7 +151,7 @@ function prepareContent(selector) {
                 /*if(typeof(e.removed) != 'undefined') {
                     console.log(e.removed);
                 } */
-            }).on('select2-focus', function() {
+            }).on('change', function() {
                 if(!$(this).data('select2').opened())
                     $(this).data('select2').open();
             });
@@ -178,7 +178,6 @@ function prepareContent(selector) {
     dataTables = $$('table.table.datatable');
     for(var c = 0; c < dataTables.length; c++)
         tagsDataTable(dataTables);
-
 }
 
 
@@ -244,6 +243,7 @@ function getGlyphicon(glyphiconID) {
         case 'ipv4netdefault':
         case 'portifcompatdefault':
         case 'attrsdefault':
+        case 'myaccountinterface':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-eye-open'></span></a>";
         case 'objectlog':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-list'></span></a>";
@@ -264,7 +264,13 @@ function getGlyphicon(glyphiconID) {
         case 'reportsipv4':
             return "<a class='tab-glyph'><strong class='glyphicon'>4</strong></a>"; 
         case 'reportsipv6':
-            return "<a class='tab-glyph'><strong class='glyphicon'>6</strong></a>"; 
+            return "<a class='tab-glyph'><strong class='glyphicon'>6</strong></a>";
+        case 'myaccountmypassword':
+            return "<a class='tab-glyph'><strong class='glyphicon glyphicon glyphicon-lock'></strong></a>";
+        case 'myaccountdefault':
+            return "<a class='tab-glyph'><strong class='glyphicon glyphicon glyphicon-user'></strong></a>";
+        case 'myaccountqlinks':
+            return "<a class='tab-glyph'><strong class='glyphicon glyphicon glyphicon-link'></strong></a>";
         case 'rowtagroller':
         case 'ipv4nettags':
         case 'objecttags':
@@ -272,10 +278,9 @@ function getGlyphicon(glyphiconID) {
         case 'roweditracks':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span><span class='glyphicon glyphicon-home'></span></a>";   
         case '8021qvstlist':
-            return "<a class='tab-glyph'>Q<span class='glyphicon glyphicon-edit'></span></a>";
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span></a>";
         default:
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-exclamation-sign'></span></a>";
-        
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-exclamation-sign'></span></a>"; 
     }
 }
 
@@ -494,7 +499,7 @@ function showDataEditDialog(title, content_selector, dialog_type) {
     BootstrapDialog.show({
         title: title,
         type: dialog_type,
-        closeByBackdrop: true,
+        closeByBackdrop: false,
         draggable: true,
         message: $(content_selector).children(),
         onshown : function(dialogRef) {
