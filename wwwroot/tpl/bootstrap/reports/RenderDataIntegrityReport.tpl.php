@@ -348,7 +348,11 @@
 	<?php } ?>
 	
 	<?php if ($this->is("NoViolations",true)) { ?>
-		<h2>No integrity violations found</h2>
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title">No integrity violations found</h3>
+		</div>
+	</div>
 	<?php } ?> 
 
 <?php } else { ?>

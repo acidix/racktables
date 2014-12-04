@@ -27,7 +27,7 @@
 			<button class="btn btn-default" type=button style="margin: 10px;" onclick="showRemoveDialog();"><span class="glyphicon glyphicon-minus"></span></button></div>
 		</div>
 		<div class="box-body" style="position: relative">
-			<table class="table table-bordered table-striped" id="ipspaceTable">
+			<table class="table table-bordered table-striped datatable">
 				<thead><tr><th>prefix</th><th>name/tags</th><th>capacity</th>
 				<?php if($this->is('AddRouted')) { ?>
 						<th>routed by</th>
@@ -42,11 +42,6 @@
 			<script src="./js/plugins/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
 			<!-- DATA Tables CSS -->
 			<link href="./css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
-			<script type="text/javascript">
-			$(function() {
-				tagsDataTable('#ipspaceTable');
-			});
-			</script>
 		</div>
 	</div>
 	<div class="row">

@@ -29,7 +29,7 @@
 			<h2>networks (<?php $this->overallCount ?>)</h2>
 			<table cellspacing=0 cellpadding=5 align=center class=widetable>
 			<tr><th>
-			<?php $this->getH("PrintImageHref", array('net')); ?>
+			<strong class='glyphicon glyphicon glyphicon-globe'></strong>
 			</th><th><?php $this->getH("PrintImageHref", array('text')); ?>
 			</th></tr>
 			<?php $this->startLoop("allNets"); ?>	

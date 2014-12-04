@@ -4,9 +4,9 @@
 		<h3 class="box-title">VLAN existence per domain</h3>
 	</div>
 	<div class="box-content no-padding">
-		<table class="table">
+		<table class="table table-striped table-bordered">
 			<tbody>
-				<?php while($this->loop("OutputArr")) { ?>	
+				<?php while($this->refLoop("OutputArr")) { ?>	
 					<?php $this->Header; ?>
 					<tr class="state_<?php $this->CountStats ?>"><th class=tdright><?php $this->VlanId ?></th>
 						<?php $this->Domains; ?> 

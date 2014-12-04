@@ -7,7 +7,7 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th>description</th><th>VLANs</th><th>switches</th><th><?php $this->getH("PrintImageHref", array( 'net')); ?></th><th>ports</th>
+					<th>description</th><th>VLANs</th><th>switches</th><th><strong class='glyphicon glyphicon glyphicon-globe'></strong></th><th>ports</th>
 				</tr>
 			</thead>
 			<tbody>

@@ -25,7 +25,7 @@
 	<?php if($this->is('ID')) { ?>
 		<?php $this->getH('NiftyString',$this->_Name); ?>
 		<?php if($this->is('Tags')) { ?>
-			<br><small class='tag_small'><?php $this->Tags; ?></small>
+			<br><small><?php $this->Tags; ?></small>
 		<?php } ?>
 	<?php } else { ?>
 		<?php $this->getH('PrintImageHREF',array('dragons', 'Here be dragons.')); ?>

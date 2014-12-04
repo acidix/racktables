@@ -2,7 +2,7 @@
 	<table cellspacing=0 cellpadding=5 align=center class=widetable>
 	<tr>
 	<?php if ($this->is("IsVLAN", true)) { ?>
-		<th><?php $this->getH("PrintImageHref", array('net')); ?></th>
+		<th><strong class='glyphicon glyphicon glyphicon-globe'></strong></th>
 	<?php } ?> 
 	<?php if ($this->is("IsIpv6Net",true)) { ?>
 		<th>VLAN</th>

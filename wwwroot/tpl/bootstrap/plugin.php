@@ -292,6 +292,7 @@ global $tabhandler;
 $tabhandler['rackspace']['default'] = 'renderRackspaceSVG';
 $tabhandler['depot']['addmore'] = 'renderDynamicAddMultipleObjectsForm';
 $tabhandler['ipv4space']['default'] = 'renderIPSpaceWithAddRem';
+$tabhandler['ipv6space']['default'] = 'renderIPSpaceWithAddRem';
 $tabhandler['depot']['default'] = 'renderDepotWithAdd';
 
 ?>

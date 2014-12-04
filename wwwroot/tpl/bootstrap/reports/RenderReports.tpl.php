@@ -3,16 +3,11 @@
 	<div class="box-header">
 		<h3 class="box-title">Reports</h3>
 	</div>
-	<div class="box-content no-padding">
-		<table class="table">
-			<tbody>
-				<?php $this->startLoop("ItemContent"); ?>	
-					<tr><th><h3><?php $this->Title; ?> </h3></th></tr>
-					<?php $this->Cont; ?> 
-					<tr><td><hr></td></tr>
-				<?php $this->endLoop(); ?>
-			</tbody>
-		</table>
+	<div class="box-body">
+		<?php while( $this->refLoop("ItemContent") ) { ?>	
+			<h3><?php $this->Title; ?></h3>
+			<?php $this->Cont; ?>
+		<?php } ?>
 	</div>
 </div>
 <?php } else { ?>

@@ -6130,6 +6130,7 @@ function renderCell ($cell)
             $mod->setOutput("serializedLinks", serializeFileLinks ($cell['links']));
 
         $mod->setOutput("fileCount", count ($cell['etags']) ? ("<small>" . serializeTags ($cell['etags']) . "</small>") : '&nbsp;');
+        
         if (isolatedPermission ('file', 'download', $cell))
         {
             // FIXME: reuse renderFileDownloader()

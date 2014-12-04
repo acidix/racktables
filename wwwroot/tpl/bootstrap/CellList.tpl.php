@@ -7,11 +7,12 @@
 	</div>
 	<div class="box-body" style="position: relative">
 		<table class="table table-bordered table-striped" id="ipspaceTable">
+			<thead><th>File</th></thead>
 			<tbody>
 				<?php $this->startLoop("CellListContent"); ?>
 				<tr class=row_<?php $this->Order; ?>>
 					<td>
-						<?php $this->CellContent; ?>
+					<?php $this->CellContent; ?>
 					</td>
 				</tr>
 			<?php $this->endLoop(); ?>

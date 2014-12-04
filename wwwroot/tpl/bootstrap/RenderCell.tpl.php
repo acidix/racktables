@@ -17,21 +17,22 @@
 	<?php } ?>
 
 	<?php if ($this->is("typeFile",true)) { ?>
-		<table class='slbcell vscell'><tr><td>
-		<?php $this->get("fileImgSpace"); ?>
-		</td><td>
-		<?php $this->get("nameAndID") ?>
-		</td><td rowspan=3 valign=top>
-		<small> <?php $this->get("serializedLinks"); ?></small>
-		</td></tr><tr><td>
-		<?php $this->get("fileCount") ?>
-		</td></tr><tr><td>
-		<?php if ($this->is("isolatedPerm",true)) { ?>
-			<a href='?module=download&file_id=<?php $this->get("cellID") ?>'>
-			<?php $this->get("isoPermImg") ?>
-			</a>&nbsp;
-		<?php } ?><?php $this->fileSize ?>
-		</td></tr></table>
+		<div class='slbcell vscell'>
+			<div class="row"><div class="col-sm-4 header">
+				<?php $this->get("fileImgSpace"); ?>
+				</div><div class="col-sm-4">
+				<?php $this->get("nameAndID") ?>
+				</div><div class="col-sm-4">
+				<small><?php $this->get("serializedLinks"); ?></small>
+			</div></div><div class="row"><div class="col-sm-4 header">
+				<?php $this->get("fileCount") ?>
+				</div><div class="col-sm-4 header">
+				<?php if ($this->is("isolatedPerm",true)) { ?>
+					<a href='?module=download&file_id=<?php $this->get("cellID") ?>'>
+					<span style="font-size: 20px" class='glyphicon glyphicon-cloud-download'></span>
+					</a>&nbsp;
+				<?php } ?><?php $this->fileSize ?>
+		</div></div></div>
 	<?php } ?>
 
 	<?php if ($this->is("typeIPV4RSPool",true)) { ?>
@@ -40,7 +41,7 @@
 
 	<?php if ($this->is("typeIPNet",true)) { ?>
 		<table class='slbcell vscell'><tr><td>
-		<div class="pull-left" style=""><?php $this->getH("PrintImageHref","NET") ?></div>
+		<div class="pull-left" style=""><strong class='glyphicon glyphicon glyphicon-globe'></strong></div>
 		</td><td><?php $this->get("mkACell"); ?><?php $this->get("renderdIPNetCap"); ?></td></tr>
 		<tr><td>
 		<?php if($this->is("cellName",true)) { ?>

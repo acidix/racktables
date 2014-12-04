@@ -458,13 +458,15 @@ body > header > nav.navbar.navbar-static-top {
 
 .tag_small {	
 	line-height: 14px;
+	margin: 2px 0px 2px 0px;
+	display: inline-block;
 }
 
 .tag_small > a:first-of-type {
 	margin: 0px 5px 0px 0px;
 }
 
-.tag_small > a, .tag_small > span {
+.tag_small  a, .tag_small > span {
 	display: inline-block;
 	line-height: 12px;
 	font-family: 'Source Sans Pro', sans-serif;
@@ -473,7 +475,7 @@ body > header > nav.navbar.navbar-static-top {
 	font-weight: bold;
 	border-radius: 3px;
 	padding: 3px 3px 3px 3px;
-	margin: 0px 5px 0px 5px;
+	margin: 5px 5px 5px 5px;
 	color: white !important;
 	background-color: #0073b7 !important;
 }
@@ -606,5 +608,12 @@ td > .form-control, .edit_row .form-control {
 
 .multi-td > .form-control {
 	width: auto;
+}
+
+/* Enforce autocomplete shown */
+.ui-autocomplete { 
+	position: absolute; 
+	cursor: default;
+	z-index:3000 !important;
 }
 

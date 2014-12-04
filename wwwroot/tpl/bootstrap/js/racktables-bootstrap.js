@@ -101,15 +101,19 @@ function prepareContent(selector) {
         // Add css class to tabbar 
         $$('#tabsidebar').addClass('horizontal-tabbar');
         $$('.tab-link').css('display', 'inline-block');
-        $$('.sidebar.tabbar > .sidebar-menu:first-child').css('margin-top', '0px' );
+        $$('.sidebar.tabbar > .sidebar-menu > li:first-of-type').css('height', '0px');
+        if($$("li.tab").length > 1)
+            $$('.highlight-ring').addClass('hidden-ring');
         //$('#contentarea').css('margin-left', '0px');
     },
     unmatch : function () {
-        $$('#tabsidebar').addClass('horizontal-tabbar');
+        $$('#tabsidebar').removeClass('horizontal-tabbar');
         $$('.tab-link').css('display', 'inline-block');
         $$('body > div.wrapper.row-offcanvas.row-offcanvas-left.active.relative > aside.left-side.sidebar-offcanvas').css('top', '');
         var userboxHeight = top_offset + $('.user-panel').outerHeight() + $('body > div.wrapper.row-offcanvas.row-offcanvas-left > aside.left-side.sidebar-offcanvas > section > form').outerHeight();
         $$('.sidebar.tabbar > .sidebar-menu > li:first-of-type').css('height', userboxHeight + 'px' );
+        if($$("li.tab").length > 1)
+            $$('.highlight-ring').removeClass('hidden-ring');
         //$('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
     }
     });
@@ -146,7 +150,7 @@ function prepareContent(selector) {
                         }
                     }
                     // console.log("value is " +  tag_val);
-                    $$('form[name="add"]').append('<input type="hidden" style="display:none;" value="' + tag_val + '" name="taglist[]">');                       
+                    $(this).closest('form').append('<input type="hidden" style="display:none;" value="' + tag_val + '" name="taglist[]">');                       
                 }
                 /*if(typeof(e.removed) != 'undefined') {
                     console.log(e.removed);
@@ -175,9 +179,10 @@ function prepareContent(selector) {
     });
 
     console.log('setting datatables');
-    dataTables = $$('table.table.datatable');
-    for(var c = 0; c < dataTables.length; c++)
-        tagsDataTable(dataTables);
+    datatables = $$('table.table.datatable');
+    for(var c = 0; c < datatables.length; c++) {
+        tagsDataTable(datatables.eq(c));
+    }
 }
 
 
@@ -432,14 +437,15 @@ function tagsDataTable(table_selector) {
     // Add tags to autocomplete
     // has to be done before tags are hidden    
     var taglist = [];
-    var possTags = $(table_selector).find('tbody > tr > td > small').children();
+    var possTags = table_selector.find('tbody > tr .tag_small').children();
+    
     //var possTags = $(table_selector + ' > tbody > tr > td > small').children();
     for (var i = 0; i < possTags.length; i++) {
         // No duplicates
         if($.inArray(possTags[i].innerHTML, taglist) === -1) taglist.push(possTags[i].innerHTML);
     };
-    
-    var datatab = $(table_selector).dataTable();
+    console.log('tags', taglist);
+    var datatable = table_selector.DataTable();
     
     function split( val ) {
       return val.split( / \s*/ );
@@ -447,38 +453,53 @@ function tagsDataTable(table_selector) {
     function extractLast( term ) {
       return split(term).pop();
     }
-    $( $(table_selector).attr('id') + '_filter > label > input[type="text"]' )
-      // don't navigate away from the field on tab when selecting an item
-      .bind( "keydown", function( event ) {
-        if ( event.keyCode === $.ui.keyCode.TAB &&
-            $( this ).autocomplete( "instance" ).menu.active ) {
-          event.preventDefault();
-        }
-      })
-      .autocomplete({
-        minLength: 0,
-        source: function( request, response ) {
-          // delegate back to autocomplete, but extract the last term
-          response( $.ui.autocomplete.filter(
-            taglist, extractLast( request.term ) ) );
-        },
-        select: function( event, ui ) {
-          var terms = split( this.value );
-          // remove the current input
-          terms.pop();
-          // add the selected item
-          terms.push( ui.item.value );
-          // add placeholder to get the comma-and-space at the end
-          terms.push( "" );
-          this.value = terms.join( " " );
-         
-          // show next search
-          console.log('select');
-          return false;
-        }
-      }).css('margin-left', '10px')
-      .focus(function(){            
-        $(this).autocomplete('search',this.value);
+
+    var select2_input = table_selector.prev().find('input[type="text"]')
+        // don't navigate away from the field on tab when selecting an item
+        /*.autocomplete({
+            minLength: 0,
+            source: function( request, response ) {
+                // delegate back to autocomplete, but extract the last term
+                response( $.ui.autocomplete.filter(
+                  taglist, extractLast( request.term ) ) );
+            },
+            select: function( event, ui ) {
+                var terms = split( this.value, " " );
+                // remove the current input
+                terms.pop();
+                // add the selected item
+                terms.push( ui.item.value );
+                // add placeholder to get the comma-and-space at the end
+                terms.push( " " );
+                this.value = terms.join( " " );
+                
+                // show next search
+                console.log('select');
+                return false;
+            },
+            change: function () {
+                $(this).autocomplete('search',this.value);
+            }
+        }).css('margin-left', '10px')
+        .bind( "keydown", function( event ) {
+            if ( event.keyCode === $.ui.keyCode.TAB &&
+                $( this ).autocomplete( "instance" ).menu.active ) {
+                    event.preventDefault();
+                }
+        }).focus( function () {
+            $(this).autocomplete('search',this.value);
+        });*/
+    .select2({
+        tags: taglist,
+        tokenSeparators: [",", " "]
+    });
+    select2_input.target_datatable = datatable;
+
+    select2_input.on('change', function() {
+        if(!$(this).data('select2').opened())
+            $(this).data('select2').open();
+     //   console.log('table', this.target_datatable);
+     //   this.target_datatable.search($(this)[0].value);
     });
 }
 

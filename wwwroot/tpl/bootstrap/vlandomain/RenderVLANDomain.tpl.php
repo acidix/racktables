@@ -31,7 +31,7 @@
 			<h2>VLANs (<?php $this->countMyVLANs ?>)</h2>
 			<table class=cooltable align=center border=0 cellpadding=5 cellspacing=0>
 			<tr><th>VLAN ID</th><th>propagation</th><th>
-			<?php $this->getH("PrintImageHref", array('net', 'IPv4 networks linked')); ?> 
+			<strong class='glyphicon glyphicon glyphicon-globe'></strong>
 			</th><th>ports</th><th>description</th></tr>
 			<?php $this->startLoop("allMyVLANs"); ?>	
 				<tr class=row_<?php $this->order ?>>

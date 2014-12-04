@@ -176,7 +176,8 @@ $this->setInMemoryTemplate("RenderNewEntityTags","<div class=tagselector><table 
  * FileSummaryDownloadLink
  * Usage: interface.php - renderFileSummary() to display the download link.
  */
-$this->setInMemoryTemplate('FileSummaryDownloadLink',"<a href='?module=download&file_id={{Id}}' src=?module=chrome&uri=pix/download.png title='Download' height=16 width=16 ><img ></a>&nbsp;");
+$this->setInMemoryTemplate('FileSummaryDownloadLink',"<a href='?module=download&file_id={{Id}}' title='Download'><span class='glyphicon glyphicon-cloud-download'></span></a>&nbsp;");
+
 /**
 *	ReportsCounters: 
 *	ReportsMesseges: 
@@ -185,11 +186,10 @@ $this->setInMemoryTemplate('FileSummaryDownloadLink',"<a href='?module=download&
 *	Usage: interface.php
 *
 **/
-$this->setInMemoryTemplate("ReportsCounter","<tr><td class=tdright>{{Header}}:</td><td class=tdleft>{{Data}}</td></tr>");
-$this->setInMemoryTemplate("ReportsMessages","<tr class='msg_{{Class}}'><td class=tdright>{{Header}}:</td><td class=tdleft>{{Text}}</td></tr>");
-$this->setInMemoryTemplate("ReportsCustom","<tr><td colspan=2>\n{{ItemCont}}\n</td></tr>");
-$this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{Title}}:</td><td class=tdcenter>\n{{ProgressBar}}\n<br><small>{{IsMax}}</small></td></tr>");
-
+$this->setInMemoryTemplate("ReportsCounter","<div class='row edit_row'><div class='col-sm-6 header'>{{Header}}:</div><div class='col-sm-6'>{{Data}}</div></div>");
+$this->setInMemoryTemplate("ReportsMessages","<div class='row edit_row msg_{{Class}}'><div class='col-sm-6 header'>{{Header}}:</div><div class='col-sm-6'>{{Text}}</div></div>");
+$this->setInMemoryTemplate("ReportsCustom","<div class='row edit_row'><div class='col-sm-12'>\n{{ItemCont}}\n</div></div>");
+$this->setInMemoryTemplate("ReportsMeters","<div class='row edit_row'><div class='col-sm-6 header'>{{Title}}:</div><div class='col-sm-6'>\n{{ProgressBar}}\n<br><small>{{IsMax}}</small></div></div>");
 
 /**
 *	GetProgressBar: 
@@ -198,7 +198,6 @@ $this->setInMemoryTemplate("ReportsMeters","<tr><td class=tdright>{{Title}}:</td
 **/
 $this->setInMemoryTemplate("GetProgressBar",'<div class="progress">' .
 						'<div class="progress-bar progress-bar" style="width: {{done}}%">{{done}}%</div></div>');
-
 
 /**
 *	NoVLANConfig: 
@@ -278,8 +277,8 @@ $this->setInMemoryTemplate('CellLink','<a href="{{Link}}">{{Title}}</a>');
  * Serialized Tag
  * Usage: serializeTags (interface-lib.php)
  */
-$this->setInMemoryTemplate('SerializedTagLink','<a href="{{BaseUrl}}cft[]={{ID}}" class="{{Class}}" title="{{Title}}">{{Tag}}</a>{{Delimiter}}');
-$this->setInMemoryTemplate('SerializedTag','<span class="{{Class}}" title="{{Title}}">{{Tag}}</span> {{Delimiter}}');
+$this->setInMemoryTemplate('SerializedTagLink','<div class="tag_small"><a href="{{BaseUrl}}cft[]={{ID}}" class="{{Class}}" title="{{Title}}">{{Tag}}</a></div>{{Delimiter}}');
+$this->setInMemoryTemplate('SerializedTag','<div class="tag_small"><span class="{{Class}}" title="{{Title}}">{{Tag}}</span></div> {{Delimiter}}');
 
 /**
  * FileSummaryComment
@@ -349,7 +348,7 @@ $this->setInMemoryTemplate("GlobalPlaceholder","{{Cont}}");
 *	Usage:  render8021QStatus -> interface.php
 *
 **/
-$this->setInMemoryTemplate("ETagsLine","<br><small class='tag_small'>{{cont}}</small>");
+$this->setInMemoryTemplate("ETagsLine","<br><small>{{cont}}</small>");
 
 /**
 *	PCodeLine: 
