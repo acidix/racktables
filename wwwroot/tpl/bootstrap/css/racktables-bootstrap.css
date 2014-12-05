@@ -128,7 +128,7 @@ body > header > nav.navbar.navbar-static-top {
 	/*border-bottom: inherit;*/
 }
 
-.highlight-ring.hidden-ring {
+.sidebar.tabbar.hidden-tabbar {
 	display: none;
 }
 

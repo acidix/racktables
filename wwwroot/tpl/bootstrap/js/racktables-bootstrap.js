@@ -37,9 +37,10 @@ function prepareContent(selector) {
     var tabs = $$("li.tab");
     var maxchildren = 0;
 
-    $$('.highlight-ring').addClass('hidden-ring');
+    $$('.row.sidebar.tabbar').addClass('hidden-tabbar');
     for (var i = 0; i < tabs.length; i++) {
-        $$('.highlight-ring').removeClass('hidden-ring');
+        $$('.row.sidebar.tabbar').removeClass('hidden-tabbar');
+
         var link = tabs.eq(i).children('a')[0].href;
         tabs.eq(i).prepend(getGlyphicon(tabs[i].id));
 
