@@ -229,6 +229,8 @@ function getGlyphicon(glyphiconID) {
         case 'objectedit':
         case 'portifcompatedit':
         case 'attrseditattrs':
+        case 'userlistedit':
+        case 'permsedit':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span></a>";
         case 'abort-btn':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-remove'></span></a>";
@@ -249,6 +251,7 @@ function getGlyphicon(glyphiconID) {
         case 'portifcompatdefault':
         case 'attrsdefault':
         case 'myaccountinterface':
+        case 'permsdefault':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-eye-open'></span></a>";
         case 'objectlog':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-list'></span></a>";
@@ -273,6 +276,7 @@ function getGlyphicon(glyphiconID) {
         case 'myaccountmypassword':
             return "<a class='tab-glyph'><strong class='glyphicon glyphicon glyphicon-lock'></strong></a>";
         case 'myaccountdefault':
+        case 'userlistdefault':
             return "<a class='tab-glyph'><strong class='glyphicon glyphicon glyphicon-user'></strong></a>";
         case 'myaccountqlinks':
             return "<a class='tab-glyph'><strong class='glyphicon glyphicon glyphicon-link'></strong></a>";
@@ -281,7 +285,7 @@ function getGlyphicon(glyphiconID) {
         case 'objecttags':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-tag'></span></a>"; 
         case 'roweditracks':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span><span class='glyphicon glyphicon-home'></span></a>";   
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span></a>";   
         case '8021qvstlist':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span></a>";
         default:

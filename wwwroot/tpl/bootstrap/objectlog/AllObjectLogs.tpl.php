@@ -1,18 +1,20 @@
-<?php if (defined("RS_TPL")) {?>
-<br><table width='80%' align=center border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>
-<tr valign=top><th class=tdleft>Object</th><th class=tdleft>Date/user</th>
-	<th class=tdcenter> <?php $this->get("Image_Href"); ?>  </th></tr>
-	
-	<?php $this->startLoop("LogTableData"); ?>
-	<tr class=row_<?php $this->order ?> valign=top>
-		<td class=tdleft> <?php $this->get("Object_id"); ?> </td>
-		<td class=tdleft> <?php $this->get("User"); ?> <br> <?php $this->get("Date"); ?> </td>
-		<td class="logentry"> <?php $this->get("Logentry"); ?> </td>
-	</tr>
-	<?php $this->endLoop(); ?>
+<?php if (defined("RS_TPL")) {?> 
 
-
-</table>	
+<div class="box box-primary">
+	<div class="box-body">
+	<table align=center class="table table-striped">
+		<tr valign=top><th class=tdleft>Object</th><th class=tdleft>Date/user</th>
+		<th style="text-align: center"><span class='glyphicon glyphicon glyphicon-file'></span></th></tr>	
+		<?php while( $this->loop("LogTableData") ) { ?>
+		<tr class=row_<?php $this->order ?> valign=top>
+			<td class=tdleft><?php $this->get("Object_id"); ?></td>
+			<td class=tdleft><?php $this->get("User"); ?><br><?php $this->get("Date"); ?> </td>
+			<td class="logentry"> <?php $this->get("Logentry"); ?></td>
+		</tr>
+		<?php } ?>
+	</table>
+	</div>
+</div>	
 
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />

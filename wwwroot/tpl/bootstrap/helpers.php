@@ -36,7 +36,7 @@ class TemplateHelperForm extends TemplateHelperAbstract
 	protected function generate($params)
 	{
 		global $pageno, $tabno;
-		if (count($params) == 0||$params[0]=="")
+		if (count($params) == 0 || $params[0] == "")
 		{
 			echo "";
 		}
@@ -55,7 +55,7 @@ class TemplateHelperForm extends TemplateHelperAbstract
 				}
 			}
 			
-			if (count($params)>2 && is_array($params[2])) {
+			if (count($params) > 2 && is_array($params[2])) {
 				foreach ($params[2] as $name => $value) {
 					echo " " . $name . "=\"" . $value . "\"";
 				}

@@ -1,9 +1,9 @@
 <?php if (defined("RS_TPL")) {?>
-<div class="box">
+<div class="box box-primary">
 	<div class="box-header">
 		<h3 class="box-title">VLAN existence per domain</h3>
 	</div>
-	<div class="box-content no-padding">
+	<div class="box-body">
 		<table class="table table-striped table-bordered">
 			<tbody>
 				<?php while($this->refLoop("OutputArr")) { ?>	

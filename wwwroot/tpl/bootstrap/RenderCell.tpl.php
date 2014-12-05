@@ -1,32 +1,33 @@
 <?php if (defined("RS_TPL")) {?>
 
 	<?php if ($this->is("typeUser",true)) { ?>
-
-		<table class='slbcell vscell'><tr><td>
-		<?php $this->getH("PrintImageHref","USER") ?> 
-		</td><td> <?php $this->get("UserRef") ?> </td></tr>
-		
+		<div class='slbcell vscell' align="center">
+		<div class='row'>
+			<div class='col-sm-6'><span style="font-size: 20px" class='glyphicon glyphicon glyphicon-user'></span></div>
+			<div class='col-sm-6 pull-right'><?php $this->get("UserRef") ?></div>
+		</div>
+		<div class='row'>
 		<?php if ($this->is("hasUserRealname",true)) { ?>
-			<tr><td><strong><?php $this->get("userRealname") ?></strong></td></tr>
+			<div class="col-sm-6 pull-left"><strong><?php $this->get("userRealname") ?></strong></div>
 		<?php } else { ?>
-			<tr><td class=sparenetwork>no name</td></tr>
-		<?php }?>
-		<td>
+			<div class="col-sm-6 pull-left">no name</div>
+		<?php }?> 
+		<div class="col-sm-6">
 			<?php $this->get('UserTags') ?>
-		</td></tr></table>
+		</div></div>
 	<?php } ?>
 
 	<?php if ($this->is("typeFile",true)) { ?>
 		<div class='slbcell vscell'>
 			<div class="row"><div class="col-sm-4 header">
 				<?php $this->get("fileImgSpace"); ?>
-				</div><div class="col-sm-4">
+				</div><div class="col-sm-4 pull-right">
 				<?php $this->get("nameAndID") ?>
-				</div><div class="col-sm-4">
+				</div><div class="col-sm-4 pull-right">
 				<small><?php $this->get("serializedLinks"); ?></small>
 			</div></div><div class="row"><div class="col-sm-4 header">
 				<?php $this->get("fileCount") ?>
-				</div><div class="col-sm-4 header">
+				</div><div class="col-sm-4 pull-right">
 				<?php if ($this->is("isolatedPerm",true)) { ?>
 					<a href='?module=download&file_id=<?php $this->get("cellID") ?>'>
 					<span style="font-size: 20px" class='glyphicon glyphicon-cloud-download'></span>
@@ -58,7 +59,6 @@
 	<?php } ?>
 
 	<?php if ($this->is("typeRack",true)) { ?>
-
 		<table class='slbcell vscell'><tr><td>
 		<img border=0 width=<?php $this->thumbWidth ?> 
 					height=<?php $this->thumbHeight ?> title='<?php $this->cellHeight ?> units' 

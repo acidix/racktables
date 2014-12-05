@@ -24,7 +24,7 @@
 					<?php while($this->loop('AddTable')) { ?>
 					<tr count="<?php $this->i ?>" >
 						<td><?php $this->NiftySelect; ?></td>
-						<td><input type=text name=<?php $this->i ?>_object_name></td>
+						<td><input type=text name=<?php $this->i ?>_object_name tabindex=<?php echo $this->_Tabindex + 1; ?>></td>
 						<td><input type=text name=<?php $this->i ?>_object_label ></td>
 						<td><input type=text name=<?php $this->i ?>_object_asset_no ></td>
 						<td style="min-width: 100px"><?php $this->TagsPicker; ?></td>

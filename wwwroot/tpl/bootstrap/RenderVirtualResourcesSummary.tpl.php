@@ -6,10 +6,10 @@
 			</div>
 			<div class="box-body" style="position: relative">
 				<?php if ($this->is("areClusters",true)) { ?>
-					<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>
+					<table class="table table-striped" align="center">
 					<tr><th>Cluster</th><th>Hypervisors</th><th>Resource Pools</th><th>Cluster VMs</th><th>RP VMs</th><th>Total VMs</th></tr>
 					<?php $this->startLoop("clustersArray"); ?>	
-						<tr class=row_<?php $this->order ?> valign=top>
+						<tr valign=top>
 						<td class="tdleft"> <?php $this->mka ?> </td>
 						<td class='tdleft'><?php $this->clusterHypervisor ?> </td>
 						<td class='tdleft'><?php $this->clusterResPools ?> </td>
@@ -31,10 +31,10 @@
 			</div>
 			<div class="box-body" style="position: relative">
 				<?php if ($this->is("areResPools",true)) { ?>
-					<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>
+					<table class="table table-striped" align="center">
 					<tr><th>Pool</th><th>Cluster</th><th>VMs</th></tr>
 					<?php $this->startLoop("poolsArray"); ?>	
-						<tr class=row_<?php $this->order ?>  valign=top>
+						<tr valign=top>
 						<td class="tdleft"><?php $this->mka ?> </td>
 						<td class="tdleft">
 						<?php $this->clusterID ?> 
@@ -57,10 +57,10 @@
 			</div>
 			<div class="box-body" style="position: relative">
 				<?php if ($this->is("areHypervisors",true)) { ?>
-					<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>
+					<table class="table table-striped" align="center">
 					<tr><th>Hypervisor</th><th>Cluster</th><th>VMs</th></tr>
 					<?php $this->startLoop("hypersArray"); ?>	
-						<tr class=row_<?php $this->order ?>  valign=top>
+						<tr valign=top>
 						<td class="tdleft"><?php $this->mka ?> </td>
 						<td class="tdleft">
 						<?php $this->hyperID ?> 
@@ -80,10 +80,10 @@
 			</div>
 			<div class="box-body" style="position: relative">
 				<?php if ($this->is("areSwitches",true)) { ?>
-					<table border=0 cellpadding=5 cellspacing=0 align=center class=cooltable>
+					<table class="table table-striped" align="center">
 					<tr><th>Name</th></tr>
 					<?php $this->startLoop("switchesArray"); ?>	
-						<tr class=row_<?php $this->order ?>  valign=top>
+						<tr  valign=top>
 						<td class="tdleft"><?php $this->mka ?> </td>
 						</tr>
 					<?php $this->endLoop(); ?>

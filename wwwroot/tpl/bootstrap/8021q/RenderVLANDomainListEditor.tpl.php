@@ -1,9 +1,9 @@
 <?php if (defined("RS_TPL")) {?>
-<div class="box">
+<div class="box box-primary">
 	<div class="box-header">
 		<h3 class="box-title">VLAN domain list</h3>
 	</div>
-	<div class="box-content no-padding">
+	<div class="box-body">
 		<table class="table">
 			<thead>
 				<tr><th>&nbsp;</th><th>description</th><th>&nbsp;</th></tr>
@@ -13,13 +13,13 @@
 					<?php $this->getH("PrintOpFormIntro", array('add')); ?>
 					<tr>
 						<td>
-							<?php $this->getH("PrintImageHREF", array( 'create', 'create domain', TRUE, 104)); ?> 
+							<button submit class="btn btn-primary" title="Create domain" tabindex="104"><span class="glyphicon glyphicon-plus"></span></button>
 						</td>
 						<td>
 							<input type=text size=48 name=vdom_descr tabindex=102>
 						</td>
 						<td>
-							<?php $this->getH("PrintImageHREF", array( 'create', 'create domain', TRUE, 103)); ?>
+							<button submit class="btn btn-primary" title="Create domain" tabindex="104"><span class="glyphicon glyphicon-plus"></span></button>
 						</td>
 					</tr>
 					</form> 
@@ -38,13 +38,13 @@
 					<?php $this->getH("PrintOpFormIntro", array('add')); ?>
 					<tr>
 						<td>
-							<?php $this->getH("PrintImageHREF", array( 'create', 'create domain', TRUE, 104)); ?> 
+							<button submit class="btn btn-primary" title="Create domain" tabindex="104"><span class="glyphicon glyphicon-plus"></span></button>
 						</td>
 						<td>
 							<input type=text size=48 name=vdom_descr tabindex=102>
 						</td>
 						<td>
-							<?php $this->getH("PrintImageHREF", array( 'create', 'create domain', TRUE, 103)); ?>
+							<button submit class="btn btn-primary" title="Create domain" tabindex="104"><span class="glyphicon glyphicon-plus"></span></button>
 						</td>
 					</tr>
 					</form> 
