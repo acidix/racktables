@@ -3,7 +3,7 @@
 	<div class="box-header">
 		<h3 class="box-title">VLAN domains</h3>
 	</div>
-	<div class="box-content no-padding">
+	<div class="box-body">
 		<table class="table">
 			<thead>
 				<tr>
@@ -36,7 +36,7 @@
 	<div class="box-header">
 		<h3 class="box-title">switch templates</h3>
 	</div>
-	<div class="box-content no-padding">
+	<div class="box-body">
 		<table class="table">
 			<thead>
 				<tr><th>description</th><th>rules</th><th>switches</th></tr>
@@ -65,7 +65,7 @@
 	<div class="box-header">
 		<h3 class="box-title">deploy queues</h3>
 	</div>
-	<div class="box-content no-padding">
+	<div class="box-body">
 		<table class="table">
 			<tbody>
 				<?php $this->startLoop("allDeployQueues"); ?>	

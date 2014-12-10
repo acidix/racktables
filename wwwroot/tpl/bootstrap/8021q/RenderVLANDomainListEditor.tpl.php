@@ -12,27 +12,26 @@
 				<?php if ($this->is("isAddNew", true)) { ?>
 					<?php $this->getH("PrintOpFormIntro", array('add')); ?>
 					<tr>
-						<td>
-							<button submit class="btn btn-primary" title="Create domain" tabindex="104"><span class="glyphicon glyphicon-plus"></span></button>
-						</td>
-						<td>
-							<input type=text size=48 name=vdom_descr tabindex=102>
-						</td>
-						<td>
-							<button submit class="btn btn-primary" title="Create domain" tabindex="104"><span class="glyphicon glyphicon-plus"></span></button>
-						</td>
+						<td><input type=text size=48 name=vdom_descr tabindex=102 class="form-control"></td>
+						<td><button class="btn btn-primary" style="margin-left: 13px" title="Create domain" name="submit"><span class="glyphicon glyphicon-plus"></span></button></td>
 					</tr>
 					</form> 
 				<?php } ?>
 				<?php while($this->loop("allDomainStats")) { ?>	
-					<?php $this->formIntro ?> 
-					<tr><td>
-						<?php $this->imageNoDestroy ?> 	
-						<?php $this->linkDestroy ?> 
-					</td><td><input name=vdom_descr type=text size=48 value=<?php $this->niftyStr ?>> 
-					</td><td>
-						<?php $this->imageUpdate ?> 
-					</td></tr></form>
+					<?php $this->getH('PrintOpFormIntro', array('upd', array ('vdom_id' => $this->_Id))); ?>
+					<tr>
+						<td style="vertical-align: middle"><input name=vdom_descr type=text size=48 value="<?php $this->NiftyStr; ?>" class="form-control"></td>
+						<td>
+							<div class="btn btn-group" style="box-shadow: none;">
+								<button class="btn btn-success" name="submit"><span class="glyphicon glyphicon-ok"></span></button>
+								<?php if($this->is('ImageNoDestroy')) { ?>
+									<a href="#" class="btn btn-danger disabled"><span class="glyphicon glyphicon-remove"></span></a>
+								<?php } else { ?>
+									<?php $this->getH('GetOpLink', array(array ('op' => 'del', 'vdom_id' => $this->_Id), '<span class="glyphicon glyphicon-remove"></span>', '', 'Delete domain', 'btn btn-danger')); ?>
+								<?php } ?>
+							</div>
+						</td>
+					</tr></form>
 				<?php } ?>
 				<?php if (!$this->is("isAddNew", true)) { ?>
 					<?php $this->getH("PrintOpFormIntro", array('add')); ?>
