@@ -232,6 +232,8 @@ function getGlyphicon(glyphiconID) {
         case 'attrseditattrs':
         case 'userlistedit':
         case 'permsedit':
+        case 'parentmapedit':
+        case 'portmapedit':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span></a>";
         case 'abort-btn':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-remove'></span></a>";
@@ -253,6 +255,8 @@ function getGlyphicon(glyphiconID) {
         case 'attrsdefault':
         case 'myaccountinterface':
         case 'permsdefault':
+        case 'parentmapdefault':
+        case 'portmapdefault':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-eye-open'></span></a>";
         case 'objectlog':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-list'></span></a>";

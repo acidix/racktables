@@ -1,12 +1,12 @@
 <?php if (defined("RS_TPL")) {?>
-
-	<br><table class=cooltable border=0 cellpadding=5 cellspacing=0 align=center>
-	<tr><th>Parent</th><th>Child</th></tr>
-	<?php $this->startLoop('Looparray'); ?>
-	<tr class=row_<?php $this->Order; ?>><td><?php $this->Parentname; ?></td><td><?php $this->Childname; ?></td></tr>
-	<?php $this->endLoop(); ?>
-	</table>
-
+<div class="box box-primary">
+	<div class="box-body">
+	<div class="row edit_row"><div class="col-sm-6 header tdright">Parent</div><div class="col-sm-6 header tdleft">Child</div></div>
+	<?php while( $this->Loop('Looparray') ) { ?>
+		<div class="row edit_row"><div class="col-sm-6 tdright"><?php $this->Parentname; ?></div><div class="col-sm-6 tdleft"><?php $this->Childname; ?></div></div>
+	<?php } ?>
+	</div>
+</div>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />
