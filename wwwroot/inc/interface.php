@@ -4015,6 +4015,8 @@ function renderObjectParentCompatEditor()
             $last_left_parent_id = $pair['parent_objtype_id'];
         }
         $mod->addOutput('Looparray', array(
+                            'Parent_Id' => $pair['parent_objtype_id'],
+                            'Child_Id' => $pair['child_objtype_id'],
                             'Order' => $order,
                             'Parentname' => $pair['parent_name'],
                             'Childname' => $pair['child_name'],
