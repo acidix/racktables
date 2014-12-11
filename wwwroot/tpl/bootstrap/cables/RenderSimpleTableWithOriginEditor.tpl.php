@@ -20,22 +20,19 @@
 				<?php } ?>
 				<?php while($this->refLoop('AllRows')) { ?>
 					<tr>
-						<?php if ($this->is('OriginIsDefault')) { ?>
-							<td><?php $this->getH('PrintImageHref', array('computer', 'default')); ?></td>
-							<td><?php $this->RowValueWidth ?></td>
-							<td>&nbsp;</td>
-						<?php } else { ?>
-							<?php $this->getH('PrintOpFormIntro', array('upd', array ($this->_Key => $this->_ColumnKey))); ?>
-							<td><?php $this->getH("PrintImageHref", array('favorite', 'custom')); ?></td>
-							<td><input type=text size=<?php $this->Width ?> name=<?php $this->Value ?> value='<?php $this->RowValueWidth ?>'></td>
-							<td>
-								<div class="btn-group">
-									<button class="btn btn-succes" name="submit"><span class="glyphicon glyphicon-ok"></span></button>
-									<?php $this->getH('GetOpLink', array(array ('op' => 'del', $this->_Key => $this->_ColumnKey), '<span class="glyphicon glyphicon-remove"></span>', '', 'remove', 'btn btn-danger')); ?>
-								</div>
-							</td>
-							</form>
-						<?php } ?> 
+					<?php if ($this->is('OriginIsDefault', true)) { ?>
+						<td><?php $this->getH('PrintImageHref', array('computer', 'default')); ?></td>
+						<td>&nbsp;</td>
+						<td><?php $this->RowValueWidth ?></td>
+						<td>&nbsp;</td>
+					<?php } else { ?>
+						<td><?php $this->getH('PrintOpFormIntro', array('upd', array ($this->_Key => $this->_ColumnKey))); ?>
+						<?php $this->getH("PrintImageHref", array('favorite', 'custom')); ?></td>
+						<td><?php $this->getH('GetOpLink', array(array ('op' => 'del', $this->_Key => $this->_ColumnKey), '', 'destroy', 'remove')); ?></td>
+						<td><input type=text size=<?php $this->Width ?> name=<?php $this->Value ?> value='<?php $this->RowValueWidth ?>'></td>
+						<td><?php $this->getH('PrintImageHref', array('save', 'Save changes', TRUE)); ?></td>
+						</form>
+					<?php } ?> 
 					</tr>
 				<?php } ?>
 				<?php if(!$this->is('NewTop')) { ?>

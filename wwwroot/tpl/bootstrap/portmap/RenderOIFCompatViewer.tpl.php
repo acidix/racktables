@@ -2,7 +2,7 @@
 <div class="box">
 	<div class="box-header">
 	</div>
-	<div class="box-content no-padding">
+	<div class="box-body">
 		<table class="table table-striped">
 			<thead>
 				<tr><th>From interface</th><th>To interface</th></tr>

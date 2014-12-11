@@ -1,38 +1,42 @@
 <?php if (defined("RS_TPL")) {?>
 <div class="box box-primary">
 	<div class="box-body">
-	
-	<div class="row edit_row"><div class="col-sm-4"></div><div class="col-sm-4 header tdright">Parent</div><div class="col-sm-4 header tdleft">Child</div></div>
-	<?php if($this->is("AddTop", true)) : ?>
-		<?php $this->getH('PrintOpFormIntro', 'add'); ?>
-		<div class="row edit_row">
-			<div class="col-sm-4"><button class="btn btn-primary btn-sm" title="Add pair" name="submit"><span class="glyphicon glyphicon-plus"></span></button></div>
-			<div class="col-sm-4 tdright"><?php $this->Parent; ?></div>
-			<div class="col-sm-4 tdleft"><?php $this->Child; ?></div>
-		</div>
-		</form>
-	<?php endif ?>
-	
-	<?php $this->startLoop('Looparray'); ?>
-		<div class="row edit_row">
-			<div class="col-sm-4"><a class="btn btn-danger btn-sm" href="?module=redirect&amp;op=del&amp;parent_objtype_id=<?php $this->Parent_Id ?>&amp;child_objtype_id=<?php $this->Child_Id ?>&amp;page=parentmap&amp;tab=edit" title="Remove pair">
-				<span class="glyphicon glyphicon-minus"></span>
-			</a></div>
-			<div class="col-sm-4 tdright"><?php $this->Parentname; ?></div>
-			<div class="col-sm-4 tdleft"><?php $this->Childname; ?></div>
-		</div>
-	<?php $this->endLoop(); ?>
-	
-	<?php if($this->is("AddTop", false)) : ?>
-		<?php $this->getH('PrintOpFormIntro', 'add'); ?>
-		<div class="row edit_row">
-			<div class="col-sm-4"><button class="btn btn-primary btn-sm" title="Add pair" name="submit"><span class="glyphicon glyphicon-plus"></span></button></div>
-			<div class="col-sm-4 tdright"><?php $this->Parent; ?></div>
-			<div class="col-sm-4 tdleft"><?php $this->Child; ?></div>
-		</div>
-		</form>
-	<?php endif ?>
-	</div>
+	<table class="table table-striped">
+	<thead>
+		<tr><th>&nbsp;</th><th>Parent</th><th>Child</th></tr>
+	</thead>
+	<tbody>
+		<?php if($this->is("AddTop", true)) : ?>
+			<?php $this->getH('PrintOpFormIntro', 'add'); ?>
+			<tr>
+				<td><button class="btn btn-primary btn-sm" title="Add pair" name="submit"><span class="glyphicon glyphicon-plus"></span></button></td>
+				<td class="tdright"><?php $this->Parent; ?></td>
+				<td class="tdleft"><?php $this->Child; ?></td>
+			</tr>
+			</form>
+		<?php endif ?>
+		
+		<?php while( $this->Loop('Looparray') ) { ?>
+			<tr>
+				<td>
+				<?php $this->getH('GetOpLink', array(array ('op' => 'del', 'parent_objtype_id' => $this->_Parent_Id, 'child_objtype_id' => $this->_Child_Id), '<span class="glyphicon glyphicon-minus"></span>', '', 'Remove pair', 'btn btn-danger btn-sm')); ?>
+				</td>
+				<td class="tdright"><?php $this->Parentname; ?></td>
+				<td class="tdleft"><?php $this->Childname; ?></td>
+			</tr>
+		<?php } ?>
+		
+		<?php if($this->is("AddTop", false)) : ?>
+			<?php $this->getH('PrintOpFormIntro', 'add'); ?>
+			<tr>
+				<td><button class="btn btn-primary btn-sm" title="Add pair" name="submit"><span class="glyphicon glyphicon-plus"></span></button></td>
+				<td class="tdright"><?php $this->Parent; ?></td>
+				<td class="tdleft"><?php $this->Child; ?></td>
+			</tr>
+			</form>
+		<?php endif ?>
+	</tbody>
+	</table>
 </div>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />

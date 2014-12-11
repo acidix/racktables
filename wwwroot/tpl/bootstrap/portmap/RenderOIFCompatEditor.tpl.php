@@ -3,7 +3,7 @@
 	<div class="box-header">
 		<h3 class="box-title">WDM wideband receivers</h3>
 	</div>
-	<div class="box-content no-padding">
+	<div class="box-body">
 		<table class="table">
 			<thead>
 				<tr><th>&nbsp;</th><th>enable</th><th>disable</th></tr>
@@ -11,9 +11,9 @@
 			<tbody>
 				<?php while($this->loop('WDMPacks')) : ?> 
 					<tr class=row_<?php $this->Order; ?>><td class=tdleft><?php $this->Title; ?></td><td>
-						<?php $this->getH('GetOpLink', array( array ('op' => 'addPack', 'standard' => $this->_Codename), '', 'add')); ?>
+						<?php $this->getH('GetOpLink', array( array ('op' => 'addPack', 'standard' => $this->_Codename), '<span class="glyphicon glyphicon-plus"></span>', '', 'Add', 'btn btn-success btn-sm')); ?>
 					</td><td>
-						<?php $this->getH('GetOpLink', array( array ('op' => 'delPack', 'standard' => $this->_Codename), '', 'delete')); ?>
+						<?php $this->getH('GetOpLink', array( array ('op' => 'delPack', 'standard' => $this->_Codename), '<span class="glyphicon glyphicon-minus"></span>', '', 'Delete', 'btn btn-danger btn-sm')); ?>
 					</td></tr>
 				<?php endwhile ?>
 			</tbody>
@@ -24,7 +24,7 @@
 	<div class="box-header">
 		<h3 class="box-title">interface by interface</h3>
 	</div>
-	<div class="box-content no-padding">
+	<div class="box-body">
 		<table class="table table-striped">
 			<thead>
 				<tr><th>&nbsp;</th><th>From Interface</th><th>To Interface</th></tr>
@@ -33,7 +33,7 @@
 				<?php if($this->is('NewTop')) : ?>
 					<?php $this->getH('PrintOpFormIntro', 'add'); ?>
 						<tr><th class=tdleft>
-							<?php $this->getH('PrintImageHref', array('add', 'add pair', TRUE)); ?>
+							<button submit title="Add pair" class="btn btn-primary btn-sm" ><span class="glyphicon glyphicon-plus"></span></button>
 						</th><th class=tdleft>
 							<?php $this->CreateNewType1; ?>
 						</th><th class=tdleft>
@@ -43,7 +43,7 @@
 				<?php endif ?>
 				<?php while($this->refLoop('Interfaces')) : ?> 				
 					<tr><td>
-						<?php $this->getH('GetOpLink', array(array ('op' => 'del', 'type1' => $this->_Type1, 'type2' => $this->_Type2), '', 'delete', 'remove pair')); ?>
+						<?php $this->getH('GetOpLink', array(array ('op' => 'del', 'type1' => $this->_Type1, 'type2' => $this->_Type2), '<span class="glyphicon glyphicon-minus"></span>', '', 'Remove pair', 'btn btn-danger btn-sm')); ?>
 					</td><td class=tdleft><?php $this->Type1name; ?></td><td class=tdleft><?php $this->Type2name; ?></td></tr>
 				<?php endwhile ?>
 				<?php if(!$this->is('NewTop')) : ?>
