@@ -3983,7 +3983,7 @@ function renderObjectParentCompatEditor()
     $mod = $tplm->generateSubmodule("Payload", "RenderObjectParentCompatEditor");
     $mod->setNamespace("parentmap");
 
-    function printNewitemTR()
+    function printNewitemTR($mod)
     {
         $chapter = readChapter (CHAP_OBJTYPE);
         // remove rack, row, location
@@ -3998,7 +3998,7 @@ function renderObjectParentCompatEditor()
     if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
     {
         $mod->addOutput("AddTop", true);
-        printNewitemTR();
+        printNewitemTR($mod);
 
     }
 
@@ -4022,7 +4022,7 @@ function renderObjectParentCompatEditor()
     if (getConfigVar ('ADDNEW_AT_TOP') != 'yes')
     {
         $mod->addOutput("AddTop", false);
-        printNewitemTR();
+        printNewitemTR($mod);
     }
 }
 
