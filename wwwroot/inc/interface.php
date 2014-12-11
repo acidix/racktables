@@ -3369,7 +3369,7 @@ function renderNATv4ForObject ($object_id)
         $allNatv4FocusOut[] = $singleFocus;
     }
 
-    $mod->addOutput("allNatv4Focus", $allNatv4FocusOut);
+    $mod->addOutput("AllNatv4Focus", $allNatv4FocusOut);
 }
 
 function renderAddMultipleObjectsForm ()
@@ -6776,19 +6776,12 @@ function renderIIFOIFCompat()
 function renderTwoColumnCompatTableEditor ($compat, $left, $right, $parent = null, $placeholder = 'TwoColumnCompatTableEditor')
 {
     function printNewitemTR ($lkey, $loptions, $rkey, $roptions, $parent = null, $placeholder = 'NewitemTR')
-    {
+    {   
         $tplm = TemplateManager::getInstance();
-        if($parent == null)
-            $mod = $tplm->generateModule("TwoColumnCompatTableEditor_PrintNew");
-        else
-            $mod = $tplm->generateSubmodule($placeholder,"TwoColumnCompatTableEditor_PrintNew", $parent);
-        $mod->setNamespace("portifcompat");
+        $mod = $tplm->generatePseudoSubmodule($placeholder, $parent);
 
         printSelect ($loptions, array ('name' => $lkey, 'tabindex' => 100), NULL, $mod, "lOptions");
         printSelect ($roptions, array ('name' => $rkey, 'tabindex' => 110), NULL, $mod, "rOptions");
-        
-        if($parent == null)
-            return $mod->run();
     }
 
     global $nextorder;
