@@ -1,9 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
 <div class="box">
-	<div class="box-header">
-		<h3 class="box-title">TITLE HERE</h3>
-	</div>
-	<div class="box-content no-padding">
+	<div class="box-body">
 		<table class="table">
 			<thead>
 				<tr><th>Origin</th><th>Key</th><th><?php $this->ColHeader ?></th></tr>
@@ -13,9 +10,9 @@
 					<tr>
 						<td>
 							<?php if ($this->is('OriginIsDefault')) { ?>
-								<?php $this->getH('PrintImageHref', array('computer', 'default')); ?><!-- @TODO Put the symbols for default/custom here -->
+								<span class="glyphicon glyphicon-home"></span>
 							<?php } else { ?>
-								<?php $this->getH("PrintImageHref", array('favorite', 'custom')); ?>
+								<span style="color: red" class="glyphicon glyphicon-heart"></span>
 							<?php } ?> 
 						</td>
 						<td><?php $this->RowColumnKey ?></td>

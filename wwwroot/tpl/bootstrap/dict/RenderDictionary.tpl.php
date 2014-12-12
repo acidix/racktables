@@ -1,9 +1,9 @@
 <?php if (defined("RS_TPL")) {?>
-	<ul>
+<div class="list-group">
 	<?php $this->startLoop('ChapterList'); ?>
-		<li><?php $this->Link; ?> (<?php $this->Records; ?> records)</li>
+		<div class="list-group-item"><?php $this->Link; ?> (<?php $this->Records; ?> records)</div>
 	<?php $this->endLoop(); ?>
-	</ul>
+</div>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

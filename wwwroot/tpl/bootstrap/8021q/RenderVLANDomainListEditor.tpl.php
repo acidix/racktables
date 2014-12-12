@@ -25,7 +25,7 @@
 							<div class="btn btn-group" style="box-shadow: none;">
 								<button class="btn btn-success" name="submit"><span class="glyphicon glyphicon-ok"></span></button>
 								<?php if($this->is('ImageNoDestroy')) { ?>
-									<a href="#" class="btn btn-danger disabled"><span class="glyphicon glyphicon-remove"></span></a>
+									<a href="#" class="btn btn-danger disabled"><span class="glyphicon glyphicon-minus"></span></a>
 								<?php } else { ?>
 									<?php $this->getH('GetOpLink', array(array ('op' => 'del', 'vdom_id' => $this->_Id), '<span class="glyphicon glyphicon-remove"></span>', '', 'Delete domain', 'btn btn-danger')); ?>
 								<?php } ?>

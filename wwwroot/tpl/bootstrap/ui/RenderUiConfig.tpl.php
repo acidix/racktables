@@ -3,7 +3,7 @@
 	<div class="box-header">
 		<h3 class="box-title">Current configuration</h3>
 	</div>
-	<div class="box-content no-padding">
+	<div class="box-body">
 		<table class="table">
 			<thead>
 				<th>Option</th><th>Value</th>

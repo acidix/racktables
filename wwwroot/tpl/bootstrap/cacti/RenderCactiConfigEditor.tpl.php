@@ -3,7 +3,7 @@
 		<div class="box-header">
 			<h3 class="box-title">Cacti editor</h3>
 		</div>
-		<div class="box-body no-padding">
+		<div class="box-body">
 			<table class=table>
 				<tr><th>base URL</th><th>username</th><th>password</th><th>graph(s)</th><th>&nbsp;</th></tr>
 				<?php if($this->is('AddTop', true)) { ?>

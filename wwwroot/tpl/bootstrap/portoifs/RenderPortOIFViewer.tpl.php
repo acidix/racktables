@@ -3,7 +3,7 @@
 	<div class="box-header">
 		
 	</div>
-	<div class="box-content no-padding">
+	<div class="box-body">
 		<table class="table table-striped">
 			<thead>
 				<tr><th>Origin</th><th>Key</th><th>Refcnt</th><th>Outer Interface</th></tr>
@@ -11,7 +11,7 @@
 			<tbody>
 				<?php while($this->loop('AllOptions')) : ?>	
 					<tr class=row_<?php $this->Order ?>>
-						<td class=tdleft><?php $this->ImageHref ?></td>
+						<td class=tdleft><span class="glyphicon glyphicon-home"></span></td>
 						<td class=tdright><?php $this->Oif_id ?></td>
 						<td class=tdright><?php $this->Refcnt ?></td>
 						<td class=tdleft><?php $this->NiftyString ?></td>

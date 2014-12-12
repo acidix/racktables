@@ -234,14 +234,22 @@ function getGlyphicon(glyphiconID) {
         case 'permsedit':
         case 'parentmapedit':
         case 'portmapedit':
+        case '8021qvstlist':
+        case 'cableconfcabletypes':
+        case 'roweditracks':
+        case 'portoifsedit':
+        case 'dictchapters':
+        case 'tagtreeedit':
+        case 'cactiservers':
+        case 'muninservers':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span></a>";
         case 'abort-btn':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-remove'></span></a>";
         case 'reportsrackcode':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-hdd'></span></a>";
         case 'reportsintegrity':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-hdd'></span></a>";
         case 'attrseditmap':
+        case 'cableconfconnectors':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-random'></span></a>";
         case 'reportswarranty':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-time'></span></a>";
@@ -257,7 +265,15 @@ function getGlyphicon(glyphiconID) {
         case 'permsdefault':
         case 'parentmapdefault':
         case 'portmapdefault':
+        case 'cableconfdefault':
+        case 'portoifsdefault':
+        case 'dictdefault':
+        case 'tagtreedefault':
+        case 'cactidefault':
+        case 'munindefault':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-eye-open'></span></a>";
+        case 'cableconfoifcompat':
+            return "<a class='tab-glyph'><span class='glyphicon glyphicon-resize-full'></span></a>";
         case 'objectlog':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-list'></span></a>";
         case 'objectports':
@@ -284,15 +300,12 @@ function getGlyphicon(glyphiconID) {
         case 'userlistdefault':
             return "<a class='tab-glyph'><strong class='glyphicon glyphicon glyphicon-user'></strong></a>";
         case 'myaccountqlinks':
+        case 'cableconfconncompat':
             return "<a class='tab-glyph'><strong class='glyphicon glyphicon glyphicon-link'></strong></a>";
         case 'rowtagroller':
         case 'ipv4nettags':
         case 'objecttags':
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-tag'></span></a>"; 
-        case 'roweditracks':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span></a>";   
-        case '8021qvstlist':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span></a>";
         default:
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-exclamation-sign'></span></a>"; 
     }

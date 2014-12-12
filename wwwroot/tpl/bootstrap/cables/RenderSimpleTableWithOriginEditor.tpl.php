@@ -1,9 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
 <div class="box">
-	<div class="box-header">
-		<h3 class="box-title">TITLE HERE</h3>
-	</div>
-	<div class="box-content no-padding">
+	<div class="box-body">
 		<table class="table">
 			<thead>
 				<tr><th>Origin</th><th><?php $this->ColHeader ?></th></tr>
@@ -14,23 +11,23 @@
 					<tr>
 						<td>&nbsp;</td>
 						<td><input type=text size=<?php $this->ColumnWidth ?> name=<?php $this->ColumnValue ?> tabindex=100></td>
-						<td class=tdleft><button class="btn btn-primary" name="submit"><span class="glyphicon glyphicon-ok"></span></button></td>
+						<td><button class="btn btn-primary btn-sm" title="Create new" name="submit"><span class="glyphicon glyphicon-plus"></span></button></td>
 					</tr>
 					</form>
 				<?php } ?>
 				<?php while($this->refLoop('AllRows')) { ?>
 					<tr>
 					<?php if ($this->is('OriginIsDefault', true)) { ?>
-						<td><?php $this->getH('PrintImageHref', array('computer', 'default')); ?></td>
-						<td>&nbsp;</td>
+						<td><span class="glyphicon glyphicon-home"></span></td>
+							<td>&nbsp;</td>
 						<td><?php $this->RowValueWidth ?></td>
 						<td>&nbsp;</td>
 					<?php } else { ?>
-						<td><?php $this->getH('PrintOpFormIntro', array('upd', array ($this->_Key => $this->_ColumnKey))); ?>
-						<?php $this->getH("PrintImageHref", array('favorite', 'custom')); ?></td>
-						<td><?php $this->getH('GetOpLink', array(array ('op' => 'del', $this->_Key => $this->_ColumnKey), '', 'destroy', 'remove')); ?></td>
+						<?php $this->getH('PrintOpFormIntro', array('upd', array ($this->_Key => $this->_ColumnKey))); ?>
+						<td><span style="color: red" class="glyphicon glyphicon-heart"></span></td>
+						<td><?php $this->getH('GetOpLink', array(array ('op' => 'del', $this->_Key => $this->_ColumnKey), '<span class="glyphicon glyphicon-minus"></span>', '', 'Remove', 'btn btn-danger btn-sm')); ?></td>
 						<td><input type=text size=<?php $this->Width ?> name=<?php $this->Value ?> value='<?php $this->RowValueWidth ?>'></td>
-						<td><?php $this->getH('PrintImageHref', array('save', 'Save changes', TRUE)); ?></td>
+						<td><button class="btn btn-success btn-sm" title="Save changes" name="submit"><span class="glyphicon glyphicon-ok"></span></button></td>
 						</form>
 					<?php } ?> 
 					</tr>
@@ -40,7 +37,7 @@
 					<tr>
 						<td>&nbsp;</td>
 						<td><input type=text size=<?php $this->ColumnWidth ?> name=<?php $this->ColumnValue ?> tabindex=100></td>
-						<td class=tdleft><button class="btn btn-primary" name="submit"><span class="glyphicon glyphicon-ok"></span></button></td>
+						<td><button class="btn btn-primary btn-sm" title="Create new" name="submit"><span class="glyphicon glyphicon-plus"></span></button></td>
 					</tr>
 					</form>
 				<?php } ?>

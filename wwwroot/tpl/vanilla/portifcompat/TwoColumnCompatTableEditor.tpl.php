@@ -13,7 +13,8 @@
 	<?php } ?>
 	<?php while($this->refLoop("AllCompats")) { ?>	
 			<tr class=row_<?php $this->Order ?>><td>
-			<?php $this->OpLink ?>
+			<?php $this->getH('GetOpLink', array(array ('op' => 'del', $this->_Left_Key => $this->_ItemLeft_Key,
+							  $this->_Right_Key => $this->_ItemRight_Key, '', 'delete', 'remove pair')); ?>
 			</td><td class=tdleft><?php $this->LeftValue ?></td><td class=tdleft><?php $this->RightValue ?></td></tr>
 		<?php } ?> 
 	<?php while ($this->loop('AddNewBottom')) { ?>

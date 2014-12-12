@@ -4356,8 +4356,7 @@ function renderPortOIFEditor()
             {
                 $singleOption['DestroyLink'] = getOpLink (array ('op' => 'del', 'id' => $oif_id), '', 'destroy', 'remove');
             }
-            $singleOption['
-                          SaveImg'] = getImageHREF ('save', 'Save changes', TRUE);
+            $singleOption['SaveImg'] = getImageHREF ('save', 'Save changes', TRUE);
         }
         $allOptionsOut[] = $singleOption;
     }
@@ -9283,12 +9282,13 @@ function renderMuninServersEditor()
         $singleServer = array(  'FormIntro' => printOpFormIntro ('upd', array ('id' => $server['id'])),
                                 'SpecialCharSrv' => htmlspecialchars ($server['base_url'], ENT_QUOTES, 'UTF-8'),
                                 'ImageSave' => getImageHREF ('save', 'update this server', TRUE),
-                                'NumGraphs' => $server['num_graphs']);
+                                'NumGraphs' => $server['num_graphs'],
+                                'Id' => $server['id']);
 
-        if ($server['num_graphs'])
+        /*if ($server['num_graphs'])
             $singleServer['DestroyImg'] = printImageHREF ('nodestroy', 'cannot delete, graphs exist');
         else
-            $singleServer['DestroyImg'] = getOpLink (array ('op' => 'del', 'id' => $server['id']), '', 'destroy', 'delete this server');
+            $singleServer['DestroyImg'] = getOpLink (array ('op' => 'del', 'id' => $server['id']), '', 'destroy', 'delete this server');*/
         $allMuninServersOut[] = $singleServer;
     }
     $mod->addOutput("allMuninServers", $allMuninServersOut);

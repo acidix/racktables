@@ -19,9 +19,9 @@
 			<tr>
 				<td>
 					<?php if(!$this->is('NoDestroyMessage','')) { ?>
-						<?php $this->getH('PrintImageHREF',array('nodestroy',$this->_NoDestroyMessage)); ?>
+						<button class="btn btn-danger btn-sm disabled"><span class="glyphicon glyphicon-minus"></span></button>
 					<?php } else { ?>
-						<?php $this->getH('GetOpLink',array(array('op'=>'del', 'chapter_no'=>$this->_ChapterId), '', 'destroy', 'Remove chapter')); ?>
+						<?php $this->getH('GetOpLink', array(array ('op' => 'del', 'chapter_no'=>$this->_ChapterId), '<span class="glyphicon glyphicon-minus"></span>', '', 'Remove chapter', 'btn btn-danger btn-sm')); ?>
 					<?php } ?>
 				</td>
 				<td><input type=text name=chapter_name value='<?php $this->Name; ?>' <?php $this->Disabled; ?>></td>
@@ -30,7 +30,7 @@
 					<?php if ($this->is('Sticky',true)) { ?>
 						&nbsp;
 					<?php } else { ?>
-						<?php $this->getH('PrintImageHREF',array('save', 'Save changes', TRUE)); ?>
+						<button class="btn btn-success btn-sm" title="Save changes" name="submit"><span class="glyphicon glyphicon-ok"></span></button>
 					<?php } ?>
 				</td>
 			</tr>
@@ -39,13 +39,9 @@
 		<?php if(!$this->is('NewTop')) { ?>
 			<?php $this->getH('PrintOpFormIntro','add'); ?>
 			<tr>
-				<td>
-					<?php $this->getH('PrintImageHREF',array('create', 'Add new', TRUE)); ?>
-				</td>
+				<td><button class="btn btn-primary btn-sm" title="Add new" name="submit"><span class="glyphicon glyphicon-plus"></span></button></td>
 				<td><input type=text name=chapter_name tabindex=100></td><td>&nbsp;</td>
-				<td>
-					<?php $this->getH('PrintImageHREF',array('create', 'Add new', TRUE)); ?>
-				</td>
+				<td><button class="btn btn-primary btn-sm" title="Add new" name="submit"><span class="glyphicon glyphicon-plus"></span></button></td>
 			</tr>
 			</form>
 		<?php } ?>
