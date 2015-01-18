@@ -9,7 +9,6 @@ body > .header .logo {
 	font-size: 25px;
 }
 
-
 /* Most left sidebar for navigation */
 .left-side.sidebar-offcanvas {
 	/*background-color: rgba(51, 153, 170, 0.14);*/
@@ -51,6 +50,47 @@ body > div.wrapper.row-offcanvas.row-offcanvas-left > aside.right-side {
 	position: relative;
 }
 
+#contentarea {
+	display: inline-flex;
+	height: 100%;
+}
+
+#contentarea > .site-view {
+	position: absolute;
+	/*border: solid;*/
+	width: 50%;
+	right: 0px;
+	height: auto;
+	float: right;
+	background: rgb(249, 249, 249);
+	box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.7);
+	/*
+	left: 0px;
+	float: right;
+	display: inline;
+	background-color: inherit;*/
+}
+
+#contentarea > .site-view:first-of-type {
+	position: absolute;
+	float: left;
+	width: 100%;
+	left: 20px;
+	box-shadow: none;
+}
+
+.remove-view-btn {
+	position: absolute;
+	float: right;
+	top: 10px;
+	right: 10px;
+}
+
+#contentarea > section.content {
+	height: inherit;
+	background-color: inherit;
+}
+
 #contentarea > section.content-header > h1 > small {
 	margin-left: 15px;
 }
@@ -77,7 +117,7 @@ body > header > nav.navbar.navbar-static-top {
 }
 
 #tabsidebar {
-	z-index: 4;
+	z-index: 100;
 }
 
 .sidebar.tabbar {

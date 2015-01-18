@@ -11,6 +11,8 @@
 document.bootstrap_template = {};
 document.bootstrap_template.event_messenger = [];
 document.bootstrap_template.modal_window = null;
+document.view_stack = [];
+document.top_view = null;
 
 (function($) {
     $(document).ready(function() { 
@@ -170,6 +172,9 @@ function prepareContent(selector) {
     // Check for ajax href
     checkAjaxHrefBtn();
 
+    // Set site view dragable
+    setupSiteViewStack();
+
     // Set svgs 
     $$('svg').svgPan('viewport');
 
@@ -310,6 +315,122 @@ function getGlyphicon(glyphiconID) {
             return "<a class='tab-glyph'><span class='glyphicon glyphicon-exclamation-sign'></span></a>"; 
     }
 }
+
+function getOwnPage() {
+    console.log('ownurl: ', document.URL.substring(document.URL.indexOf('index'), document.URL.indexOf('&tab')));
+    return document.URL.substring(document.URL.indexOf('index'), document.URL.indexOf('&tab'));
+}
+
+
+function resizeView(event) {
+    event.preventDefault();
+}
+
+function setupSiteViewStack() {
+    // Setup stacking order of elements
+    document.view_stack = $('#contentarea > .site-view');
+    // Set z ordering 
+    var z_start = 10;
+    var z_step = 2;
+    $('#contentarea > .site-view').each(function (idx) {
+        $('#contentarea > .site-view').eq(idx).css('z-index', z_start + z_step * idx);
+    }); 
+
+    document.top_view = document.view_stack[document.view_stack.length - 1];
+
+    if(document.view_stack.length == 1)
+        return;
+
+    document.top_view.intialSize = [
+        $('#contentarea > .site-view').last().width(),
+        $('#contentarea > .site-view').last().height(),
+    ];
+
+    $('#contentarea > .site-view').last().mousedown(function (event) {
+        document.top_view.draged = true;
+        document.top_view.lastPos = [event.pageX, event.pageY];
+
+    })
+
+    $('#contentarea').mousemove(function (event) {
+        var act_view = document.top_view;
+
+        if(act_view.draged) {
+            
+            var newWidth = $(act_view).width() + (act_view.lastPos[0] - event.pageX);
+            
+            if(newWidth < act_view.intialSize[0] * 0.5)   newWidth = act_view.intialSize[0] * 0.5; 
+
+            var offsetRight = 1 - 0.05 * (document.view_stack.length - 1);
+            if(newWidth > $(this).width() * offsetRight) newWidth = $(this).width() * offsetRight;
+            $(act_view).width(newWidth);
+
+            var newHeight = $(act_view).height() + (event.pageY - act_view.lastPos[1]);
+            if(newHeight < act_view.intialSize[1])  newHeight = act_view.intialSize[1]; 
+            //if(newHeight > $(this).height())        newHeight = $(this).height();
+            $(act_view).height(newHeight);      
+        
+            act_view.lastPos = [event.pageX, event.pageY];
+        }
+    });
+
+    $('body').mouseup(function (event) {
+        document.top_view.draged = false;
+        console.log("mouseup");
+    });
+
+    // Add remove button
+    $('#contentarea').append('<button class="btn btn-default remove-view-btn" type=button style="margin: 10px;"><span class="glyphicon glyphicon-remove"></span></button>');
+    $('#contentarea > .remove-view-btn').css('z-index', z_start + z_step * document.view_stack.length);
+    $('#contentarea > .remove-view-btn').click(function (event) {
+        // That should never happend
+        if(document.view_stack.length == 1) {
+            console.info('Calling remove btn without additional views!')
+            return;
+        }
+        $('#contentarea > .site-view').last().remove();
+        $('#contentarea > .remove-view-btn').remove();
+        setupSiteViewStack();
+    });
+}
+
+function addView( link ) {
+    console.log(link, document.URL);
+    $.ajax({
+        url: link,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function(data){
+            bodytxt = '<div id="body-mock">' + data.replace(/^[\s\S]*<body.*?>|<\/body>[\s\S]*$/g, '') + '</div>';
+            var bodyelem = $(bodytxt);
+            // Somehow crashes here ?!
+            try {
+                $('#contentarea').append(bodyelem.find('.site-view'));
+            } catch (err) {
+                console.error("append", err.message);
+            }
+            var new_elem = $('#contentarea > .site-view').last();
+
+            // Make new view slide in
+            new_elem.css('right', '-' + (new_elem.width() / 2) + 'px');
+            new_elem.css('z-index', 1000);
+            
+            new_elem.animate(
+                { right: "0px" },
+                700,
+                "linear",
+                function () { 
+                    prepareContent('.content');
+                }
+            );
+             
+        }
+    });
+    
+   // $('#contentarea').append('<div class="site-view">').css('background-color', 'red');
+}
+
 
 function getAlertContext() {
     if(document.bootstrap_template.modal_window != null)
@@ -581,13 +702,11 @@ function showDataEditDialog(title, content_selector, dialog_type) {
         },
     });   
 }
-
-
+ 
 // Show an adding dialog from template
 function showAddDialog() {
     showDataEditDialog('Add new', '.addContainer', BootstrapDialog.TYPE_SUCCESS);
 }
-
 
 function showRemoveDialog() {
     showDataEditDialog('Edit rows', '.removeContainer', BootstrapDialog.TYPE_DANGER);

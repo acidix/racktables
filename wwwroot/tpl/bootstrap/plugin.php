@@ -262,21 +262,6 @@ function renderDynamicAddMultipleObjectsForm() {
 	$mod->setOutput("AddTable", $objectListOutput);
 }
 
-
-function renderIPSpaceWithAddRem() {
-	renderIPSpace();
-	$tplm = TemplateManager::getInstance();
-
-	// Add an add + remove dialog at the end
-	$tplm->getMainModule()->addOutput('Payload', '<div class="addContainer">');
-	renderIPNewNetForm();
-	$tplm->getMainModule()->addOutput('Payload', '</div>');
-	$tplm->getMainModule()->addOutput('Payload', '<div class="removeContainer">');
-	renderIPSpaceEditor();
-	$tplm->getMainModule()->addOutput('Payload', '</div>');
-}
-
-
 function renderDepotWithAdd() {
 	renderDepot();
 	$tplm = TemplateManager::getInstance();
@@ -291,8 +276,6 @@ global $tabhandler;
 
 $tabhandler['rackspace']['default'] = 'renderRackspaceSVG';
 $tabhandler['depot']['addmore'] = 'renderDynamicAddMultipleObjectsForm';
-$tabhandler['ipv4space']['default'] = 'renderIPSpaceWithAddRem';
-$tabhandler['ipv6space']['default'] = 'renderIPSpaceWithAddRem';
 $tabhandler['depot']['default'] = 'renderDepotWithAdd';
 
 ?>

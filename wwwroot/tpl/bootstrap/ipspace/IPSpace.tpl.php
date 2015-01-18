@@ -23,8 +23,8 @@
 					<!-- None --><a href='<?php $this->CollapseAll; ?>'>collapse&nbsp;all</a><!-- EndNone -->)
 			<?php }	 ?>
 			</small>
-			<div class="pull-right"><button class="btn btn-default" type=button style="margin: 10px;" onclick="showAddDialog();"><span class="glyphicon glyphicon-plus"></span></button>
-			<button class="btn btn-default" type=button style="margin: 10px;" onclick="showRemoveDialog();"><span class="glyphicon glyphicon-minus"></span></button></div>
+			<div class="pull-right"><button class="btn btn-default" type=button style="margin: 10px;" onclick="addView(getOwnPage() + '&tab=newrange');"><span class="glyphicon glyphicon-plus"></span></button>
+			<button class="btn btn-default" type=button style="margin: 10px;" onclick="addView(getOwnPage() + '&tab=manage');"><span class="glyphicon glyphicon-minus"></span></button></div>
 		</div>
 		<div class="box-body" style="position: relative">
 			<table class="table table-bordered table-striped datatable">

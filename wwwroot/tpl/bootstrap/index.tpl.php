@@ -172,34 +172,34 @@
             <!-- Right side column. Contains the tabs, navbar and content of the page -->
             <aside class="right-side col-xs-12 col-md-10" style='position: absolute'>
                 <div class="container-fluid ">
-                <div >
-                     <!-- sidebar for tabs and operator -->
+                    <!-- sidebar for tabs and operator -->
                     <section class="row sidebar tabbar col-xs-12" id="tabsidebar">  
                         <ul class="sidebar-menu tabs-list"><li></li><?php $this->Tabs; ?></ul><div class="highlight-ring"></div>
                     </section>   
                     <section id='contentarea' class="row col-xs-12">
                         <!-- Content Header (Page header) -->
-                        <section class="content-header" style='padding-left: 15px'>
-            				<?php $this->getH('PageHeadline'); ?>
-            				<!--<div class="text-center"><?php $this->Tabs ?></div>-->
-            				<!-- <?php //$this->getH('PageHeadline',array($this->_Headline,$this->_SubHeadline)); ?> -->
-                            <ol class="breadcrumb">
-            					<?php $this->Path ?>
-            					<!--
-                                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                                <li><a href="#">Examples</a></li>
-                                <li class="active">Blank page</li>
-            					-->
-                            </ol>
-                        </section>
-
-                        <!-- Main content -->
-                        <section class="content">
-            				<?php $this->Message ?>
-            				<?php $this->Payload ?>
-                        </section><!-- /.content -->
+                        <div class='site-view' draggable="true" ondragstart="resizeView(event)">
+                            <section class="content-header" style='padding-left: 15px'>
+            			 	<?php $this->getH('PageHeadline'); ?>
+            			 	<!--<div class="text-center"><?php $this->Tabs ?></div>-->
+            			 	<!-- <?php //$this->getH('PageHeadline',array($this->_Headline,$this->_SubHeadline)); ?> -->
+                                <ol class="breadcrumb">
+            			 		<?php $this->Path ?>
+            			 		<!--
+                                    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                                    <li><a href="#">Examples</a></li>
+                                    <li class="active">Blank page</li>
+            			 		-->
+                                </ol>
+                            </section>
+    
+                            <!-- Main content -->
+                            <section class="content">
+            			 	<?php $this->Message ?>
+            			 	<?php $this->Payload ?>
+                            </section>
+                        </div><!-- /.content -->
                     </section>
-                </div>
                 </div>
             </aside><!-- /.right-side -->
         </div><!-- ./wrapper -->
