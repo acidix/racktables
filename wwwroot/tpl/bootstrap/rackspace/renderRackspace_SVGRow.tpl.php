@@ -18,7 +18,8 @@
 		  style="fill:lightblue;stroke:lightblue;stroke-width:5;opacity:0.5" />
 
     	<svg counter="<?php $this->Counter; ?>" width="<?php $this->OverallWidth; ?>" height="<?php $this->OverallHeight; ?>" x="<?php $this->X; ?>" y="<?php $this->Y; ?>">
-			<a xlink:href="<?php $this->Link ?>"><text x="10" y="20" fill="black">Location: <?php $this->LocationName; ?>	|	Row: <?php $this->RowName; ?></text></a>
+			<!-- xlink:href="javascript:void(0);" xlink:onclick="addView(<?php $this->Link ?>)"-->
+			<a class="view-adder" link="<?php $this->Link ?>"><text x="10" y="20" fill="black">Location: <?php $this->LocationName; ?>	|	Row: <?php $this->RowName; ?></text></a>
  			<?php $this->Racks; ?>
  		</svg>
 <?php } else { ?>

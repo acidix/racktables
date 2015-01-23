@@ -5,7 +5,7 @@
 			<div class="box-header">
 				<h3 class="box-title">Objects</h3>
 				<div class='box-tools pull-right'>
-					<button class="btn btn-default" type=button style="margin: 10px;" onclick="showAddDialog();"><span class="glyphicon glyphicon-plus"></span></button>
+					<button class="btn btn-default" type=button style="margin: 10px;" onclick="addView(getOwnPage() + '&tab=addmore');"><span class="glyphicon glyphicon-plus"></span></button>
 				</div>
 			</div>
 			<div class="box-body">

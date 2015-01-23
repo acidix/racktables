@@ -189,6 +189,29 @@ function prepareContent(selector) {
     for(var c = 0; c < datatables.length; c++) {
         tagsDataTable(datatables.eq(c));
     }
+
+
+    console.log('setting links');
+    // Add links
+    $.each( $$(".content a"), function (key, element) {
+        if(typeof($(element).attr('newview')) != 'undefined' || $(element).attr('href') == '')
+            return;
+
+        $(element).attr('newview', $(element).attr('href'));
+        $(element).click(function (event) {
+            event.preventDefault();
+            addView($(element).attr('newview'));
+        });
+        $(element).attr('href', '');
+    });
+
+    $.each( $$(".view-adder"), function (key, element) {
+        $(element).click(function () {
+            addView($(element).attr('link'));
+        });
+        console.log($(element).attr('link'));
+    });
+
 }
 
 
@@ -362,7 +385,7 @@ function setupSiteViewStack() {
             if(newWidth < act_view.intialSize[0] * 0.5)   newWidth = act_view.intialSize[0] * 0.5; 
 
             var offsetRight = 1 - 0.05 * (document.view_stack.length - 1);
-            if(newWidth > $(this).width() * offsetRight) newWidth = $(this).width() * offsetRight;
+            if(newWidth > $(document.view_stack[document.view_stack.length - 2]).width() - 10 ) newWidth = $(document.view_stack[document.view_stack.length - 2]).width() - 10;
             $(act_view).width(newWidth);
 
             var newHeight = $(act_view).height() + (event.pageY - act_view.lastPos[1]);
@@ -380,7 +403,7 @@ function setupSiteViewStack() {
     });
 
     // Add remove button
-    $('#contentarea').append('<button class="btn btn-default remove-view-btn" type=button style="margin: 10px;"><span class="glyphicon glyphicon-remove"></span></button>');
+    $('#contentarea').append('<button class="btn btn-default remove-view-btn" type=button style="margin: 10px;"><span class="glyphicon glyphicon-chevron-right"></span></button>');
     $('#contentarea > .remove-view-btn').css('z-index', z_start + z_step * document.view_stack.length);
     $('#contentarea > .remove-view-btn').click(function (event) {
         // That should never happend
@@ -388,9 +411,17 @@ function setupSiteViewStack() {
             console.info('Calling remove btn without additional views!')
             return;
         }
-        $('#contentarea > .site-view').last().remove();
-        $('#contentarea > .remove-view-btn').remove();
-        setupSiteViewStack();
+
+        $(document.top_view).animate(
+                { right: '-' + ($(document.top_view).width() / 2) + 'px' },
+                300,
+                "linear",
+                function () { 
+                    $('#contentarea > .site-view').last().remove();
+                    $('#contentarea > .remove-view-btn').remove();
+                    setupSiteViewStack();
+                }
+            );
     });
 }
 
@@ -418,10 +449,10 @@ function addView( link ) {
             
             new_elem.animate(
                 { right: "0px" },
-                700,
+                500,
                 "linear",
                 function () { 
-                    prepareContent('.content');
+                    prepareContent('#contentarea');
                 }
             );
              
@@ -693,7 +724,7 @@ function showDataEditDialog(title, content_selector, dialog_type) {
                         /*dataTables = $('table.table.datatables');
                         for(var c = 0; c < dataTables.length; c++)
                             tagsDataTable(dataTables);*/
-                        prepareContent('.content');
+                        prepareContent('#contentarea');
                         //form.prepend(bodyelem.find('.alert'));
                     }
                 });
