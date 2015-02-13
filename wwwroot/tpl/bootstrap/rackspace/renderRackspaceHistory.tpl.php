@@ -31,7 +31,22 @@
 					<table class=table>
 						<tbody>
 						<tr><th>timestamp</th><th>author</th><th>object</th><th>comment</th></tr>
-						<?php $this->HistoryRows; ?>
+						<?php while($this->loop("HistoryRows")) : ?>
+							<tr class='<?php $this->Class; ?>'>
+								<td>
+									<a href='<?php $this->Link; ?>'><?php $this->Time; ?></a>
+								</td>
+								<td>
+									<?php $this->UserName; ?>
+								</td>
+								<td>
+									<?php $this->RenderedCell; ?>
+								</td>
+								<td>
+									<?php $this->getH("NiftyString","%%Comment"); ?>
+								</td>
+							</tr>
+						<?php endwhile ?>
 						</tbody>
 					</table>
 				</div>

@@ -168,10 +168,17 @@ body > header > nav.navbar.navbar-static-top {
 	/*border-bottom: inherit;*/
 }
 
+.sidebar.tabbar > .sidebar-menu > li:last-child {
+	text-align: center;
+	vertical-align: middle;
+	/*border-bottom: inherit;*/
+}
+
 .sidebar.tabbar.hidden-tabbar {
 	display: none;
 }
 
+/*
 .highlight-ring {
 	display: auto;
     width: 40px;
@@ -203,7 +210,7 @@ body > header > nav.navbar.navbar-static-top {
    5% {transform: scale(0.1); } 
     95% {transform: scale(1);}
     100% {transform: scale(1);}
-}
+}*/
 
 /*
 .sidebar.tabbar > .sidebar-menu > li.active {

@@ -2354,7 +2354,7 @@ function renderRackspaceHistory ()
     // Bottom portlet with list
     foreach ($history as $row)
     {
-        $smod = $tplm->generateSubmodule("HistoryRows","RackspaceHistoryRow",$mod);
+        $smod = $tplm->generatePseudoSubmodule("HistoryRows", $mod);
         if ($row['mo_id'] == $op_id)
             $class = 'hl';
         else

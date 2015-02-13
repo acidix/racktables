@@ -28,9 +28,10 @@ $.listen('parsley:field:error', function () {
 // Prepare content
 
 function prepareContent(selector) {
-    if(selector == null)
-        selector = 'body'
+    console.log('This is the setup function');
+    selector = selector || 'body';
 
+    // Self defined selector for easy access
     function $$(elem) {
         return $(selector).find(elem);
     }
@@ -163,18 +164,14 @@ function prepareContent(selector) {
                     $(this).data('select2').open();
             });
         }
-    }   // Adding tagspicker
-    console.log('This is the setup function');
+    }   
 
     // Check for ajax form 
     checkAjaxFormBtn();
     
     // Check for ajax href
     checkAjaxHrefBtn();
-
-    // Set site view dragable
-    setupSiteViewStack();
-
+    
     // Set svgs 
     $$('svg').svgPan('viewport');
 
@@ -184,36 +181,18 @@ function prepareContent(selector) {
         "height": 50
     });
 
-    console.log('setting datatables');
-    datatables = $$('table.table.datatable');
+    datatables = $$('table.datatable');
+    console.log('setting datatables', datatables.length);
     for(var c = 0; c < datatables.length; c++) {
         tagsDataTable(datatables.eq(c));
     }
 
-
     console.log('setting links');
-    // Add links
-    $.each( $$(".content a"), function (key, element) {
-        if(typeof($(element).attr('newview')) != 'undefined' || $(element).attr('href') == '')
-            return;
+    // Set site view dragable
+    setupSiteViewStack();
 
-        $(element).attr('newview', $(element).attr('href'));
-        $(element).click(function (event) {
-            event.preventDefault();
-            addView($(element).attr('newview'));
-        });
-        $(element).attr('href', '');
-    });
-
-    $.each( $$(".view-adder"), function (key, element) {
-        $(element).click(function () {
-            addView($(element).attr('link'));
-        });
-        console.log($(element).attr('link'));
-    });
-
+    setupLinks(selector);
 }
-
 
 // Returns an corresponding glyphicon for the id
 function getGlyphicon(glyphiconID) {
@@ -349,6 +328,26 @@ function resizeView(event) {
     event.preventDefault();
 }
 
+function setupLinks(selector) {
+    // Set links to open a new stack site
+
+    function $$(elem) {
+        return $(selector).find(elem);
+    }
+
+    $.each( $$(".content a"), function (key, element) {
+        if(typeof($(element).attr('newview')) != 'undefined' || $(element).attr('href') == '')
+            return;
+
+        $(element).attr('newview', $(element).attr('href'));
+        $(element).click(function (event) {
+            event.preventDefault();
+            addView($(element).attr('newview'));
+        });
+        $(element).attr('href', '');
+    });
+}
+
 function setupSiteViewStack() {
     // Setup stacking order of elements
     document.view_stack = $('#contentarea > .site-view');
@@ -375,6 +374,7 @@ function setupSiteViewStack() {
 
     })
 
+    // Setup resize behavior
     $('#contentarea').mousemove(function (event) {
         var act_view = document.top_view;
 
@@ -385,12 +385,14 @@ function setupSiteViewStack() {
             if(newWidth < act_view.intialSize[0] * 0.5)   newWidth = act_view.intialSize[0] * 0.5; 
 
             var offsetRight = 1 - 0.05 * (document.view_stack.length - 1);
-            if(newWidth > $(document.view_stack[document.view_stack.length - 2]).width() - 10 ) newWidth = $(document.view_stack[document.view_stack.length - 2]).width() - 10;
+            if(newWidth > $('#contentarea').width() - 10) newWidth = $('#contentarea').width() - 10;
+            // if(newWidth > $(document.view_stack[document.view_stack.length - 2]).width() - 10 ) newWidth = $(document.view_stack[document.view_stack.length - 2]).width() - 10;
             $(act_view).width(newWidth);
 
             var newHeight = $(act_view).height() + (event.pageY - act_view.lastPos[1]);
+            if(newHeight > $('.row.sidebar.tabbar').height() - 10) newHeight = $('.row.sidebar.tabbar').height() - 10;
             if(newHeight < act_view.intialSize[1])  newHeight = act_view.intialSize[1]; 
-            //if(newHeight > $(this).height())        newHeight = $(this).height();
+            // if(newHeight > $(this).height())        newHeight = $(this).height();
             $(act_view).height(newHeight);      
         
             act_view.lastPos = [event.pageX, event.pageY];
@@ -414,7 +416,7 @@ function setupSiteViewStack() {
 
         $(document.top_view).animate(
                 { right: '-' + ($(document.top_view).width() / 2) + 'px' },
-                300,
+                200,
                 "linear",
                 function () { 
                     $('#contentarea > .site-view').last().remove();
@@ -444,15 +446,22 @@ function addView( link ) {
             var new_elem = $('#contentarea > .site-view').last();
 
             // Make new view slide in
+          //  new_elem.css('height',  $(document.top_view).css('height'));
             new_elem.css('right', '-' + (new_elem.width() / 2) + 'px');
+
+            document.top_view.intialSize = [
+                $(document.top_view).width(),
+                $(document.top_view).height(),
+            ];
+
             new_elem.css('z-index', 1000);
             
             new_elem.animate(
                 { right: "0px" },
-                500,
+                300,
                 "linear",
                 function () { 
-                    prepareContent('#contentarea');
+                    prepareContent('.site-view:last-of-type');
                 }
             );
              
@@ -619,6 +628,9 @@ function tagsDataTable(table_selector) {
         if($.inArray(possTags[i].innerHTML, taglist) === -1) taglist.push(possTags[i].innerHTML);
     };
     console.log('tags', taglist);
+    // Replace links on search
+    table_selector.on( 'search.dt', function () { setupLinks('#contentarea:last-child'); } )
+
     var datatable = table_selector.DataTable();
     
     function split( val ) {
