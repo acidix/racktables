@@ -173,30 +173,26 @@
             <aside class="right-side col-xs-12 col-md-10" style='position: absolute'>
                 <div class="container-fluid ">
                     <!-- sidebar for tabs and operator -->
-                    <section class="row sidebar tabbar col-xs-12" id="tabsidebar">  
-                        <ul class="sidebar-menu tabs-list"><li></li><?php $this->Tabs; ?>
-                            <li class=""><a class="tab-glyph" href=""><span class="glyphicon glyphicon-chevron-right"></span></a><a class="tab-link" href=""></a></li>
-                            </ul>
-                    </section>   
+                    
                     <section id='contentarea' class="row col-xs-12">
                         <!-- Content Header (Page header) -->
                         <div class='site-view' draggable="true" ondragstart="resizeView(event)">
                             <section class="content-header" style='padding-left: 15px'>
             			 	<?php $this->getH('PageHeadline'); ?>
+                            <div class="tabsbar" id="tabssidebar">  
+                                <ul class="tabs-list">
+                                    <?php $this->Tabs; ?> 
+                                </ul>
+                            </div>   
             			 	<!--<div class="text-center"><?php $this->Tabs ?></div>-->
             			 	<!-- <?php //$this->getH('PageHeadline',array($this->_Headline,$this->_SubHeadline)); ?> -->
-                                <ol class="breadcrumb">
-            			 		<?php $this->Path ?>
-            			 		<!--
-                                    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                                    <li><a href="#">Examples</a></li>
-                                    <li class="active">Blank page</li>
-            			 		-->
-                                </ol>
                             </section>
     
                             <!-- Main content -->
                             <section class="content">
+                            <ol class="breadcrumb">
+                                <?php $this->Path ?>
+                            </ol>
             			 	<?php $this->Message ?>
             			 	<?php $this->Payload ?>
                             </section>

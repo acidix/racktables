@@ -36,91 +36,8 @@ function prepareContent(selector) {
         return $(selector).find(elem);
     }
 
-    // Add glyphicons to all tabs
-    var tabs = $$("li.tab");
-    var maxchildren = 0;
-
-    $$('.row.sidebar.tabbar').addClass('hidden-tabbar');
-    for (var i = 0; i < tabs.length; i++) {
-        $$('.row.sidebar.tabbar').removeClass('hidden-tabbar');
-
-        var link = tabs.eq(i).children('a')[0].href;
-        tabs.eq(i).prepend(getGlyphicon(tabs[i].id));
-
-        tabs.eq(i).children().eq(0).attr('href', link);
-        
-        if(maxchildren < tabs.eq(i).children().eq(0).children().length)
-            maxchildren = tabs.eq(i).children().eq(0).children().length;
-    };
-    $$('.tab-glyph').css('min-width', (maxchildren * 30) + 'px');
-    var top_offset = 21;
-    var userboxHeight = top_offset + $('.user-panel').outerHeight() + $('body > div > .sidebar-offcanvas > section > form').outerHeight();
-    console.log('height is ' + userboxHeight);
-    $$('.sidebar.tabbar > .sidebar-menu > li:first-of-type').css('height', userboxHeight + 'px' );
-    // Set timeout for showing tab names
-    var tabTimeout;
-    $$('#tabsidebar').mouseenter(function() {
-        if($$('#tabsidebar').hasClass('horizontal-tabbar'))
-            return;
-
-        tabTimeout = setTimeout(function() {
-            $$(".tab-link").fadeIn("slow");
-            $$('tabsidebar').css('posititon', 'fixed');
-        }, 1000);
-    }).mouseleave(function() {
-        if($$('#tabsidebar').hasClass('horizontal-tabbar'))
-            return;
-
-        $$(".tab-link").hide();     
-        clearTimeout(tabTimeout);
-    });
-
-    // Add all operators to bar on the left
-    var operatorstabs = $$('.tab-operator');
-    for (var i = 0; i < operatorstabs.length; i++) {
-        switch(operatorstabs[i].type){
-            case 'submit':
-                //Set target 
-                operatorstabs.eq(i).attr('href', 'javascript:$("' + operatorstabs[i].target.replace( /(:|=|\.|\[|\])/g, "\\\\$1" ) + '").submit();')  
-                break;
-            case 'abort':
-                operatorstabs.eq(i).attr('href', 'javascript:history.go(0);')
-                break;
-        }
-        if(i == 0) {
-            $$('.tabs-list').append( $('<li/>').addClass('operator-spacer'));
-        }
-
-        $$('.tabs-list').append( $('<li/>').addClass('tab tab-operator').attr('type', operatorstabs[i].type).append(operatorstabs.eq(i).clone()));
-        
-        // Add links if any 
-        var test = ($$('.tabs-list').children().last().prepend(getGlyphicon(operatorstabs[i].id)))
-        .children().eq(0).attr('href', operatorstabs[i].href);      
-        operatorstabs.eq(i).remove();
-    }
-    
-    // Check for orientation
-    enquire.register("screen and (max-width:750px)", {
-    match : function () {
-        // Add css class to tabbar 
-        $$('#tabsidebar').addClass('horizontal-tabbar');
-        $$('.tab-link').css('display', 'inline-block');
-        $$('.sidebar.tabbar > .sidebar-menu > li:first-of-type').css('height', '0px');
-        if($$("li.tab").length > 1)
-            $$('.highlight-ring').addClass('hidden-ring');
-        //$('#contentarea').css('margin-left', '0px');
-    },
-    unmatch : function () {
-        $$('#tabsidebar').removeClass('horizontal-tabbar');
-        $$('.tab-link').css('display', 'inline-block');
-        $$('body > div.wrapper.row-offcanvas.row-offcanvas-left.active.relative > aside.left-side.sidebar-offcanvas').css('top', '');
-        var userboxHeight = top_offset + $('.user-panel').outerHeight() + $('body > div.wrapper.row-offcanvas.row-offcanvas-left > aside.left-side.sidebar-offcanvas > section > form').outerHeight();
-        $$('.sidebar.tabbar > .sidebar-menu > li:first-of-type').css('height', userboxHeight + 'px' );
-        if($$("li.tab").length > 1)
-            $$('.highlight-ring').removeClass('hidden-ring');
-        //$('#contentarea').css('margin-left', $('#tabsidebar').css('width'));
-    }
-    });
+    /* Setup tabs */
+    setupTabs(selector);
 
     // Load tagpicker  
     if(typeof(GLOBAL_TAGLIST) != 'undefined') {
@@ -190,132 +107,8 @@ function prepareContent(selector) {
     console.log('setting links');
     // Set site view dragable
     setupSiteViewStack();
-
-    setupLinks(selector);
-}
-
-// Returns an corresponding glyphicon for the id
-function getGlyphicon(glyphiconID) {
-    console.log(glyphiconID);
-    switch (glyphiconID){
-        case 'rackspacedefault':
-        case 'depotdefault':
-        case 'ipv4spacedefault':
-        case 'ipv6spacedefault':
-        case 'filesdefault':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-search'></span></a>";
-        case 'rackspaceeditlocations':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-bookmark'></span></a>";
-        case 'depotaddmore':
-        case 'ipv4spacenewrange':
-        case 'ipv6spacenewrange':
-        case 'rownewrack':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-plus'></span></a>";
-        case 'ipv4spacemanage':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-minus'></span></a>";
-        case 'rackspacehistory':
-        case 'rowfiles':
-        case 'ipv4netfiles':
-        case 'reportsrackcode':
-        case 'objectfiles':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-list-alt'></span></a>";
-        case 'objectrackspace':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-align-justify'></span></a>";
-        case 'uidefault':
-        case 'reportsdefault':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-home'></span></a>";
-        case 'uireset':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-flash'></span></a>";
-        case 'confirm-btn':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-ok'></span></a>";
-        case 'uiedit':
-        case 'rackspaceeditrows':
-        case 'ipv6spacemanage':
-        case 'filesmanage':
-        case 'ipv4netproperties':
-        case 'rowedit':
-        case 'objectedit':
-        case 'portifcompatedit':
-        case 'attrseditattrs':
-        case 'userlistedit':
-        case 'permsedit':
-        case 'parentmapedit':
-        case 'portmapedit':
-        case '8021qvstlist':
-        case 'cableconfcabletypes':
-        case 'roweditracks':
-        case 'portoifsedit':
-        case 'dictchapters':
-        case 'tagtreeedit':
-        case 'cactiservers':
-        case 'muninservers':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-edit'></span></a>";
-        case 'abort-btn':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-remove'></span></a>";
-        case 'reportsrackcode':
-        case 'reportsintegrity':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-hdd'></span></a>";
-        case 'attrseditmap':
-        case 'cableconfconnectors':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-random'></span></a>";
-        case 'reportswarranty':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-time'></span></a>";
-        case '8021qdefault':
-        case 'virtualdefault':
-        case 'objectlogdefault':
-        case 'rowdefault':
-        case 'objectdefault':
-        case 'ipv4netdefault':
-        case 'portifcompatdefault':
-        case 'attrsdefault':
-        case 'myaccountinterface':
-        case 'permsdefault':
-        case 'parentmapdefault':
-        case 'portmapdefault':
-        case 'cableconfdefault':
-        case 'portoifsdefault':
-        case 'dictdefault':
-        case 'tagtreedefault':
-        case 'cactidefault':
-        case 'munindefault':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-eye-open'></span></a>";
-        case 'cableconfoifcompat':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-resize-full'></span></a>";
-        case 'objectlog':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-list'></span></a>";
-        case 'objectports':
-        case 'reportsports':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-record'></span></a>";
-        case 'objectnat4':
-            return "<a class='tab-glyph'><strong class='glyphicon'>N4</strong></a>";
-        case 'objectip':
-            return "<a class='tab-glyph'><strong class='glyphicon'>IP</strong></a>";  
-        case '8021qvdlist':
-        case 'object8021qorder':
-        case 'ipv4net8021q':
-        case 'reports8021q':
-            return "<a class='tab-glyph'><strong class='glyphicon'>Q</strong></a>"; 
-        case 'ipv4netliveptr':
-            return "<a class='tab-glyph'><strong class='glyphicon'>L</strong></a>";
-        case 'reportsipv4':
-            return "<a class='tab-glyph'><strong class='glyphicon'>4</strong></a>"; 
-        case 'reportsipv6':
-            return "<a class='tab-glyph'><strong class='glyphicon'>6</strong></a>";
-        case 'myaccountmypassword':
-            return "<a class='tab-glyph'><strong class='glyphicon glyphicon glyphicon-lock'></strong></a>";
-        case 'myaccountdefault':
-        case 'userlistdefault':
-            return "<a class='tab-glyph'><strong class='glyphicon glyphicon glyphicon-user'></strong></a>";
-        case 'myaccountqlinks':
-        case 'cableconfconncompat':
-            return "<a class='tab-glyph'><strong class='glyphicon glyphicon glyphicon-link'></strong></a>";
-        case 'rowtagroller':
-        case 'ipv4nettags':
-        case 'objecttags':
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-tag'></span></a>"; 
-        default:
-            return "<a class='tab-glyph'><span class='glyphicon glyphicon-exclamation-sign'></span></a>"; 
-    }
+    // Change all links to add view
+    // setupLinks(selector);
 }
 
 function getOwnPage() {
@@ -323,6 +116,38 @@ function getOwnPage() {
     return document.URL.substring(document.URL.indexOf('index'), document.URL.indexOf('&tab'));
 }
 
+function setupTabs(selector) {
+    // Prevent links from getting loaded
+    $(selector).find('li.tab').children().click(function (event) {
+            event.preventDefault();
+        loadNewtab(this.href);
+    });
+
+    $(selector).find('li.tab').click(function () {
+        loadNewtab($(this).children()[0].href);
+    });
+}
+
+function loadNewtab(href) {
+    console.log('Loading tab', href);
+
+    $.post(href).done(
+        function(data){
+            
+            bodytxt = '<div id="body-mock">' + data.replace(/^[\s\S]*<body.*?>|<\/body>[\s\S]*$/g, '') + '</div>';
+            var bodyelem = $(bodytxt);
+            // Somehow crashes here ?!
+            try {
+                $('#contentarea').html(bodyelem.find('#contentarea').html());
+            } catch (err) {
+                console.error("Error in loadNewtab:", err.message);
+                return; 
+            }
+
+            prepareContent('#contentarea');
+        }
+    );
+}
 
 function resizeView(event) {
     event.preventDefault();
@@ -444,6 +269,11 @@ function addView( link ) {
                 console.error("append", err.message);
             }
             var new_elem = $('#contentarea > .site-view').last();
+
+            // Remove sourounding elements and restyle
+            new_elem.html(new_elem.find('.content').html())
+            new_elem.find('.breadcrumb').remove();
+            new_elem.css('padding', '1em');
 
             // Make new view slide in
           //  new_elem.css('height',  $(document.top_view).css('height'));
@@ -617,6 +447,7 @@ function showConsoleBtns(rackconsole) {
 
 // Make data table with tag completion
 function tagsDataTable(table_selector) {
+    
     // Add tags to autocomplete
     // has to be done before tags are hidden    
     var taglist = [];
