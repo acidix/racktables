@@ -6102,11 +6102,11 @@ function printLocationChildrenSelectOptions ($location, $level, $parent_id, $loc
             continue;
             echo "<option value=${subLocation['id']}";
             if ($subLocation['id'] == $parent_id)
-            echo ' selected';
-            echo '>' . str_repeat ('&raquo; ', $level) . "${subLocation['
-            name']}</option>\n";
+                echo ' selected';
+
+            echo '>' . str_repeat ('&raquo; ', $level) . "${subLocation['name']}</option>\n";
             if ($subLocation['kidc'] > 0)
-            $self ($subLocation, $level, $parent_id, $location_id);
+                $self ($subLocation, $level, $parent_id, $location_id);
         }
     }
 }
@@ -6125,8 +6125,8 @@ function getLocationTrail ($location_id, $link = TRUE, $spacer = ' : ')
 
     static $location_tree = array ();
     if (count ($location_tree) == 0)
-    foreach ($locations as $location)
-        $location_tree[$location['id']] = array ('parent_id' => $location['parent_id'], 'name' => $location['name']);
+        foreach ($locations as $location)
+            $location_tree[$location['id']] = array ('parent_id' => $location['parent_id'], 'name' => $location['name']);
 
     // prepend parent location(s) to given location string
     $name = '';
@@ -6141,9 +6141,9 @@ function getLocationTrail ($location_id, $link = TRUE, $spacer = ' : ')
             break;
         }
         if ($link)
-        $name = mkA ($location_tree[$id]['name'], 'location', $id) . $spacer . $name;
+            $name = mkA ($location_tree[$id]['name'], 'location', $id) . $spacer . $name;
         else
-        $name = $location_tree[$id]['name'] . $spacer . $name;
+            $name = $location_tree[$id]['name'] . $spacer . $name;
         $id = $location_tree[$id]['parent_id'];
         $locationIdx++;
     }

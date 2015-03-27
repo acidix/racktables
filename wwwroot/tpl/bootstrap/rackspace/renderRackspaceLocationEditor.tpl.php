@@ -1,5 +1,4 @@
 <?php
-	
 	if (defined("RS_TPL")) {
 	$js = <<<JS
 	function locationeditor_showselectbox(e) {
@@ -40,26 +39,28 @@ JS;
 			<?php endif ?>
 			<?php while($this->loop('LocationList')) { ?>
 				<tr>
-					<td align=left style='padding-left: <?php $this->Level; ?>px'>
+					<td align=leftffor style='padding-left: <?php echo ($this->_Level * 16 + 10); ?>px'>
+					<form method=post id="updateLocation" name="updateLocation" action='?module=redirect&page=rackspace&tab=editlocations&op=updateLocation'>
 					<?php if($this->is("HasSublocations")) { ?>
-						<span class="glyphicon glyphicon-chevron-down"></span>
+						<span class="glyphicon glyphicon-chevron-right"></span>
+					<?php } else { ?>
+						<i class="fa fa-bars"></i>
 					<?php } ?>
 					</td>
-					<form method=post id="updateLocation" name="updateLocation" action='?module=redirect&page=rackspace&tab=editlocations&op=updateLocation'>
 					<td class=tdleft>
 						<input type=hidden name="location_id" value="<?php $this->LocationId; ?>">
 						<select name="parent_id" id="locationid_<?php $this->LocationId; ?>" class='locationlist-popup form-control'>
-						<?php while ($this->loop('Parentselect')) : ?>
+						<?php while ($this->loop('Parentselect')) { ?>
 							<option value='<?php $this->ParenListId; ?>' <?php $this->ParentListSelected; ?>><?php $this->ParentListContent; ?></option>
-						<?php endwhile ?>
+						<?php } ?>
 						</select>
 					</td>
 					<td class=tdleft>
-						<input type=text size=48 name=name value='<?php $this->LocationName; ?>' class='form-control'>
+						<input type=text size=48 name=name value='<?php $this->LocationName; ?>' class='form-control'/>
 					</td>
 					<td>
 						<div class='btn-group'>
-							<btn class="btn btn-success" name="submit"><span class="glyphicon glyphicon-ok"></span></btn>
+							<button class="btn btn-success" title="Save changes" type="submit"><span class="glyphicon glyphicon-ok"></span></button>
 							<?php if($this->is("IsDeletable")) { ?>
 							<a class="btn btn-danger" title="Delete location" href="?module=redirect&op=deleteLocation&location_id=<?php $this->LocationId; ?>&page=rackspace&tab=editlocations">
     							<span class="glyphicon glyphicon-remove"></span>
@@ -70,8 +71,8 @@ JS;
     						</a>
 							<?php } ?>
 						</div>
-					</td>
 					</form>
+					</td>
 				</tr>
 			<?php } ?>
 			<?php if(!$this->is('renderNewTop')) : ?>

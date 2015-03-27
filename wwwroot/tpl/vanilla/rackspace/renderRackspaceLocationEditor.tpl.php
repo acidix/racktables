@@ -1,5 +1,5 @@
 <?php
-	
+
 	if (defined("RS_TPL")) {
 	$js = <<<JS
 	<script type="text/javascript">
@@ -44,7 +44,7 @@ JS;
 					<?php } ?>
 					<?php if($this->is("IsDeletable")) { ?>
 						<a title="Delete location" href="?module=redirect&op=deleteLocation&location_id=<?php $this->LocationId; ?>&page=rackspace&tab=editlocations">
-    						<img width="16" height="16" border="0" title="Delete location" src="?module=chrome&uri=pix/tango-user-trash-16x16.png">	    			
+    						<img width="16" height="16" border="0" title="Delete location" src="?module=chrome&uri=pix/tango-user-trash-16x16.png">
 						</a>
 					<?php } else { ?>
 						<img width="16" height="16" border="0" src="?module=chrome&uri=pix/tango-user-trash-16x16-gray.png"></img>

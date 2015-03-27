@@ -2,7 +2,7 @@
 	$this->addJs('js/lineeditor.js');
 ?>
 <div class="box box-primary" id="addObjectsBox">
-	<form method="post" id="addObjects" name="addObjects" action="?module=redirect&amp;page=depot&amp;tab=addmore&amp;op=addObjects"> 
+	<form method="post" id="addObjects" name="addObjects" action="?module=redirect&amp;page=depot&amp;tab=addmore&amp;op=addObjects">
 	<input type="hidden" name="rowcount" value="<?php $this->rowCountDefault; ?>">
 	<div class="box-header">
 		<h3 class="box-title">Add objects</h3>
@@ -41,7 +41,7 @@
 		</div>
 	</div>
 	<div class="box-footer">
-		<button class="btn btn-success btn-block ajax_form" reload-target='#addObjectsBox' targetform="addObjects">Submit</button>
+		<button class="btn btn-success btn-block ajax_form" reload-target='#addObjectsBox' targetform="#addObjects">Submit</button>
 	</div>
 	</form>
 </div>

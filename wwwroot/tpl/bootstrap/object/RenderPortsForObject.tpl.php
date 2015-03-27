@@ -1,9 +1,9 @@
 <?php if (defined("RS_TPL")) {?>
 <div class="box box-info" style="position: relative; overflow-x: auto">
-	
+
 	<?php if ($this->is("isEnableMultiport",true)) { ?>
 		<div class="box-header"><h3 class="box-title">Ports and interfaces</h3></div>
-	<?php } ?> 
+	<?php } ?>
 	<div class="box-body" style="position: relative">
 		<?php if ($this->is("isAddnewTop",true)) { ?>
 			<div class="row">
@@ -23,7 +23,7 @@
 				</td></tr></form>
 				</table>
 			</div>
-		<?php } ?> 
+		<?php } ?>
 
 
 		<table cellspacing=0 cellpadding='5' align='center' id="portstable" class='table table-bordered table-striped datatable'>
@@ -51,13 +51,13 @@
 			<?php $this->getH("PrintImageHref", array('add', 'add ports', TRUE, 110)); ?>
 			</td></tr></form>
 			</table><br>
-		<?php } ?> 
+		<?php } ?>
 
 		<?php if ($this->is("isShowAddMultiPorts",true)) { ?>
 			</div>
 			<div class="box box" style="position: relative; overflow-x: auto">
 			<div class="box-header"><h3 class="box-title">Add/update multiple ports</h3></div>
-			<div class="box-body" style="position: relative">	
+			<div class="box-body" style="position: relative">
 				<?php $this->getH("PrintOpFormIntro", array('addMultiPorts')); ?>
 				Format: <select class="form-control" name=format tabindex=201>
 				<option value=c3600asy>Cisco 3600 async: sh line | inc TTY</option>
@@ -65,7 +65,7 @@
 				<option value=fisxii>Foundry FastIron SuperX/II4000: sh int br</option>
 				<option value=ssv1>SSV:&lt;interface name&gt; &lt;MAC address&gt;</option>
 				</select>
-				Default port type: 
+				Default port type:
 				<?php $this->portTypeNiftySel ?>
 				<input type=submit value='Parse output' tabindex=204><br>
 				<textarea name=input cols=100 rows=50 tabindex=203></textarea><br>

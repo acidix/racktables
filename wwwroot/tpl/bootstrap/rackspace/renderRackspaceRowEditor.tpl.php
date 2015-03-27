@@ -9,6 +9,7 @@
 				<?php if ($this->is('NewTop')) : ?>
 					<?php $this->getH("Form","addRow"); ?>
 					<tr>
+						<td></td>
 						<td align="center">
 							<select name=location_id tabindex=100 class="form-control">
 								<?php $this->LocationNewOptions; ?>
@@ -18,7 +19,7 @@
 							<input type=text name=name tabindex=100 class="form-control">
 						</td>
 						<td>
-							<button class="btn btn-primary" name="submit"><i class="fa fa-fw fa-plus"></i></button>
+							<button submit class="btn btn-primary" ><i class="fa fa-fw fa-plus"></i></button>
 						</td>
 					</tr>
 					</form>
@@ -27,6 +28,13 @@
 				<form method=post id="updateRow" name="updateRow" action='?module=redirect&page=rackspace&tab=editrows&op=updateRow'>
 					<input type=hidden name="row_id" value="<?php $this->RowId; ?>">
 					<tr>
+						<td align=left style='padding-left: <?php echo ($this->_Level * 3 + 10); ?>px'>
+						<?php if($this->is("HasSublocations")) { ?>
+							<span class="glyphicon glyphicon-chevron-right"></span>
+						<?php } else { ?>
+							<i class="fa fa-bars"></i>
+						<?php } ?>
+						</td>
 						<td align="center" style='padding-left: <?php $this->Level; ?>px'>
 							<select name=location_id tabindex=100 class="form-control">
 								<?php $this->LocationEditOptions; ?>
@@ -35,7 +43,7 @@
 							<input type=text name=name value='<?php $this->RowName; ?>' tabindex=100 class="form-control">
 						</td><td>
 							<div class="btn-group">
-								<btn class="btn btn-success" name="submit"><span class="glyphicon glyphicon-ok"></span></btn>
+								<button submit class="btn btn-success" name="submit"><span class="glyphicon glyphicon-ok"></span></button>
 								<?php if($this->is("HasChildren")) { ?>
 									<a href='#' class="btn btn-danger disabled" title="<?php $this->RackCount; ?> rack(s) here"><span class="glyphicon glyphicon-remove"></span></a>
 								<?php } else { ?>
@@ -49,6 +57,7 @@
 			<?php if (!$this->is('NewTop')) : ?>
 				<?php $this->getH("Form","addRow"); ?>
 					<tr>
+						<td></td>
 						<td align="center"s>
 							<select name=location_id tabindex=100 class="form-control">
 								<?php $this->LocationNewOptions; ?>

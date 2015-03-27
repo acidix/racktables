@@ -1,7 +1,7 @@
-<?php 	
+<?php
     $this->map(['Tabs',0],"<small>|</small>","|");
 	$this->mapFunction(['Path',[]],'transformPathLink');
-	
+
 	//A small function that transform static links added by the interface.php file to the list elements we need for the breadcrumbs
 	function transformPathLink($old) {
 		if (substr($old,0,3) != ' : ') {
@@ -30,6 +30,8 @@
         <link href="./tpl/bootstrap/css/select2.css" rel="stylesheet" type="text/css" />
         <!-- Bootstrapdialog javascript -->
         <link href="./tpl/bootstrap/css/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
+        <!-- JS tree -->
+        <link href="./tpl/bootstrap/css/jstree/default/style.css" rel="stylesheet" />
         <!-- Bootstrap Theme style -->
         <link href="./tpl/bootstrap/css/racktables-bootstrap.css" rel="stylesheet" type="text/css" />
 
@@ -38,7 +40,7 @@
         <!--[if lt IE 9]>
           <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
           <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-        <![endif]-->	
+        <![endif]-->
 		<!-- jQuery 2.0.2 -->
         <script src="./js/jquery-2.0.2.min.js" type="text/javascript"></script>
         <!-- jQuery UI-->
@@ -62,17 +64,19 @@
         <!-- Highlight plugin javascript -->
         <script src="./tpl/bootstrap/js/jquery.highlight.js" type="text/javascript"></script>
         <!-- Highlight plugin javascript -->
-        <script src="./tpl/bootstrap/js/jquery-svgpan.js" type="text/javascript"></script>
+        <!-- <script src="./tpl/bootstrap/js/jquery-svgpan.js" type="text/javascript"></script> -->
         <!-- Inputmask plugin javascript -->
         <script src="./tpl/bootstrap/js/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
         <!-- Knob plugin javascript -->
         <script src="./tpl/bootstrap/js/jquery.knob.min.js" type="text/javascript"></script>
+        <!-- JS Tree -->
+        <script src="./tpl/bootstrap/js/jstree.min.js" type="text/javascript"></script>
         <!-- Bootstrap theme javascript -->
         <script src="./tpl/bootstrap/js/racktables-bootstrap.js" type="text/javascript"></script>
-        
+
 		<?php $this->Header ?>
     </head>
-    
+
     <body class="skin-blue">
         <!-- header logo: style can be found in header.less -->
         <header class="header" style='position: fixed'>
@@ -99,7 +103,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
-                                <!-- 
+                                <!--
                                 <li class="user-header bg-light-blue">
                                     <img src="../../img/avatar3.png" class="img-circle" alt="User Image" />
                                     <p>
@@ -109,7 +113,7 @@
                                     </p>
                                 </li>
                                 -->
-                                <!-- Menu Body 
+                                <!-- Menu Body
                                 <li class="user-body">
                                     <div class="col-xs-4 text-center">
                                         <a href="#">Followers</a>
@@ -166,28 +170,28 @@
                     </form>
                     <!-- /.search form -->
                     <!-- sidebar menu: : style can be found in sidebar.less -->
-                    <?php $this->getH('PrintSidebar'); ?>      
+                    <?php $this->getH('PrintSidebar'); ?>
                 <!-- /.sidebar -->
             </aside>
             <!-- Right side column. Contains the tabs, navbar and content of the page -->
             <aside class="right-side col-xs-12 col-md-10" style='position: absolute'>
                 <div class="container-fluid ">
                     <!-- sidebar for tabs and operator -->
-                    
+
                     <section id='contentarea' class="row col-xs-12">
                         <!-- Content Header (Page header) -->
                         <div class='site-view' draggable="true" ondragstart="resizeView(event)">
                             <section class="content-header" style='padding-left: 15px'>
             			 	<?php $this->getH('PageHeadline'); ?>
-                            <div class="tabsbar" id="tabssidebar">  
+                            <div class="tabsbar" id="tabssidebar">
                                 <ul class="tabs-list">
-                                    <?php $this->Tabs; ?> 
+                                    <?php $this->Tabs; ?>
                                 </ul>
-                            </div>   
+                            </div>
             			 	<!--<div class="text-center"><?php $this->Tabs ?></div>-->
             			 	<!-- <?php //$this->getH('PageHeadline',array($this->_Headline,$this->_SubHeadline)); ?> -->
                             </section>
-    
+
                             <!-- Main content -->
                             <section class="content">
                             <ol class="breadcrumb">

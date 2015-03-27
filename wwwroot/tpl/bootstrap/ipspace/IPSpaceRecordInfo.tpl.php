@@ -28,9 +28,9 @@
 			<br><small><?php $this->Tags; ?></small>
 		<?php } ?>
 	<?php } else { ?>
-		<?php $this->getH('PrintImageHREF',array('dragons', 'Here be dragons.')); ?>
+		
 		<?php if ($this->is('KnightLink')) { ?>
-			<a href='<?php $this->KnightLink; ?>'><?php $this->getH('PrintImageHREF',array('knight','create network here')); ?></a>		
+			<a href='<?php $this->KnightLink; ?>' class='btn btn-default btn-sm btn-no-border create-network' alt='Create network here'><span class="glyphicon glyphicon-plus"></span></a>		
 		<?php } ?>
 	<?php } ?>
 	</td>

@@ -5,7 +5,7 @@
 			<div class="box-header">
 				<h3 class="box-title">Objects</h3>
 				<div class='box-tools pull-right'>
-					<button class="btn btn-default" type=button style="margin: 10px;" onclick="addView(getOwnPage() + '&tab=addmore');"><span class="glyphicon glyphicon-plus"></span></button>
+					<button class="btn btn-default btn-sm btn-no-border" style="margin: 10px;" onclick="addView(getOwnPage() + '&tab=addmore');"><span class="glyphicon glyphicon-plus"></span></button>
 				</div>
 			</div>
 			<div class="box-body">
@@ -48,7 +48,7 @@
 			<div class="box-header">
 				<h3 class="box-title">Rackcode</h3>
 				<div class="box-tools pull-right">
-                <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                <button class="btn btn-default btn-sm btn-no-border" data-widget="collapse"><i class="fa fa-plus"></i></button>
                 </div>
 			</div>
 			<div class="box-body" style="display: none;">

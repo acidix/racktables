@@ -13,11 +13,11 @@ $mainpage_widgets = array();
  * and should be created by using TemplateManager->generateModule(). To keep your widget
  * independent from the bootstrap template, use setTemplate on the created module to redirect
  * it to your own folder.
- * 
+ *
  * The widgets should fit into a bootstrap column with a width of 6.
- * 
- * $order specifies wether the widget will be added at the end ('last'), or the beginning ('first') of the page. 
- * 
+ *
+ * $order specifies wether the widget will be added at the end ('last'), or the beginning ('first') of the page.
+ *
  * @param Function $callback
  */
 function addMainpageWidget($callback,$order = 'last') {
@@ -84,7 +84,7 @@ function renderRackspaceSVG() {
 					$row_id = $row['row_id'];
 					$row_name = $row['row_name'];
 					$rackList = $row['racks'];
-						
+
 					if (
 					$location_id != '' and isset ($_SESSION['locationFilter']) and !in_array ($location_id, $_SESSION['locationFilter']) or
 					empty ($rackList) and ! $cellfilter['is_empty']
@@ -114,52 +114,52 @@ function renderRackspaceSVG() {
 						$locationIdx++;
 					}
 					$locationTree = substr ($locationTree, 8);
-				
+
 					$rowo = $tplm->generateSubmodule('Content', 'renderRackspace_SVGRow', $smod);
-					
+
 					$rackx = 10;
 					$maxracky = 20;
-			
+
 				//@TODO Add link to row
-					
+
 				// 					$rowo["LocationTree"] = $locationTree;
 				// 					$rowo["HrefToRow"] = makeHref(array('page'=>'row', 'row_id'=>$row_id));
 				// 					$rowo["RowName"] = $row_name;
 				// 					$rowo["CellFilterUrlExtra"] = $cellfilter['urlextra'];
-		
+
 					if (count ($rackList))
 					{
 						foreach ($rackList as $rack)
 						{
 							$racko = $tplm->generateSubmodule('Racks', 'renderRackspace_SVGRack', $rowo);
-							
+
 							//Set curent x position and current index
 							$racko->addOutput('X', $rackx);
 							$racko->addOutput('Y', 35);
-							
+
 							$racko->addOutput('RackName',$rack['name']);
 							$racko->addOutput('RackLink', makeHref(array('page'=>'rack', 'rack_id'=>$rack['id'])));
-								
+
 							$rackData = spotEntity ('rack', $rack['id']);
 							amplifyCell($rackData);
 							markAllSpans($rackData);
-							
+
 							//Height is 10 Pix per HE + 10 for the border
 							$racko->addOutput('Height', ($rackData['height'] * 10) + 10);
-								
+
 							$maxracky = (($rackData['height'] * 10) + 10) > $maxracky ? ($rackData['height'] * 10) + 10 : $maxracky;
-								
+
 							for ($i = $rackData['height']; $i > 0; $i--) {
 								for($j = 0; $j < 3; ++$j) {
 									if (isset ($rackData[$i][$j]['skipped']))
 										continue;
-									
+
 									$state = $rackData[$i][$j]['state'];
 									//F Frei
 									//A Im Design deaktiviert
 									//U Kaputt
 									//T In benutzung
-	
+
 									if ($state == 'T' || $state == 'U' || $state == 'A') {
 										$height =  array_key_exists('rowspan', $rackData[$i][$j]) && $rackData[$i][$j]['rowspan'] > 0 ? $rackData[$i][$j]['rowspan'] : 1 ;
 										$width = array_key_exists('colspan', $rackData[$i][$j]) && $rackData[$i][$j]['colspan'] > 0 ? $rackData[$i][$j]['colspan'] : 1;
@@ -168,13 +168,13 @@ function renderRackspaceSVG() {
 										$elo->addOutput('Y', ($rackData['height'] - $i) * 10);
 										$elo->addOutput('Width', $width * 60);
 										$elo->addOutput('Height', $height * 10);
-								 
+
 										if ($state == 'T') {
 											$elo->addOutput('Class', 'element');
 											$elo->addOutput('Link', '?page=object&object_id=' . $rackData[$i][$j]['object_id']);
-	
+
 											$object = spotEntity ('object', $rackData[$i][$j]['object_id']);
-	
+
 											$elo->addOutput('Name', $object['dname']);
 										} elseif ($state == 'U') {
 											$elo->addOutput('Class', 'unusable');
@@ -192,13 +192,13 @@ function renderRackspaceSVG() {
 							$rackx += 200;
 						}
 					}
-					
+
 					$rowo->addOutput('OverallWidth', $rackx + 20);
 					$rowo->addOutput('OverallHeight', $maxracky + 60);
 					$rowo->addOutput('LocationName', $locationTree);
 					$rowo->addOutput('RowName', $row_name);
 					$rowo->addOutput('Y', $rowy + 10);
-					
+
 					if($rack_counter % 2)
 						$rowo->addOutput('X', 5);
 					else
@@ -209,7 +209,7 @@ function renderRackspaceSVG() {
 
 					if($rack_counter % 2 == 0)
 						$rowy += ($maxracky + 100);
-					
+
 					$maxx = $maxx < $rackx + 20 ? $rackx + 20 : $maxx;
 				}
 				$smod->addOutput('OverallWidth', $maxx);
@@ -228,12 +228,12 @@ function renderRackspaceSVG() {
 
 function renderDynamicAddMultipleObjectsForm() {
 	$max = getConfigVar ('MASSCOUNT');
-	
+
 	$tplm = TemplateManager::getInstance();
 	$tplm->getMainModule()->addOutput('Payload', '');
 	$mod = $tplm->generateSubmodule("Payload","AddMultipleObjects");
 	$mod->setNamespace("depot");
-	
+
 	// exclude location-related object types
 	global $location_obj_types;
 	$tabindex = 100;
@@ -245,7 +245,7 @@ function renderDynamicAddMultipleObjectsForm() {
 	foreach ($typelist['other'] as $key => $value)
 	if ($key > 0 && in_array($key, $location_obj_types))
 		unset($typelist['other'][$key]);
-	
+
 	$objectListOutput = array();
 	for ($i = 0; $i < $max; $i++)
 	{
@@ -256,7 +256,7 @@ function renderDynamicAddMultipleObjectsForm() {
 			$singleEntry['TagsPicker'] = printTagsPicker();
 
 		$singleEntry['NiftySelect'] = printNiftySelect ($typelist, array ('name' => "${i}_object_type_id", 'tabindex' => $tabindex), 0);
-					
+
 		$objectListOutput[] = $singleEntry;
 	}
 	$mod->setOutput("AddTable", $objectListOutput);
@@ -272,10 +272,18 @@ function renderDepotWithAdd() {
 	$tplm->getMainModule()->addOutput('Payload', '</div>');
 }
 
+function renderAllIPSpaces() {
+	// Set eid to print everything
+	$_REQUEST['eid'] = 'ALL';
+	renderIPSpace();
+}
+
 global $tabhandler;
 
 $tabhandler['rackspace']['default'] = 'renderRackspaceSVG';
 $tabhandler['depot']['addmore'] = 'renderDynamicAddMultipleObjectsForm';
 $tabhandler['depot']['default'] = 'renderDepotWithAdd';
 
+$tabhandler['ipv4space']['default'] = 'renderAllIPSpaces';
+$tabhandler['ipv6space']['default'] = 'renderAllIPSpaces';
 ?>
