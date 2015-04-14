@@ -582,7 +582,7 @@ function renderRackspaceLocationEditor ()
 {
     $tplm = TemplateManager::getInstance();
     $mod = $tplm->generateSubmodule("Payload", "renderRackspaceLocationEditor");
-    $mod->setNamespace('rackspace',true);
+    $mod->setNamespace('rackspace', true);
 
     if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
     {
@@ -591,28 +591,30 @@ function renderRackspaceLocationEditor ()
     renderLocationSelectTree (NULL, $mod, 'RenderNewFormOptions');
 
     $locations = listCells ('location');
-    renderLocationRowForEditor ($mod, treeFromList ($locations));
+    renderLocationRowForEditor ($mod, treeFromList($locations));
 }
 
 function renderRackspaceRowEditor ()
 {
     $tplm = TemplateManager::getInstance();
     $mod = $tplm->generateSubmodule("Payload", "renderRackspaceRowEditor");
-    $mod->setNamespace("rackspace",true);
+    $mod->setNamespace("rackspace", true);
 
     if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
-        $mod->setOutput('NewTop',true);
+        $mod->setOutput('NewTop', true);
 
     renderLocationSelectTree (null,$mod,'LocationNewOptions');
     foreach (getAllRows() as $row_id => $rowInfo)
     {
-        $smod = $tplm->generatePseudoSubmodule("RowList",$mod);
-        if ($rc = $rowInfo['rackc'])
+        $smod = $tplm->generatePseudoSubmodule("RowList", $mod);
+
+        if ($rc = $rowInfo['rackc'] )
             $smod->addOutput("HasChildren", true);
+
         $smod->addOutput("RowId",$row_id);
         $smod->addOutput("RackCount",$rc);
-        $smod->addOutput("RowName",$rowInfo['name']);
-        renderLocationSelectTree ($rowInfo['location_id'],$smod,'LocationEditOptions');
+        $smod->addOutput("RowName", $rowInfo['name']);
+        renderLocationSelectTree ($rowInfo['location_id'], $smod,'LocationEditOptions');
     }
 }
 
@@ -3409,7 +3411,7 @@ function renderAddMultipleObjectsForm ()
         {
             $singleEntry['Max'] = $max;
             $singleEntry['TagsPicker'] = printTagsPicker();
-        }
+       }
         else
             $singleEntry['TagsPicker'] = "";
 

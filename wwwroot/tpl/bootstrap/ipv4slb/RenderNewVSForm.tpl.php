@@ -1,25 +1,51 @@
 <?php if (defined("RS_TPL")) {?>
-	<div class=portlet>
-		<h2>Add new virtual service</h2>
-		<?php $this->getH("PrintOpFormIntro", array('add')); ?>
-		<table border=0 cellpadding=10 cellspacing=0 align=center>
-		<tr><th class=tdright>VIP:</th><td class=tdleft><input type=text name=vip tabindex=101></td>
-		<tr><th class=tdright>Port:</th><td class=tdleft>	
-		<input type=text name=vport size=5 value='<?php $this->Default_port ?>' tabindex=102></td></tr>
-		<tr><th class=tdright>Proto:</th><td class=tdleft>
-		<?php $this->getH('PrintSelect',array( $this->_Vs_proto, array ('name' => 'proto'), array_shift (array_keys ($this->_vs_keys))))?>
-		</td></tr>";
-		<tr><th class=tdright>Name:</th><td class=tdleft><input type=text name=name tabindex=104></td><td>
-		<tr><th class=tdright>Tags:</th><td class=tdleft>
-		<?php $this->TagsPicker ?>
-		</td></tr>
-		<tr><th class=tdrigh>VS configuration:</th><td class=tdleft><textarea name=vsconfig rows=10 cols=80></textarea></td></tr>
-		<tr><th class=tdrigh>RS configuration:</th><td class=tdleft><textarea name=rsconfig rows=10 cols=80></textarea></td></tr>
-		<tr><td colspan=2>
-		<?php $this->getH("PrintImageHref", array('CREATE', 'create virtual service', TRUE, 105)); ?>
-		</td></tr>
-		</table></form>
+<div class="box">
+	<div class="box-header">
+		<h3 class="box-title">Add new virtual service</h3>
 	</div>
+	<div class="box-content">
+		<?php $this->getH("PrintOpFormIntro", array('add')); ?>
+
+		<div class="row edit_row">
+			<div class="col-md-4 header">VIP:</div>
+			<div class="col-md-8"><input type=text name=vip tabindex=101></textarea></div>
+		</div>
+		<div class="row edit_row">
+			<div class="col-md-4 header">Port:</div>
+			<div class="col-md-8"><input type=text name=vport size=5 value='<?php $this->Default_port ?>' tabindex=102></div>
+		</div>
+		<div class="row edit_row">
+			<div class="col-md-4 header">Proto:</div>
+			<!-- Ignore warning here -->
+			<div class="col-md-8"><?php $this->getH('PrintSelect',array( $this->_Vs_proto, array ('name' => 'proto'), array_shift (array_keys ($this->_vs_keys))))?></div>
+		</div>
+		<div class="row edit_row">
+			<div class="col-sm-4 header">Name:</div>
+			<div class="col-md-8" align="center"><input type=text name=name tabindex=104></div>
+		</div>
+		<div class="row edit_row">
+			<div class="col-sm-4 header">Tags:</div>
+			<div class="col-md-8" align="center"><?php $this->TagsPicker ?></div>
+		</div>
+		<div class="row edit_row">
+			<div class="col-sm-4 header">VS configuration:</div>
+			<div class="col-md-8" align="center"><textarea name=vsconfig rows=10 cols=80></textarea></div>
+		</div>
+		<div class="row edit_row">
+			<div class="col-sm-4 header">RS configuration:</div>
+			<div class="col-md-8" align="center"><textarea name=rsconfig rows=10 cols=80></textarea></div>
+		</div>
+
+		<div class="row edit_row">
+			<div class="col-sm-4 header"></div>
+			<div class="col-md-8" align="center">
+				<button type="submit" class="btn btn-success" border="0" tabindex="102" title="Create virtual service" ><span class="glyphicon glyphicon-ok"></span></button>
+			</div>
+		</div>
+
+		</form>
+	</div>
+</div>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

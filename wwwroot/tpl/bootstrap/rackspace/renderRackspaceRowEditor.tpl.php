@@ -5,7 +5,7 @@
 		</div>
 		<div class="box-body no-padding">
 			<table class=table>
-				<tr><th>Location</th><th>Name</th><th>&nbsp;</th></tr>
+				<tr><th>&nbsp;</th><th>Location</th><th>Name</th><th>&nbsp;</th></tr>
 				<?php if ($this->is('NewTop')) : ?>
 					<?php $this->getH("Form","addRow"); ?>
 					<tr>
@@ -28,20 +28,22 @@
 				<form method=post id="updateRow" name="updateRow" action='?module=redirect&page=rackspace&tab=editrows&op=updateRow'>
 					<input type=hidden name="row_id" value="<?php $this->RowId; ?>">
 					<tr>
-						<td align=left style='padding-left: <?php echo ($this->_Level * 3 + 10); ?>px'>
-						<?php if($this->is("HasSublocations")) { ?>
+						<td style='padding-left: <?php echo ( !$this->is("HasChildren") * 16 + 10); ?>px'>
+						<?php if($this->is("HasChildren")) { ?>
 							<span class="glyphicon glyphicon-chevron-right"></span>
 						<?php } else { ?>
 							<i class="fa fa-bars"></i>
 						<?php } ?>
 						</td>
-						<td align="center" style='padding-left: <?php $this->Level; ?>px'>
+						<td class=tdleft>
 							<select name=location_id tabindex=100 class="form-control">
 								<?php $this->LocationEditOptions; ?>
 							</select>
-						</td><td>
-							<input type=text name=name value='<?php $this->RowName; ?>' tabindex=100 class="form-control">
-						</td><td>
+						</td>
+						<td class=tdleft>
+								<input type=text name=name value='<?php $this->RowName; ?>' tabindex=100 class="form-control">
+						</td>
+						<td>
 							<div class="btn-group">
 								<button submit class="btn btn-success" name="submit"><span class="glyphicon glyphicon-ok"></span></button>
 								<?php if($this->is("HasChildren")) { ?>

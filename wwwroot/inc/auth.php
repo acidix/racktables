@@ -77,6 +77,7 @@ function authenticate ()
         throw new RackTablesError ('', RackTablesError::NOT_AUTHENTICATED);
     $user_given_tags = $userinfo['etags'];
     $auto_tags = array_merge ($auto_tags, $userinfo['atags']);
+
     // Phase 4. Do more method-specific processing, initialize $remote_displayname on success.
     switch (TRUE)
     {

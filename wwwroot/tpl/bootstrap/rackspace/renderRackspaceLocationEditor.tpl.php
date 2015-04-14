@@ -39,7 +39,7 @@ JS;
 			<?php endif ?>
 			<?php while($this->loop('LocationList')) { ?>
 				<tr>
-					<td align=leftffor style='padding-left: <?php echo ($this->_Level * 16 + 10); ?>px'>
+					<td style='padding-left: <?php echo ($this->_Level * 16 + 10); ?>px'>
 					<form method=post id="updateLocation" name="updateLocation" action='?module=redirect&page=rackspace&tab=editlocations&op=updateLocation'>
 					<?php if($this->is("HasSublocations")) { ?>
 						<span class="glyphicon glyphicon-chevron-right"></span>

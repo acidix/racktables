@@ -27,7 +27,7 @@
 						<td><input type=text name=<?php $this->i ?>_object_name tabindex=<?php echo $this->_Tabindex + 1; ?>></td>
 						<td><input type=text name=<?php $this->i ?>_object_label ></td>
 						<td><input type=text name=<?php $this->i ?>_object_asset_no ></td>
-						<td style="min-width: 100px"><?php $this->TagsPicker; ?></td>
+						<td style="min-width: 100px" class="tagspicker-cell"><?php $this->TagsPicker; ?></td>
 						<td style="min-width: 100px">
 							<div class="btn-group" style="inline-table">
 								<a class="btn btn-danger" name="<?php $this->i ?>_btn_remove" title="Remove this line" onclick="removeLine(<?php $this->i ?>)"><span class="glyphicon glyphicon-remove"></span></a>

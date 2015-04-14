@@ -1,20 +1,37 @@
 <?php if (defined("RS_TPL")) {?>
-	<div class=portlet>
-		<h2>Add new RS pool</h2>
-		<?php $this->getH("PrintOpFormIntro", array('add')); ?>
-		<table border=0 cellpadding=5 cellspacing=0 align=center>
-		<tr><th class=tdright>Name:</th>
-		<td class=tdleft><input type=text name=name tabindex=101></td><td>
-		</td></tr><th class=tdright>Tags:</th><td class='tdleft'>
-		<?php $this->TagsPicker ?>
-		</td></tr>
-		<tr><th class=tdright>VS config</th><td colspan=2><textarea name=vsconfig rows=10 cols=80 tabindex=102></textarea></td></tr>
-		<tr><th class=tdright>RS config</th><td colspan=2><textarea name=rsconfig rows=10 cols=80 tabindex=103></textarea></td></tr>
-		<tr><td colspan=2>
-		<?php $this->getH("PrintImageHref", array('CREATE', 'create real server pool', TRUE, 104)); ?>
-		</td></tr>
-		</table></form>
+<div class="box">
+	<div class="box-header">
+		<h3 class="box-title">Add new RS group</h3>
 	</div>
+	<div class="box-content">
+		<?php $this->getH("PrintOpFormIntro", array('add')); ?>
+
+		<div class="row edit_row">
+			<div class="col-sm-4 header">Name:</div>
+			<div class="col-md-8" align="center"><input type=text name=name></div>
+		</div>
+		<div class="row edit_row">
+			<div class="col-sm-4 header">Tags:</div>
+			<div class="col-md-8" align="center"><?php $this->TagsPicker ?></div>
+		</div>
+		<div class="row edit_row">
+			<div class="col-sm-4 header">VS config:</div>
+			<div class="col-md-8" align="center"><textarea name=rsconfig rows=10 cols=80 tabindex=103></textarea></div>
+		</div>
+		<div class="row edit_row">
+			<div class="col-sm-4 header">RS config:</div>
+			<div class="col-md-8" align="center"><textarea name=rsconfig rows=10 cols=80 tabindex=103></textarea></div>
+		</div>
+
+		<div class="row edit_row">
+			<div class="col-sm-4 header"></div>
+			<div class="col-md-8" align="center">
+				<button type="submit" class="btn btn-success" border="0" tabindex="104" title="Create real server pool" ><span class="glyphicon glyphicon-ok"></span></button>
+			</div>
+		</div>
+		</form>
+	</div>
+</div>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />

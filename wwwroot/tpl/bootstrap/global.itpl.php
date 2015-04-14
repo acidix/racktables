@@ -112,31 +112,31 @@ $this->setInMemoryTemplate("GetImageHrefNoInput", "<img src={{SrcPath}} width={{
 
 
 /**
-*	getRenderedIPv4NetCapacity: 
+*	getRenderedIPv4NetCapacity:
 *	Usage: interface.php, interface-lib.php
 *
 **/
 $this->setInMemoryTemplate("RenderedIPv4NetCapacityAddrc", '<div style="vertical-align: middle"><input type="text" value="{{px1}}" class="ipv4-net-capacity-addr">' .
-															"<!--<img class='test' width='{{width}}' height=10 border=0 title='{{title2}}' src='?module=progressbar4&px1={{px1}}" . 
+															"<!--<img class='test' width='{{width}}' height=10 border=0 title='{{title2}}' src='?module=progressbar4&px1={{px1}}" .
 															"&px2={{px2}}&px3={{px3}}'>--><small style='margin-left: 5px' class='title'>{{title}}</small></div>");
 $this->setInMemoryTemplate("RenderedIPv4NetCapacityReturn","<div class=\"{{class}}\" id=\"{{div_id}}\"> {{textVal}}</div>");
 
 /**
-*	getRenderedIPv6NetCapacity: 
+*	getRenderedIPv6NetCapacity:
 *	Usage: interface.php, interface-lib.php
 *
 **/
 $this->setInMemoryTemplate("RenderedIPv6NetCapacity","<div class=\"{{class}}\" id=\"{{div_id}}\"> {{addrc}}{{cnt}}{{mult}}{{what}}  </div>");
 
 /**
-*	renderNetVLAN: 
+*	renderNetVLAN:
 *	Usage: interface.php, interface-lib.php
 *
 **/
 $this->setInMemoryTemplate("RenderNetVLAN","<div class='vlan'><strong><small>{{Noun}}</small> {{Links}}</strong></div>");
 
 /**
-*	MkA: 
+*	MkA:
 *	Usage: functions.php
 *
 **/
@@ -144,28 +144,28 @@ $this->setInMemoryTemplate("MkAInMemory","<a href='{{link}}'>{{text}}</a>");
 
 
 /**
-*	formatVSPort: 
+*	formatVSPort:
 *	Usage: slb2-interface.php
 *
 **/
 $this->setInMemoryTemplate("formatVSPortInMemory"," <span title={{name}}>{{srv}}</span>");
 
 /**
-*	FormatVSIP: 
+*	FormatVSIP:
 *	Usage:  slb2-interface.php
 *
 **/
 $this->setInMemoryTemplate("FormatVSIPInMem","<a href='{{href}}'>{{fmt_ip}}</a>");
 
 /**
-*	GetSelect: 
+*	GetSelect:
 *	Usage:  slb-interface.php
 *
 **/
 $this->setInMemoryTemplate("GetSelectInLine","<input class=form-control type=hidden name={{selectName}} id={{selectName}} value={{keyValue}}>{{value}}");
 
 /**
-*	RenderNewEntityTags: 
+*	RenderNewEntityTags:
 *	Usage:  interface.php
 *
 **/
@@ -179,10 +179,10 @@ $this->setInMemoryTemplate("RenderNewEntityTags","<div class=tagselector><table 
 $this->setInMemoryTemplate('FileSummaryDownloadLink',"<a href='?module=download&file_id={{Id}}' title='Download'><span class='glyphicon glyphicon-cloud-download'></span></a>&nbsp;");
 
 /**
-*	ReportsCounters: 
-*	ReportsMesseges: 
+*	ReportsCounters:
+*	ReportsMesseges:
 *	ReportsCustom:
-*	ReportsMeters: 
+*	ReportsMeters:
 *	Usage: interface.php
 *
 **/
@@ -192,7 +192,7 @@ $this->setInMemoryTemplate("ReportsCustom","<div class='row edit_row'><div class
 $this->setInMemoryTemplate("ReportsMeters","<div class='row edit_row'><div class='col-sm-6 header'>{{Title}}:</div><div class='col-sm-6'>\n{{ProgressBar}}\n<br><small>{{IsMax}}</small></div></div>");
 
 /**
-*	GetProgressBar: 
+*	GetProgressBar:
 *	Usage: interface-lib-php
 *
 **/
@@ -200,42 +200,42 @@ $this->setInMemoryTemplate("GetProgressBar",'<div class="progress">' .
 						'<div class="progress-bar progress-bar" style="width: {{done}}%">{{done}}%</div></div>');
 
 /**
-*	NoVLANConfig: 
+*	NoVLANConfig:
 *	Usage:  interface.php
 *
 **/
 $this->setInMemoryTemplate("NoVLANConfig","<center><h3>(no VLAN configuration exists)</h3></center>");
 
 /**
-*	StdCenterTableCell: 
+*	StdCenterTableCell:
 *	Usage: interface.php
 *
 **/
 $this->setInMemoryTemplate("StdCenterTableCell","<td class=tdcenter>{{Cont}}</td>");
 
 /**
-*	StdTableCell: 
+*	StdTableCell:
 *	Usage: interface.php
 *
 **/
 $this->setInMemoryTemplate("StdTableCell","<td>{{cont}}</td>");
 
 /**
-*	StdTableRow: 
+*	StdTableRow:
 *	Usage: printObjectDetailsForRenderRack -> interface.php
 *
 **/
 $this->setInMemoryTemplate("StdTableRow","<tr>{{cont}}</tr>");
 
 /**
-*	StdTableHead: 
+*	StdTableHead:
 *	Usage: portletRSPoolSrv -> interface.php
 *
 **/
 $this->setInMemoryTemplate("StdTableHead","<th>{{Cont}}</th>");
 
 /**
-*	RenderTagStatsALink: 
+*	RenderTagStatsALink:
 *	Usage:  interface.php
 *
 **/
@@ -249,7 +249,7 @@ $this->setInMemoryTemplate('FileSummaryComment','<div class="dashed commentblock
 
 
 /**
-*	RenderConfigVarName: 
+*	RenderConfigVarName:
 *	Usage:  interface.php
 *
 **/
@@ -287,56 +287,56 @@ $this->setInMemoryTemplate('SerializedTag','<div class="tag_small"><span class="
 $this->setInMemoryTemplate('IPNetBacktraceLink','<a href="{{Link}}" title="View IP tree with this net as root">{{Title}}</a>');
 
 /**
-*	StdListElem: 
+*	StdListElem:
 *	Usage:  renderVLANInfo -> interface.php
 *
 **/
 $this->setInMemoryTemplate('StdListElem','<li>{{cont}}</li>');
 
 /**
-*	RenderedIPPortPair: 
+*	RenderedIPPortPair:
 *	Usage:  interface.php
 *
 **/
 $this->setInMemoryTemplate('RenderedIPPortPair','<a href="{{href}}">{{ip}}</a>{{isPort}}');
 
 /**
-*	FormatLoggedSpan: 
+*	FormatLoggedSpan:
 *	Usage:  ajax-interface.php
 *
 **/
 $this->setInMemoryTemplate("FormatLoggedSpan","<span {{class}} {title}}>{{text}}</span>");
 
 /**
-*	FullWidthTable: 
+*	FullWidthTable:
 *	Usage:  printObjectDetailsForRenderRack -> interface.php
 *
 **/
 $this->setInMemoryTemplate("FullWidthTable","<table width='100%' border='1'>{{cont}}</table>");
 
 /**
-*	ObjectFreeSolt: 
+*	ObjectFreeSolt:
 *	Usage:  printObjectDetailsForRenderRack -> interface.php
 *
 **/
 $this->setInMemoryTemplate("ObjectFreeSolt","<td class='state_F'><div title='Free slot'>&nbsp;</div></td>");
 
 /**
-*	FormatPortLink: 
+*	FormatPortLink:
 *	Usage:  formatPortLink -> interface.php
 *
 **/
 $this->setInMemoryTemplate("FormatPortLink",'<a $additional href="{{href}}">{{text_items}}</a>');
 
 /**
-*	RenderSNMPPortFinder_NoExt: 
+*	RenderSNMPPortFinder_NoExt:
 *	Usage:  renderSNMPPortFinder -> interface.php
 *
 **/
 $this->setInMemoryTemplate("RenderSNMPPortFinder_NoExt","<div class=msg_error>The PHP SNMP extension is not loaded.  Cannot continue.</div>");
 
 /**
-*	GlobalPlaceholder: 
+*	GlobalPlaceholder:
 *	A very basic globalplaceholder to be filled with submodules
 *	Usage:  serializeTags -> interface-lib.php
 *
@@ -344,35 +344,35 @@ $this->setInMemoryTemplate("RenderSNMPPortFinder_NoExt","<div class=msg_error>Th
 $this->setInMemoryTemplate("GlobalPlaceholder","{{Cont}}");
 
 /**
-*	ETagsLine: 
+*	ETagsLine:
 *	Usage:  render8021QStatus -> interface.php
 *
 **/
 $this->setInMemoryTemplate("ETagsLine","<br><small>{{cont}}</small>");
 
 /**
-*	PCodeLine: 
+*	PCodeLine:
 *	Usage:  renderFilesPortlet -> interface.php
 *
 **/
 $this->setInMemoryTemplate("PCodeLine", "<tr><td colspan=2>{{pcode}}</td></tr>\n");
 
 /**
-*	EmptyTableCell: 
+*	EmptyTableCell:
 *	Usage:  renderIndex -> interface.php
 *
 **/
 $this->setInMemoryTemplate("EmptyTableCell","<td>&nbsp;</td>");
 
 /**
-*	EmptyRow: 
+*	EmptyRow:
 *	Usage:  renderRackspace -> interface.php
 *
 **/
 $this->setInMemoryTemplate("EmptyRow","<td>(empty row)</td>");
 
 /**
-*	IndexItemMod': 
+*	IndexItemMod':
 *	Usage: renderIndex -> interface.php
 *
 **/
@@ -380,28 +380,28 @@ $this->setInMemoryTemplate("IndexItemMod"," <td>\n<h1><a href='{{Href}}'>" .
 		"{{PageName}}<br>\n{{Image}} </a></h1>\n</td>");
 
 /**
-*	TDLeftCell: 
+*	TDLeftCell:
 *	Usage: renderObject -> interface.php
 *
 **/
 $this->setInMemoryTemplate("TDLeftCell","<td class=tdleft {{rowspan}}>{{cont}}</td>");
 
 /**
-*	RoundBracketsMod: 
+*	RoundBracketsMod:
 *	Usage:  renderObject -> interface.php
 *
 **/
 $this->setInMemoryTemplate("RoundBracketsMod","({{cont}})");
 
 /**
-*	TbcLine: 
+*	TbcLine:
 *	Usage:  Render8021QReport -> interface.php
 *
 **/
 $this->setInMemoryTemplate("TbcLineMod","<tr class='state_A'><th>...</th><td colspan={{CountDomains}}>&nbsp;</td></tr>");
 
 /**
-*	ExpirationsNoSection: 
+*	ExpirationsNoSection:
 *	Usage:  renderExpirations -> interface.php
 *
 **/
@@ -409,30 +409,30 @@ $this->setInMemoryTemplate("ExpirationsNoSection","<tr><td colspan=4>(none)</td>
 
 /**
  *	IPv6Separators:
- *	Usage: renderIPv6Addresses -> interface.php 
+ *	Usage: renderIPv6Addresses -> interface.php
  *
  **/
 $this->setInMemoryTemplate("IPv6SeparatorPlain","<tr><td colspan=4 class=tdleft></td></tr>");
-$this->setInMemoryTemplate("IPv6Separator","<tr class='tdleft {{Highlight}}'><td><a name='ip-{{FMT}}' href='{{Link'>{{FMT}}</a>" . 
+$this->setInMemoryTemplate("IPv6Separator","<tr class='tdleft {{Highlight}}'><td><a name='ip-{{FMT}}' href='{{Link'>{{FMT}}</a>" .
 												"</td><td><span class='rsvtext {{Editable}} id-{{FMT}} op-upd-ip-name'></span></td>" .
 												"<td><span class='rsvtext {{Editable}} id-{{FMT}} op-upd-ip-comment'></span></td><td>&nbsp;</td></tr>");
 
 /**
-*	SmallElement: 
+*	SmallElement:
 *	Usage:  renderCell -> interface.php
 *
 **/
 $this->setInMemoryTemplate('SmallElement',"<small>{{Cont}}</small>");
 
 /**
-*	StrongElement: 
+*	StrongElement:
 *	Usage:  getRenderedAlloc -> interface.php
 *
 **/
 $this->setInMemoryTemplate('StrongElement',"<strong>{{Cont}}</strong>");
 
 /**
-*	StdOptionTemplate: 
+*	StdOptionTemplate:
 *	Usage:  renderRackMultiSelect -> interface.php
 *
 **/
@@ -440,7 +440,7 @@ $this->setInMemoryTemplate('StdOptionTemplate',"<option value={{RackId}} {{IsSel
 
 
 /**
-*	RenderedAlloc Templates: 
+*	RenderedAlloc Templates:
 *	Usage:  getRenderedAlloc -> interface.php
 *
 **/
@@ -457,7 +457,7 @@ $this->setInMemoryTemplate("RenderedAllocPeers","<td class='{{TdClass}}'>{{Prefi
 $this->setInMemoryTemplate("RenderedAllocLocPeers","{{Prefix}}<a href='{{Href}}'>{{Osif}}{{LocPeer}}</a>");
 
 /**
-*	RSPoolSrvPortlet Table Filed Templates: 
+*	RSPoolSrvPortlet Table Filed Templates:
 *	Usage:  portletRSPoolSrv -> slb_interface.php
 *
 **/
@@ -466,7 +466,7 @@ $this->setInMemoryTemplate("RSPoolSrvRsconfig","<td class=slbconf>{{Cont}}</td>"
 $this->setInMemoryTemplate("RSPoolSrvDefault","<td class=tdleft>{{Cont}}</td>");
 
 /**
-*	StdSpan: 
+*	StdSpan:
 *	Usage:  renderSLBTriplets2 ->  slb2_interface.php
 *
 **/
@@ -481,7 +481,7 @@ $this->setInMemoryTemplate("VSSLBList","<ul class=\"slb-checks\">{{List}}</ul>")
 $this->setInMemoryTemplate("VSSLBListElement","<li>{{Content}}</li>");
 
 /**
-*	TdAtomState: 
+*	TdAtomState:
 *	Usage:  renderMolecule -> interface.php
 *
 **/

@@ -11,7 +11,7 @@
 			<div class="col-sm-6 pull-left"><strong><?php $this->get("userRealname") ?></strong></div>
 		<?php } else { ?>
 			<div class="col-sm-6 pull-left">no name</div>
-		<?php }?> 
+		<?php }?>
 		<div class="col-sm-6">
 			<?php $this->get('UserTags') ?>
 		</div></div>
@@ -60,37 +60,40 @@
 
 	<?php if ($this->is("typeRack",true)) { ?>
 		<table class='slbcell vscell'><tr><td>
-		<img border=0 width=<?php $this->thumbWidth ?> 
-					height=<?php $this->thumbHeight ?> title='<?php $this->cellHeight ?> units' 
+		<img border=0 width=<?php $this->thumbWidth ?>
+					height=<?php $this->thumbHeight ?> title='<?php $this->cellHeight ?> units'
 			src='?module=image&img=minirack&rack_id=<?php $this->get("cellID")?>'>
 		</td><td>
-		<?php $this->get("mkACell") ?> 
+		<?php $this->get("mkACell") ?>
 		</td></tr><tr><td>
-		<?php $this->get("cellComment") ?> 
+		<?php $this->get("cellComment") ?>
 		</td></tr><tr><td>
-		<?php $this->get("etags") ?> 
-		</td></tr></table>
-	<?php } ?>
-	
-	<?php if ($this->is("typeLocation",true)) { ?>	
-		<table class='slbcell vscell'><tr><td>
-		<div class="pull-left"><?php $this->getH("PrintImageHref","LOCATION") ?> </div>
-		</td><td>
-		<?php $this->mkACell ?> 
-		</td></tr><tr><td>
-		<?php $this->get("cellComment") ?> 
-		</td></tr><tr><td>
-		<?php $this->get("etags") ?> 
+		<?php $this->get("etags") ?>
 		</td></tr></table>
 	<?php } ?>
 
-	<?php if ($this->is("typeObject",true)) { ?>	
+	<?php if ($this->is("typeLocation",true)) { ?>
 		<table class='slbcell vscell'><tr><td>
-		<?php $this->getH("PrintImageHref","OBJECT") ?> 
+		<div class="pull-left"><?php $this->getH("PrintImageHref","LOCATION") ?> </div>
 		</td><td>
-		<?php $this->get("mkACell") ?> 
+		<?php $this->mkACell ?>
 		</td></tr><tr><td>
-		<?php $this->get("etags") ?> 
+		<?php $this->get("cellComment") ?>
+		</td></tr><tr><td>
+		<?php $this->get("etags") ?>
+		</td></tr></table>
+	<?php } ?>
+
+	<?php if ($this->is("typeObject",true)) { ?>
+		<table class='slbcell vscell'><tr><td rowspan=3 style="padding: 10px">
+			<a class="btn btn-primary btn-lg btn-no-border" href="?page=object&object_id=<?php $this->cellID?>">
+				<span class="glyphicon glyphicon-certificate" style="font-size:25px"></span>
+			</a>
+
+		</td><td>
+		<?php $this->get("mkACell") ?>
+		</td></tr><tr><td>
+		<?php $this->get("etags") ?>
 		</td></tr></table>
 	<?php } ?>
 

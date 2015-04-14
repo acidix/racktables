@@ -239,8 +239,8 @@ function renderDynamicAddMultipleObjectsForm() {
 	$tabindex = 100;
 
 	$typelist = readChapter (CHAP_OBJTYPE, 'o');
-    $typelist[0] = 'select type...';
-    $typelist = cookOptgroups ($typelist);
+  $typelist[0] = 'select type...';
+  $typelist = cookOptgroups ($typelist);
 
 	foreach ($typelist['other'] as $key => $value)
 	if ($key > 0 && in_array($key, $location_obj_types))
@@ -252,8 +252,7 @@ function renderDynamicAddMultipleObjectsForm() {
 		$singleEntry = array();
 	// Don't employ DEFAULT_OBJECT_TYPE to avoid creating ghost records for pre-selected empty rows.
 		$singleEntry['i'] = $i;
-		if($i == 0)
-			$singleEntry['TagsPicker'] = printTagsPicker();
+		$singleEntry['TagsPicker'] = printTagsPicker();
 
 		$singleEntry['NiftySelect'] = printNiftySelect ($typelist, array ('name' => "${i}_object_type_id", 'tabindex' => $tabindex), 0);
 

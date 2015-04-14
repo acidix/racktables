@@ -3,10 +3,9 @@
 	<div class="box box-info" style="position: relative; overflow-x: auto">
 	<div class="box-header">
 	    <h3 class="box-title"><?php $this->Title; ?> (<?php $this->CellCount; ?>)</h3>
-		<div class="pull-right"><?php $this->CellFilterPortlet; ?></div>
 	</div>
 	<div class="box-body" style="position: relative">
-		<table class="table table-bordered table-striped" id="ipspaceTable">
+		<table class="table table-bordered table-striped" id="cellListTable">
 			<thead><th>File</th></thead>
 			<tbody>
 				<?php $this->startLoop("CellListContent"); ?>
@@ -25,7 +24,7 @@
 		<link href="./css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
 		$(function() {
-			tagsDataTable('#ipspaceTable');
+			tagsDataTable('#cellListTable');
 		});
 		</script>
 	</div>

@@ -9,6 +9,14 @@ body > .header .logo {
 	font-size: 25px;
 }
 
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
 .content-header > h1 > small {
 	padding-left: 1em;
 }
@@ -179,6 +187,23 @@ body > header > nav.navbar.navbar-static-top {
 	border: none;
 	box-shadow: none;
 	background-color: #fafafa;
+}
+
+/* Correct select2 input position */
+.dataTables_filter > label {
+  position: relative;
+  left: -50px;
+}
+
+.dataTables_filter > label > .select2-container {
+  padding:  0px;
+  margin: 0px 5px 0px 5px;
+  border: none;
+  width: 200px !important;
+}
+
+.dataTables_length > label > select.form-control {
+  margin: 0px 5px 0px 5px;
 }
 
 /* Rackcode console */
@@ -388,6 +413,7 @@ td.atom.state_Th a {
 
 .edit_row > .header {
 	font-weight: bold;
+  margin: 10px 0px 10px 0px; */
 }
 
 .edit_row > div {

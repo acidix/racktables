@@ -6088,10 +6088,12 @@ function printLocationChildrenSelectOptions ($location, $level, $parent_id, $loc
             echo "<option value=${subLocation['id']}";
             if ($subLocation['id'] == $parent_id)
                 $mod->addOutput('Selected', 'selected');
+
             $mod->addOutput('Content', str_repeat ('&raquo; ', $level) . $subLocation['
                             name'])	;
+            $mod->setOutput('Level', $level);
             if ($subLocation['kidc'] > 0)
-            $self ($subLocation, $level, $parent_id, $location_id, $mod);
+              $self ($subLocation, $level, $parent_id, $location_id, $mod);
         }
     }
     else

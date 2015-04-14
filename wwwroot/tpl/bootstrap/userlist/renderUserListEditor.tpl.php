@@ -31,7 +31,7 @@
 					<div class='col-sm-6 header'>
 					    <label class="control-label">Tags</label>
     					</div><div class="col-sm-6">
-						<?php $this->TagsPicker; ?> 
+						<?php $this->TagsPicker; ?>
   					</div>
 				</div>
 				<div class='row edit_row'>
@@ -42,7 +42,7 @@
   				</form>
 			</div>
 		</div>
-		
+
 	<?php } ?>
 	<div class="box">
 	<div class="box-header">
@@ -105,7 +105,7 @@
 				<div class="form-group">
 					    <label class="col-md-3 control-label">Tags</label>
     					<div class="col-md-9">
-    						<?php $this->TagsPicker; ?> 
+    						<?php $this->TagsPicker; ?>
       					</div>
 				</div>
 				<div class="form-group">

@@ -455,7 +455,7 @@ function init_database_dynamic ()
         // Never send cleartext password over the wire.
         $hash = sha1 ($_REQUEST['password']);
         $query = "INSERT INTO `UserAccount` (`user_id`, `user_name`, `user_password_hash`, `user_realname`) " .
-                 "VALUES (1,'admin','$ {hash}','RackTables Administrator')";
+                 "VALUES (1,'admin','${hash}','RackTables Administrator')";
         $result = $dbxlink->exec ($query);
         echo "Administrator password has been set successfully.<br>";
         return TRUE;
