@@ -1,7 +1,5 @@
 <?php
 
-
-
 //This stores the callbacks
 $mainpage_widgets = array();
 

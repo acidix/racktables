@@ -9,8 +9,9 @@
 			<?php $this->getH('GetOpLink', array(array ('op' => 'dec', 'id' => $this->_HeapId), '', 'delete', 'consume')); ?>
 		<?php } else { ?>
 			<?php $this->getH("PrintImageHref", array('nodelete')); ?>
-		<?php } ?> 
+		<?php } ?>
 		</td>
+		<td><?php $this->getH("GetOpLink", array(array ('op' => 'dec', 'id' => $this->_HeapId), '', 'consume', 'replenish')); ?></td>
 		<td><input type=text size=7 name=amount value='<?php $this->HeapAmount ?>'></td>
 		<td><?php $this->getH("GetOpLink", array(array ('op' => 'inc', 'id' => $this->_HeapId), '', 'add', 'replenish')); ?></td>
 		<td><?php $this->EndCon1_String ?></td>

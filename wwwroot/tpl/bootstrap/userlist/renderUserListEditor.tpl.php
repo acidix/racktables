@@ -31,7 +31,7 @@
 					<div class='col-sm-6 header'>
 					    <label class="control-label">Tags</label>
     					</div><div class="col-sm-6">
-						<?php $this->TagsPicker; ?>
+								<?php $this->TagsPicker; ?>
   					</div>
 				</div>
 				<div class='row edit_row'>

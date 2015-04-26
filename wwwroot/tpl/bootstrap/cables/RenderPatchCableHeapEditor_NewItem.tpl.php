@@ -7,7 +7,7 @@
 	<td><?php $this->Connector2Opt ?></td>
 	<td><input type=text size=6 name=length value="1.00" tabindex=140></td>
 	<td><input type=text size=48 name=description tabindex=150></td>
-	<td><?php $this->getH("PrintImageHref", array('create', 'create new', TRUE, 200)); ?></td>
+	<td><button type=submit class="btn btn-primary" tabindex="200" title="create new"><span class="glyphicon glyphicon-plus"></span></button></td>
 	</tr></form>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />

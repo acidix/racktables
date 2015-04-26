@@ -3881,7 +3881,7 @@ function renderUserListEditor ()
 
     if (getConfigVar ('ADDNEW_AT_TOP') == 'yes')
         $mod->addOutput('NewTop', true);
-    printTagsPicker (null, $smod2, 'TagsPicker');
+    printTagsPicker (null, $mod, 'TagsPicker');
 
     $accounts = listCells ('user');
 
@@ -10017,7 +10017,7 @@ function renderPatchCableHeapSummary()
                                'HeapEndCon2' => $heap['end2_connector'],
                                'HeapLength' => $heap['length'],
                                'HeapDesc' => $heap['description'],
-                               'HeapPatchCalbeLength' => getPatchCableHeapCursorCode ($heap, $zoom_heap_id));
+                               'HeapPatchCableLength' => getPatchCableHeapCursorCode ($heap, $zoom_heap_id));
 
         $order = $nextorder[$order];
     }

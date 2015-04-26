@@ -1,7 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
 <div class="box">
 	<div class="box-header">
-		<h3 class="box-title">TITLE HERE</h3>
 	</div>
 	<div class="box-content">
 		<?php $this->getH("PrintOpFormIntro", array('edit',array(),false,array('class'=>'form form-horizontal'))); ?>

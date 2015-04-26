@@ -29,7 +29,7 @@
 						<td><input type=text size=<?php $this->Width ?> name=<?php $this->Value ?> value='<?php $this->RowValueWidth ?>'></td>
 						<td><button class="btn btn-success btn-sm" title="Save changes" name="submit"><span class="glyphicon glyphicon-ok"></span></button></td>
 						</form>
-					<?php } ?> 
+					<?php } ?>
 					</tr>
 				<?php } ?>
 				<?php if(!$this->is('NewTop')) { ?>

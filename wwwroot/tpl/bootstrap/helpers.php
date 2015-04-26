@@ -1,7 +1,7 @@
 <?php
 /**
  * TemplateHelper for level-2-headlines.
- * 
+ *
  * Params:
  * [0] = Content
  * @author Alexander Kastius
@@ -40,21 +40,21 @@ class TemplateHelperForm extends TemplateHelperAbstract
 		{
 			echo "";
 		}
-		else 
+		else
 		{
 			$opname = $params[0];
 
 			echo "<form method=post id=${opname} name=${opname} action='?module=redirect&page=${pageno}&tab=${tabno}&op=${opname}'";
-			
+
 			if (count($params)>1)
 			{
 				if($params[1]==true)
 				{
 					echo " enctype='multipart/form-data'";
-					
+
 				}
 			}
-			
+
 			if (count($params) > 2 && is_array($params[2])) {
 				foreach ($params[2] as $name => $value) {
 					echo " " . $name . "=\"" . $value . "\"";
@@ -62,7 +62,7 @@ class TemplateHelperForm extends TemplateHelperAbstract
 			}
 			echo ">";
 		}
-		
+
 	}
 }
 
@@ -111,9 +111,9 @@ class TemplateHelperPrintImageHref extends TemplateHelperAbstract
 
 		//Loading and rendering small module in memory and returning the
 		$tplm = TemplateManager::getInstance();
-		//$tplm->setTemplate("vanilla");	
-		if ($do_input == TRUE){		
-			$mod = $tplm->generateModule( "GetImageHrefDoInput", true, 
+		//$tplm->setTemplate("vanilla");
+		if ($do_input == TRUE){
+			$mod = $tplm->generateModule( "GetImageHrefDoInput", true,
 					array( "SrcPath" => $img['path'],  "TabIndex" => ($tabindex ? "tabindex=${tabindex}" : ''),
 							"Title" => (!strlen ($title) ? '' : " title='${title}'") ));
 
@@ -121,7 +121,7 @@ class TemplateHelperPrintImageHref extends TemplateHelperAbstract
 		}
 		else{
 
-			$mod = $tplm->generateModule("GetImageHrefNoInput", true, 
+			$mod = $tplm->generateModule("GetImageHrefNoInput", true,
 					array( "SrcPath" => $img['path'],  "ImgWidth" => $img['width'], "ImgHeight" => $img['height'] ,
 							"Title" => (!strlen ($title) ? '' : " title='${title}'") ));
 
@@ -153,7 +153,7 @@ class TemplateHelperMkA extends TemplateHelperAbstract
 			$bypass = NULL;
 		}
 		else
-			$bypass = $params[2]; 
+			$bypass = $params[2];
 
 		if (count($params) < 4)
 		{
@@ -209,7 +209,7 @@ class TemplateHelperNiftyString extends TemplateHelperAbstract
 			{
 				$usetags = $params[2];
 			}
-			else 
+			else
 			{
 				$usetags = TRUE;
 			}
@@ -235,7 +235,7 @@ class TemplateHelperSerializeTags extends TemplateHelperAbstract
 	protected function generate($params)
 	{
 		//($chain, $baseurl = '')
-		//Initalize paramters 
+		//Initalize paramters
 		if(count($params) < 1)
 			return "";
 		$chain = $params[0];
@@ -275,10 +275,10 @@ class TemplateHelperPrintTagTRs extends TemplateHelperAbstract
 	protected function generate($params)
 	{
 		//($cell, $baseurl = '')
-		//Initalize paramters 
+		//Initalize paramters
 		if(count($params) < 1)
 			return '';
-		
+
 		$cell = $params[0];
 		$baseurl = '';
 
@@ -325,14 +325,14 @@ class TemplateHelperPrintOpFormIntro extends TemplateHelperAbstract
 		global $pageno, $tabno, $page;
 		$tplm = TemplateManager::getInstance();
 		//$tplm->setTemplate("vanilla");
-		
+
 		$mod = $tplm->generateModule("PrintOpFormIntro",  false, array("opname" => $opname, "pageno" => $pageno, "tabno" => $tabno));
 
 	//	echo "<form method=post id=${opname} name=${opname} action='?module=redirect&page=${pageno}&tab=${tabno}&op=${opname}'";
 		if ($upload)
-			$mod->setOutput("isUpload", true);	 
+			$mod->setOutput("isUpload", true);
 	//		echo " enctype='multipart/form-data'";
-		
+
 		$extra_attr_looparr = array();
 		foreach ($extra_attr as $name => $value) {
 			$extra_attr_looparr[] = array('Param'=>$name,'Value'=>$value);
@@ -354,7 +354,7 @@ class TemplateHelperPrintOpFormIntro extends TemplateHelperAbstract
 class TemplateHelperGetOpLink extends TemplateHelperAbstract
 {
 	protected function generate($params){
-	//	array($params, $title,  $img_name = '', $comment = '', $class = '')	
+	//	array($params, $title,  $img_name = '', $comment = '', $class = '')
 		//Initalise standard parameters
 		if(count($params) < 2)
 			return "";
@@ -375,8 +375,8 @@ class TemplateHelperGetOpLink extends TemplateHelperAbstract
 		$tplm = TemplateManager::getInstance();
 		//$tplm->setTemplate("vanilla");
 
-		$mod = $tplm->generateModule("GetOpLink");		
-		
+		$mod = $tplm->generateModule("GetOpLink");
+
 
 		if (isset ($stdparams)){
 			$mod->setOutput("issetParams", true);
@@ -390,13 +390,13 @@ class TemplateHelperGetOpLink extends TemplateHelperAbstract
 		}
 
 		if (! empty ($comment)){
-			$mod->setOutput("htmlComment", htmlspecialchars ($comment, ENT_QUOTES));	
+			$mod->setOutput("htmlComment", htmlspecialchars ($comment, ENT_QUOTES));
 		}
 	//		$ret .= ' title="' . htmlspecialchars ($comment, ENT_QUOTES) . '"';
 		$class = trim ($class);
-		
+
 		if (! empty ($class)){
-			$mod->setOutput("htmlClass", htmlspecialchars ($class, ENT_QUOTES));		 
+			$mod->setOutput("htmlClass", htmlspecialchars ($class, ENT_QUOTES));
 		}
 	//		$ret .= ' class="' . htmlspecialchars ($class, ENT_QUOTES) . '"';
 	//	if (! empty ($comment))
@@ -406,20 +406,20 @@ class TemplateHelperGetOpLink extends TemplateHelperAbstract
 		{
 			$mod->setOutput("loadImage", true);
 			$mod->setOutput("imgName", $img_name);
-			$mod->setOutput("comment", $comment);			 
+			$mod->setOutput("comment", $comment);
 	//		$ret .= getImageHREF ($img_name, $comment);
 	//		if (! empty ($title))
 	//			$ret .= ' ';
 		}
 		if (FALSE !== strpos ($class, 'need-confirmation'))
-			$mod->setOutput("loadJs", true);			 
+			$mod->setOutput("loadJs", true);
 	//		addJS ('js/racktables.js');
 		$mod->setOutput("title", $title);
 	//	$ret .= $title . '</a>';
 	//	return $ret;
 		echo $mod->run();
 	}
-} 
+}
 
 class TemplateHelperTplSelect extends TemplateHelperAbstract
 {
@@ -431,7 +431,7 @@ class TemplateHelperTplSelect extends TemplateHelperAbstract
 		}
 		$code .= '</select>';
 		echo $code;
-	}	
+	}
 }
 
 /**
@@ -446,7 +446,7 @@ class TemplateHelperSelect extends TemplateHelperAbstract
 {
 	protected function generate($params)
 	{
-		
+
 	}
 }
 
@@ -477,8 +477,8 @@ class TemplateHelperPrintSelect extends TemplateHelperAbstract
 			$selected_id = $params[2];
 		if(count($params) > 3)
 			$treat_single_special = $params[3];
-		
-		//Original getSelect code 
+
+		//Original getSelect code
 		if (!array_key_exists ('name', $select_attrs)){
 			echo '';
 			return;
@@ -496,38 +496,38 @@ class TemplateHelperPrintSelect extends TemplateHelperAbstract
 		{
 			foreach ($optList as $key => $value)
 				break;
-			$mod = $tplm->generateModule("GetSelectInLine",  true, array("selectName" => $select_attrs['name'], "keyValue" => $key, "value" => $value ));	
+			$mod = $tplm->generateModule("GetSelectInLine",  true, array("selectName" => $select_attrs['name'], "keyValue" => $key, "value" => $value ));
 			echo $mod->run();
 			return;
 		}
-		
+
 		$mod = $tplm->generateModule("GetSelect");
-		
+
 		if (!array_key_exists ('id', $select_attrs))
 			$select_attrs['id'] = $select_attrs['name'];
-	
+
 		$selectedOutArray = array();
 		foreach ($select_attrs as $attr_name => $attr_value)
 			$selectedOutArray[] = array('attr_name' =>  $attr_name, "attr_val" => $attr_value );
-	
+
 		$mod->setOutput("selectedList", $selectedOutArray);
-	
+
 		$allOptionsArray = array();
 		foreach ($optList as $dict_key => $dict_value)
 			$allOptionsArray[] = array("dict_key" => $dict_key, "isSelected" =>  ($dict_key == $selected_id ? ' selected' : ''), "dict_val" => $dict_value );
 		$mod->setOutput("allOptions", $allOptionsArray);
-	
-		echo $mod->run();			
+
+		echo $mod->run();
 	}
 }
 
 class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
-	
+
 	protected function generate($params) {
 		global $tab,$page,$pageno,$tabno,$pagetitles;
 		$sidebar = array();
 		$sidebarpics = array();
-		
+
 		$pagetitles = array();
 		$pagetitles['rackspace'] = 'Rackspace';
 		$pagetitles['depot'] = 'Objects';
@@ -540,7 +540,8 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 		$pagetitles['config'] = 'Configuration';
 		$pagetitles['objectlog'] = 'Object Log';
 		$pagetitles['virtual'] = 'Virtual';
-		
+		$pagetitles['cables'] = 'Patch cables';
+
 		$sidebar['rackspace'] = array('editlocations','editrows','history');
 		$sidebar['depot'] = array('addmore');
 		$sidebar['ipv4space'] = array('newrange','manage');
@@ -552,21 +553,22 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 		$sidebar['config'] = array();
 		$sidebar['objectlog'] = array();
 		$sidebar['virtual'] = array();
-		
+		$sidebar['cables'] = array();
+
 		echo '<ul class="sidebar-menu">';
 
 		$parent_page = '';
-		# Get only fist part 
+		# Get only fist part
 		$start_page = explode(':', $pageno)[0];
 
-		# Find the parent section for page 
+		# Find the parent section for page
 		if(array_key_exists('parent',$page[$start_page]) && $page[$start_page]['parent'] != "index") {
 			$parent_page = explode(':', $page[$start_page]['parent'])[0];
-			while($page[$parent_page]['parent'] != "index") { 
+			while($page[$parent_page]['parent'] != "index") {
 				$parent_page = $page[$parent_page]['parent'];
 			}
 		}
-		
+
 
 		foreach ($sidebar as $pagen => $pagea) {
 			$tabclass = '';
@@ -585,9 +587,9 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 			echo '<a class="sidebar-parenttab"';
 			if (count($sidebar[$pagen]) == 0) {
 				echo 'href="index.php?page=' . $pagen . '"';
-			} 
+			}
 			echo ' >';
-			
+
 			if (array_key_exists($pagen, $sidebarpics)) {
 				echo '<i class="fa ' . $sidebarpics[$pagen] . '"></i>';
 			}
@@ -618,7 +620,7 @@ class TemplateHelperPrintSidebar extends TemplateHelperAbstract {
 }
 
 class TemplateHelperPageHeadline extends TemplateHelperAbstract {
-	
+
 	protected function generate($params) {
 		global $pageno, $tabno, $page, $tab,$pagetitles;
 		echo '<h1>';
@@ -636,7 +638,7 @@ class TemplateHelperPageHeadline extends TemplateHelperAbstract {
 		}
 		echo '</h1>';
 	}
-	
+
 	protected function getTitle($pageno) {
 		global $page;
 		if (!array_key_exists($pageno, $page)) {
@@ -659,15 +661,15 @@ class TemplateHelperRunMainpageWidgets extends TemplateHelperAbstract {
 	protected function generate($params) {
 		$mod = $params[0];
 		$clear = (count($params) > 1) ? $params[1] : true;
-		
+
 		if ($clear) {
 			$mod->setOutput('Col1', array());
 			$mod->setOutput('Col2', array());
 		}
-		
-		
+
+
 		global $mainpage_widgets;
-		
+
 		$col1 = true;
 		foreach ($mainpage_widgets as $callback) {
 			$newmod = call_user_func($callback);
