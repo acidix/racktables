@@ -1,6 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
 <?php if(!$this->is("EmptyResults")) { ?>
-	<div class="box box-info" style="position: relative; overflow-x: auto">
+	<div class="box" style="position: relative; overflow-x: auto">
 	<div class="box-header">
 	    <h3 class="box-title"><?php $this->Title; ?> (<?php $this->CellCount; ?>)</h3>
 	</div>

@@ -5,19 +5,19 @@
 	<div class="box-body">
 		<table class="table table-striped">
 			<thead>
-				<tr><th>Origin</th><th>Key</th><th>Refcnt</th><th>Outer Interface</th></tr>
+				<tr><th>Key</th><th style="text-align: center"><?php $this->LeftHeader ?></th><th>Key</th><th style="text-align: center"><?php $this->RightHeader ?></th></tr>
 			</thead>
 			<tbody>
-				<?php while($this->loop('AllOptions')) : ?>
+				<?php while($this->loop("AllCompats")) { ?>
 					<tr class=row_<?php $this->Order ?>>
-						<td class=tdleft><span class="glyphicon glyphicon-home"></span></td>
-						<td class=tdright><?php $this->Oif_id ?></td>
-						<td class=tdright><?php $this->Refcnt ?></td>
-						<td class=tdleft><?php $this->NiftyString ?></td>
+						<td><?php $this->LeftKey ?></td>
+						<td><?php $this->LeftValue ?></td>
+						<td><?php $this->RightKey ?></td>
+						<td><?php $this->RightValue ?></td>
 					</tr>
-				<?php endwhile ?>
+				<?php } ?>
 			</tbody>
-		</table>
+	</table>
 	</div>
 </div>
 <?php } else { ?>

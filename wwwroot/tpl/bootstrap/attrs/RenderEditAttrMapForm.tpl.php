@@ -1,33 +1,34 @@
 <?php if (defined("RS_TPL")) {?>
-<div class="box box-info rackbox" style="position: relative; overflow-x: auto">
+<div class="box box-primary">
 	<div class="box-header">
         <h3 class="box-title">Attribute map</h3>
     </div>
-    <div class="box-body" style="position: relative">
+    <div class="box-body">
 		<table class="table table-bordered table-striped" id='attribute_map_table' border=0 cellpadding=5 cellspacing=0 align='center'>
 			<thead><tr><th class=tdleft>Attribute name</th><th class=tdleft>Attribute type</th><th class=tdleft>Applies to</th></tr></thead>
 			<tbody>
 			<?php if ($this->is('NewTop')) : ?>
-				<?php $this->getH('PrintOpFormIntro', 'add'); ?>
 				<tr>
-					<td colspan=2 class=tdleft>
-						<select class="form-control" name=attr_id tabindex=100>
-							<?php $this->startLoop('CreateNewAttrMaps'); ?>
-							<option value=<?php $this->Id; ?> >[<?php $this->Shorttype; ?>] <?php $this->Name; ?></option>
-							<?php $this->endLoop(); ?>
+					<?php $this->getH('PrintOpFormIntro', 'add'); ?>
+					<td >
+						<select class="form-control pull-left" name=attr_id tabindex=100>
+							<?php while($this->loop('CreateNewAttrMaps')) : ?>
+								<option value=<?php $this->Id; ?> >[<?php $this->Shorttype; ?>] <?php $this->Name; ?></option>
+							<?php endwhile ?>
 						</select>
 					</td>
-					<td class=tdleft>
-						<?php $this->getH('PrintImageHref', array('add', '', TRUE)); echo ' '; 
-			 			 	  $this->CreateNewSelect;	?>
-	   					<select class="form-control" name=chapter_no tabindex=102><option value=0>-- dictionary chapter for [D] attributes --</option>
+					<td>&nbsp;</td>
+					<td>
+						<?php $this->CreateNewSelect;	?>
+						<select class="form-control" name=chapter_no tabindex=102><option value=0>-- dictionary chapter for [D] attributes --</option>
 						<?php $this->startLoop('CreateNewChapters'); ?>
 							<option value='<?php $this->Id; ?>'><?php $this->Name; ?></option>
 						<?php $this->endLoop(); ?>
 						</select>
+						<button submit class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-plus"></span></button>
 					</td>
+					</form>
 				</tr>
-				</form>
 			<?php endif ?>
 			<?php while ($this->loop('AttrMap')) : ?>
 				<tr class=row_<?php $this->Order; ?>>
@@ -36,43 +37,50 @@
 					<td colspan=2 class=tdleft>
 						<?php while($this->loop('AttrMapChilds')) : ?>
 							<?php if ($this->is('Sticky', 'yes')) { ?>
-								<?php $this->getH("PrintImageHref", array('nodelete', 'system mapping')); ?>	
+								<a style="color: lightgrey" title="system mapping'">
+									<i class="fa fa-minus"></i>
+								</a>
 							<?php } elseif ($this->is('RefCnt', true) ){ ?>
-								<?php $this->getH("PrintImageHref", array('nodelete', $this->_RefCnt . ' value(s) stored for objects')); ?> 
+								<a style="color: lightgrey" title="<?php $this->RefCnt ?> value(s) stored for objects'">
+									<i class="fa fa-minus"></i>
+								</a>
 							<?php } else { ?>
-								<?php $this->getH("GetOpLink", array(array('op'=>'del', 'attr_id'=>$this->_Id, 'objtype_id'=>$this->_ObjId), '', 'delete', 'Remove mapping')); ?>
+								<a href="?module=redirect&op=del&attr_id=<?php $this->Id ?>&objtype_id=<?php $this->ObjId ?>&page=attrs&tab=editmap" title="Remove mapping">
+									<i class="fa fa-minus"></i>
+								</a>
 							<?php } ?>
 							<?php $this->DecObj ?>
 							<?php if ($this->is("Type",'dict')) { ?>
 								(values from '<?php $this->ChapterName ?>')
 							<?php } ?>
-							<br />	
-						<?php endwhile ?>	 
+							<br />
+						<?php endwhile ?>
 					</td>
 				</tr>
 			<?php endwhile ?>
 			<?php if (!$this->is('NewTop')) : ?>
 				<?php $this->getH('PrintOpFormIntro', 'add'); ?>
 				<tr>
+					<?php $this->getH('PrintOpFormIntro', 'add'); ?>
 					<td colspan=2 class=tdleft>
-						<select name=attr_id tabindex=100>
+						<select class="form-control" name=attr_id tabindex=100>
 							<?php $this->startLoop('CreateNewAttrMaps'); ?>
 							<option value=<?php $this->Id; ?> >[<?php $this->Shorttype; ?>] <?php $this->Name; ?></option>
 							<?php $this->endLoop(); ?>
 						</select>
 					</td>
 					<td class=tdleft>
-						<?php $this->getH('PrintImageHref', array('add', '', TRUE)); echo ' '; 
+						<?php $this->getH('PrintImageHref', array('add', '', TRUE)); echo ' ';
 			 			 	  $this->CreateNewSelect;	?>
-	   					<select name=chapter_no tabindex=102><option value=0>-- dictionary chapter for [D] attributes --</option>
+	   					<select class="form-control" name=chapter_no tabindex=102><option value=0>-- dictionary chapter for [D] attributes --</option>
 						<?php $this->startLoop('CreateNewChapters'); ?>
 							<option value='<?php $this->Id; ?>'><?php $this->Name; ?></option>
 						<?php $this->endLoop(); ?>
 						</select>
 					</td>
+					</form>
 				</tr>
-				</form>
-			<?php endif ?>
+				<?php endif ?>
 			</tbody>
 		</table>
 		<!-- DATA TABES SCRIPT -->

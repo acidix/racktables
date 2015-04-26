@@ -1,5 +1,5 @@
 <?php if (defined("RS_TPL")) {?>
-<div class="box box-primary">
+<div class="box">
 	<div class="box-body">
 	<table class="table table-striped">
 	<thead>

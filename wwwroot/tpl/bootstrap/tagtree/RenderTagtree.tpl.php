@@ -6,16 +6,18 @@
 	</div>
 	<div class="box-content">
 		<!--<table class=tagtree> -->
-		<div class="tree-view-list" align="left"><ul>
-
-		<?php $first = true;
+		<div class="tree-view-list" align="left" style="padding-left: 10em">
+		<ul style="list-style-type: none;">
+			<?php $first = true;
 			while($this->loop('Taglist')) {
 				if($first) {
 					$LastLvl = $this->_Level;
 					$first = false;
 				}
 				if($LastLvl < $this->_Level) { ?>
-					<ul class="jstree-open">
+					<!-- open new sub tree -->
+					<div style="right: 2em; color: #3c8dbc; margin-right: -1em; top: 0.5em" class="pull-left glyphicon glyphicon-chevron-down"></div>
+					<ul style="list-style-type: none;">
 				<?php } else if($LastLvl > $this->_Level) { ?>
 					</ul>
 				<?php } ?>
@@ -25,30 +27,13 @@
 			<?php } ?>
 
 				<li>
-			<?php $this->Level; $this->Tag; ?>
-			<?php if (!$this->is('Refc', '')) { ?>
-				<i>(<?php $this->Refc; ?>)</i>
-			<?php } ?>
-
-
-
-
-		<!--	<tr class='<?php $this->Trclass ?>'> ->>
-			<td align=left style='padding-left:<?php echo ($this->_Level * 16); ?>px;'>
-				<?php if ($this->is('HasChildren',true)) { ?>
-					<img width="16" border="0" height="16" src="?module=chrome&uri=pix/node-expanded-static.png"></img>
-				<?php } ?>
-				<span title="<?php $this->Stats; ?>" class="<?php $this->SpanClass; ?>">
-					<?php $this->Tag; ?>
+					<div class="tag_small">
+						<span><?php $this->Tag; ?></span>
+					</div>
 					<?php if (!$this->is('Refc', '')) { ?>
 						<i>(<?php $this->Refc; ?>)</i>
 					<?php } ?>
-				</span>
-			</td>
-			</tr> -->
-
 			<?php
-
 				$LastLvl = $this->_Level;
 			} ?>
 			</li>

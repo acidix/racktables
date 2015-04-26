@@ -9,12 +9,12 @@
 				<th>Option</th><th>Value</th>
 			</thead>
 			<tbody>
-				<?php while($this->loop("allLoadConfigCache")){?>	
+				<?php while($this->loop("allLoadConfigCache")){?>
 				<tr>
 					<td><?php $this->renderedConfigVarName ?></td>
 					<td><?php $this->varvalue ?></td>
 				</tr>
-				<?php } ?> 
+				<?php } ?>
 			</tbody>
 		</table>
 	</div>

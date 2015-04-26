@@ -1,5 +1,5 @@
 <?php if (defined("RS_TPL")) {?>
-<div class="box box-info" id='current-config' style="position: relative; overflow-x: auto">
+<div class="box box-primary" id='current-config' style="position: relative; overflow-x: auto">
 	<div class="box-header">
         <h3 class="box-title">Current configuration</h3>
     </div>
@@ -15,7 +15,7 @@
 			</div>
 			<div class="col-sm-5"><input type=text name=<?php $this->Index; ?>_varvalue value='<?php $this->HtmlSpecialChars; ?>' size=24></div>
 			<div class="col-sm-1">
-			<?php $this->OpLink ?> 
+			<?php $this->OpLink ?>
 			</div>
 		</div>
 	<?php $this->endLoop(); ?>
@@ -23,14 +23,21 @@
 	<div class="row" align="center">
 		<button type="submit" class="btn btn-success btn-sm ajax_form" targetform="#updname=upd" border="0" tabindex="4" title="Save changes">Save</button>
 	</div>
+
 	<!-- Save button operators -->
+	<div class="btn-group fixed-btns">
+		<button class="btn btn-success" name="submit"><span class="glyphicon glyphicon-ok"></span></button>
+		<a class="btn btn-danger" href="javascript:location.reload();"><span class="glyphicon glyphicon-remove"></span></a>
+	</div>
+	<!--
 	<a id='confirm-btn' type='submit' class='tab-operator tab-link' target='#updname=upd'>Save</a>
-	<a id='abort-btn' type='abort' class="tab-operator tab-link">Abort</a> 
+	<a id='abort-btn' type='abort' class="tab-operator tab-link">Abort</a>
+-->
 	</form>
 	</div>
 </div>
-	
-<?php } else { ?>	
+
+<?php } else { ?>
 Don't use this page directly, it's supposed <br />
 to get loaded within the main page. <br />
 Return to the index. <br />

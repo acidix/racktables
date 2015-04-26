@@ -30,6 +30,11 @@ body > .header .logo {
 	left: 0px;
 }
 
+/* Scroll fix for the right  content container */
+.right-side {
+  overflow: scroll;
+}
+
 div.overlay {
 	display: none;
 	z-index: 4;
@@ -42,6 +47,12 @@ div.overlay {
 
 .box.box-info {
 	border-radius: 0px;
+}
+
+.fixed-btns {
+  position: fixed;
+  top: 33%;
+  right: 3%;
 }
 
 #contentarea {
@@ -73,7 +84,6 @@ body > div.wrapper.row-offcanvas.row-offcanvas-left > aside.right-side {
 	background: rgb(249, 249, 249);
 	box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.7);
 }
-
 
 #contentarea > .site-view:first-of-type {
 	position: absolute;

@@ -1,5 +1,5 @@
 <?php if (defined("RS_TPL")) {?>
-		<?php $js = 
+		<?php $js =
 <<<JS
 function tageditor_showselectbox(e) {
 	$(this).load('index.php', {module: 'ajax', ac: 'get-tag-select', tagid: this.id});
@@ -7,7 +7,7 @@ function tageditor_showselectbox(e) {
 }
 $(document).ready(function () {
 	$('select.taglist-popup').bind('mousedown', tageditor_showselectbox);
-});			
+});
 JS;
 	$this->addJS($js,true);
 ?>
@@ -68,7 +68,7 @@ JS;
 							<?php if ($this->is('hasChildren', true)) { ?>
 								<img width="16" border="0" height="16" src="?module=chrome&uri=pix/node-expanded-static.png"></img>
 							<?php } ?>
-							
+
 						</td>
 						<?php $this->getH('PrintOpFormIntro',array('updateTag', array ('tag_id' => $this->_ID))) ; ?>
 						<td>

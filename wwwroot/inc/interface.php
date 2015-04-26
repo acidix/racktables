@@ -4452,7 +4452,6 @@ function renderAttributes ()
         $order = $nextorder[$order];
     }
     $mod->addOutput("AllAttrs", $allAttrsOut);
-
 }
 
 function renderEditAttributesForm ()
@@ -4474,12 +4473,15 @@ function renderEditAttributesForm ()
                                 'Type' =>$attr['type'],
                                 'OpFormIntro' => printOpFormIntro ('upd', array ('attr_id' => $attr['id'])));
 
-        if($attr['id'] < 10000)
+        if($attr['id'] < 10000) {
             $singleAttrMap['DestroyImg'] = printImageHREF ('nodestroy', 'system attribute');
-        elseif (count ($attr['application']))
+        } elseif (count ($attr['application'])) {
             $singleAttrMap['DestroyImg'] = printImageHREF ('nodestroy', count ($attr['application']) . ' reference(s) in attribute map');
-        else
+        } else {
+            $singleAttrMap['AttrId'] = $attr['id'];
             $singleAttrMap['DestroyImg'] = getOpLink (array('op'=>'del', 'attr_id'=>$attr['id']), '', 'destroy', 'Remove attribute');
+        }
+
         $singleAttrMap['SaveImg'] = printImageHREF ('save', 'Save changes', TRUE);
         $allAttrMapsOut[] = $singleAttrMap;
     }
@@ -6721,11 +6723,16 @@ function dynamic_title_decoder ($path_position)
     }
 }
 
-function renderTwoColumnCompatTableViewer ($compat, $left, $right)
+function renderTwoColumnCompatTableViewer ($compat, $left, $right, $parent = null, $placeholder = 'TwoColumnCompatTableViewer')
 {
     global $nextorder;
     $tplm = TemplateManager::getInstance();
-    $mod = $tplm->generateSubmodule("Payload","RenderIIFOIFCompat");
+
+    if($parent == null)
+        $mod = $tplm->generateSubmodule("Payload","TwoColumnCompatTableViewer");
+    else
+        $mod = $tplm->generateSubmodule($placeholder,"TwoColumnCompatTableViewer", $parent);
+
     $mod->setNamespace("portifcompat");
 
     $last_lkey = NULL;
@@ -6744,10 +6751,10 @@ function renderTwoColumnCompatTableViewer ($compat, $left, $right)
         }
 
         $singleRecord = array('Order' => $order,
-                              'ItemLeftKey' => $item[$left['key']],
-                              'LeftString' => niftyString ($item[$left['value']], $left['width']),
-                              'ItemRightKey' => $item[$right['key']],
-                              'RightString' => niftyString ($item[$right['value']], $right['width']));
+                              'LeftKey' => $item[$left['key']],
+                              'LeftValue' => niftyString ($item[$left['value']], $left['width']),
+                              'RightKey' => $item[$right['key']],
+                              'RightValue' => niftyString ($item[$right['value']], $right['width']));
 
         $allCompatsOut[] = $singleRecord;
     }
@@ -6856,14 +6863,16 @@ function renderIIFOIFCompatEditor()
 
             $singlePack['IifCont'] .= $iif_id_mod->run();
         }
+        $allWDM_PacksOut[] = $singlePack;
     }
+    $mod->setOutput('AllWDMPacks', $allWDM_PacksOut);
 
     renderTwoColumnCompatTableEditor
     (
         getPortInterfaceCompat(),
         array
         (
-            'header' => 'inner interface',
+            'header' => 'Inner interface',
             'key' => 'iif_id',
             'value' => 'iif_name',
             'width' => 16,
@@ -6871,7 +6880,7 @@ function renderIIFOIFCompatEditor()
         ),
         array
         (
-            'header' => 'outer interface',
+            'header' => 'Outer interface',
             'key' => 'oif_id',
             'value' => 'oif_name',
             'width' => 48,
@@ -10101,7 +10110,7 @@ function renderSimpleTableWithOriginViewer ($rows, $column, $parent = null, $pla
     if($parent == null)
         $mod = $tplm->generateModule("RenderSimpleTableWithOriginViewer");
     else
-        $mod = $tplm->generateSubmodule('Payload', "RenderSimpleTableWithOriginViewer", $parent);
+        $mod = $tplm->generateSubmodule($placeholder, "RenderSimpleTableWithOriginViewer", $parent);
 
     $mod->setNamespace('cables');
     $mod->setOutput('ColHeader', $column['header']);

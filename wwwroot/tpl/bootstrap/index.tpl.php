@@ -1,5 +1,5 @@
 <?php
-    $this->map(['Tabs',0],"<small>|</small>","|");
+  $this->map(['Tabs',0],"<small>|</small>","|");
 	$this->mapFunction(['Path',[]],'transformPathLink');
 
 	//A small function that transform static links added by the interface.php file to the list elements we need for the breadcrumbs
@@ -41,7 +41,7 @@
           <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
           <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-		<!-- jQuery 2.0.2 -->
+		    <!-- jQuery 2.0.2 -->
         <script src="./js/jquery-2.0.2.min.js" type="text/javascript"></script>
         <!-- jQuery UI-->
         <script src="./js/jquery-ui.min.js" type="text/javascript"></script>
@@ -49,8 +49,6 @@
         <script src="./js/bootstrap.min.js" type="text/javascript"></script>
         <!-- AdminLTE App -->
         <script src="./js/AdminLTE/app.js" type="text/javascript"></script>
-        <!-- AdminLTE for demo purposes -->
-        <script src="./js/AdminLTE/demo.js" type="text/javascript"></script>
         <!-- Parsley for form validation -->
         <script src="./tpl/bootstrap/js/parsley.min.js" type="text/javascript"></script>
         <!-- Enquire for responsive media query -->
@@ -74,7 +72,7 @@
         <!-- Bootstrap theme javascript -->
         <script src="./tpl/bootstrap/js/racktables-bootstrap.js" type="text/javascript"></script>
 
-		<?php $this->Header ?>
+		    <?php $this->Header ?>
     </head>
 
     <body class="skin-blue">
@@ -182,23 +180,23 @@
                         <!-- Content Header (Page header) -->
                         <div class='site-view' draggable="true" ondragstart="resizeView(event)">
                             <section class="content-header" style='padding-left: 15px'>
-            			 	<?php $this->getH('PageHeadline'); ?>
-                            <div class="tabsbar" id="tabssidebar">
-                                <ul class="tabs-list">
-                                    <?php $this->Tabs; ?>
-                                </ul>
-                            </div>
+            			 	             <?php $this->getH('PageHeadline'); ?>
+                                <div class="tabsbar" id="tabssidebar">
+                                    <ul class="tabs-list">
+                                        <?php $this->Tabs; ?>
+                                    </ul>
+                                </div>
             			 	<!--<div class="text-center"><?php $this->Tabs ?></div>-->
             			 	<!-- <?php //$this->getH('PageHeadline',array($this->_Headline,$this->_SubHeadline)); ?> -->
                             </section>
 
                             <!-- Main content -->
                             <section class="content">
-                            <ol class="breadcrumb">
-                                <?php $this->Path ?>
-                            </ol>
-            			 	<?php $this->Message ?>
-            			 	<?php $this->Payload ?>
+                              <ol class="breadcrumb">
+                                  <?php $this->Path ?>
+                              </ol>
+              			 	        <?php $this->Message ?>
+              			 	        <?php $this->Payload ?>
                             </section>
                         </div><!-- /.content -->
                     </section>

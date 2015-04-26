@@ -21,7 +21,7 @@
 		<tr>
 		<?php if($this->is('lowkey', true)) { ?>
 			<td>
-	    		<i class="fa fa-fw fa-desktop"></i>
+	    		<i style="color: #3c8dbc" class="fa fa-fw fa-desktop"></i>
 			</td>
 			<td><?php $this->key ?></td>
 			<td><?php $this->value ?></td>
@@ -29,7 +29,7 @@
 		<?php } else { ?>
 			<?php $this->getH('PrintOpFormIntro', array('upd', array ('dict_key' => $this->_key))); ?>
 			<td>
-				<i class="fa fa-fw fa-star"></i>
+				<i style="color: #f56954" class="fa fa-fw fa-heart"></i>
 			</td>
 			<td><?php $this->key ?></td>
 			<td class=tdleft><input type=text name=dict_value size=64 value='<?php $this->value ?>' class='form-control'></td>
@@ -42,7 +42,7 @@
 						<?php $this->getH('GetOpLink', array(array('op'=>'del', 'dict_key'=>$this->_key), '<span class="glyphicon glyphicon-remove">', '', 'Delete word', 'btn btn-danger')); ?>
 					<?php } ?>
 				</div>
-			</td>	
+			</td>
 			</form>
 		<?php } ?>
 	</tr>

@@ -1,8 +1,10 @@
 <?php if (defined("RS_TPL")) {?>
-	<tr class=row_<?php $this->order ?>><th class=tdleft><?php $this->iif_iif_id ?></th><td> 
-	<?php $this->getH("GetOpLink", array(array ('op' => 'addPack', 'standard' => $this->_codename, 'iif_id' => $this->_iif_id), '', 'add')); ?> 
+	<tr ><th><?php $this->iif_iif_id ?></th><td>
+		<a href="?module=redirect&amp;op=addPack&amp;standard=<?php  $this->codename ?>&amp;iif_id=<?php  $this->iif_id ?>&amp;page=portifcompat&amp;tab=edit"  title="add">
+		<i class="fa fa-fw fa-plus"></i> </a>
 	</td><td>
-	<?php $this->getH("GetOpLink", array(array ('op' => 'delPack', 'standard' => $this->_codename, 'iif_id' => $this->_iif_id), '', 'delete')); ?> 
+		<a href="?module=redirect&amp;op=delPack&amp;standard=<?php  $this->codename ?>&amp;iif_id=<?php  $this->iif_id ?>&amp;page=portifcompat&amp;tab=edit"  title="delete">
+		<i class="fa fa-fw fa-minus"></i></a>
 	</td></tr>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />

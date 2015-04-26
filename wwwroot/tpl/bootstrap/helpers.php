@@ -625,7 +625,7 @@ class TemplateHelperPageHeadline extends TemplateHelperAbstract {
 		global $pageno, $tabno, $page, $tab,$pagetitles;
 		echo '<h1>';
 		$title = $this->getTitle($pageno);
-		if ($title = 'Main page' && $pageno != 'index') {
+		if ($title == 'Main page' && $pageno != 'index') {
 			if (array_key_exists($pageno,$pagetitles)) {
 				$title = $pagetitles[$pageno];
 			} else {

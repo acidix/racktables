@@ -22,7 +22,7 @@
 		<div class="row edit_row">
 			<div class="col-sm-4 header"></div>
 			<div class="col-md-8" align="center">
-				<button type="submit" class="btn btn-primary" border="0" tabindex="105" title="Save changes" ><span class="glyphicon glyphicon-ok"></span></button>
+				<button type="submit" class="btn btn-success" border="0" tabindex="105" title="Save changes" ><span class="glyphicon glyphicon-ok"></span></button>
 			</div>
 		</div>
 		</form>

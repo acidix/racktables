@@ -6,22 +6,22 @@
 	<div class="box-body">
 		<table class="table table-striped">
 			<thead>
-				<tr><th>Origin</th><th>Key</th><th>Refcnt</th><th>&nbsp;</th><th>Outer Interface</th><th>&nbsp;</th></tr>	
+				<tr><th>Origin</th><th>Key</th><th>Refcnt</th><th>&nbsp;</th><th>Outer Interface</th><th>&nbsp;</th></tr>
 			</thead>
 			<tbody>
 				<?php if($this->is('NewTop')) : ?>
 					<?php $this->getH("PrintOpFormIntro", array('add')); ?>
 						<tr>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
 							<td><button class="btn btn-primary" style="margin-left: 13px" title="Create new" name="submit"><span class="glyphicon glyphicon-plus"></span></button></td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
 							<td><input type=text size=48 name=oif_name tabindex=100></td>
-							<td><button class="btn btn-primary" style="margin-left: 13px" title="Create new" name="submit"><span class="glyphicon glyphicon-plus"></span></button></td>
+							<td>&nbsp;</td>
 						</tr>
 					</form>
 				<?php endif ?>
-				<?php while($this->loop('AllOptions')) : ?>	
+				<?php while($this->loop('AllOptions')) : ?>
 					<tr>
 						<?php if ($this->is('SmallOif')) { ?>
 							<td><span class="glyphicon glyphicon-home"></span></td>
@@ -40,22 +40,22 @@
 							<?php } else { ?>
 								<td>&nbsp;</td>
 								<td><?php $this->getH('GetOpLink', array(array ('op' => 'del', 'id' => $this->_Oif_Id), '<span class="glyphicon glyphicon-minus"></span>', '', 'Destroy', 'btn btn-danger btn-sm')); ?></td>
-							<?php } ?> 
+							<?php } ?>
 								<td><input type=text size=48 name=oif_name value="<?php $this->NiftyString ?>"></td>
 								<td><button class="btn btn-success btn-sm" title="Save changes" name="submit"><span class="glyphicon glyphicon-ok"></span></button></td>
 							</form>
-						<?php } ?> 
+						<?php } ?>
 					</tr>
-				<?php endwhile ?> 
+				<?php endwhile ?>
 				<?php if(!$this->is('NewTop')) : ?>
 					<?php $this->getH("PrintOpFormIntro", array('add')); ?>
 						<tr>
+							<td><button class="btn btn-primary" style="margin-left: 13px" title="Create new" name="submit"><span class="glyphicon glyphicon-plus"></span></button></td>
 							<td>&nbsp;</td>
 							<td>&nbsp;</td>
 							<td>&nbsp;</td>
-							<td><button class="btn btn-primary btn-sm" title="Create new" name="submit"><span class="glyphicon glyphicon-plus"></span></button></td>
 							<td><input type=text size=48 name=oif_name tabindex=100></td>
-							<td><button class="btn btn-primary btn-sm" title="Create new" name="submit"><span class="glyphicon glyphicon-plus"></span></button></td>
+							<td>&nbsp;</td>
 						</tr>
 					</form>
 				<?php endif ?>

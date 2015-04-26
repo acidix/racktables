@@ -8,12 +8,12 @@
 			<tbody>
 				<?php while($this->refLoop('AllRows')) { ?>
 					<tr>
-						<td>
-							<?php if ($this->is('OriginIsDefault')) { ?>
-								<span class="glyphicon glyphicon-home"></span>
+						<td style="text-align: center">
+							<?php if ($this->is('OriginIsDefault', true)) { ?>
+								<span style="color: #3c8dbc" class="glyphicon glyphicon-home"></span>
 							<?php } else { ?>
 								<span style="color: red" class="glyphicon glyphicon-heart"></span>
-							<?php } ?> 
+							<?php } ?>
 						</td>
 						<td><?php $this->RowColumnKey ?></td>
 						<td><?php $this->RowString ?></td>

@@ -1,5 +1,5 @@
-<?php if (defined("RS_TPL")) {?>	
-<div class="box box-info" style="position: relative; overflow-x: auto">
+<?php if (defined("RS_TPL")) {?>
+<div class="box" style="position: relative; overflow-x: auto">
 	<div class="box-header">
 	    <h3 class="box-title">Optional attributes</h3>
 	</div>
@@ -7,7 +7,7 @@
 		<table class="table table-bordered table-striped datatable" id='attrs_table' border=0 cellpadding=5 cellspacing=0 align='center'>
 		<thead><tr><th class=tdleft>Attribute name</th><th class=tdleft>Attribute type</th><th class=tdleft>Applies to</th></tr></thead>
 		<tbody>
-		<?php while($this->refLoop('AllAttrs')) { ?>	
+		<?php while($this->refLoop('AllAttrs')) { ?>
 			<tr class=row_<?php $this->Order; ?>>
 			<td class=tdleft><?php $this->Name; ?></td>
 			<td class=tdleft><?php $this->Type; ?></td>
@@ -16,11 +16,11 @@
 			<?php while ($this->loop('AllAttrsMap')) : ?>
 				<?php $this->ObjType ?>
 				<?php $this->DictCont ?>
-				<br> 	
+				<br>
 			<?php endwhile ?>
 			</td>
 			</tr>
-		<?php } ?> 
+		<?php } ?>
 		</tbody>
 		</table>
 		<!-- DATA TABES SCRIPT -->

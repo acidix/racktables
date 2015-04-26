@@ -1,6 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
-	<br> 
-	<?php $this->TableViewer ?>
+	<br>
+		<?php $this->TableViewer ?>
 	<br>
 <?php } else { ?>
 Don't use this page directly, it's supposed <br />

@@ -1,6 +1,6 @@
 <?php if (defined("RS_TPL")) {?>
 	<?php if($this->is('NewTop')) { ?>
-		<div class="box">
+		<div class="box box-primary">
 			<div class="box-header">
 				<h3 class="box-title">Add new</h3>
 			</div>
@@ -44,7 +44,7 @@
 		</div>
 
 	<?php } ?>
-	<div class="box">
+	<div class="box box-primary">
 	<div class="box-header">
 		<h3 class="box-title">Manage existing (<?php $this->Count; ?>)</h3>
 	</div>
@@ -78,7 +78,7 @@
 	</div>
 	</div>
 	<?php if(!$this->is('NewTop')) { ?>
-		<div class="box">
+		<div class="box box-primary">
 			<div class="box-header">
 				<h3 class="box-title">Add new</h3>
 			</div>
